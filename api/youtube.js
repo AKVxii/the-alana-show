@@ -1,6 +1,9 @@
 const HANDLE = "@alanakvandeveer";
 const MAX_PAGES = 4;
 
+// Keep genuine videos while excluding actual Shorts.
+// The previous 15-minute rule excluded every video on the channel.
+const MIN_STANDARD_VIDEO_SECONDS = 90;
 const EXCLUDED_TITLE_PATTERNS = [
   /\bshorts?\b/i,
   /\btrailer\b/i,
@@ -8,88 +11,73 @@ const EXCLUDED_TITLE_PATTERNS = [
   /\bpromo\b/i
 ];
 
+function parseDuration(value = "PT0S") {
+  const match = value.match(
+    /P(?:(\d+)D)?T?(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?/
+  );
+  if (!match) return 0;
+
+  const days = Number(match[1] || 0);
+  const hours = Number(match[2] || 0);
+  const minutes = Number(match[3] || 0);
+  const seconds = Number(match[4] || 0);
+
+  return days * 86400 + hours * 3600 + minutes * 60 + seconds;
+}
+
+function summarize(description = "") {
+  return description.replace(/\s+/g, " ").trim().slice(0, 220);
+}
+
 async function getJson(url) {
   const response = await fetch(url);
 
   if (!response.ok) {
-    const message = await response.text();
-
-    throw new Error(
-      `YouTube API returned ${response.status}: ${message}`
-    );
+    const text = await response.text();
+    throw new Error(`YouTube API error ${response.status}: ${text}`);
   }
 
   return response.json();
 }
 
-function summarize(description = "") {
-  return description
-    .replace(/\s+/g, " ")
-    .trim()
-    .slice(0, 220);
-}
-
 function normalizeVideo(video) {
   return {
     videoId: video.id,
-
-    title:
-      video.snippet?.title ||
-      "The Alana Show",
-
-    description: summarize(
-      video.snippet?.description || ""
-    ),
-
-    publishedAt:
-      video.snippet?.publishedAt ||
-      "",
-
+    title: video.snippet?.title || "",
+    description: summarize(video.snippet?.description || ""),
+    publishedAt: video.snippet?.publishedAt || "",
     thumbnail:
       video.snippet?.thumbnails?.maxres?.url ||
       video.snippet?.thumbnails?.standard?.url ||
       video.snippet?.thumbnails?.high?.url ||
       video.snippet?.thumbnails?.medium?.url ||
       "",
-
-    viewCount: Number(
-      video.statistics?.viewCount || 0
-    )
+    viewCount: Number(video.statistics?.viewCount || 0),
+    durationSeconds: parseDuration(video.contentDetails?.duration || "")
   };
 }
 
-function isEligibleVideo(video) {
-  if (!video.videoId) {
-    return false;
-  }
-
-  return !EXCLUDED_TITLE_PATTERNS.some(
-    pattern => pattern.test(video.title)
-  );
+function isEligible(video) {
+  if (!video.videoId) return false;
+  if (video.durationSeconds < MIN_STANDARD_VIDEO_SECONDS) return false;
+  return !EXCLUDED_TITLE_PATTERNS.some(pattern => pattern.test(video.title));
 }
 
 module.exports = async function handler(req, res) {
   if (req.method !== "GET") {
     res.setHeader("Allow", "GET");
-
-    return res.status(405).json({
-      error: "Method not allowed"
-    });
+    return res.status(405).json({ error: "Method not allowed" });
   }
 
-  const apiKey = process.env.YOUTUBE_API_KEY;
+  const key = process.env.YOUTUBE_API_KEY;
 
-  if (!apiKey) {
+  if (!key) {
     return res.status(503).json({
       error: "YOUTUBE_API_KEY is not configured"
     });
   }
 
   try {
-    /*
-     * STEP 1:
-     * Find The Alana Show channel using its YouTube handle.
-     */
     const channelUrl = new URL(
       "https://www.googleapis.com/youtube/v3/channels"
     );
@@ -97,190 +85,102 @@ module.exports = async function handler(req, res) {
     channelUrl.search = new URLSearchParams({
       part: "id,contentDetails",
       forHandle: HANDLE,
-      key: apiKey
+      key
     });
 
     const channelData = await getJson(channelUrl);
-
     const channel = channelData.items?.[0];
 
     if (!channel) {
+      return res.status(404).json({ error: "YouTube channel not found" });
+    }
+
+    const uploadsPlaylist =
+      channel.contentDetails?.relatedPlaylists?.uploads;
+
+    if (!uploadsPlaylist) {
       return res.status(404).json({
-        error: "The Alana Show YouTube channel was not found"
+        error: "Uploads playlist not found"
       });
     }
 
-    /*
-     * STEP 2:
-     * Get the uploads playlist belonging to the channel.
-     */
-    const uploadsPlaylistId =
-      channel.contentDetails
-        ?.relatedPlaylists
-        ?.uploads;
+    const ids = [];
+    let pageToken = "";
 
-    if (!uploadsPlaylistId) {
-      return res.status(404).json({
-        error: "The channel uploads playlist was not found"
-      });
-    }
-
-    /*
-     * STEP 3:
-     * Collect video IDs from the uploads playlist.
-     */
-    const videoIds = [];
-
-    let nextPageToken = "";
-
-    for (
-      let page = 0;
-      page < MAX_PAGES;
-      page += 1
-    ) {
+    for (let page = 0; page < MAX_PAGES; page += 1) {
       const playlistUrl = new URL(
         "https://www.googleapis.com/youtube/v3/playlistItems"
       );
 
-      const playlistParams = {
+      playlistUrl.search = new URLSearchParams({
         part: "contentDetails",
-        playlistId: uploadsPlaylistId,
+        playlistId: uploadsPlaylist,
         maxResults: "50",
-        key: apiKey
-      };
-
-      if (nextPageToken) {
-        playlistParams.pageToken =
-          nextPageToken;
-      }
-
-      playlistUrl.search =
-        new URLSearchParams(
-          playlistParams
-        );
-
-      const playlistData =
-        await getJson(playlistUrl);
-
-      const pageVideoIds =
-        (playlistData.items || [])
-          .map(
-            item =>
-              item.contentDetails?.videoId
-          )
-          .filter(Boolean);
-
-      videoIds.push(...pageVideoIds);
-
-      nextPageToken =
-        playlistData.nextPageToken || "";
-
-      if (!nextPageToken) {
-        break;
-      }
-    }
-
-    if (!videoIds.length) {
-      return res.status(200).json({
-        channelId: channel.id,
-        scannedVideos: 0,
-        eligibleVideos: 0,
-        latest: null,
-        mostWatched: null,
-        recent: []
+        ...(pageToken ? { pageToken } : {}),
+        key
       });
+
+      const playlistData = await getJson(playlistUrl);
+
+      ids.push(
+        ...(playlistData.items || [])
+          .map(item => item.contentDetails?.videoId)
+          .filter(Boolean)
+      );
+
+      pageToken = playlistData.nextPageToken || "";
+      if (!pageToken) break;
     }
 
-    /*
-     * STEP 4:
-     * Retrieve titles, descriptions, thumbnails,
-     * publication dates and view counts.
-     */
     const rawVideos = [];
 
-    for (
-      let index = 0;
-      index < videoIds.length;
-      index += 50
-    ) {
-      const group =
-        videoIds.slice(
-          index,
-          index + 50
-        );
-
-      const videosUrl = new URL(
+    for (let i = 0; i < ids.length; i += 50) {
+      const videoUrl = new URL(
         "https://www.googleapis.com/youtube/v3/videos"
       );
 
-      videosUrl.search =
-        new URLSearchParams({
-          part: "snippet,statistics",
-          id: group.join(","),
-          key: apiKey
-        });
+      videoUrl.search = new URLSearchParams({
+        part: "snippet,statistics,contentDetails",
+        id: ids.slice(i, i + 50).join(","),
+        key
+      });
 
-      const videosData =
-        await getJson(videosUrl);
+      const data = await getJson(videoUrl);
+      rawVideos.push(...(data.items || []));
+    }
 
-      rawVideos.push(
-        ...(videosData.items || [])
+    const allVideos = rawVideos.map(normalizeVideo);
+    let eligible = allVideos.filter(isEligible);
+
+    // Safety fallback: if channel formatting changes or videos are unusually
+    // short, still return non-Short uploads instead of an empty website.
+    if (!eligible.length) {
+      eligible = allVideos.filter(video =>
+        video.videoId &&
+        video.durationSeconds > 60 &&
+        !EXCLUDED_TITLE_PATTERNS.some(pattern => pattern.test(video.title))
       );
     }
 
-    /*
-     * STEP 5:
-     * Normalize and lightly filter the results.
-     */
-    const allVideos =
-      rawVideos.map(normalizeVideo);
-
-    let eligibleVideos =
-      allVideos.filter(
-        isEligibleVideo
-      );
-
-    /*
-     * Safety fallback:
-     * Never leave the website empty merely because
-     * every title matched a filter.
-     */
-    if (!eligibleVideos.length) {
-      eligibleVideos = allVideos;
+    // Final fallback: return all public uploads rather than null values.
+    if (!eligible.length) {
+      eligible = allVideos.filter(video => video.videoId);
     }
 
-    /*
-     * STEP 6:
-     * Find newest and most-watched videos.
-     */
     const latest =
-      [...eligibleVideos]
-        .sort(
-          (a, b) =>
-            new Date(b.publishedAt) -
-            new Date(a.publishedAt)
-        )[0] || null;
+      [...eligible].sort(
+        (a, b) => new Date(b.publishedAt) - new Date(a.publishedAt)
+      )[0] || null;
 
     const mostWatched =
-      [...eligibleVideos]
-        .sort(
-          (a, b) =>
-            b.viewCount -
-            a.viewCount
-        )[0] || null;
+      [...eligible].sort((a, b) => b.viewCount - a.viewCount)[0] || null;
 
-    const recent =
-      [...eligibleVideos]
-        .sort(
-          (a, b) =>
-            new Date(b.publishedAt) -
-            new Date(a.publishedAt)
-        )
-        .slice(0, 6);
+    const recent = [...eligible]
+      .sort(
+        (a, b) => new Date(b.publishedAt) - new Date(a.publishedAt)
+      )
+      .slice(0, 6);
 
-    /*
-     * Cache for five minutes.
-     */
     res.setHeader(
       "Cache-Control",
       "s-maxage=300, stale-while-revalidate=3600"
@@ -289,21 +189,15 @@ module.exports = async function handler(req, res) {
     return res.status(200).json({
       channelId: channel.id,
       scannedVideos: allVideos.length,
-      eligibleVideos:
-        eligibleVideos.length,
+      eligibleVideos: eligible.length,
       latest,
       mostWatched,
       recent
     });
   } catch (error) {
-    console.error(
-      "YouTube function error:",
-      error
-    );
-
+    console.error(error);
     return res.status(500).json({
-      error:
-        "Unable to load The Alana Show YouTube videos",
+      error: "Unable to load YouTube episodes",
       detail: error.message
     });
   }

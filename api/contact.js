@@ -15,17 +15,10 @@ module.exports = async function handler(req, res) {
   }
 
   const {
-    name = "",
-    email = "",
-    organization = "",
-    phone = "",
-    inquiry = "",
-    website = "",
-    message = "",
-    company_website = ""
+    name = "", email = "", organization = "", phone = "", inquiry = "",
+    website = "", message = "", company_website = ""
   } = req.body || {};
 
-  // Honeypot: silently accept bot submissions without sending.
   if (company_website) return res.status(200).json({ ok: true });
 
   if (!name.trim() || !validEmail(email) || !inquiry.trim() || !message.trim()) {
@@ -64,13 +57,7 @@ module.exports = async function handler(req, res) {
         "Authorization": `Bearer ${apiKey}`,
         "Content-Type": "application/json"
       },
-      body: JSON.stringify({
-        from,
-        to: [to],
-        reply_to: email,
-        subject,
-        html
-      })
+      body: JSON.stringify({ from, to: [to], reply_to: email, subject, html })
     });
 
     const result = await response.json();
