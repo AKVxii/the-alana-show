@@ -1,199 +1,146 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <meta name="description" content="The Alana Show — real conversations, distinct voices, and thoughtful perspective across radio, video, and every major podcast platform.">
-  <meta name="theme-color" content="#040b16">
-  <meta property="og:title" content="The Alana Show">
-  <meta property="og:description" content="Real conversations. Distinct voices. Thoughtful perspective.">
-  <meta property="og:type" content="website">
-  <meta property="og:image" content="assets/alana-original.jpg">
-  <title>The Alana Show | Real Conversations. Distinct Voices.</title>
-  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,600&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
-  <script>document.documentElement.classList.add('js')</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Alana Show | Real Conversations. Distinct Voices.</title>
+    <link rel="stylesheet" href="styles.css">
+    <!-- Google Fonts: Playfair Display for elegance, Inter for modern readability -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
 </head>
 <body>
-  <a class="skip-link" href="#main">Skip to content</a>
-
-  <header class="site-header">
-    <div class="shell header-inner">
-      <a class="brand" href="#home" aria-label="The Alana Show home">
-        <span class="brand-seal" aria-hidden="true">TAS</span>
-        <span class="brand-text"><strong>The Alana Show</strong><small>Real conversations. Distinct voices.</small></span>
-      </a>
-
-      <button class="menu-toggle" type="button" aria-label="Open navigation" aria-expanded="false" aria-controls="site-nav">
-        <span></span><span></span><span></span>
-      </button>
-
-      <nav id="site-nav" aria-label="Primary navigation">
-        <a href="#watch">Watch</a>
-        <a href="#listen">Listen</a>
-        <a href="#guests">Guests</a>
-        <a href="#on-air">On Air</a>
-        <a href="#about">About</a>
-        <a href="#partner">Partner</a>
-        <a href="#connect">Contact</a>
-      </nav>
-
-      <a class="header-cta" href="https://us7.maindigitalstream.com/5070/" target="_blank" rel="noopener">
-        <span aria-hidden="true">◉</span> Listen Live
-      </a>
-    </div>
-  </header>
-
-  <main id="main">
-    <section class="hero" id="home">
-      <div class="ambient-lines" aria-hidden="true"></div>
-      <div class="spark-field" aria-hidden="true"></div>
-      <div class="shell hero-grid">
-        <div class="hero-copy" data-reveal>
-          <p class="kicker">Voice of the Gold Coast</p>
-          <h1><span class="the">The</span><span class="name">Alana</span><span class="show">Show</span></h1>
-          <p class="hero-statement">Real conversations. <em>Distinct voices.</em><br>Thoughtful perspective.</p>
-          <p class="hero-lede">A curated introduction to the people, ideas, and stories at the heart of The Alana Show.</p>
-          <div class="hero-actions">
-            <a class="btn btn-gold" href="#watch"><span aria-hidden="true">▶</span> Watch Featured Conversation</a>
-            <a class="btn btn-outline" href="#listen"><span aria-hidden="true">◉</span> Listen Everywhere</a>
-          </div>
-          <div class="hero-proof" aria-label="Show highlights">
-            <span>South Florida radio</span><span>Worldwide streaming</span><span>Independent editorial voice</span>
-          </div>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="brand">
+            <div class="logo-mark">TAS</div>
+            <div class="brand-text">
+                <span class="brand-title">The Alana Show</span>
+                <span class="brand-tagline">REAL CONVERSATIONS. DISTINCT VOICES.</span>
+            </div>
         </div>
+        <ul class="nav-links">
+            <li><a href="#" class="active">Home</a></li>
+            <li><a href="#">Watch</a></li>
+            <li><a href="#">Listen</a></li>
+            <li><a href="#">Guests</a></li>
+            <li><a href="#">On Air</a></li>
+            <li><a href="#">About</a></li>
+            <li><a href="#">Partner</a></li>
+            <li><a href="#">Contact</a></li>
+        </ul>
+        <a href="#" class="btn btn-gold">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg>
+            LISTEN LIVE
+        </a>
+    </nav>
 
-        <div class="portrait-wrap" data-reveal data-tilt>
-          <div class="portrait-glow" aria-hidden="true"></div>
-          <figure class="portrait-frame">
-            <img src="assets/alana-original.jpg" alt="Alana K. Vandeveer, host of The Alana Show" width="958" height="958">
-            <figcaption><small>Hosted by</small><strong>Alana K. Vandeveer</strong></figcaption>
-          </figure>
-        </div>
-      </div>
-    </section>
+    <main class="container">
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-content">
+                <div class="eyebrow">
+                    <span class="line"></span> VOICE OF THE GOLD COAST
+                </div>
+                <h1 class="main-heading">
+                    <span class="small-the">THE</span><br>
+                    <span class="large-alana">ALANA</span><br>
+                    <span class="gold-show">SHOW</span>
+                </h1>
+                <h2 class="sub-heading">
+                    Real conversations.<br>
+                    <em>Distinct voices.</em><br>
+                    Thoughtful perspective.
+                </h2>
+                <p class="hero-desc">
+                    A curated introduction to the people, ideas, and stories at the heart of The Alana Show.
+                </p>
+                <div class="hero-actions">
+                    <a href="#" class="btn btn-gold">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                        WATCH FEATURED CONVERSATION
+                    </a>
+                    <a href="#" class="btn btn-outline">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path><path d="M2 12h20"></path></svg>
+                        LISTEN EVERYWHERE
+                    </a>
+                </div>
+                <div class="hero-trust">
+                    <span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#e2c073" stroke-width="2"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"></path></svg> SOUTH FLORIDA RADIO</span>
+                    <span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#e2c073" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line></svg> WORLDWIDE STREAMING</span>
+                    <span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#e2c073" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg> INDEPENDENT EDITORIAL VOICE</span>
+                </div>
+            </div>
+            
+            <div class="hero-visual">
+                <div class="image-wrapper">
+                    <img src="assets/alana-original.jpg" alt="Alana K. Vandeveer" class="host-image">
+                    <div class="host-badge">
+                        <span class="badge-title">HOSTED BY</span>
+                        <span class="badge-name">Alana K. Vandeveer</span>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-    <section class="platform-band" id="listen" aria-labelledby="listen-heading">
-      <div class="shell">
-        <div class="band-title"><span></span><h2 id="listen-heading">Watch or listen wherever you are</h2><span></span></div>
-        <div class="platform-grid">
-          <a class="platform-card youtube" href="https://www.youtube.com/@alanakvandeveer/videos" target="_blank" rel="noopener"><b>▶</b><span><strong>YouTube</strong><small>Watch</small></span></a>
-          <a class="platform-card apple" href="https://podcasts.apple.com/us/podcast/the-alana-show/id1653660911" target="_blank" rel="noopener"><b>◉</b><span><strong>Apple Podcasts</strong><small>Listen</small></span></a>
-          <a class="platform-card spotify" href="https://creators.spotify.com/pod/show/alanakvandeveer" target="_blank" rel="noopener"><b>≋</b><span><strong>Spotify</strong><small>Listen</small></span></a>
-          <a class="platform-card amazon" href="https://music.amazon.com/podcasts/189d4745-19c0-4e85-a3ea-41d67efc2dec/the-alana-show" target="_blank" rel="noopener"><b>a</b><span><strong>Amazon Music</strong><small>Listen</small></span></a>
-          <a class="platform-card iheart" href="https://www.iheart.com/search/?q=The%20Alana%20Show" target="_blank" rel="noopener"><b>♥</b><span><strong>iHeartRadio</strong><small>Find the show</small></span></a>
-          <a class="platform-card trueoldies" href="https://trueoldiesfla.com/on-air/the-alana-show" target="_blank" rel="noopener"><b>TO</b><span><strong>True Oldies</strong><small>Listen live</small></span></a>
-        </div>
-      </div>
-    </section>
+        <!-- Platform Bar -->
+        <section class="platform-bar">
+            <div class="section-divider">
+                <span class="line"></span>
+                <span class="divider-text"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#e2c073" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg> WATCH OR LISTEN WHEREVER YOU ARE</span>
+                <span class="line"></span>
+            </div>
+            <div class="platforms">
+                <div class="platform-pill"><div class="icon yt"></div><div><strong>YouTube</strong><br>Watch</div></div>
+                <div class="platform-pill"><div class="icon apple"></div><div><strong>Apple Podcasts</strong><br>Listen</div></div>
+                <div class="platform-pill"><div class="icon spotify"></div><div><strong>Spotify</strong><br>Listen</div></div>
+                <div class="platform-pill"><div class="icon amazon"></div><div><strong>Amazon Music</strong><br>Listen</div></div>
+                <div class="platform-pill"><div class="icon iheart"></div><div><strong>iHeartRadio</strong><br>Listen</div></div>
+                <div class="platform-pill"><div class="icon trueoldies"></div><div><strong>True Oldies</strong><br>Listen Live</div></div>
+                <div class="platform-pill"><div class="icon more">...</div><div><strong>More Options</strong><br>Listen</div></div>
+            </div>
+        </section>
 
-    <section class="compact-section" id="watch">
-      <div class="shell feature-grid">
-        <article class="feature-card" data-reveal>
-          <div class="section-label">Featured Conversation</div>
-          <div class="video-box">
-            <iframe id="featured-video" src="https://www.youtube-nocookie.com/embed/kJWFTnWOgYM?rel=0" title="Featured conversation from The Alana Show" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-          </div>
-          <div class="feature-copy">
-            <p class="episode-number" id="featured-stats">From The Alana Show archive</p>
-            <h2 id="featured-title">Chairman Michael Barnett Recaps the 2022 Midterms</h2>
-            <p id="featured-description">A direct conversation about leadership, civic engagement, public life, and Palm Beach County.</p>
-            <a id="featured-link" class="text-link" href="https://www.youtube.com/watch?v=kJWFTnWOgYM" target="_blank" rel="noopener">Watch or listen <span>→</span></a>
-          </div>
-        </article>
+        <!-- Featured Grid -->
+        <section class="featured-grid">
+            <!-- Left Card -->
+            <div class="card featured-card">
+                <div class="card-header">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#e2c073" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+                    FEATURED CONVERSATION
+                </div>
+                <div class="card-body">
+                    <div class="video-thumbnail">
+                        <div class="play-btn-large"><svg width="24" height="24" viewBox="0 0 24 24" fill="white"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg></div>
+                    </div>
+                    <div class="episode-info">
+                        <span class="ep-number">EPISODE 24</span>
+                        <h3>Leading with Purpose</h3>
+                        <p>A deep dive into leadership, legacy, and the choices that shape our future.</p>
+                        <div class="ep-meta">
+                            <span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#e2c073" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg> 45:18</span>
+                            <a href="#" class="text-link">Watch or Listen &rarr;</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-        <aside class="radio-card" id="on-air" data-reveal>
-          <p class="section-label centered">As Heard On</p>
-          <div class="true-oldies-wordmark"><i>True</i><strong>Oldies</strong><small>South Florida</small></div>
-          <div class="radio-wave" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
-          <h2>Tuesdays · 8:00–8:30 PM ET</h2>
-          <p>Across South Florida on the True Oldies Channel, with worldwide streaming and video.</p>
-          <div class="radio-actions">
-            <a class="btn btn-gold" href="https://us7.maindigitalstream.com/5070/" target="_blank" rel="noopener">Listen Live Now ↗</a>
-            <a class="small-link" href="https://trueoldiesfla.com/on-air/the-alana-show" target="_blank" rel="noopener">Explore The Alana Show on True Oldies</a>
-          </div>
-        </aside>
-      </div>
-    </section>
-
-    <section class="compact-section condensed" id="about">
-      <div class="shell about-grid">
-        <div class="about-photo" data-reveal><img src="assets/alana-original.jpg" alt="Alana K. Vandeveer in the studio" loading="lazy"></div>
-        <div class="about-copy" data-reveal>
-          <p class="kicker">Meet the host</p>
-          <h2>Curious, direct, prepared—and always listening.</h2>
-          <p>Alana K. Vandeveer is an entrepreneur, commercial real estate professional, community advocate, and media host with a deep interest in people, public life, faith, service, and the ideas shaping our communities.</p>
-          <p>Raised in a civically engaged Minnesota family and now based in South Florida, Alana brings preparation, practical judgment, warmth, and genuine curiosity to every conversation.</p>
-          <blockquote><small>A principle behind every conversation</small>“If someone isn’t in the room, don’t talk about them.”</blockquote>
-          <div class="signature">Alana K. Vandeveer</div>
-        </div>
-      </div>
-    </section>
-
-    <section class="compact-section guests-section" id="guests">
-      <div class="shell">
-        <div class="section-header-row">
-          <div><p class="kicker">Recent voices</p><h2>More conversations worth hearing.</h2></div>
-          <a href="https://www.youtube.com/@alanakvandeveer/videos" target="_blank" rel="noopener">View all episodes ↗</a>
-        </div>
-        <div class="episode-rail" id="recent-episodes" aria-live="polite">
-          <article class="episode-placeholder"><span>Loading recent conversations…</span></article>
-        </div>
-      </div>
-    </section>
-
-    <section class="compact-section partner-section" id="partner">
-      <div class="shell partner-grid">
-        <div data-reveal>
-          <p class="kicker">Advertise & partner</p>
-          <h2>Connect your brand with conversations that matter.</h2>
-          <p>Thoughtful sponsorships, community-impact partnerships, episode support, live programming, and custom collaborations—selected for fit, quality, and respect for the audience.</p>
-          <a class="btn btn-gold" href="#connect" data-inquiry="Advertising or partnership">Request partnership information</a>
-        </div>
-        <div class="partner-points" data-reveal>
-          <article><strong>Episode Sponsorship</strong><span>Refined opening, closing, or on-screen acknowledgment.</span></article>
-          <article><strong>Season Partnership</strong><span>A consistent presence across a group of conversations.</span></article>
-          <article><strong>Community Impact</strong><span>Help underwrite service-focused episodes and distribution.</span></article>
-          <article><strong>Custom Collaboration</strong><span>A tailored series or initiative built around shared relevance.</span></article>
-        </div>
-      </div>
-    </section>
-
-    <section class="compact-section contact-section" id="connect">
-      <div class="shell contact-grid">
-        <div class="contact-intro" data-reveal>
-          <p class="kicker">Connect with the show</p>
-          <h2>Bring a meaningful conversation to the table.</h2>
-          <p>Reach out about a guest, nonprofit or community organization, advertising opportunity, media request, partnership, support, or general question.</p>
-          <a href="mailto:alana@alanakvandeveer.com">alana@alanakvandeveer.com</a>
-        </div>
-
-        <form class="contact-form" id="contact-form" novalidate data-reveal>
-          <div class="form-row"><label>Name *<input name="name" autocomplete="name" required></label><label>Email *<input name="email" type="email" autocomplete="email" required></label></div>
-          <div class="form-row"><label>Organization<input name="organization" autocomplete="organization"></label><label>Phone<input name="phone" type="tel" autocomplete="tel"></label></div>
-          <label>How can we help? *<select name="inquiry" id="inquiry" required><option value="">Choose an option</option><option>Advertising or partnership</option><option>Recommend a guest</option><option>Recommend an organization</option><option>Media inquiry</option><option>Support the show</option><option>General contact</option></select></label>
-          <label>Website or social link<input name="website" type="url" placeholder="https://"></label>
-          <label>Message *<textarea name="message" required placeholder="Tell us about the opportunity, guest, organization, or story."></textarea></label>
-          <input class="honeypot" name="company_website" tabindex="-1" autocomplete="off" aria-hidden="true">
-          <div class="form-bottom"><p>Submission does not guarantee an appearance. Your information is not sold.</p><button class="btn btn-gold" type="submit">Send Inquiry</button></div>
-          <div class="form-status" id="form-status" role="status" aria-live="polite"></div>
-        </form>
-      </div>
-    </section>
-  </main>
-
-  <footer>
-    <div class="shell footer-grid">
-      <div class="footer-brand"><span class="brand-seal">TAS</span><strong>The Alana Show</strong><small>Real conversations. Distinct voices. Thoughtful perspective.</small></div>
-      <div class="footer-links"><a href="#watch">Watch</a><a href="#listen">Listen</a><a href="#on-air">On Air</a><a href="#about">About</a><a href="#partner">Partner</a><a href="#connect">Contact</a></div>
-      <div class="footer-radio"><span>Heard on</span><strong>True Oldies South Florida</strong><a href="https://trueoldiesfla.com/on-air/the-alana-show" target="_blank" rel="noopener">Visit the show page ↗</a></div>
-    </div>
-    <div class="shell footer-bottom"><span>© <span id="year"></span> The Alana Show. All rights reserved.</span><span>Editorial independence · Purposeful storytelling · Community impact</span></div>
-  </footer>
-
-  <script src="app.js" defer></script>
+            <!-- Right Card -->
+            <div class="card radio-card">
+                <div class="radio-content">
+                    <span class="gold-text small-bold">AS HEARD ON</span>
+                    <h2 class="radio-logo"><em>True</em><br>OLDIES<br><span class="radio-sub">SOUTH FLORIDA</span></h2>
+                    <div class="radio-schedule">Tuesdays • 8:00 – 8:30 PM ET</div>
+                    <p>Across South Florida on the True Oldies Channel<br>and streaming worldwide.</p>
+                    <a href="#" class="btn btn-gold btn-full">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"></path></svg>
+                        LISTEN LIVE NOW
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
 </body>
 </html>
