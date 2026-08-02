@@ -1,0 +1,9 @@
+{
+  "name": "the-alana-show",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Official landing page for The Alana Show",
+  "scripts": {
+    "dev": "vercel dev"
+  }
+}
