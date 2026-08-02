@@ -1,24 +1,44 @@
-# The Alana Show — final website package
+# The Alana Show 2.0
 
-## Verified True Oldies wording
-The gold broadcast band uses the station's current published claims:
-- The Alana Show airs Tuesdays, 8:00–8:30 PM ET.
-- True Oldies describes a five-county Florida network reaching over 4 million people.
-- The Alana Show page states that the program has worldwide streaming and video components.
+A premium, modular, no-build website for Vercel. It keeps the current YouTube and Resend serverless integrations while separating the design into maintainable components.
 
-## Deploy
-Upload the contents of this folder to the GitHub repository root. Vercel should see `index.html`, `assets/`, `api/`, and `vercel.json` at the top level.
+## Project structure
 
-Vercel settings:
-- Framework Preset: Other
-- Root Directory: ./
-- Build Command: blank
-- Output Directory: blank
+- `index.html` — metadata, structured data, application mount
+- `src/main.js` — application behavior and integrations
+- `src/styles.css` — complete responsive visual system
+- `src/components/` — reusable page sections
+- `src/data/site.js` — platform links and editable site content
+- `src/lib/` — icons and utilities
+- `api/youtube.js` — YouTube library, featured/latest/recent episodes
+- `api/contact.js` — working Resend contact form
+- `assets/` — portrait, logo, favicon, social share artwork
 
-Environment variables:
+## Deploy to the existing GitHub/Vercel project
+
+1. Extract this ZIP.
+2. In the GitHub repository, upload the **contents** of this folder to the repository root.
+3. Replace matching files and folders. Delete old `app.js` and `styles.css` at the root if they still exist; this version uses `src/main.js` and `src/styles.css`.
+4. Commit directly to `main`.
+5. Vercel should deploy automatically. Framework preset remains `Other`; no build command or output directory is required.
+
+## Existing Vercel variables retained
+
 - `YOUTUBE_API_KEY`
 - `RESEND_API_KEY`
 - `CONTACT_TO_EMAIL`
 - `CONTACT_FROM_EMAIL`
 
-The page itself works without the email variables. The YouTube API variable is needed for automatic episode updates.
+Optional:
+
+- `FEATURED_YOUTUBE_VIDEO_ID` — set a specific YouTube video ID to curate the Featured Conversation. Without it, the API uses the most-watched eligible full conversation.
+
+## Easy edits
+
+Edit `src/data/site.js` to update platform links, organization profiles, contact details, and topics.
+
+## Important notes
+
+- The iHeartRadio button uses an exact-title iHeart search until the direct show URL is confirmed.
+- The True Oldies copy uses the official published Tuesday 8:00–8:30 PM schedule and official South Florida frequencies.
+- Sponsorship wording intentionally avoids invented audience metrics.

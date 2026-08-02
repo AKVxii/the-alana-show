@@ -1,0 +1,39 @@
+THE ALANA SHOW 2.0 — GITHUB / VERCEL DEPLOYMENT
+
+1. Download and extract The_Alana_Show_2_0_Phase_1.zip.
+2. Open GitHub: AKVxii/the-alana-show.
+3. Choose Add file → Upload files.
+4. Drag every item INSIDE the extracted folder into GitHub:
+   api/
+   assets/
+   src/
+   index.html
+   vercel.json
+   robots.txt
+   sitemap.xml
+   site.webmanifest
+   README.md
+5. GitHub will replace matching files and add the new src/ folder.
+6. Commit directly to main with message:
+   Launch The Alana Show 2.0 Phase 1
+7. Vercel should redeploy automatically.
+8. Do not recreate or delete the existing Vercel variables:
+   YOUTUBE_API_KEY
+   RESEND_API_KEY
+   CONTACT_TO_EMAIL
+   CONTACT_FROM_EMAIL
+9. When Vercel says Ready, hard-refresh:
+   https://www.thealanashow.com/
+10. Test:
+   - Featured/latest/recent YouTube episodes
+   - Episode search button or / keyboard shortcut
+   - True Oldies links
+   - All podcast platform buttons
+   - Contact form delivery
+   - Mobile menu
+
+OPTIONAL CLEANUP AFTER THE NEW SITE WORKS
+Delete the old root-level app.js and styles.css files if they remain. The new site uses src/main.js and src/styles.css, so the old files are not used.
+
+OPTIONAL CURATED FEATURED EPISODE
+In Vercel, add FEATURED_YOUTUBE_VIDEO_ID with the chosen YouTube video ID, then redeploy. Without it, the most-watched eligible full conversation is featured automatically.
