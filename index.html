@@ -571,7 +571,7 @@
           <h2 id="featured-heading">Featured Conversation</h2>
           <p>
             A curated introduction to the people, ideas, and stories at the heart of The Alana Show.
-            When the YouTube integration is enabled, this section automatically displays the most-watched eligible full episode.
+            
           </p>
         </div>
 
@@ -937,7 +937,7 @@
           episode.description || "A featured conversation from The Alana Show.";
         const details = [formatDate(episode.publishedAt), formatViews(episode.viewCount)].filter(Boolean);
         document.getElementById("featured-stats").textContent = details.join(" · ");
-        document.getElementById("featured-heading").textContent = "Most-Watched Conversation";
+        document.getElementById("featured-heading").textContent = "Featured Conversation";
       } else if (type === "latest") {
         document.getElementById("latest-title").textContent = episode.title;
         document.getElementById("latest-description").textContent =
