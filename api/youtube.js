@@ -1,6 +1,6 @@
 const HANDLE = "@alanakvandeveer";
 const MAX_PAGES = 4;
-const MIN_DURATION_SECONDS = 15 * 60;
+const MIN_DURATION_SECONDS = 90;
 const EXCLUDED_TITLE_WORDS = ["short", "shorts", "clip", "trailer", "teaser", "promo"];
 
 function parseDuration(value = "PT0S") {
