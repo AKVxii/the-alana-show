@@ -11,7 +11,7 @@ import { SearchDialog } from "./components/SearchDialog.js";
 import { Conversions } from "./components/Conversions.js";
 import { icon } from "./lib/icons.js";
 import { site } from "./data/site.js";
-import { compactNumber, escapeHtml, excerpt, formatDate, formatDuration, nextBroadcastLabel } from "./lib/utils.js";
+import { compactNumber, escapeHtml, excerpt, formatDate, formatDuration, isValidWebsiteOrSocial, nextBroadcastLabel, normalizeWebsiteOrSocial } from "./lib/utils.js";
 import { searchEpisodes, uniqueEpisodes } from "./lib/episode-search.js";
 
 const app = document.querySelector("#app");
@@ -266,18 +266,27 @@ function setupSearch() {
 function setupContactForm() {
   const form = document.querySelector("[data-contact-form]");
   const status = document.querySelector("[data-form-status]");
+  const website = form?.elements.namedItem("website");
   if (!form) return;
+  website?.addEventListener("input", () => website.setCustomValidity(""));
   form.addEventListener("submit", async event => {
     event.preventDefault();
     status.textContent = "";
     status.classList.remove("success");
     form.setAttribute("aria-busy", "false");
-    const data = Object.fromEntries(new FormData(form).entries());
+    if (website) {
+      const websiteEntry = website.value;
+      website.value = normalizeWebsiteOrSocial(websiteEntry);
+      website.setCustomValidity(isValidWebsiteOrSocial(websiteEntry) ? "" : "Enter a valid website address or social username.");
+    }
     if (!form.checkValidity()) {
       form.reportValidity();
-      status.textContent = "Please complete the required fields.";
+      status.textContent = website?.validity.customError
+        ? "Enter a valid website address or social username."
+        : "Please complete the required fields.";
       return;
     }
+    const data = Object.fromEntries(new FormData(form).entries());
     const button = form.querySelector('button[type="submit"]');
     form.setAttribute("aria-busy", "true");
     button.disabled = true;
