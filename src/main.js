@@ -1,7 +1,7 @@
 import { Header } from "./components/Header.js";
 import { Hero } from "./components/Hero.js";
 import { Platforms } from "./components/Platforms.js";
-import { Episodes } from "./components/Episodes.js";
+import { EpisodeThumbnail, Episodes, isUsableThumbnailUrl, revealThumbnailFallback } from "./components/Episodes.js";
 import { Impact } from "./components/Impact.js";
 import { About } from "./components/About.js";
 import { Partner } from "./components/Partner.js";
@@ -108,7 +108,7 @@ function episodeCard(episode) {
   return `
     <article class="episode-card">
       <a class="episode-thumb" href="${videoUrl}" target="_blank" rel="noopener" aria-label="Watch ${escapeHtml(episode.title)}">
-        <img src="${escapeHtml(episode.thumbnail)}" alt="" loading="lazy">
+        ${EpisodeThumbnail(episode, { latest: false })}
         <span class="episode-play">${icon("play")}</span>
         <small>${escapeHtml(formatDuration(episode.durationSeconds))}</small>
       </a>
@@ -126,6 +126,18 @@ function renderEpisodes(episodes) {
   const rail = document.querySelector("[data-episode-rail]");
   if (!rail) return;
   rail.innerHTML = episodes.slice(0, 8).map(episodeCard).join("");
+  setupThumbnailFallbacks(rail);
+}
+
+function setupThumbnailFallbacks(root = document) {
+  root.querySelectorAll("[data-thumbnail-frame]").forEach(frame => {
+    const image = frame.querySelector("img");
+    if (!image || image.dataset.fallbackBound) return;
+    image.dataset.fallbackBound = "true";
+    image.addEventListener("load", () => frame.classList.remove("fallback-visible"));
+    image.addEventListener("error", () => revealThumbnailFallback(frame, image));
+    if (image.complete && image.naturalWidth === 0) revealThumbnailFallback(frame, image);
+  });
 }
 
 function updateFeatured(episode) {
@@ -140,8 +152,14 @@ function updateFeatured(episode) {
 
 function updateLatest(episode) {
   if (!episode?.videoId) return;
-  const thumb = document.querySelector("[data-latest-thumb]");
-  thumb.style.backgroundImage = `linear-gradient(180deg, transparent, rgba(6,16,32,.82)), url("${episode.thumbnail}")`;
+  const media = document.querySelector("[data-latest-media]");
+  if (media) {
+    media.innerHTML = EpisodeThumbnail({
+      ...episode,
+      thumbnail: isUsableThumbnailUrl(episode.thumbnail) ? episode.thumbnail : ""
+    }, { latest: true });
+    setupThumbnailFallbacks(media);
+  }
   document.querySelector("[data-latest-title]").textContent = episode.title;
   document.querySelector("[data-latest-description]").textContent = excerpt(episode.description, 145) || `Published ${formatDate(episode.publishedAt)}.`;
   document.querySelector("[data-latest-link]").href = `https://www.youtube.com/watch?v=${episode.videoId}`;
@@ -170,7 +188,7 @@ function searchResult(episode) {
   const videoUrl = `https://www.youtube.com/watch?v=${encodeURIComponent(episode.videoId)}`;
   const categories = (episode.categories || []).slice(0, 3);
   return `<a class="search-result" href="${videoUrl}" target="_blank" rel="noopener">
-    <img src="${escapeHtml(episode.thumbnail)}" alt="" loading="lazy">
+    <span class="search-result-media">${EpisodeThumbnail(episode, { latest: false })}</span>
     <span><small>${escapeHtml(formatDate(episode.publishedAt))}</small><strong>${escapeHtml(episode.title)}</strong><p>${escapeHtml(excerpt(episode.description, 110))}</p>${categories.length ? `<span class="search-categories">${categories.map(category => `<span>${escapeHtml(category)}</span>`).join("")}</span>` : ""}</span>
     ${icon("arrow")}
   </a>`;
@@ -196,6 +214,7 @@ function renderSearchResults(query, category = state.selectedCategory) {
     return;
   }
   container.innerHTML = matches.map(searchResult).join("");
+  setupThumbnailFallbacks(container);
 }
 
 function setupSearch() {
@@ -297,4 +316,5 @@ setupInquiryLinks();
 setupSearch();
 setupContactForm();
 setupYear();
+setupThumbnailFallbacks();
 loadYouTube();
