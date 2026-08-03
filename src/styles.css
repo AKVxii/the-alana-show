@@ -177,9 +177,9 @@ p { margin-bottom: 0; }
   overflow: hidden;
   color: var(--white);
   background:
-    radial-gradient(circle at 76% 26%, rgba(26, 66, 106, .58), transparent 34%),
-    radial-gradient(circle at 15% 80%, rgba(103, 48, 79, .17), transparent 32%),
-    linear-gradient(125deg, var(--navy-1000), var(--navy-950) 55%, #0d2d50);
+    radial-gradient(circle at 78% 25%, rgba(26, 66, 106, .48), transparent 33%),
+    radial-gradient(circle at 42% 48%, rgba(216, 184, 102, .045), transparent 25%),
+    linear-gradient(125deg, var(--navy-1000), var(--navy-950) 58%, #0a2847);
 }
 .hero::after {
   content: "";
@@ -195,7 +195,7 @@ p { margin-bottom: 0; }
 }
 .hero-aurora {
   width: 640px; height: 640px; position: absolute; right: -130px; top: 50px;
-  border-radius: 50%; filter: blur(65px); opacity: .18;
+  border-radius: 50%; filter: blur(65px); opacity: .09;
   background: conic-gradient(from 40deg, transparent, var(--gold-400), #2e6f9c, transparent 65%);
   animation: aurora 18s linear infinite;
 }
@@ -239,14 +239,12 @@ p { margin-bottom: 0; }
 .portrait-inner img { width: 100%; height: auto; display: block; aspect-ratio: 958 / 960; object-fit: contain; object-position: center; }
 .portrait-caption {
   position: absolute; left: -18px; bottom: 18px; z-index: 4;
-  min-width: 210px; padding: 12px 16px;
+  min-width: 190px; padding: 10px 14px;
   color: var(--navy-950); border-left: 2px solid var(--gold-500); border-radius: 0 8px 8px 0;
   background: rgba(255,253,248,.96); box-shadow: var(--shadow-sm); backdrop-filter: blur(10px);
 }
-.portrait-caption span { display: block; color: var(--gold-600); font-size: .58rem; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; }
-.portrait-caption strong { display: block; margin-top: 3px; font-family: var(--serif); font-size: 1.25rem; }
-.scroll-cue { position: absolute; left: 50%; bottom: 20px; z-index: 3; display: grid; justify-items: center; gap: 8px; color: #aebccd; text-decoration: none; font-size: .59rem; letter-spacing: .2em; text-transform: uppercase; transform: translateX(-50%); }
-.scroll-cue i { width: 1px; height: 32px; display: block; background: linear-gradient(var(--gold-400), transparent); animation: scrollPulse 2s ease-in-out infinite; }
+.portrait-caption span { display: block; color: var(--gold-600); font-size: .53rem; font-weight: 800; letter-spacing: .15em; text-transform: uppercase; }
+.portrait-caption strong { display: block; margin-top: 2px; font-family: var(--serif); font-size: 1.12rem; }
 
 /* Broadcast */
 .broadcast { height: 100%; position: relative; z-index: 4; color: var(--white); border: 1px solid rgba(216,184,102,.2); border-radius: 18px; background: linear-gradient(145deg, #102540, #07162a 62%, #102642); }
@@ -279,6 +277,7 @@ p { margin-bottom: 0; }
 .platform-heading span { height: 1px; background: linear-gradient(90deg, transparent, var(--gold-500)); }
 .platform-heading span:last-child { background: linear-gradient(90deg, var(--gold-500), transparent); }
 .platform-heading h2 { color: var(--gold-400); font-size: 1rem; font-weight: 700; letter-spacing: .08em; text-align: center; text-transform: uppercase; }
+.platform-heading-mobile { display: none; }
 .platform-rail { display: grid; grid-template-columns: repeat(7, 1fr); gap: 10px; }
 .platform-card { min-height: 72px; padding: 10px; display: grid; grid-template-columns: 32px 1fr; align-items: center; gap: 9px; position: relative; overflow: hidden; color: var(--white); border: 1px solid rgba(255,255,255,.11); border-radius: 10px; background: rgba(4,14,28,.58); text-decoration: none; box-shadow: none; transition: transform .22s ease, border-color .22s ease, box-shadow .22s ease; }
 .platform-card::before { content: ""; position: absolute; inset: auto -40% -70% 10%; height: 130px; border-radius: 50%; background: radial-gradient(circle, rgba(216,184,102,.22), transparent 65%); transition: transform .3s ease; }
@@ -458,7 +457,6 @@ p { margin-bottom: 0; }
 @keyframes orbit { to { transform: rotate(360deg); } }
 @keyframes ring { 0% { inset: 48%; opacity: .75; } 100% { inset: -15%; opacity: 0; } }
 @keyframes livePulse { 50% { box-shadow: 0 0 0 9px rgba(255,82,102,.06); } }
-@keyframes scrollPulse { 50% { opacity: .25; transform: scaleY(.7); } }
 @keyframes skeleton { to { background-position: -200% 0; } }
 
 /* 120% zoom / compact laptop safeguards */
@@ -505,28 +503,39 @@ p { margin-bottom: 0; }
   .section-heading { align-items: start; flex-direction: column; gap: 13px; }
   .brand-copy span { display: none; }
   .header-actions { display: none; }
-  .header-inner { height: 64px; }
-  .brand-seal { width: 42px; height: 42px; }
-  .brand-copy strong { font-size: 1.2rem; }
-  .menu-button { width: 42px; height: 42px; }
-  .primary-nav { inset-block-start: 64px; }
-  .hero-grid { padding: 82px 0 38px; gap: 30px; }
-  .title-small { font-size: 1rem; }
-  .title-main { font-size: clamp(4rem, 18vw, 4.5rem); line-height: .84; }
-  .title-show { margin-top: 4px; font-size: clamp(1.75rem, 9vw, 2.25rem); }
-  .hero-line { margin-top: 18px; font-size: 1.45rem; line-height: 1.08; }
-  .hero-intro { margin-top: 12px; font-size: .91rem; }
-  .hero-actions { margin-top: 18px; gap: 8px; }
-  .hero-actions .button { min-height: 46px; padding-block: 10px; }
+  .header-inner { height: 60px; }
+  .brand-seal { width: 40px; height: 40px; }
+  .brand-copy strong { font-size: 1.15rem; }
+  .menu-button { width: 40px; height: 40px; }
+  .primary-nav { inset-block-start: 60px; }
+  .hero-grid { padding: 72px 0 24px; gap: 20px; }
+  .hero .eyebrow { margin-bottom: 8px; font-size: .66rem; }
+  .title-small { font-size: .92rem; }
+  .title-main { font-size: clamp(3.9rem, 17vw, 4.35rem); line-height: .84; }
+  .title-show { margin-top: 2px; font-size: clamp(1.65rem, 8vw, 2rem); }
+  .hero-line { margin-top: 13px; font-size: 1.28rem; line-height: 1.06; }
+  .hero-intro { margin-top: 9px; font-size: .86rem; line-height: 1.5; }
+  .hero-actions { margin-top: 14px; gap: 6px; }
+  .hero-actions .button { min-height: 42px; padding-block: 8px; }
   .hero-actions, .hero-actions .button { width: 100%; }
-  .hero-credentials { margin-top: 17px; gap: 7px 15px; font-size: .61rem; }
-  .portrait-stage { width: min(100%, 440px); }
-  .portrait-caption { left: 10px; bottom: -14px; min-width: 190px; padding: 10px 13px; border-radius: 0 8px 8px 0; }
-  .scroll-cue { display: none; }
+  .hero-credentials { margin-top: 13px; gap: 5px 13px; font-size: .57rem; line-height: 1.35; }
+  .hero-credentials span { gap: 6px; }
+  .portrait-stage { width: min(93%, 440px); }
+  .portrait-caption { left: 8px; bottom: -10px; min-width: 0; max-width: calc(100% - 16px); padding: 7px 10px; border-radius: 0 6px 6px 0; }
+  .portrait-caption span { font-size: .45rem; }
+  .portrait-caption strong { margin-top: 1px; font-size: .88rem; }
   .broadcast-grid { padding: 26px 20px; }
   .broadcast-mark { width: 80px; height: 80px; }
+  .platform-heading { margin-bottom: 9px; gap: 9px; }
+  .platform-heading h2 { font-size: .88rem; }
+  .platform-heading-wide { display: none; }
+  .platform-heading-mobile { display: inline; }
   .platform-rail { grid-template-columns: 1fr 1fr; }
-  .platform-card { min-height: 72px; }
+  .platform-card { min-height: 64px; padding: 8px; grid-template-columns: 28px 1fr; gap: 7px; }
+  .platform-icon { width: 28px; height: 28px; }
+  .platform-icon svg { width: 17px; height: 17px; }
+  .platform-copy strong { font-size: .84rem; }
+  .platform-copy small { margin-top: 2px; font-size: .55rem; }
   .watch-aside { grid-template-columns: 1fr; }
   .featured-meta { align-items: start; flex-direction: column; gap: 14px; }
   .episode-header { align-items: start; flex-direction: column; gap: 12px; }
@@ -546,13 +555,15 @@ p { margin-bottom: 0; }
 }
 
 @media (max-width: 440px) {
-  .platform-rail { grid-template-columns: 1fr; }
-  .platform-card { min-height: 64px; }
   .episode-rail { grid-auto-columns: 92%; }
   .contact-form { padding: 22px; }
   .footer-grid { grid-template-columns: 1fr; }
   .footer-brand, .footer-heard { grid-column: auto; }
   .conversion-grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 360px) {
+  .platform-rail { grid-template-columns: 1fr; }
 }
 
 @media (prefers-reduced-motion: reduce) {

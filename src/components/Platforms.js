@@ -7,7 +7,10 @@ export function Platforms() {
       <div class="shell">
         <div class="platform-heading reveal">
           <span aria-hidden="true"></span>
-          <h2>Watch or listen wherever you are</h2>
+          <h2>
+            <span class="platform-heading-wide">Watch or listen wherever you are</span>
+            <span class="platform-heading-mobile">Listen everywhere</span>
+          </h2>
           <span aria-hidden="true"></span>
         </div>
 
