@@ -1,4 +1,5 @@
 import { icon } from "../lib/icons.js";
+import { site } from "../data/site.js";
 
 export function Header() {
   return `
@@ -18,10 +19,11 @@ export function Header() {
         </button>
 
         <nav id="primary-nav" class="primary-nav" aria-label="Primary navigation" data-nav>
+          <a href="#home">Home</a>
           <a href="#watch">Watch</a>
           <a href="#listen">Listen</a>
+          <a href="#guests">Guests</a>
           <a href="#on-air">On Air</a>
-          <a href="#impact">Stepping Up</a>
           <a href="#about">About</a>
           <a href="#partner">Partner</a>
           <a href="#contact">Contact</a>
@@ -33,7 +35,7 @@ export function Header() {
             <span>Search</span>
             <kbd>/</kbd>
           </button>
-          <a class="button button-gold button-small" href="#listen">Listen everywhere</a>
+          <a class="button button-gold button-small" href="${site.trueOldiesLive}" target="_blank" rel="noopener">True Oldies Home</a>
         </div>
       </div>
     </header>
