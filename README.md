@@ -1,11 +1,24 @@
-# The Alana Show — Phase 1 Luxury Build
+# The Alana Show — final website package
 
-Upload every file and folder in this package to the root of the existing GitHub repository. Existing Vercel environment variables remain unchanged.
+## Verified True Oldies wording
+The gold broadcast band uses the station's current published claims:
+- The Alana Show airs Tuesdays, 8:00–8:30 PM ET.
+- True Oldies describes a five-county Florida network reaching over 4 million people.
+- The Alana Show page states that the program has worldwide streaming and video components.
 
-Required Vercel variables:
-- YOUTUBE_API_KEY
-- RESEND_API_KEY
-- CONTACT_TO_EMAIL
-- CONTACT_FROM_EMAIL
+## Deploy
+Upload the contents of this folder to the GitHub repository root. Vercel should see `index.html`, `assets/`, `api/`, and `vercel.json` at the top level.
 
-This build preserves the working YouTube API and Resend contact form.
+Vercel settings:
+- Framework Preset: Other
+- Root Directory: ./
+- Build Command: blank
+- Output Directory: blank
+
+Environment variables:
+- `YOUTUBE_API_KEY`
+- `RESEND_API_KEY`
+- `CONTACT_TO_EMAIL`
+- `CONTACT_FROM_EMAIL`
+
+The page itself works without the email variables. The YouTube API variable is needed for automatic episode updates.
