@@ -9,20 +9,23 @@ import { Partner } from "./components/Partner.js";
 import { Contact } from "./components/Contact.js";
 import { Footer } from "./components/Footer.js";
 import { SearchDialog } from "./components/SearchDialog.js";
+import { Conversions } from "./components/Conversions.js";
 import { icon } from "./lib/icons.js";
+import { site } from "./data/site.js";
 import { compactNumber, escapeHtml, excerpt, formatDate, formatDuration, nextBroadcastLabel } from "./lib/utils.js";
 
 const app = document.querySelector("#app");
 
 app.innerHTML = `
   ${Header()}
-  <main>
+  <main id="main-content">
     ${Hero()}
     ${Broadcast()}
     ${Platforms()}
     ${Episodes()}
     ${Impact()}
     ${About()}
+    ${Conversions()}
     ${Partner()}
     ${Contact()}
   </main>
@@ -35,16 +38,26 @@ const state = { episodes: [] };
 function setupNavigation() {
   const menuButton = document.querySelector("[data-menu-button]");
   const nav = document.querySelector("[data-nav]");
-  menuButton?.addEventListener("click", () => {
-    const open = nav.classList.toggle("open");
+  const menuLabel = menuButton?.querySelector(".sr-only");
+  const setMenuState = open => {
+    nav?.classList.toggle("open", open);
     document.body.classList.toggle("menu-open", open);
-    menuButton.setAttribute("aria-expanded", String(open));
+    menuButton?.setAttribute("aria-expanded", String(open));
+    if (menuLabel) menuLabel.textContent = open ? "Close navigation" : "Open navigation";
+  };
+  menuButton?.addEventListener("click", () => {
+    setMenuState(!nav?.classList.contains("open"));
   });
   nav?.querySelectorAll("a").forEach(link => link.addEventListener("click", () => {
-    nav.classList.remove("open");
-    document.body.classList.remove("menu-open");
-    menuButton?.setAttribute("aria-expanded", "false");
+    setMenuState(false);
   }));
+
+  document.addEventListener("keydown", event => {
+    if (event.key === "Escape" && nav?.classList.contains("open")) {
+      setMenuState(false);
+      menuButton?.focus();
+    }
+  });
 
   const header = document.querySelector("[data-header]");
   const updateHeader = () => header?.classList.toggle("scrolled", window.scrollY > 18);
@@ -54,7 +67,7 @@ function setupNavigation() {
 
 function setupReveals() {
   const nodes = document.querySelectorAll(".reveal");
-  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches || !("IntersectionObserver" in window)) {
     nodes.forEach(node => node.classList.add("visible"));
     return;
   }
@@ -81,7 +94,12 @@ function setupInquiryLinks() {
   document.querySelectorAll("[data-inquiry]").forEach(link => {
     link.addEventListener("click", () => {
       const select = document.querySelector("[data-inquiry-select]");
-      if (select) select.value = link.dataset.inquiry;
+      if (!select) return;
+      const requested = link.dataset.inquiry;
+      const exists = [...select.options].some(option => option.value === requested);
+      if (!exists) return;
+      select.value = requested;
+      window.requestAnimationFrame(() => select.focus({ preventScroll: true }));
     });
   });
 }
@@ -135,7 +153,7 @@ async function loadYouTube() {
     const response = await fetch("/api/youtube", { headers: { Accept: "application/json" } });
     if (!response.ok) throw new Error("YouTube feed unavailable");
     const data = await response.json();
-    state.episodes = data.episodes || data.recent || [];
+    state.episodes = data.recent || data.episodes || [];
     updateFeatured(data.featured || data.mostWatched || data.latest);
     updateLatest(data.latest);
     renderEpisodes(data.recent || state.episodes);
@@ -143,7 +161,9 @@ async function loadYouTube() {
   } catch (error) {
     console.info("Using the curated fallback episode while the YouTube feed is unavailable.");
     const rail = document.querySelector("[data-episode-rail]");
-    if (rail) rail.innerHTML = `<div class="episode-fallback"><strong>Explore every conversation on YouTube.</strong><a class="button button-gold" href="https://www.youtube.com/@alanakvandeveer/videos" target="_blank" rel="noopener">Visit the channel ${icon("arrow")}</a></div>`;
+    if (rail) rail.innerHTML = `<div class="episode-fallback"><strong>Explore every conversation on YouTube.</strong><a class="button button-gold" href="${site.youtube}" target="_blank" rel="noopener">Visit the channel ${icon("arrow")}</a></div>`;
+    state.episodes = [];
+    renderSearchResults("");
   }
 }
 
@@ -160,11 +180,15 @@ function renderSearchResults(query) {
   const container = document.querySelector("[data-search-results]");
   if (!container) return;
   const normalized = query.trim().toLowerCase();
+  if (!state.episodes.length) {
+    container.innerHTML = `<div class="search-empty"><p>Recent search is temporarily unavailable.</p><a href="${site.youtube}" target="_blank" rel="noopener">Visit The Alana Show on YouTube ${icon("arrow")}</a></div>`;
+    return;
+  }
   const matches = state.episodes.filter(episode => {
     const haystack = `${episode.title} ${episode.description}`.toLowerCase();
     return !normalized || haystack.includes(normalized);
   }).slice(0, 12);
-  if (!matches.length) {
+  if (normalized && !matches.length) {
     container.innerHTML = `<p class="search-empty">No conversations matched “${escapeHtml(query)}.” Try another guest or topic.</p>`;
     return;
   }
@@ -174,12 +198,20 @@ function renderSearchResults(query) {
 function setupSearch() {
   const dialog = document.querySelector("[data-search-dialog]");
   const input = document.querySelector("[data-search-input]");
-  const open = () => {
+  let opener = null;
+  const open = event => {
+    if (!dialog || !input || typeof dialog.showModal !== "function") return;
+    opener = event?.currentTarget || document.activeElement;
+    if (dialog.open) return;
     dialog.showModal();
     setTimeout(() => input.focus(), 50);
     renderSearchResults(input.value);
   };
-  const close = () => dialog.close();
+  const close = () => {
+    if (!dialog?.open || typeof dialog.close !== "function") return;
+    dialog.close();
+    opener?.focus?.({ preventScroll: true });
+  };
   document.querySelectorAll("[data-search-open]").forEach(button => button.addEventListener("click", open));
   document.querySelector("[data-search-close]")?.addEventListener("click", close);
   dialog?.addEventListener("click", event => { if (event.target === dialog) close(); });
@@ -189,7 +221,10 @@ function setupSearch() {
     renderSearchResults(input.value);
   }));
   window.addEventListener("keydown", event => {
-    if (event.key === "/" && !["INPUT", "TEXTAREA", "SELECT"].includes(document.activeElement?.tagName)) {
+    if (event.key === "Escape" && dialog?.open) close();
+    const active = document.activeElement;
+    const typing = ["INPUT", "TEXTAREA", "SELECT"].includes(active?.tagName) || active?.isContentEditable;
+    if (event.key === "/" && !typing) {
       event.preventDefault();
       open();
     }
@@ -203,12 +238,16 @@ function setupContactForm() {
   form.addEventListener("submit", async event => {
     event.preventDefault();
     status.textContent = "";
+    status.classList.remove("success");
+    form.setAttribute("aria-busy", "false");
     const data = Object.fromEntries(new FormData(form).entries());
-    if (!data.name || !data.email || !data.inquiry || !data.message) {
+    if (!form.checkValidity()) {
+      form.reportValidity();
       status.textContent = "Please complete the required fields.";
       return;
     }
     const button = form.querySelector('button[type="submit"]');
+    form.setAttribute("aria-busy", "true");
     button.disabled = true;
     button.dataset.original = button.innerHTML;
     button.textContent = "Sending…";
@@ -227,6 +266,7 @@ function setupContactForm() {
       status.textContent = "Your message could not be sent. Please email Alana@AlanaKVandeveer.com.";
       status.classList.remove("success");
     } finally {
+      form.setAttribute("aria-busy", "false");
       button.disabled = false;
       button.innerHTML = button.dataset.original;
     }

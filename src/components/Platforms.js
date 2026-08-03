@@ -15,7 +15,7 @@ export function Platforms() {
 
         <div class="platform-rail" role="list">
           ${site.platforms.map(platform => `
-            <a class="platform-card reveal" role="listitem" href="${platform.url}" target="_blank" rel="noopener">
+            <a class="platform-card reveal" role="listitem" href="${platform.url}" aria-label="${platform.name}: ${platform.detail}"${platform.inquiry ? ` data-inquiry="${platform.inquiry}"` : ""}${platform.url.startsWith("http") ? ' target="_blank" rel="noopener"' : ""}>
               <span class="platform-icon">${icon(platform.icon)}</span>
               <span class="platform-copy">
                 <strong>${platform.name}</strong>
