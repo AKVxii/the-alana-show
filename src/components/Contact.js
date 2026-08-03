@@ -52,7 +52,8 @@ export function Contact() {
             </label>
             <label class="full">
               <span>Website or social link</span>
-              <input name="website" type="url" inputmode="url" placeholder="https://">
+              <input name="website" type="text" inputmode="url" autocomplete="url" placeholder="example.com or @username" aria-describedby="website-help">
+              <small class="field-help" id="website-help">Enter a website address, full link, or social username.</small>
             </label>
             <label class="full">
               <span>Message *</span>
