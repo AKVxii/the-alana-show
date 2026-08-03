@@ -86,6 +86,12 @@ const TITLE_FALLBACK_OVERRIDES = [
     categories: ["Stepping Up", "Community"]
   },
   {
+    label: "Rack Electric",
+    field: "metadata",
+    pattern: /\brack electric\b/i,
+    categories: ["Community", "Business"]
+  },
+  {
     label: "We Fund the Blue / MACA",
     field: "metadata",
     pattern: /\bwe fund the blue\b|\bmaca\b/i,

@@ -34,6 +34,26 @@ hasExactly(categories({
   description: "A faith-based ministry focused on food rescue and community relief."
 }), ["Stepping Up", "Community", "Faith & Purpose"]);
 
+hasExactly(categories({
+  title: "A Conversation with Rack Electric",
+  description: "The local company and its work in the community."
+}), ["Community", "Business"]);
+
+hasExactly(categories({
+  title: "A Conversation with Rack Electric",
+  description: "Entrepreneurship, company leadership, team development, and organizational growth."
+}), ["Community", "Business", "Leadership"]);
+
+assert(!categories({
+  title: "Choosing an Electric Equipment Rack",
+  description: "A product discussion unrelated to the company."
+}).includes("Community"));
+
+assert(!categories({
+  title: "A Conversation with Rack Electric",
+  description: "The company serves the local area."
+}).includes("Public Service"));
+
 for (const title of ["We Fund the Blue", "MACA Community Service"]) {
   hasExactly(categories({ title }), ["Stepping Up", "Community", "Public Service"]);
 }
