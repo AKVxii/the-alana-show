@@ -52,7 +52,6 @@ export function Episodes() {
             <p class="eyebrow"><span></span> Watch now</p>
             <h2>Featured Conversation</h2>
           </div>
-          <p>One conversation selected to introduce the ideas, people, and perspective that define the show.</p>
         </div>
 
         <div class="editorial-pair">
