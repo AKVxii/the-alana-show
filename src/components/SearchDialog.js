@@ -8,13 +8,13 @@ export function SearchDialog() {
         <div class="search-topline">
           <div>
             <span>Conversation finder</span>
-            <strong>Search all conversations</strong>
+            <strong>Search recent conversations</strong>
           </div>
           <button type="button" data-search-close aria-label="Close episode search">${icon("close")}</button>
         </div>
 
         <label class="search-input-wrap">
-          <span class="sr-only">Search all conversations by guest, topic, category, or idea</span>
+          <span class="sr-only">Search recent conversations by guest, topic, category, or idea</span>
           ${icon("search")}
           <input type="search" placeholder="Try leadership, veterans, healthcare, AI…" autocomplete="off" data-search-input>
           <kbd>ESC</kbd>
