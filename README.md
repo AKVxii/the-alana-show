@@ -26,7 +26,7 @@ The gold broadcast band uses the station's current published claims:
 - Vercel Preview deployments must be visually and functionally tested before any production merge.
 - The project remains a zero-build native-module frontend.
 - The root-level `app.js` and `styles.css` remain temporarily as rollback references.
-- Phase 1 search covers the recent episode collection returned by `/api/youtube`; full-archive indexing is a future, separately scoped enhancement.
+- Search uses the complete eligible episode archive returned in `/api/youtube` as `episodes`, with category and tag discovery; the homepage rail remains limited to the `recent` collection.
 
 Vercel settings:
 - Framework Preset: Other

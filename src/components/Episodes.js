@@ -55,7 +55,7 @@ export function Episodes() {
               <span class="discovery-icon">${icon("search")}</span>
               <span>
                 <small>Find a conversation</small>
-                <strong>Search recent conversations by guest, topic, or idea.</strong>
+                <strong>Search conversations by guest, topic, or idea.</strong>
               </span>
               ${icon("arrow")}
             </button>

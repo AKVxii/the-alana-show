@@ -12,6 +12,7 @@ import { Conversions } from "./components/Conversions.js";
 import { icon } from "./lib/icons.js";
 import { site } from "./data/site.js";
 import { compactNumber, escapeHtml, excerpt, formatDate, formatDuration, nextBroadcastLabel } from "./lib/utils.js";
+import { searchEpisodes, uniqueEpisodes } from "./lib/episode-search.js";
 
 const app = document.querySelector("#app");
 
@@ -31,7 +32,7 @@ app.innerHTML = `
   ${SearchDialog()}
 `;
 
-const state = { episodes: [] };
+const state = { episodes: [], selectedCategory: "" };
 
 function setupNavigation() {
   const menuButton = document.querySelector("[data-menu-button]");
@@ -151,7 +152,7 @@ async function loadYouTube() {
     const response = await fetch("/api/youtube", { headers: { Accept: "application/json" } });
     if (!response.ok) throw new Error("YouTube feed unavailable");
     const data = await response.json();
-    state.episodes = data.recent || data.episodes || [];
+    state.episodes = uniqueEpisodes(data.episodes?.length ? data.episodes : (data.recent || []));
     updateFeatured(data.featured || data.mostWatched || data.latest);
     updateLatest(data.latest);
     renderEpisodes(data.recent || state.episodes);
@@ -167,27 +168,31 @@ async function loadYouTube() {
 
 function searchResult(episode) {
   const videoUrl = `https://www.youtube.com/watch?v=${encodeURIComponent(episode.videoId)}`;
+  const categories = (episode.categories || []).slice(0, 3);
   return `<a class="search-result" href="${videoUrl}" target="_blank" rel="noopener">
     <img src="${escapeHtml(episode.thumbnail)}" alt="" loading="lazy">
-    <span><small>${escapeHtml(formatDate(episode.publishedAt))}</small><strong>${escapeHtml(episode.title)}</strong><p>${escapeHtml(excerpt(episode.description, 110))}</p></span>
+    <span><small>${escapeHtml(formatDate(episode.publishedAt))}</small><strong>${escapeHtml(episode.title)}</strong><p>${escapeHtml(excerpt(episode.description, 110))}</p>${categories.length ? `<span class="search-categories">${categories.map(category => `<span>${escapeHtml(category)}</span>`).join("")}</span>` : ""}</span>
     ${icon("arrow")}
   </a>`;
 }
 
-function renderSearchResults(query) {
+function renderSearchResults(query, category = state.selectedCategory) {
   const container = document.querySelector("[data-search-results]");
+  const status = document.querySelector("[data-search-status]");
   if (!container) return;
-  const normalized = query.trim().toLowerCase();
   if (!state.episodes.length) {
-    container.innerHTML = `<div class="search-empty"><p>Recent search is temporarily unavailable.</p><a href="${site.youtube}" target="_blank" rel="noopener">Visit The Alana Show on YouTube ${icon("arrow")}</a></div>`;
+    if (status) status.textContent = "The conversation archive is temporarily unavailable.";
+    container.innerHTML = `<div class="search-empty"><p>The conversation archive is temporarily unavailable.</p><a href="${site.youtube}" target="_blank" rel="noopener">Visit The Alana Show on YouTube ${icon("arrow")}</a></div>`;
     return;
   }
-  const matches = state.episodes.filter(episode => {
-    const haystack = `${episode.title} ${episode.description}`.toLowerCase();
-    return !normalized || haystack.includes(normalized);
-  }).slice(0, 12);
-  if (normalized && !matches.length) {
-    container.innerHTML = `<p class="search-empty">No conversations matched “${escapeHtml(query)}.” Try another guest or topic.</p>`;
+  const matches = searchEpisodes(state.episodes, query, category);
+  const description = category
+    ? `${matches.length} conversation${matches.length === 1 ? "" : "s"} in ${category}.`
+    : `${matches.length} conversation${matches.length === 1 ? "" : "s"} found.`;
+  if (status) status.textContent = description;
+  if ((query.trim() || category) && !matches.length) {
+    const term = category || query;
+    container.innerHTML = `<p class="search-empty">No conversations matched “${escapeHtml(term)}.” Try another guest, topic, or category.</p>`;
     return;
   }
   container.innerHTML = matches.map(searchResult).join("");
@@ -213,10 +218,20 @@ function setupSearch() {
   document.querySelectorAll("[data-search-open]").forEach(button => button.addEventListener("click", open));
   document.querySelector("[data-search-close]")?.addEventListener("click", close);
   dialog?.addEventListener("click", event => { if (event.target === dialog) close(); });
-  input?.addEventListener("input", () => renderSearchResults(input.value));
-  document.querySelectorAll("[data-search-chip]").forEach(button => button.addEventListener("click", () => {
-    input.value = button.dataset.searchChip;
-    renderSearchResults(input.value);
+  const chips = [...document.querySelectorAll("[data-search-chip]")];
+  const selectCategory = category => {
+    state.selectedCategory = category;
+    chips.forEach(button => button.setAttribute("aria-pressed", String(button.dataset.searchChip === category)));
+  };
+  input?.addEventListener("input", () => {
+    selectCategory("");
+    renderSearchResults(input.value, "");
+  });
+  chips.forEach(button => button.addEventListener("click", () => {
+    const category = state.selectedCategory === button.dataset.searchChip ? "" : button.dataset.searchChip;
+    selectCategory(category);
+    input.value = "";
+    renderSearchResults("", category);
   }));
   window.addEventListener("keydown", event => {
     if (event.key === "Escape" && dialog?.open) close();

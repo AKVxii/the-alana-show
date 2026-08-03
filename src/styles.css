@@ -440,6 +440,8 @@ p { margin-bottom: 0; }
 .search-input-wrap kbd { color: #8e9daf; font-size: .61rem; }
 .search-chips { margin-top: 13px; display: flex; flex-wrap: wrap; gap: 7px; }
 .search-chips button { padding: 6px 10px; color: #bdc8d6; border: 1px solid rgba(255,255,255,.11); border-radius: 999px; background: rgba(255,255,255,.035); font-size: .6rem; }
+.search-chips button[aria-pressed="true"] { color: var(--navy-950); border-color: var(--gold-400); background: var(--gold-400); }
+.search-status { margin-top: 13px; color: #aebccd; font-size: .65rem; }
 .search-results { max-height: 510px; margin-top: 17px; overflow-y: auto; display: grid; gap: 8px; }
 .search-result { padding: 10px; display: grid; grid-template-columns: 120px 1fr auto; align-items: center; gap: 14px; color: var(--white); border: 1px solid rgba(255,255,255,.08); border-radius: 13px; background: rgba(255,255,255,.025); text-decoration: none; }
 .search-result:hover { border-color: rgba(216,184,102,.3); background: rgba(216,184,102,.06); }
@@ -447,6 +449,8 @@ p { margin-bottom: 0; }
 .search-result small { color: var(--gold-400); font-size: .55rem; font-weight: 800; }
 .search-result strong { display: block; margin-top: 3px; font-family: var(--serif); font-size: 1rem; line-height: 1.1; }
 .search-result p { margin-top: 4px; color: #93a2b5; font-size: .66rem; }
+.search-categories { margin-top: 6px; display: flex; flex-wrap: wrap; gap: 5px; }
+.search-categories > span { padding: 2px 6px; color: #b9c6d6; border: 1px solid rgba(216,184,102,.16); border-radius: 999px; font-size: .5rem; line-height: 1.4; }
 .search-empty { padding: 34px; color: #93a2b5; text-align: center; }
 
 /* Motion */
