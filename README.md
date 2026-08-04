@@ -24,6 +24,7 @@ The gold broadcast band uses the station's current published claims:
 - `luxury-redesign` is the protected redesign and integration branch.
 - Individual feature work should be reviewed before it reaches `luxury-redesign`.
 - Vercel Preview deployments must be visually and functionally tested before any production merge.
+- Phase 2A preview validation includes the Episodes and Guests hubs and their verified detail pages.
 - The project remains a zero-build native-module frontend.
 - The root-level `app.js` and `styles.css` remain temporarily as rollback references.
 - Search uses the complete eligible episode archive returned in `/api/youtube` as `episodes`, with category and tag discovery; the homepage rail remains limited to the `recent` collection.
