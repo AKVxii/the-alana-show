@@ -1,6 +1,6 @@
 import { MediaHeader, setupMediaNavigation } from "./components/MediaHeader.js";
 import { Footer } from "./components/Footer.js";
-import { guests, episodeById } from "./data/catalog.js";
+import { guests } from "./data/catalog.js";
 import { escapeHtml } from "./lib/utils.js";
 
 const app = document.querySelector("#app");
@@ -26,11 +26,11 @@ const alphabet = document.querySelector("[data-alphabet]");
 alphabet.innerHTML = `<button type="button" aria-pressed="true" data-letter="">All</button>${"ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("").map(item => `<button type="button" data-letter="${item}" aria-pressed="false"${initials.includes(item) ? "" : " disabled"}>${item}</button>`).join("")}`;
 
 function guestCard(guest) {
-  const related = guest.episodeIds.map(episodeById).filter(Boolean);
+  const guestPath = `/guests/${guest.id}/`;
   return `<article class="guest-card"><div class="guest-monogram" aria-hidden="true">${escapeHtml(guest.name.split(/\s+/).map(part => part[0]).slice(0, 2).join(""))}</div>
-    <div><p class="content-label">Guest</p><h3><a href="/guests/${guest.id}/">${escapeHtml(guest.name)}</a></h3>
+    <div><p class="content-label">Guest</p><h3><a href="${guestPath}">${escapeHtml(guest.name)}</a></h3>
     ${guest.organization ? `<p>${escapeHtml(guest.organization)}</p>` : ""}
-    ${related.length ? `<p><a href="${related[0].detailPath}">View related conversation</a></p>` : ""}</div></article>`;
+    <p><a href="${guestPath}">View conversations</a></p></div></article>`;
 }
 
 function render() {
