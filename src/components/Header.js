@@ -9,7 +9,7 @@ export function Header() {
           <span class="brand-seal" aria-hidden="true">TAS</span>
           <span class="brand-copy">
             <strong>The Alana Show</strong>
-            <span>Real conversations · Meaningful impact</span>
+            <span>Real conversations. Distinct voices.</span>
           </span>
         </a>
 
@@ -35,7 +35,7 @@ export function Header() {
             <span>Search</span>
             <kbd>/</kbd>
           </button>
-          <a class="button button-gold button-small" href="${site.trueOldiesLive}" target="_blank" rel="noopener">True Oldies Home</a>
+          <a class="button button-gold button-small" href="${site.trueOldies}" target="_blank" rel="noopener">True Oldies</a>
         </div>
       </div>
     </header>

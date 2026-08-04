@@ -1,5 +1,10 @@
 const HANDLE = "@alanakvandeveer";
-const MAX_PAGES = 4;
+const { categorizeEpisode } = require("./episode-categories");
+
+// 20 uploads-playlist pages cover as many as 1,000 public uploads while
+// keeping serverless execution bounded. Pagination still stops immediately
+// when YouTube supplies no nextPageToken.
+const MAX_PAGES = 20;
 
 // Keep genuine videos while excluding actual Shorts.
 // The previous 15-minute rule excluded every video on the channel.
@@ -25,8 +30,8 @@ function parseDuration(value = "PT0S") {
   return days * 86400 + hours * 3600 + minutes * 60 + seconds;
 }
 
-function summarize(description = "") {
-  return description.replace(/\s+/g, " ").trim().slice(0, 220);
+function normalizeDescription(description = "") {
+  return description.replace(/\s+/g, " ").trim();
 }
 
 async function getJson(url) {
@@ -41,10 +46,11 @@ async function getJson(url) {
 }
 
 function normalizeVideo(video) {
-  return {
+  const tags = Array.isArray(video.snippet?.tags) ? video.snippet.tags : [];
+  const normalized = {
     videoId: video.id,
     title: video.snippet?.title || "",
-    description: summarize(video.snippet?.description || ""),
+    description: normalizeDescription(video.snippet?.description || ""),
     publishedAt: video.snippet?.publishedAt || "",
     thumbnail:
       video.snippet?.thumbnails?.maxres?.url ||
@@ -53,8 +59,14 @@ function normalizeVideo(video) {
       video.snippet?.thumbnails?.medium?.url ||
       "",
     viewCount: Number(video.statistics?.viewCount || 0),
-    durationSeconds: parseDuration(video.contentDetails?.duration || "")
+    durationSeconds: parseDuration(video.contentDetails?.duration || ""),
+    tags
   };
+  const classification = categorizeEpisode({
+    ...normalized,
+    description: video.snippet?.description || ""
+  });
+  return { ...normalized, ...classification };
 }
 
 function isEligible(video) {
@@ -132,16 +144,17 @@ module.exports = async function handler(req, res) {
       if (!pageToken) break;
     }
 
+    const uniqueIds = [...new Set(ids)];
     const rawVideos = [];
 
-    for (let i = 0; i < ids.length; i += 50) {
+    for (let i = 0; i < uniqueIds.length; i += 50) {
       const videoUrl = new URL(
         "https://www.googleapis.com/youtube/v3/videos"
       );
 
       videoUrl.search = new URLSearchParams({
         part: "snippet,statistics,contentDetails",
-        id: ids.slice(i, i + 50).join(","),
+        id: uniqueIds.slice(i, i + 50).join(","),
         key
       });
 
@@ -167,19 +180,19 @@ module.exports = async function handler(req, res) {
       eligible = allVideos.filter(video => video.videoId);
     }
 
+    const episodes = [...eligible].sort(
+      (a, b) => new Date(b.publishedAt) - new Date(a.publishedAt)
+    );
+
     const latest =
-      [...eligible].sort(
+      [...episodes].sort(
         (a, b) => new Date(b.publishedAt) - new Date(a.publishedAt)
       )[0] || null;
 
     const mostWatched =
-      [...eligible].sort((a, b) => b.viewCount - a.viewCount)[0] || null;
+      [...episodes].sort((a, b) => b.viewCount - a.viewCount)[0] || null;
 
-    const recent = [...eligible]
-      .sort(
-        (a, b) => new Date(b.publishedAt) - new Date(a.publishedAt)
-      )
-      .slice(0, 6);
+    const recent = episodes.slice(0, 6);
 
     res.setHeader(
       "Cache-Control",
@@ -192,7 +205,8 @@ module.exports = async function handler(req, res) {
       eligibleVideos: eligible.length,
       latest,
       mostWatched,
-      recent
+      recent,
+      episodes
     });
   } catch (error) {
     console.error(error);

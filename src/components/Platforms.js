@@ -5,12 +5,13 @@ export function Platforms() {
   return `
     <section class="section listen-section" id="listen">
       <div class="shell">
-        <div class="section-heading compact reveal">
-          <div>
-            <p class="eyebrow dark"><span></span> Watch. Listen. Join the conversation.</p>
-            <h2>The Alana Show meets you wherever you listen.</h2>
-          </div>
-          <p>Watch full conversations, choose your favorite podcast app, or tune in on air across South Florida.</p>
+        <div class="platform-heading reveal">
+          <span aria-hidden="true"></span>
+          <h2>
+            <span class="platform-heading-wide">Watch or listen wherever you are</span>
+            <span class="platform-heading-mobile">Listen everywhere</span>
+          </h2>
+          <span aria-hidden="true"></span>
         </div>
 
         <div class="platform-rail" role="list">

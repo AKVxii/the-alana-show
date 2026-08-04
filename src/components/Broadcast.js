@@ -3,8 +3,8 @@ import { site } from "../data/site.js";
 
 export function Broadcast() {
   return `
-    <section class="broadcast" id="on-air">
-      <div class="shell broadcast-grid">
+    <aside class="broadcast reveal" id="on-air" aria-labelledby="broadcast-heading">
+      <div class="broadcast-grid">
         <div class="broadcast-mark" aria-hidden="true">
           <div class="broadcast-mic">${icon("radio")}</div>
           <div class="broadcast-rings"><i></i><i></i><i></i></div>
@@ -12,7 +12,7 @@ export function Broadcast() {
 
         <div class="broadcast-copy">
           <div class="broadcast-status" data-broadcast-status><span></span> Tuesdays · 8:00 PM ET</div>
-          <h2>Airing on True Oldies across South Florida.</h2>
+          <h2 id="broadcast-heading">Airing on True Oldies across South Florida.</h2>
           <p>
             The Alana Show airs on True Oldies in South Florida, with worldwide online streaming and video access.
           </p>
@@ -31,9 +31,8 @@ export function Broadcast() {
           <a class="button button-light" href="${site.trueOldies}" target="_blank" rel="noopener">
             Explore on True Oldies ${icon("external")}
           </a>
-          <a class="broadcast-live-link" href="${site.trueOldiesLive}" target="_blank" rel="noopener">Visit True Oldies online →</a>
         </div>
       </div>
-    </section>
+    </aside>
   `;
 }

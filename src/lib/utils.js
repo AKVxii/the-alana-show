@@ -39,6 +39,32 @@ export function excerpt(value = "", length = 150) {
   return clean.length > length ? `${clean.slice(0, length).trim()}…` : clean;
 }
 
+const DOMAIN_WITH_OPTIONAL_PATH = /^(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z]{2,63}(?::\d{1,5})?(?:[/?#][^\s]*)?$/i;
+const SOCIAL_USERNAME = /^@[a-z0-9._-]+$/i;
+
+export function normalizeWebsiteOrSocial(value = "") {
+  const trimmed = String(value).trim();
+  if (!trimmed || trimmed.startsWith("@") || /^https?:\/\//i.test(trimmed)) return trimmed;
+  return DOMAIN_WITH_OPTIONAL_PATH.test(trimmed) ? `https://${trimmed}` : trimmed;
+}
+
+export function isValidWebsiteOrSocial(value = "") {
+  const raw = String(value);
+  if (!raw) return true;
+  if (!raw.trim()) return false;
+  const normalized = normalizeWebsiteOrSocial(value);
+  if (normalized.startsWith("@")) return SOCIAL_USERNAME.test(normalized);
+  if (!/^https?:\/\//i.test(normalized)) return false;
+
+  try {
+    const url = new URL(normalized);
+    return (url.protocol === "http:" || url.protocol === "https:")
+      && DOMAIN_WITH_OPTIONAL_PATH.test(`${url.hostname}${url.port ? `:${url.port}` : ""}`);
+  } catch {
+    return false;
+  }
+}
+
 export function nextBroadcastLabel() {
   const now = new Date();
   const easternParts = new Intl.DateTimeFormat("en-US", {

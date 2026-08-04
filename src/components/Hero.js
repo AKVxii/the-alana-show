@@ -47,10 +47,6 @@ export function Hero() {
         </div>
       </div>
 
-      <a class="scroll-cue" href="#on-air" aria-label="Continue to broadcast information">
-        <span>Explore</span>
-        <i aria-hidden="true"></i>
-      </a>
     </section>
   `;
 }
