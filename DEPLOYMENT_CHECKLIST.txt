@@ -1,39 +1,39 @@
-THE ALANA SHOW 2.0 — GITHUB / VERCEL DEPLOYMENT
+THE ALANA SHOW — GITHUB / VERCEL DEPLOYMENT
 
-1. Download and extract The_Alana_Show_2_0_Phase_1.zip.
-2. Open GitHub: AKVxii/the-alana-show.
-3. Choose Add file → Upload files.
-4. Drag every item INSIDE the extracted folder into GitHub:
-   api/
-   assets/
-   src/
-   index.html
-   vercel.json
-   robots.txt
-   sitemap.xml
-   site.webmanifest
-   README.md
-5. GitHub will replace matching files and add the new src/ folder.
-6. Commit directly to main with message:
-   Launch The Alana Show 2.0 Phase 1
-7. Vercel should redeploy automatically.
-8. Do not recreate or delete the existing Vercel variables:
-   YOUTUBE_API_KEY
-   RESEND_API_KEY
-   CONTACT_TO_EMAIL
-   CONTACT_FROM_EMAIL
-9. When Vercel says Ready, hard-refresh:
-   https://www.thealanashow.com/
-10. Test:
-   - Featured/latest/recent YouTube episodes
-   - Episode search button or / keyboard shortcut
+1. Keep the live production website on the main branch.
+2. Build and review redesign work on luxury-redesign or on a dedicated feature branch created from luxury-redesign.
+3. Never commit redesign work directly to main.
+4. Open an initial review pull request with luxury-redesign as the base branch.
+5. Review the resulting Vercel Preview deployment on desktop, desktop at 120% zoom, tablet, and mobile.
+6. Test all required integrations before approval.
+7. After the redesign is fully approved, use a separate reviewed pull request to merge the completed redesign into main.
+8. Production should redeploy only after the approved redesign reaches main.
+9. Do not recreate, rename, expose, or delete the existing Vercel environment variables:
+   - YOUTUBE_API_KEY
+   - RESEND_API_KEY
+   - CONTACT_TO_EMAIL
+   - CONTACT_FROM_EMAIL
+10. After Vercel reports Ready, test:
+   - Featured, latest, and recent YouTube content
+   - YouTube failure/fallback state
+   - Recent-conversation search and keyboard shortcut
    - True Oldies links
-   - All podcast platform buttons
+   - Every podcast-platform link
    - Contact form delivery
-   - Mobile menu
+   - Inquiry-prefill links
+   - Mobile navigation
+   - Keyboard navigation
+   - Reduced-motion behavior
+   - Desktop, tablet, and mobile presentation
 
-OPTIONAL CLEANUP AFTER THE NEW SITE WORKS
-Delete the old root-level app.js and styles.css files if they remain. The new site uses src/main.js and src/styles.css, so the old files are not used.
+LEGACY FILES
 
-OPTIONAL CURATED FEATURED EPISODE
-In Vercel, add FEATURED_YOUTUBE_VIDEO_ID with the chosen YouTube video ID, then redeploy. Without it, the most-watched eligible full conversation is featured automatically.
+The root-level app.js and styles.css files are retained temporarily as rollback references. The active modular frontend uses src/main.js and src/styles.css. Do not delete the legacy files until the modular site has passed production verification.
+
+FEATURED CONVERSATION
+
+The public heading remains “Featured Conversation.” The YouTube function supplies latest, mostWatched, and recent episode data. The frontend uses mostWatched as the featured selection and retains a polished static fallback when the API is unavailable.
+
+ROLLBACK
+
+Before any future production merge, record the current known-good main commit. If a production problem occurs, restore the previous known-good commit through GitHub rather than making random live-file edits.

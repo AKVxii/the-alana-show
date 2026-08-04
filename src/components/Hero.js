@@ -37,7 +37,7 @@ export function Hero() {
           <div class="portrait-orbit" aria-hidden="true"></div>
           <div class="portrait-frame">
             <div class="portrait-inner">
-              <img src="/assets/alana-portrait.webp" alt="Alana K. Vandeveer, host of The Alana Show" width="1200" height="1500" fetchpriority="high">
+              <img src="/assets/alana-original.jpg" alt="Alana K. Vandeveer, host of The Alana Show" width="958" height="960" fetchpriority="high">
             </div>
           </div>
           <div class="portrait-caption">
@@ -47,10 +47,6 @@ export function Hero() {
         </div>
       </div>
 
-      <a class="scroll-cue" href="#on-air" aria-label="Continue to broadcast information">
-        <span>Explore</span>
-        <i aria-hidden="true"></i>
-      </a>
     </section>
   `;
 }

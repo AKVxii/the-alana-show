@@ -41,7 +41,7 @@ export const site = {
     },
     {
       name: "iHeartRadio",
-      detail: "Find The Alana Show",
+      detail: "Search for the show",
       url: "https://www.iheart.com/search/?q=The%20Alana%20Show",
       icon: "iheart"
     },
@@ -50,6 +50,13 @@ export const site = {
       detail: "Tuesdays at 8 PM ET",
       url: "https://trueoldiesfla.com/on-air/the-alana-show",
       icon: "radio"
+    },
+    {
+      name: "More Options",
+      detail: "Ask about another platform",
+      url: "#contact",
+      inquiry: "General contact",
+      icon: "plus"
     }
   ],
   topics: [

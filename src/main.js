@@ -1,28 +1,30 @@
 import { Header } from "./components/Header.js";
 import { Hero } from "./components/Hero.js";
-import { Broadcast } from "./components/Broadcast.js";
 import { Platforms } from "./components/Platforms.js";
-import { Episodes } from "./components/Episodes.js";
+import { EpisodeThumbnail, Episodes, isUsableThumbnailUrl, revealThumbnailFallback } from "./components/Episodes.js";
 import { Impact } from "./components/Impact.js";
 import { About } from "./components/About.js";
 import { Partner } from "./components/Partner.js";
 import { Contact } from "./components/Contact.js";
 import { Footer } from "./components/Footer.js";
 import { SearchDialog } from "./components/SearchDialog.js";
+import { Conversions } from "./components/Conversions.js";
 import { icon } from "./lib/icons.js";
-import { compactNumber, escapeHtml, excerpt, formatDate, formatDuration, nextBroadcastLabel } from "./lib/utils.js";
+import { site } from "./data/site.js";
+import { compactNumber, escapeHtml, excerpt, formatDate, formatDuration, isValidWebsiteOrSocial, nextBroadcastLabel, normalizeWebsiteOrSocial } from "./lib/utils.js";
+import { searchEpisodes, uniqueEpisodes } from "./lib/episode-search.js";
 
 const app = document.querySelector("#app");
 
 app.innerHTML = `
   ${Header()}
-  <main>
+  <main id="main-content">
     ${Hero()}
-    ${Broadcast()}
     ${Platforms()}
     ${Episodes()}
     ${Impact()}
     ${About()}
+    ${Conversions()}
     ${Partner()}
     ${Contact()}
   </main>
@@ -30,21 +32,31 @@ app.innerHTML = `
   ${SearchDialog()}
 `;
 
-const state = { episodes: [] };
+const state = { episodes: [], selectedCategory: "" };
 
 function setupNavigation() {
   const menuButton = document.querySelector("[data-menu-button]");
   const nav = document.querySelector("[data-nav]");
-  menuButton?.addEventListener("click", () => {
-    const open = nav.classList.toggle("open");
+  const menuLabel = menuButton?.querySelector(".sr-only");
+  const setMenuState = open => {
+    nav?.classList.toggle("open", open);
     document.body.classList.toggle("menu-open", open);
-    menuButton.setAttribute("aria-expanded", String(open));
+    menuButton?.setAttribute("aria-expanded", String(open));
+    if (menuLabel) menuLabel.textContent = open ? "Close navigation" : "Open navigation";
+  };
+  menuButton?.addEventListener("click", () => {
+    setMenuState(!nav?.classList.contains("open"));
   });
   nav?.querySelectorAll("a").forEach(link => link.addEventListener("click", () => {
-    nav.classList.remove("open");
-    document.body.classList.remove("menu-open");
-    menuButton?.setAttribute("aria-expanded", "false");
+    setMenuState(false);
   }));
+
+  document.addEventListener("keydown", event => {
+    if (event.key === "Escape" && nav?.classList.contains("open")) {
+      setMenuState(false);
+      menuButton?.focus();
+    }
+  });
 
   const header = document.querySelector("[data-header]");
   const updateHeader = () => header?.classList.toggle("scrolled", window.scrollY > 18);
@@ -54,7 +66,7 @@ function setupNavigation() {
 
 function setupReveals() {
   const nodes = document.querySelectorAll(".reveal");
-  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches || !("IntersectionObserver" in window)) {
     nodes.forEach(node => node.classList.add("visible"));
     return;
   }
@@ -81,7 +93,12 @@ function setupInquiryLinks() {
   document.querySelectorAll("[data-inquiry]").forEach(link => {
     link.addEventListener("click", () => {
       const select = document.querySelector("[data-inquiry-select]");
-      if (select) select.value = link.dataset.inquiry;
+      if (!select) return;
+      const requested = link.dataset.inquiry;
+      const exists = [...select.options].some(option => option.value === requested);
+      if (!exists) return;
+      select.value = requested;
+      window.requestAnimationFrame(() => select.focus({ preventScroll: true }));
     });
   });
 }
@@ -91,7 +108,7 @@ function episodeCard(episode) {
   return `
     <article class="episode-card">
       <a class="episode-thumb" href="${videoUrl}" target="_blank" rel="noopener" aria-label="Watch ${escapeHtml(episode.title)}">
-        <img src="${escapeHtml(episode.thumbnail)}" alt="" loading="lazy">
+        ${EpisodeThumbnail(episode, { latest: false })}
         <span class="episode-play">${icon("play")}</span>
         <small>${escapeHtml(formatDuration(episode.durationSeconds))}</small>
       </a>
@@ -109,6 +126,18 @@ function renderEpisodes(episodes) {
   const rail = document.querySelector("[data-episode-rail]");
   if (!rail) return;
   rail.innerHTML = episodes.slice(0, 8).map(episodeCard).join("");
+  setupThumbnailFallbacks(rail);
+}
+
+function setupThumbnailFallbacks(root = document) {
+  root.querySelectorAll("[data-thumbnail-frame]").forEach(frame => {
+    const image = frame.querySelector("img");
+    if (!image || image.dataset.fallbackBound) return;
+    image.dataset.fallbackBound = "true";
+    image.addEventListener("load", () => frame.classList.remove("fallback-visible"));
+    image.addEventListener("error", () => revealThumbnailFallback(frame, image));
+    if (image.complete && image.naturalWidth === 0) revealThumbnailFallback(frame, image);
+  });
 }
 
 function updateFeatured(episode) {
@@ -123,8 +152,14 @@ function updateFeatured(episode) {
 
 function updateLatest(episode) {
   if (!episode?.videoId) return;
-  const thumb = document.querySelector("[data-latest-thumb]");
-  thumb.style.backgroundImage = `linear-gradient(180deg, transparent, rgba(6,16,32,.82)), url("${episode.thumbnail}")`;
+  const media = document.querySelector("[data-latest-media]");
+  if (media) {
+    media.innerHTML = EpisodeThumbnail({
+      ...episode,
+      thumbnail: isUsableThumbnailUrl(episode.thumbnail) ? episode.thumbnail : ""
+    }, { latest: true });
+    setupThumbnailFallbacks(media);
+  }
   document.querySelector("[data-latest-title]").textContent = episode.title;
   document.querySelector("[data-latest-description]").textContent = excerpt(episode.description, 145) || `Published ${formatDate(episode.publishedAt)}.`;
   document.querySelector("[data-latest-link]").href = `https://www.youtube.com/watch?v=${episode.videoId}`;
@@ -135,7 +170,7 @@ async function loadYouTube() {
     const response = await fetch("/api/youtube", { headers: { Accept: "application/json" } });
     if (!response.ok) throw new Error("YouTube feed unavailable");
     const data = await response.json();
-    state.episodes = data.episodes || data.recent || [];
+    state.episodes = uniqueEpisodes(data.episodes?.length ? data.episodes : (data.recent || []));
     updateFeatured(data.featured || data.mostWatched || data.latest);
     updateLatest(data.latest);
     renderEpisodes(data.recent || state.episodes);
@@ -143,53 +178,85 @@ async function loadYouTube() {
   } catch (error) {
     console.info("Using the curated fallback episode while the YouTube feed is unavailable.");
     const rail = document.querySelector("[data-episode-rail]");
-    if (rail) rail.innerHTML = `<div class="episode-fallback"><strong>Explore every conversation on YouTube.</strong><a class="button button-gold" href="https://www.youtube.com/@alanakvandeveer/videos" target="_blank" rel="noopener">Visit the channel ${icon("arrow")}</a></div>`;
+    if (rail) rail.innerHTML = `<div class="episode-fallback"><strong>Explore every conversation on YouTube.</strong><a class="button button-gold" href="${site.youtube}" target="_blank" rel="noopener">Visit the channel ${icon("arrow")}</a></div>`;
+    state.episodes = [];
+    renderSearchResults("");
   }
 }
 
 function searchResult(episode) {
   const videoUrl = `https://www.youtube.com/watch?v=${encodeURIComponent(episode.videoId)}`;
+  const categories = (episode.categories || []).slice(0, 3);
   return `<a class="search-result" href="${videoUrl}" target="_blank" rel="noopener">
-    <img src="${escapeHtml(episode.thumbnail)}" alt="" loading="lazy">
-    <span><small>${escapeHtml(formatDate(episode.publishedAt))}</small><strong>${escapeHtml(episode.title)}</strong><p>${escapeHtml(excerpt(episode.description, 110))}</p></span>
+    <span class="search-result-media">${EpisodeThumbnail(episode, { latest: false })}</span>
+    <span><small>${escapeHtml(formatDate(episode.publishedAt))}</small><strong>${escapeHtml(episode.title)}</strong><p>${escapeHtml(excerpt(episode.description, 110))}</p>${categories.length ? `<span class="search-categories">${categories.map(category => `<span>${escapeHtml(category)}</span>`).join("")}</span>` : ""}</span>
     ${icon("arrow")}
   </a>`;
 }
 
-function renderSearchResults(query) {
+function renderSearchResults(query, category = state.selectedCategory) {
   const container = document.querySelector("[data-search-results]");
+  const status = document.querySelector("[data-search-status]");
   if (!container) return;
-  const normalized = query.trim().toLowerCase();
-  const matches = state.episodes.filter(episode => {
-    const haystack = `${episode.title} ${episode.description}`.toLowerCase();
-    return !normalized || haystack.includes(normalized);
-  }).slice(0, 12);
-  if (!matches.length) {
-    container.innerHTML = `<p class="search-empty">No conversations matched “${escapeHtml(query)}.” Try another guest or topic.</p>`;
+  if (!state.episodes.length) {
+    if (status) status.textContent = "The conversation archive is temporarily unavailable.";
+    container.innerHTML = `<div class="search-empty"><p>The conversation archive is temporarily unavailable.</p><a href="${site.youtube}" target="_blank" rel="noopener">Visit The Alana Show on YouTube ${icon("arrow")}</a></div>`;
+    return;
+  }
+  const matches = searchEpisodes(state.episodes, query, category);
+  const description = category
+    ? `${matches.length} conversation${matches.length === 1 ? "" : "s"} in ${category}.`
+    : `${matches.length} conversation${matches.length === 1 ? "" : "s"} found.`;
+  if (status) status.textContent = description;
+  if ((query.trim() || category) && !matches.length) {
+    const term = category || query;
+    container.innerHTML = `<p class="search-empty">No conversations matched “${escapeHtml(term)}.” Try another guest, topic, or category.</p>`;
     return;
   }
   container.innerHTML = matches.map(searchResult).join("");
+  setupThumbnailFallbacks(container);
 }
 
 function setupSearch() {
   const dialog = document.querySelector("[data-search-dialog]");
   const input = document.querySelector("[data-search-input]");
-  const open = () => {
+  let opener = null;
+  const open = event => {
+    if (!dialog || !input || typeof dialog.showModal !== "function") return;
+    opener = event?.currentTarget || document.activeElement;
+    if (dialog.open) return;
     dialog.showModal();
     setTimeout(() => input.focus(), 50);
     renderSearchResults(input.value);
   };
-  const close = () => dialog.close();
+  const close = () => {
+    if (!dialog?.open || typeof dialog.close !== "function") return;
+    dialog.close();
+    opener?.focus?.({ preventScroll: true });
+  };
   document.querySelectorAll("[data-search-open]").forEach(button => button.addEventListener("click", open));
   document.querySelector("[data-search-close]")?.addEventListener("click", close);
   dialog?.addEventListener("click", event => { if (event.target === dialog) close(); });
-  input?.addEventListener("input", () => renderSearchResults(input.value));
-  document.querySelectorAll("[data-search-chip]").forEach(button => button.addEventListener("click", () => {
-    input.value = button.dataset.searchChip;
-    renderSearchResults(input.value);
+  const chips = [...document.querySelectorAll("[data-search-chip]")];
+  const selectCategory = category => {
+    state.selectedCategory = category;
+    chips.forEach(button => button.setAttribute("aria-pressed", String(button.dataset.searchChip === category)));
+  };
+  input?.addEventListener("input", () => {
+    selectCategory("");
+    renderSearchResults(input.value, "");
+  });
+  chips.forEach(button => button.addEventListener("click", () => {
+    const category = state.selectedCategory === button.dataset.searchChip ? "" : button.dataset.searchChip;
+    selectCategory(category);
+    input.value = "";
+    renderSearchResults("", category);
   }));
   window.addEventListener("keydown", event => {
-    if (event.key === "/" && !["INPUT", "TEXTAREA", "SELECT"].includes(document.activeElement?.tagName)) {
+    if (event.key === "Escape" && dialog?.open) close();
+    const active = document.activeElement;
+    const typing = ["INPUT", "TEXTAREA", "SELECT"].includes(active?.tagName) || active?.isContentEditable;
+    if (event.key === "/" && !typing) {
       event.preventDefault();
       open();
     }
@@ -199,16 +266,29 @@ function setupSearch() {
 function setupContactForm() {
   const form = document.querySelector("[data-contact-form]");
   const status = document.querySelector("[data-form-status]");
+  const website = form?.elements.namedItem("website");
   if (!form) return;
+  website?.addEventListener("input", () => website.setCustomValidity(""));
   form.addEventListener("submit", async event => {
     event.preventDefault();
     status.textContent = "";
-    const data = Object.fromEntries(new FormData(form).entries());
-    if (!data.name || !data.email || !data.inquiry || !data.message) {
-      status.textContent = "Please complete the required fields.";
+    status.classList.remove("success");
+    form.setAttribute("aria-busy", "false");
+    if (website) {
+      const websiteEntry = website.value;
+      website.value = normalizeWebsiteOrSocial(websiteEntry);
+      website.setCustomValidity(isValidWebsiteOrSocial(websiteEntry) ? "" : "Enter a valid website address or social username.");
+    }
+    if (!form.checkValidity()) {
+      form.reportValidity();
+      status.textContent = website?.validity.customError
+        ? "Enter a valid website address or social username."
+        : "Please complete the required fields.";
       return;
     }
+    const data = Object.fromEntries(new FormData(form).entries());
     const button = form.querySelector('button[type="submit"]');
+    form.setAttribute("aria-busy", "true");
     button.disabled = true;
     button.dataset.original = button.innerHTML;
     button.textContent = "Sending…";
@@ -227,6 +307,7 @@ function setupContactForm() {
       status.textContent = "Your message could not be sent. Please email Alana@AlanaKVandeveer.com.";
       status.classList.remove("success");
     } finally {
+      form.setAttribute("aria-busy", "false");
       button.disabled = false;
       button.innerHTML = button.dataset.original;
     }
@@ -244,4 +325,5 @@ setupInquiryLinks();
 setupSearch();
 setupContactForm();
 setupYear();
+setupThumbnailFallbacks();
 loadYouTube();
