@@ -1,6 +1,6 @@
 import { MediaHeader, setupMediaNavigation } from "./components/MediaHeader.js";
 import { Footer } from "./components/Footer.js";
-import { episodeById, guestById } from "./data/catalog.js";
+import { episodeById, guestById, organizationById } from "./data/catalog.js";
 import { escapeHtml } from "./lib/utils.js";
 
 const root = document.querySelector("#app");
@@ -14,9 +14,12 @@ function breadcrumbs(current) {
 }
 
 function episodeDetail(episode) {
-  const guest = episode.guestIds.map(guestById).find(Boolean);
+  const relatedGuests = episode.guestIds.map(guestById).filter(Boolean);
+  const relatedOrganizations = (episode.organizationIds || []).map(organizationById).filter(Boolean);
+  const guestLinks = relatedGuests.map(guest => `<a href="/guests/${guest.id}/">${escapeHtml(guest.name)}</a>`).join(" and ");
   return `<section class="detail-hero"><div class="shell detail-shell">${breadcrumbs(episode.title)}<p class="eyebrow"><span></span> Episode</p><h1>${escapeHtml(episode.title)}</h1>
-    ${guest ? `<p class="detail-byline">A conversation with <a href="/guests/${guest.id}/">${escapeHtml(guest.name)}</a></p>` : ""}
+    ${guestLinks ? `<p class="detail-byline">A conversation with ${guestLinks}</p>` : ""}
+    ${relatedOrganizations.length ? `<p class="detail-byline">Organization named in this conversation: ${relatedOrganizations.map(organization => escapeHtml(organization.name)).join(", ")}</p>` : ""}
     <div class="video-frame"><iframe src="https://www.youtube-nocookie.com/embed/${encodeURIComponent(episode.videoId)}?rel=0" title="${escapeHtml(episode.title)}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>
     <div class="detail-actions"><a class="button button-gold" href="https://www.youtube.com/watch?v=${encodeURIComponent(episode.videoId)}" target="_blank" rel="noopener">Watch on YouTube</a><a class="button button-outline" href="mailto:?subject=${encodeURIComponent(episode.title)}&body=${encodeURIComponent(location.href)}">Share by email</a></div>
   </div></section>`;
