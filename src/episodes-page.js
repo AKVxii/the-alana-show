@@ -5,6 +5,7 @@ import { enrichEpisode, episodes as editorialEpisodes, topics } from "./data/cat
 import { episodeCard, bindThumbnailFallbacks } from "./lib/media-page.js";
 import { searchEpisodes, uniqueEpisodes } from "./lib/episode-search.js";
 import { escapeHtml } from "./lib/utils.js";
+import { setupEditorialMotion } from "./lib/motion.js";
 
 const PAGE_SIZE = 9;
 const state = { episodes: [], query: "", category: "", shown: PAGE_SIZE };
@@ -16,11 +17,11 @@ app.innerHTML = `${MediaHeader()}<main id="main-content">
     <p class="eyebrow"><span></span> The conversation archive</p><h1>Episodes</h1>
     <p>Explore conversations from The Alana Show by title, topic, or verified guest.</p>
   </div></section>
-  <section class="media-section" aria-labelledby="featured-heading"><div class="shell">
+  <section class="media-section" aria-labelledby="featured-heading" data-reveal><div class="shell">
     <div class="media-section-heading"><div><p class="eyebrow dark"><span></span> Selected conversation</p><h2 id="featured-heading">Featured conversation</h2></div></div>
     <div data-featured class="featured-loading" role="status">Loading the featured conversation…</div>
   </div></section>
-  <section class="media-section archive-section" aria-labelledby="archive-heading"><div class="shell">
+  <section class="media-section archive-section" aria-labelledby="archive-heading" data-reveal><div class="shell">
     <div class="media-section-heading"><div><p class="eyebrow dark"><span></span> Browse the archive</p><h2 id="archive-heading">Newest conversations</h2></div></div>
     <form class="archive-controls" data-controls role="search"><label><span>Search conversations</span><input type="search" data-query placeholder="Guest, title, or topic" autocomplete="off"></label>
       <label><span>Filter by topic</span><select data-category><option value="">All verified topics</option>${topics.map(topic => `<option>${topic}</option>`).join("")}</select></label>
@@ -52,6 +53,7 @@ function render() {
   document.querySelector("[data-status]").textContent = `${matches.length} conversation${matches.length === 1 ? "" : "s"} available.`;
   document.querySelector("[data-more]").hidden = visible.length >= matches.length;
   bindThumbnailFallbacks(grid);
+  setupEditorialMotion(grid);
 }
 
 async function load() {
@@ -70,4 +72,4 @@ document.querySelector("[data-query]").addEventListener("input", event => { stat
 document.querySelector("[data-category]").addEventListener("change", event => { state.category = event.target.value; state.shown = PAGE_SIZE; render(); });
 document.querySelector("[data-controls]").addEventListener("reset", () => { state.query = ""; state.category = ""; state.shown = PAGE_SIZE; requestAnimationFrame(render); });
 document.querySelector("[data-more]").addEventListener("click", () => { state.shown += PAGE_SIZE; render(); });
-setupMediaNavigation(); load();
+setupMediaNavigation(); setupEditorialMotion(app); load();

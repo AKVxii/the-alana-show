@@ -24,7 +24,7 @@ export function bindThumbnailFallbacks(root = document) {
 
 export function relatedConversationRow(episode, index = 0) {
   const sequence = String(index + 1).padStart(2, "0");
-  return `<article class="related-conversation">
+  return `<article class="related-conversation" data-reveal data-reveal-stagger="true">
     <a class="related-conversation-card" href="${episode.detailPath}" aria-label="View ${escapeHtml(episode.title)}">
       <span class="related-conversation-thumb">
         ${EpisodeThumbnail({ ...episode, thumbnail: episodeThumbnailUrl(episode) })}<span class="episode-play">${icon("play")}</span>
@@ -41,7 +41,7 @@ export function relatedConversationRow(episode, index = 0) {
 export function episodeCard(episode) {
   const url = episode.detailPath || `https://www.youtube.com/watch?v=${encodeURIComponent(episode.videoId)}`;
   const external = !episode.detailPath;
-  return `<article class="media-card">
+  return `<article class="media-card" data-reveal data-reveal-stagger="true">
     <a class="media-card-image" href="${url}"${external ? ' target="_blank" rel="noopener"' : ""} aria-label="View ${escapeHtml(episode.title)}">
       ${EpisodeThumbnail(episode)}<span class="episode-play">${icon("play")}</span>
     </a>

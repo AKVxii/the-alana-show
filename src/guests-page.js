@@ -2,6 +2,7 @@ import { MediaHeader, setupMediaNavigation } from "./components/MediaHeader.js";
 import { Footer } from "./components/Footer.js";
 import { guests } from "./data/catalog.js";
 import { escapeHtml } from "./lib/utils.js";
+import { setupEditorialMotion } from "./lib/motion.js";
 
 const app = document.querySelector("#app");
 app.innerHTML = `${MediaHeader()}<main id="main-content">
@@ -10,7 +11,7 @@ app.innerHTML = `${MediaHeader()}<main id="main-content">
     <p class="eyebrow"><span></span> People in conversation</p><h1>Guests</h1>
     <p>Browse the verified guests who have joined The Alana Show.</p>
   </div></section>
-  <section class="media-section archive-section" aria-labelledby="directory-heading"><div class="shell">
+  <section class="media-section archive-section" aria-labelledby="directory-heading" data-reveal><div class="shell">
     <div class="media-section-heading"><div><p class="eyebrow dark"><span></span> Guest directory</p><h2 id="directory-heading">Browse alphabetically</h2></div></div>
     <form class="guest-search" role="search"><label><span>Search by guest name</span><input type="search" data-guest-query placeholder="Guest name" autocomplete="off"></label></form>
     <nav class="alphabet-nav" aria-label="Filter guests by first letter" data-alphabet></nav>
@@ -27,7 +28,7 @@ alphabet.innerHTML = `<button type="button" aria-pressed="true" data-letter="">A
 
 function guestCard(guest) {
   const guestPath = `/guests/${guest.id}/`;
-  return `<article class="guest-card"><div class="guest-monogram" aria-hidden="true">${escapeHtml(guest.name.split(/\s+/).map(part => part[0]).slice(0, 2).join(""))}</div>
+  return `<article class="guest-card" data-reveal data-reveal-stagger="true"><div class="guest-monogram" aria-hidden="true">${escapeHtml(guest.name.split(/\s+/).map(part => part[0]).slice(0, 2).join(""))}</div>
     <div><p class="content-label">Guest</p><h3><a href="${guestPath}">${escapeHtml(guest.name)}</a></h3>
     ${guest.organization ? `<p>${escapeHtml(guest.organization)}</p>` : ""}
     ${guest.episodeIds.length ? `<p><a href="${guestPath}">View conversations</a></p>` : ""}</div></article>`;
@@ -36,7 +37,9 @@ function guestCard(guest) {
 function render() {
   const matches = guests.filter(guest => (!letter || guest.name.toUpperCase().startsWith(letter)) && guest.name.toLowerCase().includes(query.toLowerCase()));
   document.querySelector("[data-guest-status]").textContent = `${matches.length} verified guest${matches.length === 1 ? "" : "s"}.`;
-  document.querySelector("[data-guest-grid]").innerHTML = matches.length ? matches.map(guestCard).join("") : `<div class="media-empty"><h3>No guests found</h3><p>Try another name or letter.</p></div>`;
+  const grid = document.querySelector("[data-guest-grid]");
+  grid.innerHTML = matches.length ? matches.map(guestCard).join("") : `<div class="media-empty"><h3>No guests found</h3><p>Try another name or letter.</p></div>`;
+  setupEditorialMotion(grid);
 }
 
 document.querySelector("[data-guest-query]").addEventListener("input", event => { query = event.target.value.trim(); render(); });
@@ -44,4 +47,4 @@ alphabet.addEventListener("click", event => {
   const button = event.target.closest("button[data-letter]"); if (!button) return;
   letter = button.dataset.letter; alphabet.querySelectorAll("button").forEach(item => item.setAttribute("aria-pressed", String(item === button))); render();
 });
-setupMediaNavigation(); render();
+setupMediaNavigation(); setupEditorialMotion(app); render();
