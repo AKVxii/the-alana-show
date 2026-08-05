@@ -30,7 +30,7 @@ function guestDetail(guest) {
   const related = guest.episodeIds.map(episodeById).filter(Boolean);
   return `<section class="detail-hero"><div class="shell detail-shell">${breadcrumbs(guest.name)}<p class="eyebrow"><span></span> Guest</p><h1>${escapeHtml(guest.name)}</h1>
     <div class="guest-detail-intro"><div class="guest-monogram guest-monogram-large" aria-hidden="true">${escapeHtml(guest.name.split(/\s+/).map(part => part[0]).slice(0, 2).join(""))}</div><p>Verified conversations featuring ${escapeHtml(guest.name)}.</p></div>
-    ${related.length ? `<section class="related-section" aria-labelledby="related-heading"><h2 id="related-heading">Related conversations</h2><div class="related-conversation-list">${related.map(relatedConversationRow).join("")}</div></section>` : ""}
+    ${related.length ? `<section class="related-section" aria-labelledby="related-heading"><p class="related-eyebrow"><span></span>${escapeHtml(guest.name.toUpperCase())} ARCHIVE</p><h2 id="related-heading">Related conversations</h2><div class="related-conversation-list">${related.map(relatedConversationRow).join("")}</div></section>` : ""}
   </div></section>`;
 }
 

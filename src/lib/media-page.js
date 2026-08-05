@@ -22,13 +22,18 @@ export function bindThumbnailFallbacks(root = document) {
   });
 }
 
-export function relatedConversationRow(episode) {
+export function relatedConversationRow(episode, index = 0) {
+  const sequence = String(index + 1).padStart(2, "0");
   return `<article class="related-conversation">
     <a class="related-conversation-card" href="${episode.detailPath}" aria-label="View ${escapeHtml(episode.title)}">
       <span class="related-conversation-thumb">
         ${EpisodeThumbnail({ ...episode, thumbnail: episodeThumbnailUrl(episode) })}<span class="episode-play">${icon("play")}</span>
       </span>
-      <span class="related-conversation-title">${escapeHtml(episode.title)}</span>
+      <span class="related-conversation-copy">
+        <span class="related-conversation-sequence">CONVERSATION ${sequence}</span>
+        <span class="related-conversation-title">${escapeHtml(episode.title)}</span>
+        <span class="related-conversation-action">View conversation →</span>
+      </span>
     </a>
   </article>`;
 }
