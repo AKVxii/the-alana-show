@@ -4,6 +4,7 @@ import test from "node:test";
 
 import { episodeById, episodes, guests } from "./catalog.js";
 import { searchEpisodes } from "../lib/episode-search.js";
+import { episodeThumbnailUrl, relatedConversationRow } from "../lib/media-page.js";
 
 test("verified guest relationships stay unique and complete", () => {
   assert.equal(new Set(guests.map(guest => guest.id)).size, guests.length);
@@ -33,4 +34,18 @@ test("guest directory conversation CTAs route to guest profiles", async () => {
 
   assert.ok(source.includes('href="${guestPath}">View conversations'));
   assert.doesNotMatch(source, /related\\[0\\]\\.detailPath/);
+});
+
+test("guest detail related conversations render compact thumbnail rows", () => {
+  const michaelBarnett = guests.find(guest => guest.id === "michael-barnett");
+  const jasonMandle = guests.find(guest => guest.id === "jason-mandle");
+  const michaelRows = michaelBarnett.episodeIds.map(episodeById).map(relatedConversationRow);
+  const jasonRows = jasonMandle.episodeIds.map(episodeById).map(relatedConversationRow);
+
+  assert.equal(michaelRows.length, 2);
+  assert.equal(jasonRows.length, 1);
+  assert.ok(michaelRows.every(row => row.includes("related-conversation-thumb")));
+  assert.ok(jasonRows.every(row => row.includes("related-conversation-thumb")));
+  assert.equal(episodeThumbnailUrl(episodeById("michael-barnett-2022-midterms")), "https://i.ytimg.com/vi/kJWFTnWOgYM/hqdefault.jpg");
+  assert.equal(episodeThumbnailUrl(episodeById("restoration-bridge-civic-battle-against-hunger")), "https://i.ytimg.com/vi/y5dQET3O1-c/hqdefault.jpg");
 });

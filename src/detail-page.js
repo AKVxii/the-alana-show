@@ -2,6 +2,7 @@ import { MediaHeader, setupMediaNavigation } from "./components/MediaHeader.js";
 import { Footer } from "./components/Footer.js";
 import { episodeById, guestById, organizationById } from "./data/catalog.js";
 import { escapeHtml } from "./lib/utils.js";
+import { bindThumbnailFallbacks, relatedConversationRow } from "./lib/media-page.js";
 
 const root = document.querySelector("#app");
 const type = document.body.dataset.detailType;
@@ -29,9 +30,10 @@ function guestDetail(guest) {
   const related = guest.episodeIds.map(episodeById).filter(Boolean);
   return `<section class="detail-hero"><div class="shell detail-shell">${breadcrumbs(guest.name)}<p class="eyebrow"><span></span> Guest</p><h1>${escapeHtml(guest.name)}</h1>
     <div class="guest-detail-intro"><div class="guest-monogram guest-monogram-large" aria-hidden="true">${escapeHtml(guest.name.split(/\s+/).map(part => part[0]).slice(0, 2).join(""))}</div><p>Verified conversations featuring ${escapeHtml(guest.name)}.</p></div>
-    ${related.length ? `<section class="related-section" aria-labelledby="related-heading"><h2 id="related-heading">Related conversations</h2>${related.map(episode => `<article><h3><a href="${episode.detailPath}">${escapeHtml(episode.title)}</a></h3></article>`).join("")}</section>` : ""}
+    ${related.length ? `<section class="related-section" aria-labelledby="related-heading"><h2 id="related-heading">Related conversations</h2><div class="related-conversation-list">${related.map(relatedConversationRow).join("")}</div></section>` : ""}
   </div></section>`;
 }
 
 root.innerHTML = `${MediaHeader()}<main id="main-content">${type === "episode" ? episodeDetail(item) : guestDetail(item)}</main>${Footer({ fromSubpage: true })}`;
 setupMediaNavigation();
+bindThumbnailFallbacks(root);

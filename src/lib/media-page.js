@@ -2,12 +2,33 @@ import { escapeHtml, formatDate, formatDuration } from "./utils.js";
 import { EpisodeThumbnail, revealThumbnailFallback } from "../components/Episodes.js";
 import { icon } from "./icons.js";
 
+export function episodeThumbnailUrl(episode = {}) {
+  if (episode.thumbnail) {
+    try {
+      const url = new URL(episode.thumbnail);
+      if (url.protocol === "https:" || url.protocol === "http:") return episode.thumbnail;
+    } catch {
+      // Fall back to the verified YouTube video ID below.
+    }
+  }
+  return episode.videoId ? `https://i.ytimg.com/vi/${encodeURIComponent(episode.videoId)}/hqdefault.jpg` : "";
+}
+
 export function bindThumbnailFallbacks(root = document) {
   root.querySelectorAll("[data-thumbnail-frame]").forEach(frame => {
     const image = frame.querySelector("img");
     if (!image) return;
     image.addEventListener("error", () => revealThumbnailFallback(frame, image));
   });
+}
+
+export function relatedConversationRow(episode) {
+  return `<article class="related-conversation">
+    <a class="related-conversation-thumb" href="${episode.detailPath}" aria-label="View ${escapeHtml(episode.title)}">
+      ${EpisodeThumbnail({ ...episode, thumbnail: episodeThumbnailUrl(episode) })}<span class="episode-play">${icon("play")}</span>
+    </a>
+    <h3><a href="${episode.detailPath}">${escapeHtml(episode.title)}</a></h3>
+  </article>`;
 }
 
 export function episodeCard(episode) {
