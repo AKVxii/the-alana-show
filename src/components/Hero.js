@@ -41,7 +41,7 @@ export function Hero() {
             </div>
           </div>
           <div class="portrait-caption">
-            <span>Hosted by</span>
+            <span>HOSTED BY</span>
             <strong>Alana K. Vandeveer</strong>
           </div>
         </div>
