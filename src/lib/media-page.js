@@ -24,10 +24,12 @@ export function bindThumbnailFallbacks(root = document) {
 
 export function relatedConversationRow(episode) {
   return `<article class="related-conversation">
-    <a class="related-conversation-thumb" href="${episode.detailPath}" aria-label="View ${escapeHtml(episode.title)}">
-      ${EpisodeThumbnail({ ...episode, thumbnail: episodeThumbnailUrl(episode) })}<span class="episode-play">${icon("play")}</span>
+    <a class="related-conversation-card" href="${episode.detailPath}" aria-label="View ${escapeHtml(episode.title)}">
+      <span class="related-conversation-thumb">
+        ${EpisodeThumbnail({ ...episode, thumbnail: episodeThumbnailUrl(episode) })}<span class="episode-play">${icon("play")}</span>
+      </span>
+      <span class="related-conversation-title">${escapeHtml(episode.title)}</span>
     </a>
-    <h3><a href="${episode.detailPath}">${escapeHtml(episode.title)}</a></h3>
   </article>`;
 }
 
