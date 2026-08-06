@@ -1,12 +1,16 @@
 import { icon } from "../lib/icons.js";
 
+const ALANA_PORTRAIT_SRC = "/assets/alana-portrait-cutout.png";
+const ALANA_PORTRAIT_WIDTH = 958;
+const ALANA_PORTRAIT_HEIGHT = 968;
+
 export function About() {
   return `
     <section class="section about-section" id="about">
       <div class="shell about-grid">
         <div class="about-portrait reveal">
           <div class="about-photo-frame">
-            <img src="/assets/alana-original.jpg" alt="Alana K. Vandeveer in the studio" width="958" height="960" loading="lazy">
+            <img src="${ALANA_PORTRAIT_SRC}" alt="Alana K. Vandeveer in the studio" width="${ALANA_PORTRAIT_WIDTH}" height="${ALANA_PORTRAIT_HEIGHT}" loading="lazy" decoding="async">
           </div>
           <div class="about-monogram" aria-hidden="true">AKV</div>
         </div>

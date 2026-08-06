@@ -2,6 +2,7 @@ import { icon } from "../lib/icons.js";
 import { site } from "../data/site.js";
 import { escapeHtml } from "../lib/utils.js";
 import { Broadcast } from "./Broadcast.js";
+import { Sponsor } from "./Sponsor.js";
 
 export function BrandedEpisodeArtwork({ compact = false } = {}) {
   return `
@@ -78,6 +79,8 @@ export function Episodes() {
 
           ${Broadcast()}
         </div>
+
+        ${Sponsor()}
 
         <div class="watch-tools">
           <aside class="watch-aside">
