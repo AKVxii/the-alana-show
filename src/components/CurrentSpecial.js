@@ -22,6 +22,13 @@ export function isCurrentSpecialActive(config = currentSpecial, now = new Date()
 export function CurrentSpecial(config = currentSpecial, now = new Date()) {
   if (!isCurrentSpecialActive(config, now)) return "";
   const theme = ["gold", "current-special"].includes(config.theme) ? config.theme : "current-special";
+  const broadcastDetails = config.broadcastText || config.reachText
+    ? `<div class="current-special-broadcast" aria-label="True Oldies broadcast reach">
+        ${config.broadcastText ? `<p class="current-special-stations">${escapeHtml(config.broadcastText)}</p>` : ""}
+        ${config.reachText ? `<p class="current-special-reach">${escapeHtml(config.reachText)}</p>` : ""}
+      </div>`
+    : "";
+
   return `
     <section class="current-special current-special--${theme}" aria-labelledby="current-special-heading" data-current-special>
       <div class="shell">
@@ -32,6 +39,7 @@ export function CurrentSpecial(config = currentSpecial, now = new Date()) {
             <p class="current-special-availability">Limited Availability</p>
             <h2 id="current-special-heading">${escapeHtml(config.heading)}</h2>
             <p class="current-special-lede">${escapeHtml(config.copy)}</p>
+            ${broadcastDetails}
             <p class="current-special-urgency"><strong>${escapeHtml(config.urgencyText)}</strong></p>
             <a class="button button-gold current-special-cta" href="${escapeHtml(config.ctaHref)}" data-inquiry="Candidate Interview Series">${escapeHtml(config.ctaLabel)} ${icon("arrow")}</a>
             <p class="current-special-disclaimer">${escapeHtml(config.disclaimer)}</p>
