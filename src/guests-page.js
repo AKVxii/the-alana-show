@@ -1,6 +1,7 @@
 import { MediaHeader, setupMediaNavigation } from "./components/MediaHeader.js";
 import { Footer } from "./components/Footer.js";
-import { guests } from "./data/catalog.js";
+import { episodes, guests } from "./data/catalog.js";
+import { CANDIDATES_LABEL, isVerifiedCandidateGuest } from "./data/collections.js";
 import { escapeHtml } from "./lib/utils.js";
 import { setupEditorialMotion } from "./lib/motion.js";
 
@@ -30,6 +31,7 @@ function guestCard(guest) {
   const guestPath = `/guests/${guest.id}/`;
   return `<article class="guest-card" data-reveal data-reveal-stagger="true"><div class="guest-monogram" aria-hidden="true">${escapeHtml(guest.name.split(/\s+/).map(part => part[0]).slice(0, 2).join(""))}</div>
     <div><p class="content-label">Guest</p><h3><a href="${guestPath}">${escapeHtml(guest.name)}</a></h3>
+    ${isVerifiedCandidateGuest(guest, episodes) ? `<p class="candidate-label">${CANDIDATES_LABEL}</p>` : ""}
     ${guest.organization ? `<p>${escapeHtml(guest.organization)}</p>` : ""}
     ${guest.episodeIds.length ? `<p><a href="${guestPath}">View conversations</a></p>` : ""}</div></article>`;
 }

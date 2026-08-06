@@ -42,6 +42,7 @@ export function Contact() {
               <span>Inquiry *</span>
               <select name="inquiry" required data-inquiry-select>
                 <option value="">Choose an option</option>
+                <option>Candidate Interview Series</option>
                 <option>Advertising or partnership</option>
                 <option>Recommend a guest</option>
                 <option>Recommend an organization</option>
