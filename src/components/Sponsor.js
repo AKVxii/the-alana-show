@@ -1,4 +1,8 @@
-import { FITZGERALD_LOGO_SRC } from "../data/fitzgerald-logo.js";
+import {
+  FITZGERALD_LOGO_SRC,
+  FITZGERALD_LOGO_WIDTH,
+  FITZGERALD_LOGO_HEIGHT,
+} from "../data/fitzgerald-logo-exact.js";
 
 export function Sponsor() {
   return `
@@ -7,7 +11,7 @@ export function Sponsor() {
         <article class="sponsor-acknowledgement" aria-label="The Fitzgerald Group">
           <p class="eyebrow"><span></span> PRESENTING COMMERCIAL REAL ESTATE SPONSOR</p>
           <div class="sponsor-logo-card" data-reveal style="--reveal-delay: 90ms;">
-            <img src="${FITZGERALD_LOGO_SRC}" alt="The Fitzgerald Group — Commercial Real Estate" width="663" height="147" loading="lazy">
+            <img src="${FITZGERALD_LOGO_SRC}" alt="The Fitzgerald Group — Commercial Real Estate" width="${FITZGERALD_LOGO_WIDTH}" height="${FITZGERALD_LOGO_HEIGHT}" loading="lazy">
           </div>
           <p class="sponsor-supporting">Commercial real estate strategy, representation, and opportunity.</p>
         </article>
