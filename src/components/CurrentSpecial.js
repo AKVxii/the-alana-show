@@ -28,6 +28,10 @@ export function CurrentSpecial(config = currentSpecial, now = new Date()) {
         ${config.reachText ? `<p class="current-special-reach">${escapeHtml(config.reachText)}</p>` : ""}
       </div>`
     : "";
+  const externalCta = config.ctaExternal === true || /^https?:\/\//i.test(config.ctaHref || "");
+  const ctaAttributes = externalCta
+    ? ` target="_blank" rel="noopener noreferrer"`
+    : ` data-inquiry="Candidate Interview Series"`;
 
   return `
     <section class="current-special current-special--${theme}" aria-labelledby="current-special-heading" data-current-special>
@@ -41,7 +45,7 @@ export function CurrentSpecial(config = currentSpecial, now = new Date()) {
             <p class="current-special-lede">${escapeHtml(config.copy)}</p>
             ${broadcastDetails}
             <p class="current-special-urgency"><strong>${escapeHtml(config.urgencyText)}</strong></p>
-            <a class="button button-gold current-special-cta" href="${escapeHtml(config.ctaHref)}" data-inquiry="Candidate Interview Series">${escapeHtml(config.ctaLabel)} ${icon("arrow")}</a>
+            <a class="button button-gold current-special-cta" href="${escapeHtml(config.ctaHref)}"${ctaAttributes}>${escapeHtml(config.ctaLabel)} ${icon("arrow")}</a>
             <p class="current-special-disclaimer">${escapeHtml(config.disclaimer)}</p>
           </div>
         </div>
