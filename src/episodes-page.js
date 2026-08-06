@@ -6,6 +6,7 @@ import { episodeCard, bindThumbnailFallbacks } from "./lib/media-page.js";
 import { searchEpisodes, uniqueEpisodes } from "./lib/episode-search.js";
 import { escapeHtml } from "./lib/utils.js";
 import { setupEditorialMotion } from "./lib/motion.js";
+import { CANDIDATES_DISCLAIMER, resolveCollection } from "./data/collections.js";
 
 const PAGE_SIZE = 9;
 const state = { episodes: [], query: "", category: "", shown: PAGE_SIZE, usingFallback: false };
@@ -27,6 +28,7 @@ app.innerHTML = `${MediaHeader()}<main id="main-content">
       <label><span>Filter by topic</span><select data-category><option value="">All verified topics</option>${topics.map(topic => `<option>${topic}</option>`).join("")}</select></label>
       <button type="reset" class="button button-outline">Clear</button></form>
     <p class="archive-status" data-status role="status" aria-live="polite">Loading conversations…</p>
+    <aside class="collection-disclaimer" data-collection-disclaimer hidden>${CANDIDATES_DISCLAIMER}</aside>
     <div class="media-grid" data-grid aria-busy="true"><div class="media-skeleton"></div><div class="media-skeleton"></div><div class="media-skeleton"></div></div>
     <div class="load-more-wrap"><button class="button button-gold" data-more hidden>Load more conversations</button></div>
   </div></section>
@@ -59,6 +61,7 @@ function setCategoryFilterAvailability(isAvailable) {
 }
 
 function render() {
+  const activeCollection = resolveCollection(state.category) || resolveCollection(state.query);
   const matches = searchEpisodes(state.episodes, state.query, state.category);
   const visible = matches.slice(0, state.shown);
   const grid = document.querySelector("[data-grid]");
@@ -66,6 +69,7 @@ function render() {
   grid.innerHTML = visible.length ? visible.map(episodeCard).join("") : `<div class="media-empty"><h3>No conversations found</h3><p>Try another title, guest, or verified topic.</p></div>`;
   const fallbackNote = state.usingFallback ? " Topic filtering is unavailable while the live feed is offline." : "";
   document.querySelector("[data-status]").textContent = `${matches.length} conversation${matches.length === 1 ? "" : "s"} available.${fallbackNote}`;
+  document.querySelector("[data-collection-disclaimer]").hidden = !activeCollection;
   document.querySelector("[data-more]").hidden = visible.length >= matches.length;
   bindThumbnailFallbacks(grid);
   setupEditorialMotion(grid);
