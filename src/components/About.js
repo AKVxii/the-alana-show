@@ -1,6 +1,6 @@
 import { icon } from "../lib/icons.js";
 
-const ALANA_PORTRAIT_SRC = "/assets/alana-portrait.webp?v=approved-20260806";
+const ALANA_PORTRAIT_SRC = "/assets/alana-portrait-cutout.png";
 const ALANA_PORTRAIT_WIDTH = 958;
 const ALANA_PORTRAIT_HEIGHT = 968;
 
