@@ -1,9 +1,8 @@
 import { icon } from "../lib/icons.js";
-import {
-  ALANA_PORTRAIT_SRC,
-  ALANA_PORTRAIT_WIDTH,
-  ALANA_PORTRAIT_HEIGHT,
-} from "../data/alana-portrait-data.js";
+
+const ALANA_PORTRAIT_SRC = "/assets/alana-portrait.webp?v=approved-20260806";
+const ALANA_PORTRAIT_WIDTH = 958;
+const ALANA_PORTRAIT_HEIGHT = 968;
 
 export function Hero() {
   return `
@@ -42,7 +41,7 @@ export function Hero() {
           <div class="portrait-orbit" aria-hidden="true"></div>
           <div class="portrait-frame">
             <div class="portrait-inner">
-              <img src="${ALANA_PORTRAIT_SRC}" alt="Alana K. Vandeveer, host of The Alana Show" width="${ALANA_PORTRAIT_WIDTH}" height="${ALANA_PORTRAIT_HEIGHT}" fetchpriority="high">
+              <img src="${ALANA_PORTRAIT_SRC}" alt="Alana K. Vandeveer, host of The Alana Show" width="${ALANA_PORTRAIT_WIDTH}" height="${ALANA_PORTRAIT_HEIGHT}" fetchpriority="high" decoding="async">
             </div>
           </div>
           <div class="portrait-caption">
