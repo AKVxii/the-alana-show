@@ -8,7 +8,7 @@ import { escapeHtml } from "./lib/utils.js";
 import { setupEditorialMotion } from "./lib/motion.js";
 
 const PAGE_SIZE = 9;
-const state = { episodes: [], query: "", category: "", shown: PAGE_SIZE };
+const state = { episodes: [], query: "", category: "", shown: PAGE_SIZE, usingFallback: false };
 const app = document.querySelector("#app");
 
 app.innerHTML = `${MediaHeader()}<main id="main-content">
@@ -44,13 +44,28 @@ function renderFeatured() {
   node.innerHTML = `<div class="featured-conversation-media">${episodeCard(episode)}</div><div class="featured-conversation-copy"><p class="content-label">From the archive</p><h3>${escapeHtml(episode.title)}</h3><a class="button button-gold" href="${url}" target="_blank" rel="noopener">Watch on YouTube</a></div>`;
 }
 
+function setCategoryFilterAvailability(isAvailable) {
+  const select = document.querySelector("[data-category]");
+  select.disabled = !isAvailable;
+  if (isAvailable) {
+    select.removeAttribute("aria-disabled");
+    select.options[0].textContent = "All verified topics";
+    return;
+  }
+  state.category = "";
+  select.value = "";
+  select.setAttribute("aria-disabled", "true");
+  select.options[0].textContent = "Topic filter unavailable offline";
+}
+
 function render() {
   const matches = searchEpisodes(state.episodes, state.query, state.category);
   const visible = matches.slice(0, state.shown);
   const grid = document.querySelector("[data-grid]");
   grid.setAttribute("aria-busy", "false");
   grid.innerHTML = visible.length ? visible.map(episodeCard).join("") : `<div class="media-empty"><h3>No conversations found</h3><p>Try another title, guest, or verified topic.</p></div>`;
-  document.querySelector("[data-status]").textContent = `${matches.length} conversation${matches.length === 1 ? "" : "s"} available.`;
+  const fallbackNote = state.usingFallback ? " Topic filtering is unavailable while the live feed is offline." : "";
+  document.querySelector("[data-status]").textContent = `${matches.length} conversation${matches.length === 1 ? "" : "s"} available.${fallbackNote}`;
   document.querySelector("[data-more]").hidden = visible.length >= matches.length;
   bindThumbnailFallbacks(grid);
   setupEditorialMotion(grid);
@@ -62,8 +77,12 @@ async function load() {
     if (!response.ok) throw new Error("feed unavailable");
     const data = await response.json();
     state.episodes = uniqueEpisodes(data.episodes || []).map(enrichEpisode);
+    state.usingFallback = false;
+    setCategoryFilterAvailability(true);
   } catch {
     state.episodes = editorialEpisodes;
+    state.usingFallback = true;
+    setCategoryFilterAvailability(false);
   }
   renderFeatured(); render();
 }
