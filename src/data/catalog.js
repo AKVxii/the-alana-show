@@ -65,5 +65,10 @@ export function organizationById(id) {
 
 export function enrichEpisode(apiEpisode) {
   const editorial = episodes.find(episode => episode.videoId === apiEpisode.videoId);
-  return editorial ? { ...apiEpisode, ...editorial, title: apiEpisode.title || editorial.title } : apiEpisode;
+  return editorial ? {
+    ...apiEpisode,
+    ...editorial,
+    title: apiEpisode.title || editorial.title,
+    guestNames: editorial.guestIds.map(id => guestById(id)?.name).filter(Boolean)
+  } : apiEpisode;
 }

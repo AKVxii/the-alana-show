@@ -1,0 +1,105 @@
+.current-special-panel {
+  isolation: isolate;
+}
+
+.current-special-panel::before {
+  content: "";
+  position: absolute;
+  inset: -3% auto -3% -1%;
+  width: 36%;
+  min-width: 330px;
+  z-index: 0;
+  pointer-events: none;
+  opacity: .14;
+  border-radius: 28px 0 0 28px;
+  clip-path: polygon(0 3%, 98% 0, 100% 96%, 0 100%);
+  background-image:
+    radial-gradient(ellipse at 30% 28%, rgba(255, 255, 255, .18), transparent 34%),
+    linear-gradient(102deg, rgba(2, 10, 25, .08), rgba(255, 255, 255, .05) 44%, rgba(2, 10, 25, .18) 72%, transparent),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 760 400'%3E%3Cdefs%3E%3Cpattern id='stripes' width='760' height='61.54' patternUnits='userSpaceOnUse'%3E%3Crect width='760' height='30.77' fill='%23ead79e'/%3E%3C/pattern%3E%3Csymbol id='star' viewBox='0 0 20 20'%3E%3Cpath d='M10 1.5l2.45 5.28 5.76.54-4.27 3.87 1.24 5.62L10 13.94l-5.18 2.87 1.24-5.62-4.27-3.87 5.76-.54z' fill='%23ead79e'/%3E%3C/symbol%3E%3Cpattern id='stars' width='36' height='30' patternUnits='userSpaceOnUse'%3E%3Cuse href='%23star' x='2' y='2' width='9' height='9'/%3E%3Cuse href='%23star' x='20' y='16' width='9' height='9'/%3E%3C/pattern%3E%3ClinearGradient id='shade' x1='0' y1='0' x2='1' y2='0'%3E%3Cstop offset='0' stop-color='%23040b18' stop-opacity='.18'/%3E%3Cstop offset='.28' stop-color='%23ffffff' stop-opacity='.08'/%3E%3Cstop offset='.52' stop-color='%23040b18' stop-opacity='.22'/%3E%3Cstop offset='.74' stop-color='%23ffffff' stop-opacity='.07'/%3E%3Cstop offset='1' stop-color='%23040b18' stop-opacity='.25'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='760' height='400' fill='url(%23stripes)'/%3E%3Crect width='306' height='216' rx='2' fill='%23091933'/%3E%3Crect width='306' height='216' fill='url(%23stars)'/%3E%3Cpath d='M-10 38C124 4 219 68 356 35S596 10 777 48M-8 190c130-35 238 28 375-5s245-26 404 13M-8 334c126-26 237 20 374-8s246-18 405 15' fill='none' stroke='%23ffffff' stroke-opacity='.08' stroke-width='18'/%3E%3Crect width='760' height='400' fill='url(%23shade)'/%3E%3C/svg%3E");
+  background-repeat: no-repeat, no-repeat, no-repeat;
+  background-position: center, center, 50% 50%;
+  background-size: 100% 100%, 100% 100%, cover;
+  mix-blend-mode: screen;
+  filter: saturate(.72) contrast(1.08) drop-shadow(0 20px 30px rgba(0, 0, 0, .16));
+  transform-origin: 8% 50%;
+  will-change: transform, background-position, opacity;
+  animation: currentSpecialFlagWave 14s ease-in-out infinite;
+  -webkit-mask-image: linear-gradient(90deg, #000 0%, #000 78%, transparent 100%);
+  mask-image: linear-gradient(90deg, #000 0%, #000 78%, transparent 100%);
+}
+
+@keyframes currentSpecialFlagWave {
+  0%, 100% {
+    transform: perspective(950px) rotateY(-2.4deg) translate3d(-1.2%, 0, 0) scale(1.035, 1.02);
+    background-position: center, center, 50% 50%;
+    opacity: .135;
+  }
+  50% {
+    transform: perspective(950px) rotateY(2deg) translate3d(.8%, -.7%, 0) scale(1.055, 1.035);
+    background-position: center, center, 46% 49%;
+    opacity: .16;
+  }
+}
+
+.current-special-panel::after {
+  z-index: 3;
+}
+
+.current-special-accent,
+.current-special-copy {
+  position: relative;
+  z-index: 1;
+}
+
+.current-special-broadcast {
+  max-width: 840px;
+  margin-top: 18px;
+  padding: 13px 16px;
+  border-left: 2px solid rgba(216, 184, 102, .72);
+  border-radius: 0 10px 10px 0;
+  background: rgba(255, 255, 255, .035);
+}
+
+.current-special-broadcast p {
+  margin: 0;
+  color: #d8e0ea;
+  font-size: clamp(.7rem, 1vw, .8rem);
+  line-height: 1.55;
+}
+
+.current-special-broadcast p + p {
+  margin-top: 4px;
+}
+
+.current-special-reach {
+  color: var(--gold-300) !important;
+  font-weight: 750;
+}
+
+@media (max-width: 720px) {
+  .current-special-panel::before {
+    inset: -2% 0 auto;
+    width: 100%;
+    min-width: 0;
+    height: 220px;
+    opacity: .105;
+    border-radius: 22px 22px 0 0;
+    clip-path: polygon(0 3%, 100% 0, 100% 95%, 0 100%);
+    background-size: 100% 100%, 100% 100%, 112% auto;
+    -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 72%, transparent 100%);
+    mask-image: linear-gradient(180deg, #000 0%, #000 72%, transparent 100%);
+  }
+
+  .current-special-broadcast {
+    margin-top: 16px;
+    padding: 12px 14px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .current-special-panel::before {
+    animation: none;
+    transform: none;
+  }
+}

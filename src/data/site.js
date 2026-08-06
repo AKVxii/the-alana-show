@@ -60,6 +60,7 @@ export const site = {
     }
   ],
   topics: [
+    "2026 Candidates Special",
     "Leadership",
     "Community",
     "Business",
