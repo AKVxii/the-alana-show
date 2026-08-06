@@ -7,19 +7,32 @@ import { currentSpecial } from "../data/current-special.js";
 
 const today = new Date("2026-08-06T23:59:59-07:00");
 
-test("current special renders exact configured copy, broadcast reach, and contact CTA", () => {
+test("current special renders exact configured copy, broadcast reach, and Calendly CTA", () => {
   const markup = CurrentSpecial(currentSpecial, today);
   for (const value of [
     currentSpecial.eyebrow, currentSpecial.heading, currentSpecial.copy,
     currentSpecial.broadcastText, currentSpecial.reachText,
     currentSpecial.urgencyText, currentSpecial.ctaLabel, currentSpecial.disclaimer
   ]) assert.ok(markup.includes(value));
-  assert.match(markup, /href="\/#contact"/);
-  assert.match(markup, /data-inquiry="Candidate Interview Series"/);
+  assert.match(markup, /href="https:\/\/calendly\.com\/alana-alanakvandeveer\/30min"/);
+  assert.match(markup, /target="_blank"/);
+  assert.match(markup, /rel="noopener noreferrer"/);
+  assert.doesNotMatch(markup, /data-inquiry="Candidate Interview Series"/);
   assert.match(markup, /Limited Availability/);
   assert.match(markup, /current-special-broadcast/);
   assert.match(markup, /over 4 million people/);
   assert.match(markup, /95\.3, 95\.9, 96\.9 and 106\.9 FM/);
+});
+
+test("internal reusable CTA can still use the existing inquiry flow", () => {
+  const markup = CurrentSpecial({
+    ...currentSpecial,
+    ctaHref: "/#contact",
+    ctaExternal: false
+  }, today);
+  assert.match(markup, /href="\/#contact"/);
+  assert.match(markup, /data-inquiry="Candidate Interview Series"/);
+  assert.doesNotMatch(markup, /target="_blank"/);
 });
 
 test("broadcast details remain optional for future reusable specials", () => {
@@ -48,7 +61,7 @@ test("spotlight is integrated only between homepage platforms and episodes", asy
   for (const source of [detail, episodes, guests]) assert.doesNotMatch(source, /CurrentSpecial\(\)/);
 });
 
-test("existing contact form supports the spotlight inquiry context", async () => {
+test("existing contact form still supports the Candidate Interview Series context", async () => {
   const contact = await readFile(new URL("./Contact.js", import.meta.url), "utf8");
   const main = await readFile(new URL("../main.js", import.meta.url), "utf8");
   assert.match(contact, /<option>Candidate Interview Series<\/option>/);
