@@ -1,6 +1,7 @@
 import { Header } from "./components/Header.js";
 import { Hero } from "./components/Hero.js";
 import { Platforms } from "./components/Platforms.js";
+import { CurrentSpecial } from "./components/CurrentSpecial.js";
 import { EpisodeThumbnail, Episodes, isUsableThumbnailUrl, revealThumbnailFallback } from "./components/Episodes.js";
 import { Impact } from "./components/Impact.js";
 import { About } from "./components/About.js";
@@ -11,6 +12,7 @@ import { SearchDialog } from "./components/SearchDialog.js";
 import { Conversions } from "./components/Conversions.js";
 import { icon } from "./lib/icons.js";
 import { site } from "./data/site.js";
+import { enrichEpisode } from "./data/catalog.js";
 import { compactNumber, escapeHtml, excerpt, formatDate, formatDuration, isValidWebsiteOrSocial, nextBroadcastLabel, normalizeWebsiteOrSocial } from "./lib/utils.js";
 import { searchEpisodes, uniqueEpisodes } from "./lib/episode-search.js";
 import { setupEditorialMotion } from "./lib/motion.js";
@@ -22,6 +24,7 @@ app.innerHTML = `
   <main id="main-content">
     ${Hero()}
     ${Platforms()}
+    ${CurrentSpecial()}
     ${Episodes()}
     ${Impact()}
     ${About()}
@@ -158,7 +161,7 @@ async function loadYouTube() {
     const response = await fetch("/api/youtube", { headers: { Accept: "application/json" } });
     if (!response.ok) throw new Error("YouTube feed unavailable");
     const data = await response.json();
-    state.episodes = uniqueEpisodes(data.episodes?.length ? data.episodes : (data.recent || []));
+    state.episodes = uniqueEpisodes(data.episodes?.length ? data.episodes : (data.recent || [])).map(enrichEpisode);
     updateFeatured(data.featured || data.mostWatched || data.latest);
     updateLatest(data.latest);
     renderEpisodes(data.recent || state.episodes);

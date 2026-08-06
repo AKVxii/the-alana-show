@@ -1,3 +1,5 @@
+import { resolveCollection } from "../data/collections.js";
+
 export function uniqueEpisodes(episodes = []) {
   const seen = new Set();
   return episodes.filter(episode => {
@@ -8,17 +10,27 @@ export function uniqueEpisodes(episodes = []) {
 }
 
 export function searchEpisodes(episodes = [], query = "", category = "") {
+  const queryCollection = resolveCollection(query);
+  const categoryCollection = resolveCollection(category);
   const normalizedQuery = query.trim().toLowerCase();
   return uniqueEpisodes(episodes).filter(episode => {
     const categories = Array.isArray(episode.categories) ? episode.categories : [];
     const tags = Array.isArray(episode.tags) ? episode.tags : [];
-    const categoryMatch = !category || categories.includes(category);
+    const collection = episode.collection || "";
+    const categoryMatch = !category || (categoryCollection
+      ? collection === categoryCollection.name
+      : categories.includes(category));
     const haystack = [
       episode.title || "",
       episode.description || "",
       ...categories,
-      ...tags
+      ...tags,
+      ...(episode.guestNames || []),
+      collection
     ].join(" ").toLowerCase();
-    return categoryMatch && (!normalizedQuery || haystack.includes(normalizedQuery));
+    const queryMatch = queryCollection
+      ? collection === queryCollection.name
+      : !normalizedQuery || haystack.includes(normalizedQuery);
+    return categoryMatch && queryMatch;
   });
 }
