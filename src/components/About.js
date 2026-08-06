@@ -6,7 +6,7 @@ export function About() {
       <div class="shell about-grid">
         <div class="about-portrait reveal">
           <div class="about-photo-frame">
-            <img src="/assets/alana-original.jpg" alt="Alana K. Vandeveer in the studio" width="958" height="960" loading="lazy">
+            <img src="/assets/alana-portrait-cutout.png" alt="Alana K. Vandeveer in the studio" width="958" height="968" loading="lazy">
           </div>
           <div class="about-monogram" aria-hidden="true">AKV</div>
         </div>

@@ -37,11 +37,11 @@ export function Hero() {
           <div class="portrait-orbit" aria-hidden="true"></div>
           <div class="portrait-frame">
             <div class="portrait-inner">
-              <img src="/assets/alana-original.jpg" alt="Alana K. Vandeveer, host of The Alana Show" width="958" height="960" fetchpriority="high">
+              <img src="/assets/alana-portrait-cutout.png" alt="Alana K. Vandeveer, host of The Alana Show" width="958" height="968" fetchpriority="high">
             </div>
           </div>
           <div class="portrait-caption">
-            <span>Hosted by</span>
+            <span>HOSTED BY</span>
             <strong>Alana K. Vandeveer</strong>
           </div>
         </div>

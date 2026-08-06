@@ -1,12 +1,13 @@
 import { site } from "../data/site.js";
 import { icon } from "../lib/icons.js";
 
-export function Footer() {
+export function Footer({ fromSubpage = false } = {}) {
+  const home = fromSubpage ? "/" : "";
   return `
     <footer class="site-footer">
       <div class="shell footer-grid">
         <div class="footer-brand">
-          <a class="brand" href="#home">
+          <a class="brand" href="${home}#home">
             <span class="brand-seal" aria-hidden="true">TAS</span>
             <span class="brand-copy"><strong>The Alana Show</strong><span>Real conversations · Meaningful impact</span></span>
           </a>
@@ -15,17 +16,18 @@ export function Footer() {
 
         <div class="footer-links">
           <strong>Explore</strong>
-          <a href="#watch">Watch</a>
-          <a href="#listen">Listen</a>
-          <a href="#on-air">On Air</a>
-          <a href="#impact">Stepping Up</a>
+          <a href="/episodes/">Episodes</a>
+          <a href="/guests/">Guests</a>
+          <a href="${home}#listen">Listen</a>
+          <a href="${home}#on-air">On Air</a>
         </div>
 
         <div class="footer-links">
           <strong>Connect</strong>
-          <a href="#about">About Alana</a>
-          <a href="#partner">Advertise &amp; Partner</a>
-          <a href="#contact">Contact</a>
+          <a href="${home}#about">About Alana</a>
+          <a href="${home}#partner">Advertise &amp; Partner</a>
+          <a href="${home}#sponsor">Commercial Real Estate Sponsor — The Fitzgerald Group</a>
+          <a href="${home}#contact">Contact</a>
           <a href="${site.social.instagram}" target="_blank" rel="noopener">Instagram</a>
           <a href="${site.social.x}" target="_blank" rel="noopener">X / Twitter</a>
           <a href="${site.social.linkedin}" target="_blank" rel="noopener">LinkedIn</a>

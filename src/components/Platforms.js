@@ -8,8 +8,8 @@ export function Platforms() {
         <div class="platform-heading reveal">
           <span aria-hidden="true"></span>
           <h2>
-            <span class="platform-heading-wide">Watch or listen wherever you are</span>
-            <span class="platform-heading-mobile">Listen everywhere</span>
+            <span class="platform-heading-wide">WATCH OR LISTEN WHEREVER YOU ARE</span>
+            <span class="platform-heading-mobile">WATCH OR LISTEN WHEREVER YOU ARE</span>
           </h2>
           <span aria-hidden="true"></span>
         </div>
