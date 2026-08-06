@@ -1,26 +1,77 @@
+.portrait-frame {
+  aspect-ratio: 10 / 11;
+  border-color: rgba(234, 215, 158, .78);
+  background: linear-gradient(145deg, rgba(242, 218, 145, .9), rgba(156, 116, 43, .28) 48%, rgba(234, 215, 158, .82));
+  box-shadow: 0 26px 58px rgba(0, 0, 0, .28), 0 0 22px rgba(216, 184, 102, .08);
+}
+
+.portrait-frame::before {
+  inset: 6px;
+  border-color: rgba(255, 253, 248, .27);
+}
+
 .portrait-inner {
+  height: 100%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  isolation: isolate;
   background:
-    radial-gradient(circle at 51% 24%, rgba(78, 145, 197, .62) 0%, rgba(39, 92, 137, .38) 32%, transparent 58%),
-    linear-gradient(138deg, transparent 0 27%, rgba(216, 184, 102, .055) 27.2% 27.65%, transparent 27.9% 57%, rgba(75, 137, 187, .09) 57.2% 57.85%, transparent 58.1%),
-    linear-gradient(150deg, #123c63 0%, #0b2e50 42%, #071f38 72%, #041426 100%);
-  box-shadow:
-    inset 0 0 72px rgba(3, 9, 20, .16),
-    inset 0 -22px 42px rgba(3, 9, 20, .14);
+    radial-gradient(circle at 53% 28%, rgba(43, 94, 164, .48), transparent 38%),
+    linear-gradient(132deg, transparent 0 15%, rgba(27, 53, 114, .56) 15.2% 27%, transparent 27.2% 43%, rgba(9, 25, 74, .7) 43.2% 54%, transparent 54.2%),
+    linear-gradient(36deg, transparent 0 18%, rgba(37, 72, 151, .52) 18.2% 31%, transparent 31.2% 48%, rgba(4, 14, 46, .86) 48.2% 61%, transparent 61.2%),
+    conic-gradient(from 214deg at 69% 18%, #08132f, #142b69 13%, #07132f 25%, #1c3578 38%, #050d24 51%, #10285d 67%, #06132e 82%, #08152f);
+  box-shadow: inset 0 0 78px rgba(1, 6, 18, .34);
 }
 
 .portrait-inner::before {
+  z-index: 0;
+  opacity: .65;
   background:
-    radial-gradient(circle at 50% 22%, rgba(116, 177, 222, .15), transparent 39%),
-    linear-gradient(135deg, transparent 0 45%, rgba(216, 184, 102, .04) 45.2% 45.5%, transparent 45.8%);
+    linear-gradient(145deg, transparent 0 22%, rgba(216, 184, 102, .08) 22.2% 22.6%, transparent 22.8% 61%, rgba(69, 113, 192, .16) 61.2% 61.8%, transparent 62%),
+    radial-gradient(circle at 54% 26%, rgba(75, 132, 209, .18), transparent 37%);
 }
 
 .portrait-inner::after {
+  z-index: 2;
   background:
-    linear-gradient(90deg, rgba(3, 9, 20, .08), transparent 15%, transparent 85%, rgba(3, 9, 20, .1)),
-    linear-gradient(180deg, rgba(3, 9, 20, .05), transparent 18%, transparent 84%, rgba(3, 9, 20, .12));
+    linear-gradient(90deg, rgba(2, 8, 24, .22), transparent 13%, transparent 87%, rgba(2, 8, 24, .24)),
+    linear-gradient(180deg, rgba(2, 8, 24, .08), transparent 18%, transparent 82%, rgba(2, 8, 24, .22));
 }
 
 .portrait-inner img {
-  mix-blend-mode: lighten;
-  filter: saturate(.98) contrast(1.01) drop-shadow(0 16px 24px rgba(2, 8, 18, .26));
+  width: 100%;
+  height: auto;
+  max-height: 100%;
+  z-index: 1;
+  object-fit: contain;
+  object-position: center bottom;
+  mix-blend-mode: normal;
+  filter: drop-shadow(0 17px 22px rgba(1, 6, 18, .34));
+}
+
+.about-photo-frame {
+  overflow: hidden;
+  background: linear-gradient(145deg, rgba(234, 215, 158, .92), rgba(156, 116, 43, .68));
+}
+
+.about-photo-frame::before {
+  background:
+    linear-gradient(90deg, rgba(6, 16, 32, .05), transparent 18%, transparent 82%, rgba(6, 16, 32, .09)),
+    linear-gradient(180deg, rgba(255, 253, 248, .18), transparent 30%);
+}
+
+.about-photo-frame img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 958 / 968;
+  object-fit: contain;
+  object-position: center bottom;
+  background:
+    radial-gradient(circle at 50% 25%, rgba(255, 253, 248, .96), rgba(248, 242, 230, .94) 58%, rgba(229, 216, 190, .92));
+}
+
+@media (max-width: 720px) {
+  .portrait-frame { aspect-ratio: 10 / 11; }
+  .portrait-inner img { width: 100%; height: auto; object-fit: contain; object-position: center bottom; }
 }
