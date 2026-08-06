@@ -13,6 +13,7 @@ import { icon } from "./lib/icons.js";
 import { site } from "./data/site.js";
 import { compactNumber, escapeHtml, excerpt, formatDate, formatDuration, isValidWebsiteOrSocial, nextBroadcastLabel, normalizeWebsiteOrSocial } from "./lib/utils.js";
 import { searchEpisodes, uniqueEpisodes } from "./lib/episode-search.js";
+import { setupEditorialMotion } from "./lib/motion.js";
 
 const app = document.querySelector("#app");
 
@@ -65,20 +66,7 @@ function setupNavigation() {
 }
 
 function setupReveals() {
-  const nodes = document.querySelectorAll(".reveal");
-  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches || !("IntersectionObserver" in window)) {
-    nodes.forEach(node => node.classList.add("visible"));
-    return;
-  }
-  const observer = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add("visible");
-        observer.unobserve(entry.target);
-      }
-    });
-  }, { threshold: .12, rootMargin: "0px 0px -45px" });
-  nodes.forEach(node => observer.observe(node));
+  setupEditorialMotion();
 }
 
 function setupBroadcastStatus() {
