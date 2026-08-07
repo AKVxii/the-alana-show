@@ -78,6 +78,14 @@
   text-align: center;
 }
 
+/* The featured archive card is inserted after the initial motion scan.
+   Keep that nested card visible; the surrounding section already provides
+   the entrance animation. */
+.featured-conversation .media-card[data-reveal] {
+  opacity: 1;
+  transform: none;
+}
+
 /* A verified guest link already provides the exact matching conversations.
    Avoid repeating the same result again in the generic archive below it. */
 main:has(.guest-results-section:not([hidden])) .archive-section {
