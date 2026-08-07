@@ -61,7 +61,9 @@ export function buildGuestDirectory(episodeRecords = [], curatedGuests = []) {
     sortName: `${guestSurname(guest.name, guest.surname)}, ${guest.name}`,
     conversationCount: guest.videoIds.length
       ? new Set(guest.videoIds).size
-      : new Set(guest.episodeIds).size,
+      : guest.episodeIds.length
+        ? new Set(guest.episodeIds).size
+        : guest.conversationCount || 0,
     detailPath: STATIC_GUEST_IDS.has(guest.id) ? `/guests/${guest.id}/` : ""
   })).sort((a, b) => a.sortName.localeCompare(b.sortName, "en", { sensitivity: "base" }));
 }
