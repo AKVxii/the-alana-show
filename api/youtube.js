@@ -1,5 +1,6 @@
 const HANDLE = "@alanakvandeveer";
 const { categorizeEpisode } = require("./episode-categories");
+const { identifyEpisodeGuests } = require("./guest-identities");
 
 // 20 uploads-playlist pages cover as many as 1,000 public uploads while
 // keeping serverless execution bounded. Pagination still stops immediately
@@ -66,7 +67,7 @@ function normalizeVideo(video) {
     ...normalized,
     description: video.snippet?.description || ""
   });
-  return { ...normalized, ...classification };
+  return { ...normalized, ...classification, ...identifyEpisodeGuests(normalized) };
 }
 
 function isEligible(video) {
@@ -193,6 +194,9 @@ module.exports = async function handler(req, res) {
       [...episodes].sort((a, b) => b.viewCount - a.viewCount)[0] || null;
 
     const recent = episodes.slice(0, 6);
+    const unresolvedGuestAudit = episodes
+      .map(episode => episode.unresolvedGuestAudit)
+      .filter(Boolean);
 
     res.setHeader(
       "Cache-Control",
@@ -206,7 +210,8 @@ module.exports = async function handler(req, res) {
       latest,
       mostWatched,
       recent,
-      episodes
+      episodes,
+      unresolvedGuestAudit
     });
   } catch (error) {
     console.error(error);

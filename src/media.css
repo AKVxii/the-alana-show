@@ -126,3 +126,25 @@
   .related-conversation-card { transition: none; }
   .related-conversation-card:hover, .related-conversation-card:focus-visible { transform: none; }
 }
+.guest-results-section[hidden],
+[data-generic-featured][hidden] { display: none; }
+
+.guest-results-single {
+  grid-template-columns: minmax(0, 760px);
+}
+
+.guest-results-section .media-card-image,
+.featured-conversation .media-card-image {
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+}
+
+.guest-results-section .media-card-image img,
+.featured-conversation .media-card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.focused-result-card { min-width: 0; }
+.focused-result-action { margin-top: 1rem; }
