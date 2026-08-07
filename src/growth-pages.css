@@ -1,0 +1,150 @@
+.growth-hero {
+  position: relative;
+  overflow: hidden;
+  padding-top: 54px;
+  padding-bottom: 24px;
+}
+
+/* Compact navigation for the expanded growth-hub menu. */
+.media-site-header .header-inner.shell {
+  width: min(calc(100% - 28px), 1480px);
+  height: 58px;
+  gap: 12px;
+}
+.media-site-header .brand { gap: 9px; }
+.media-site-header .brand-seal { width: 39px; height: 39px; font-size: .88rem; }
+.media-site-header .brand-copy strong { font-size: 1.1rem; }
+.media-site-header .brand-copy span { font-size: .39rem; }
+.media-site-header .primary-nav { gap: 8px; }
+.media-site-header .primary-nav a {
+  padding: 19px 1px 15px;
+  font-size: .64rem;
+  letter-spacing: .008em;
+}
+.media-site-header .primary-nav a::after { bottom: 12px; }
+.media-site-header .header-actions .button-small { min-height: 38px; padding: 8px 15px; }
+
+.growth-hero .breadcrumbs { margin-bottom: 9px; }
+.growth-hero .eyebrow { margin-bottom: 6px; }
+.growth-hero h1 { margin-bottom: 5px; font-size: clamp(3rem, 4.8vw, 4.45rem); }
+.growth-hero p:last-child { max-width: 800px; font-size: .88rem; line-height: 1.38; }
+
+.growth-orbit {
+  position: absolute;
+  border: 1px solid rgba(216, 184, 102, .11);
+  border-radius: 50%;
+  pointer-events: none;
+}
+.growth-orbit-one { width: 380px; height: 380px; right: 4%; top: -240px; animation: growthDrift 18s ease-in-out infinite alternate; }
+.growth-orbit-two { width: 175px; height: 175px; right: 19%; bottom: -138px; border-color: rgba(74, 120, 164, .18); animation: growthDrift 14s ease-in-out infinite alternate-reverse; }
+
+.growth-feature { padding: 24px 0 22px; background: var(--ivory-100); }
+.growth-feature-grid { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(340px, .8fr); gap: 18px; align-items: stretch; }
+.growth-feature-copy { padding: 6px 0 3px; }
+.growth-feature-copy .eyebrow { margin-bottom: 6px; }
+.growth-feature-copy h2 { max-width: 820px; margin-top: 5px; font-size: clamp(2.25rem, 3.5vw, 3.7rem); line-height: .97; letter-spacing: -.035em; }
+.growth-feature-copy > p:last-child { max-width: 720px; margin-top: 10px; color: var(--muted); font-size: .87rem; line-height: 1.48; }
+
+.growth-feature-panel {
+  position: relative;
+  overflow: hidden;
+  padding: 22px 24px;
+  color: var(--white);
+  border-radius: 17px;
+  background: radial-gradient(circle at 90% 10%, rgba(53, 92, 132, .48), transparent 34%), linear-gradient(145deg, #102947, #08172d 72%);
+  box-shadow: 0 16px 38px rgba(5, 18, 38, .13);
+}
+.growth-feature-panel::after { content:""; width:170px; height:170px; position:absolute; right:-80px; bottom:-92px; border:1px solid rgba(216,184,102,.12); border-radius:50%; box-shadow:0 0 0 28px rgba(216,184,102,.025); }
+.growth-feature-panel > * { position: relative; z-index: 1; }
+.growth-panel-kicker { display:block; color: var(--gold-300); font-size:.57rem; font-weight:900; letter-spacing:.16em; text-transform:uppercase; }
+.growth-feature-panel strong { display:block; margin-top:8px; font-family: var(--font-display); font-size: clamp(1.75rem, 2.45vw, 2.5rem); line-height:.98; }
+.growth-feature-panel p { margin-top:9px; color: rgba(255,255,255,.84); font-size:.76rem; line-height:1.42; }
+.growth-feature-panel .growth-panel-note { color: rgba(255,255,255,.62); font-size:.67rem; }
+.growth-feature-panel .button { margin-top:14px; min-height:43px; padding:10px 18px; }
+
+/* Give the South Florida broadcast card enough width to read as one balanced line. */
+@media (min-width: 1180px) {
+  body[data-page="south-florida"] .growth-feature-grid {
+    grid-template-columns: minmax(0, .95fr) minmax(560px, 1.05fr);
+  }
+  body[data-page="south-florida"] .growth-feature-panel strong {
+    white-space: nowrap;
+    font-size: clamp(1.9rem, 2.15vw, 2.35rem);
+  }
+}
+
+.growth-explore { position:relative; overflow:hidden; padding: 21px 0 26px; background: linear-gradient(180deg, #fffdf8, var(--ivory-100)); border-top: 1px solid rgba(20,35,58,.08); }
+.growth-explore::after { content:""; width:360px; height:360px; position:absolute; right:-205px; top:6px; border:1px solid rgba(189,150,63,.07); border-radius:50%; pointer-events:none; animation:growthDrift 20s ease-in-out infinite alternate; }
+.growth-section-heading { margin-bottom: 11px; }
+.growth-section-heading .eyebrow { margin-bottom: 5px; }
+.growth-section-heading h2 { margin-top:3px; font-size: clamp(1.95rem, 2.9vw, 2.9rem); line-height:1; }
+.growth-grid { position:relative; z-index:1; display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; }
+.growth-card { min-height:174px; padding:17px 18px; display:flex; flex-direction:column; color:var(--ink); text-decoration:none; border:1px solid rgba(20,35,58,.1); border-radius:16px; background:rgba(255,255,255,.72); box-shadow:0 10px 26px rgba(5,18,38,.045); transition:transform .22s ease, border-color .22s ease, box-shadow .22s ease; }
+.growth-card:hover,.growth-card:focus-visible { transform:translateY(-4px); border-color:rgba(189,150,63,.38); box-shadow:0 18px 38px rgba(5,18,38,.09); }
+.growth-card-number { color:var(--gold-600); font-size:.56rem; font-weight:900; letter-spacing:.13em; }
+.growth-card h2 { margin-top:7px; font-size:clamp(1.55rem,2.05vw,2.15rem); line-height:1; }
+.growth-card p { margin-top:7px; color:var(--muted); font-size:.73rem; line-height:1.4; }
+.growth-card-link { margin-top:auto; padding-top:10px; display:flex; justify-content:space-between; border-top:1px solid rgba(20,35,58,.08); color:var(--navy-700); font-size:.65rem; font-weight:850; }
+.growth-card-link span { color:var(--gold-600); }
+
+/* Final density pass: keep the CTA prominent without creating another tall section. */
+.growth-cta { padding:14px 0; color:var(--white); background:radial-gradient(circle at 82% 20%, rgba(36,75,115,.44), transparent 28%), linear-gradient(125deg,var(--navy-1000),var(--navy-900)); border-top:1px solid rgba(216,184,102,.18); }
+.growth-cta-inner { display:flex; justify-content:space-between; align-items:center; gap:18px; }
+.growth-cta .eyebrow { margin-bottom:3px; font-size:.66rem; }
+.growth-cta h2 { max-width:720px; margin-top:2px; font-size:clamp(1.55rem,2.45vw,2.35rem); line-height:.97; }
+.growth-cta-actions { flex:0 0 auto; display:flex; flex-wrap:wrap; gap:7px; }
+.growth-cta-actions .button { min-height:40px; padding:8px 17px; }
+
+/* Final compact footer: preserve every route while removing unnecessary height. */
+.site-footer .footer-grid {
+  padding-top: 14px;
+  padding-bottom: 9px;
+  gap: 16px;
+  align-items: start;
+}
+.site-footer .footer-brand .brand { gap:8px; }
+.site-footer .footer-brand .brand-seal { width:36px; height:36px; font-size:.82rem; }
+.site-footer .footer-brand .brand-copy strong { font-size:1rem; }
+.site-footer .footer-brand .brand-copy span { font-size:.36rem; }
+.site-footer .footer-brand p { margin-top: 5px; max-width: 390px; font-size: .67rem; line-height: 1.32; }
+.site-footer .footer-links { gap: 0; }
+.site-footer .footer-links strong,
+.site-footer .footer-heard > span { margin-bottom:2px; font-size:.57rem; }
+.site-footer .footer-links a { font-size: .66rem; line-height: 1.12; }
+.site-footer .footer-heard strong { font-size:1.72rem; line-height:.96; }
+.site-footer .footer-heard small { margin-top: 3px; font-size:.64rem; line-height:1.25; }
+.site-footer .footer-heard a { margin-top:4px; font-size:.66rem; }
+.site-footer .footer-bottom { padding-top: 7px; padding-bottom: 7px; font-size: .56rem; }
+
+@keyframes growthDrift { from { transform:translate3d(0,0,0) scale(1); } to { transform:translate3d(-18px,12px,0) scale(1.04); } }
+
+@media (max-width: 1260px) {
+  .media-site-header .primary-nav { gap: 6px; }
+  .media-site-header .primary-nav a { font-size: .61rem; }
+  .media-site-header .brand-copy strong { font-size: 1.04rem; }
+  .media-site-header .brand-copy span { display: none; }
+}
+
+@media (max-width: 1100px) {
+  .growth-feature-grid { grid-template-columns: 1fr; }
+  .growth-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
+  .growth-cta-inner { align-items:flex-start; flex-direction:column; gap:13px; }
+}
+@media (max-width: 700px) {
+  .growth-hero { padding-top:48px; padding-bottom:24px; }
+  .growth-hero h1 { font-size:clamp(2.65rem,12.5vw,3.9rem); }
+  .growth-feature { padding-top:23px; padding-bottom:21px; }
+  .growth-feature-copy h2 { font-size:clamp(2.05rem,10vw,3rem); }
+  .growth-feature-panel { padding:20px; border-radius:15px; }
+  .growth-explore { padding-top:20px; padding-bottom:23px; }
+  .growth-grid { grid-template-columns:1fr; }
+  .growth-card { min-height:166px; padding:18px 17px; }
+  .growth-cta { padding:17px 0; }
+  .growth-cta-actions,.growth-cta-actions .button { width:100%; }
+  .site-footer .footer-grid { padding-top:16px; padding-bottom:10px; gap:15px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .growth-orbit,.growth-explore::after { animation:none; }
+  .growth-card { transition:none; }
+  .growth-card:hover,.growth-card:focus-visible { transform:none; }
+}
