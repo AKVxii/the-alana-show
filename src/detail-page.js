@@ -12,13 +12,13 @@ const item = type === "episode" ? episodeById(id) : guestById(id);
 
 function breadcrumbs(current) {
   const parent = type === "episode" ? "Episodes" : "Guests";
-  return `<nav class="breadcrumbs" aria-label="Breadcrumb"><ol><li><a href="/">Home</a></li><li><a href="/${parent.toLowerCase()}/">${parent}</a></li><li aria-current="page">${escapeHtml(current)}</li></ol></nav>`;
+  return `<nav class="breadcrumbs" aria-label="Breadcrumb"><ol><li><a href="/">Home</a></li><li><a href="/${parent.toLowerCase()}">${parent}</a></li><li aria-current="page">${escapeHtml(current)}</li></ol></nav>`;
 }
 
 function episodeDetail(episode) {
   const relatedGuests = episode.guestIds.map(guestById).filter(Boolean);
   const relatedOrganizations = (episode.organizationIds || []).map(organizationById).filter(Boolean);
-  const guestLinks = relatedGuests.map(guest => `<a href="/guests/${guest.id}/">${escapeHtml(guest.name)}</a>`).join(" and ");
+  const guestLinks = relatedGuests.map(guest => `<a href="/guests/${guest.id}">${escapeHtml(guest.name)}</a>`).join(" and ");
   return `<section class="detail-hero"><div class="shell detail-shell">${breadcrumbs(episode.title)}<p class="eyebrow"><span></span> Episode</p><h1>${escapeHtml(episode.title)}</h1>
     ${guestLinks ? `<p class="detail-byline">A conversation with ${guestLinks}</p>` : ""}
     ${relatedOrganizations.length ? `<p class="detail-byline">Organization named in this conversation: ${relatedOrganizations.map(organization => escapeHtml(organization.name)).join(", ")}</p>` : ""}
