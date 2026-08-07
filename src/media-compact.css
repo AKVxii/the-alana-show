@@ -48,13 +48,24 @@
 }
 
 .guest-results-section {
-  padding-top: 42px;
+  padding-top: 34px;
+}
+
+.guest-results-section .media-section-heading {
+  margin-bottom: 12px;
 }
 
 .guest-results-section .media-section-heading h2 {
-  max-width: 1180px;
-  font-size: clamp(2.7rem, 5vw, 4.85rem);
-  line-height: .98;
+  max-width: none;
+  font-size: clamp(2.7rem, 3.7vw, 3.95rem);
+  line-height: .96;
+  letter-spacing: -.035em;
+}
+
+.guest-results-section .archive-status {
+  min-height: 0;
+  margin-top: 7px;
+  margin-bottom: 0;
 }
 
 .guest-results-single {
@@ -71,6 +82,12 @@
    Avoid repeating the same result again in the generic archive below it. */
 main:has(.guest-results-section:not([hidden])) .archive-section {
   display: none;
+}
+
+@media (min-width: 1180px) {
+  .guest-results-section .media-section-heading h2 {
+    white-space: nowrap;
+  }
 }
 
 @media (max-width: 760px) {
@@ -100,6 +117,7 @@ main:has(.guest-results-section:not([hidden])) .archive-section {
   .guest-results-section .media-section-heading h2 {
     font-size: clamp(2.35rem, 11vw, 3.6rem);
     line-height: 1;
+    letter-spacing: -.025em;
   }
 
   .guest-results-single {
