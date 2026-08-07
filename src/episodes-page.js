@@ -9,7 +9,8 @@ import { setupEditorialMotion } from "./lib/motion.js";
 import { CANDIDATES_DISCLAIMER, resolveCollection } from "./data/collections.js";
 
 const PAGE_SIZE = 9;
-const state = { episodes: [], query: "", category: "", shown: PAGE_SIZE, usingFallback: false };
+const initialParams = new URLSearchParams(location.search);
+const state = { episodes: [], query: initialParams.get("guest") || "", category: "", shown: PAGE_SIZE, usingFallback: false };
 const app = document.querySelector("#app");
 
 app.innerHTML = `${MediaHeader()}<main id="main-content">
@@ -91,8 +92,25 @@ async function load() {
   renderFeatured(); render();
 }
 
-document.querySelector("[data-query]").addEventListener("input", event => { state.query = event.target.value; state.shown = PAGE_SIZE; render(); });
+document.querySelector("[data-query]").addEventListener("input", event => { state.query = event.target.value; state.shown = PAGE_SIZE; syncGuestQuery(); render(); });
 document.querySelector("[data-category]").addEventListener("change", event => { state.category = event.target.value; state.shown = PAGE_SIZE; render(); });
-document.querySelector("[data-controls]").addEventListener("reset", () => { state.query = ""; state.category = ""; state.shown = PAGE_SIZE; requestAnimationFrame(render); });
+document.querySelector("[data-controls]").addEventListener("reset", () => { state.query = ""; state.category = ""; state.shown = PAGE_SIZE; syncGuestQuery(); requestAnimationFrame(render); });
 document.querySelector("[data-more]").addEventListener("click", () => { state.shown += PAGE_SIZE; render(); });
 setupMediaNavigation(); setupEditorialMotion(app); load();
+
+const queryInput = document.querySelector("[data-query]");
+queryInput.value = state.query;
+
+function syncGuestQuery() {
+  const url = new URL(location.href);
+  if (state.query) url.searchParams.set("guest", state.query);
+  else url.searchParams.delete("guest");
+  history.replaceState(null, "", `${url.pathname}${url.search}${url.hash}`);
+}
+
+window.addEventListener("popstate", () => {
+  state.query = new URLSearchParams(location.search).get("guest") || "";
+  queryInput.value = state.query;
+  state.shown = PAGE_SIZE;
+  render();
+});

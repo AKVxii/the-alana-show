@@ -29,10 +29,11 @@ test("verified guest searches return only their related catalog episodes", () =>
   );
 });
 
-test("guest directory conversation CTAs route to guest profiles", async () => {
+test("guest directory preserves profiles and routes new guests to filtered episodes", async () => {
   const source = await readFile(new URL("../guests-page.js", import.meta.url), "utf8");
 
   assert.ok(source.includes('href="${guestPath}">View conversations'));
+  assert.ok(source.includes("guestConversationPath(guest)"));
   assert.doesNotMatch(source, /related\\[0\\]\\.detailPath/);
 });
 

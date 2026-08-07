@@ -69,6 +69,9 @@ export function enrichEpisode(apiEpisode) {
     ...apiEpisode,
     ...editorial,
     title: apiEpisode.title || editorial.title,
-    guestNames: editorial.guestIds.map(id => guestById(id)?.name).filter(Boolean)
+    guestNames: apiEpisode.guestNames?.length
+      ? apiEpisode.guestNames
+      : editorial.guestIds.map(id => guestById(id)?.name).filter(Boolean),
+    guestIds: apiEpisode.guestIds?.length ? apiEpisode.guestIds : editorial.guestIds
   } : apiEpisode;
 }
