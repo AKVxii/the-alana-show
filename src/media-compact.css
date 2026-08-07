@@ -86,6 +86,37 @@
   transform: none;
 }
 
+/* On desktop, let the artwork fill the full height of the featured card so
+   the image and editorial copy finish on the same baseline without a blank
+   white shelf beneath the thumbnail. */
+.featured-conversation {
+  align-items: stretch;
+}
+
+.featured-conversation-media,
+.featured-conversation-media .media-card,
+.featured-conversation-media .media-card-image,
+.featured-conversation-media .thumbnail-media {
+  height: 100%;
+}
+
+.featured-conversation-media .media-card-image,
+.featured-conversation-media .thumbnail-media {
+  aspect-ratio: auto;
+}
+
+.featured-conversation-media .thumbnail-media {
+  border: 0;
+  border-radius: 0;
+}
+
+.featured-conversation-media .thumbnail-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
 /* Soften the featured title treatment so the image and copy read as one
    premium editorial card instead of two hard-edged rectangles. */
 .featured-conversation {
@@ -164,6 +195,17 @@ main:has(.guest-results-section:not([hidden])) .archive-section {
 }
 
 @media (max-width: 980px) {
+  .featured-conversation-media,
+  .featured-conversation-media .media-card {
+    height: auto;
+  }
+
+  .featured-conversation-media .media-card-image,
+  .featured-conversation-media .thumbnail-media {
+    height: auto;
+    aspect-ratio: 16 / 9;
+  }
+
   .featured-conversation-copy::before {
     width: auto;
     height: 2px;
