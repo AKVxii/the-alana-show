@@ -1,4 +1,11 @@
-const STATIC_GUEST_IDS = new Set(["michael-barnett", "jason-mandle"]);
+const STATIC_GUEST_IDS = new Set([
+  "al-cacace", "ashley-vertuno", "bob-sutton", "caden-veltkamp", "celeste-ellich",
+  "diana-davis", "elijah-knight", "george-lemieux", "gillian-lieberman", "jason-mandle",
+  "jesse-rack", "johana-villafuerte", "john-rourke", "josh-smith", "mark-khachaturian",
+  "marvens-beauge", "matthew-yeandle", "michael-barnett", "michael-castellano", "michael-saldana",
+  "nick-cannon", "noel-j-guillama-alvarez", "ric-bradshaw", "rick-morris", "sabrina-maschue",
+  "scott-diament", "stacey-ibarra", "steve-cisneros", "thais-glysson", "vaughn-mitchell"
+]);
 const SORT_SURNAME_OVERRIDES = new Map([
   ["ric bradshaw", "Bradshaw"],
   ["michael barnett", "Barnett"],
