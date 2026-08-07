@@ -20,11 +20,11 @@ export function Header() {
 
         <nav id="primary-nav" class="primary-nav" aria-label="Primary navigation" data-nav>
           <a href="#home">Home</a>
-          <a href="/episodes/">Episodes</a>
-          <a href="/guests/">Guests</a>
-          <a href="/topics/">Topics</a>
-          <a href="/specials/">Specials</a>
-          <a href="/south-florida/">South Florida</a>
+          <a href="/episodes">Episodes</a>
+          <a href="/guests">Guests</a>
+          <a href="/topics">Topics</a>
+          <a href="/specials">Specials</a>
+          <a href="/south-florida">South Florida</a>
           <a href="#listen">Listen</a>
           <a href="#on-air">On Air</a>
           <a href="#about">About</a>
