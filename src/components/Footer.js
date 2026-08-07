@@ -16,11 +16,11 @@ export function Footer({ fromSubpage = false } = {}) {
 
         <div class="footer-links">
           <strong>Explore</strong>
-          <a href="/episodes/">Episodes</a>
-          <a href="/guests/">Guests</a>
-          <a href="/topics/">Topics</a>
-          <a href="/specials/">Specials</a>
-          <a href="/south-florida/">South Florida</a>
+          <a href="/episodes">Episodes</a>
+          <a href="/guests">Guests</a>
+          <a href="/topics">Topics</a>
+          <a href="/specials">Specials</a>
+          <a href="/south-florida">South Florida</a>
           <a href="${home}#listen">Listen</a>
           <a href="${home}#on-air">On Air</a>
         </div>
@@ -28,8 +28,8 @@ export function Footer({ fromSubpage = false } = {}) {
         <div class="footer-links">
           <strong>Connect</strong>
           <a href="${home}#about">About Alana</a>
-          <a href="/book/">Be a Guest</a>
-          <a href="/advertise/">Advertise &amp; Partner</a>
+          <a href="/book">Be a Guest</a>
+          <a href="/advertise">Advertise &amp; Partner</a>
           <a href="${home}#sponsor">Commercial Real Estate Sponsor — The Fitzgerald Group</a>
           <a href="${home}#contact">Contact</a>
           <a href="${site.social.instagram}" target="_blank" rel="noopener">Instagram</a>
