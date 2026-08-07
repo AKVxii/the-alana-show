@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://www.thealanashow.com/sitemap.xml
+Sitemap: https://thealanashow.com/sitemap.xml
