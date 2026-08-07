@@ -16,7 +16,7 @@ const state = { episodes: [], query: initialGuestQuery, guestContext: initialGue
 const app = document.querySelector("#app");
 
 app.innerHTML = `${MediaHeader()}<main id="main-content">
-  <section class="media-hero"><div class="shell media-hero-inner">
+  <section class="media-hero" data-episodes-hero><div class="shell media-hero-inner">
     <nav class="breadcrumbs" aria-label="Breadcrumb"><ol><li><a href="/">Home</a></li><li aria-current="page">Episodes</li></ol></nav>
     <p class="eyebrow"><span></span> The conversation archive</p><h1>Episodes</h1>
     <p>Explore conversations from The Alana Show by title, topic, or verified guest.</p>
@@ -114,6 +114,8 @@ function render() {
   const grid = document.querySelector("[data-grid]");
   const archiveHeading = document.querySelector("#archive-heading");
   const archiveEyebrow = document.querySelector("[data-archive-eyebrow]");
+  const hero = document.querySelector("[data-episodes-hero]");
+  hero?.classList.toggle("media-hero-filtered", Boolean(state.category));
   archiveHeading.textContent = state.category ? `${state.category} conversations` : "Newest conversations";
   archiveEyebrow.innerHTML = `<span></span> ${state.category ? "Selected topic" : "Browse the archive"}`;
   grid.setAttribute("aria-busy", "false");
