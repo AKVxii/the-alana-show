@@ -11,7 +11,8 @@ import { CANDIDATES_DISCLAIMER, resolveCollection } from "./data/collections.js"
 const PAGE_SIZE = 9;
 const initialParams = new URLSearchParams(location.search);
 const initialGuestQuery = initialParams.get("guest") || "";
-const state = { episodes: [], query: initialGuestQuery, guestContext: initialGuestQuery, category: "", shown: PAGE_SIZE, usingFallback: false, loading: true };
+const initialTopicQuery = initialParams.get("topic") || "";
+const state = { episodes: [], query: initialGuestQuery, guestContext: initialGuestQuery, category: initialTopicQuery, shown: PAGE_SIZE, usingFallback: false, loading: true };
 const app = document.querySelector("#app");
 
 app.innerHTML = `${MediaHeader()}<main id="main-content">
@@ -29,7 +30,7 @@ app.innerHTML = `${MediaHeader()}<main id="main-content">
     <div data-featured class="featured-loading" role="status">Loading the featured conversation…</div>
   </div></section>
   <section class="media-section archive-section" aria-labelledby="archive-heading" data-reveal><div class="shell">
-    <div class="media-section-heading"><div><p class="eyebrow dark"><span></span> Browse the archive</p><h2 id="archive-heading">Newest conversations</h2></div></div>
+    <div class="media-section-heading"><div><p class="eyebrow dark" data-archive-eyebrow><span></span> Browse the archive</p><h2 id="archive-heading">Newest conversations</h2></div></div>
     <form class="archive-controls" data-controls role="search"><label><span>Search conversations</span><input type="search" data-query placeholder="Guest, title, or topic" autocomplete="off"></label>
       <label><span>Filter by topic</span><select data-category><option value="">All verified topics</option>${topics.map(topic => `<option>${topic}</option>`).join("")}</select></label>
       <button type="reset" class="button button-outline">Clear</button></form>
@@ -68,7 +69,7 @@ function renderGuestResults() {
   const genericFeatured = document.querySelector("[data-generic-featured]");
   if (!state.guestContext) {
     section.hidden = true;
-    genericFeatured.hidden = false;
+    genericFeatured.hidden = Boolean(state.category);
     return;
   }
   const matches = guestEpisodes(state.episodes, state.guestContext);
@@ -96,6 +97,8 @@ function setCategoryFilterAvailability(isAvailable) {
   if (isAvailable) {
     select.removeAttribute("aria-disabled");
     select.options[0].textContent = "All verified topics";
+    select.value = topics.includes(state.category) ? state.category : "";
+    if (state.category && !topics.includes(state.category)) state.category = "";
     return;
   }
   state.category = "";
@@ -109,6 +112,10 @@ function render() {
   const matches = searchEpisodes(state.episodes, state.query, state.category);
   const visible = matches.slice(0, state.shown);
   const grid = document.querySelector("[data-grid]");
+  const archiveHeading = document.querySelector("#archive-heading");
+  const archiveEyebrow = document.querySelector("[data-archive-eyebrow]");
+  archiveHeading.textContent = state.category ? `${state.category} conversations` : "Newest conversations";
+  archiveEyebrow.innerHTML = `<span></span> ${state.category ? "Selected topic" : "Browse the archive"}`;
   grid.setAttribute("aria-busy", "false");
   grid.innerHTML = visible.length ? visible.map(episodeCard).join("") : `<div class="media-empty"><h3>No conversations found</h3><p>Try another title, guest, or verified topic.</p></div>`;
   const fallbackNote = state.usingFallback ? " Topic filtering is unavailable while the live feed is offline." : "";
@@ -137,31 +144,41 @@ async function load() {
   renderGuestResults(); renderFeatured(); render();
 }
 
+const queryInput = document.querySelector("[data-query]");
+const categorySelect = document.querySelector("[data-category]");
+queryInput.value = state.query;
+categorySelect.value = state.category;
+
+function syncFilters() {
+  const url = new URL(location.href);
+  if (state.guestContext) url.searchParams.set("guest", state.guestContext);
+  else url.searchParams.delete("guest");
+  if (state.category) url.searchParams.set("topic", state.category);
+  else url.searchParams.delete("topic");
+  history.replaceState(null, "", `${url.pathname}${url.search}${url.hash}`);
+}
+
 document.querySelector("[data-query]").addEventListener("input", event => {
   state.query = event.target.value; state.shown = PAGE_SIZE;
-  updateGuestContext(); syncGuestQuery(); renderGuestResults(); renderFeatured(); render();
+  updateGuestContext(); syncFilters(); renderGuestResults(); renderFeatured(); render();
 });
-document.querySelector("[data-category]").addEventListener("change", event => { state.category = event.target.value; state.shown = PAGE_SIZE; render(); });
+document.querySelector("[data-category]").addEventListener("change", event => {
+  state.category = event.target.value; state.shown = PAGE_SIZE;
+  syncFilters(); renderGuestResults(); renderFeatured(); render();
+});
 document.querySelector("[data-controls]").addEventListener("reset", () => {
   state.query = ""; state.guestContext = ""; state.category = ""; state.shown = PAGE_SIZE;
-  syncGuestQuery(); renderGuestResults(); renderFeatured(); requestAnimationFrame(render);
+  syncFilters(); renderGuestResults(); renderFeatured(); requestAnimationFrame(render);
 });
 document.querySelector("[data-more]").addEventListener("click", () => { state.shown += PAGE_SIZE; render(); });
 setupMediaNavigation(); setupEditorialMotion(app); renderGuestResults(); load();
 
-const queryInput = document.querySelector("[data-query]");
-queryInput.value = state.query;
-
-function syncGuestQuery() {
-  const url = new URL(location.href);
-  if (state.guestContext) url.searchParams.set("guest", state.guestContext);
-  else url.searchParams.delete("guest");
-  history.replaceState(null, "", `${url.pathname}${url.search}${url.hash}`);
-}
-
 window.addEventListener("popstate", () => {
-  state.query = new URLSearchParams(location.search).get("guest") || "";
+  const params = new URLSearchParams(location.search);
+  state.query = params.get("guest") || "";
+  state.category = params.get("topic") || "";
   queryInput.value = state.query;
+  categorySelect.value = state.category;
   state.shown = PAGE_SIZE;
   updateGuestContext(); renderGuestResults(); renderFeatured(); render();
 });
