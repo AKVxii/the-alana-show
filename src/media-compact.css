@@ -21,6 +21,34 @@
   font-size: 1rem;
 }
 
+/* Topic deep-links are already a focused destination, so compress the generic
+   Episodes masthead and get visitors to the selected conversations faster. */
+.media-hero.media-hero-filtered {
+  padding-top: 66px;
+  padding-bottom: 30px;
+}
+
+.media-hero.media-hero-filtered .breadcrumbs {
+  margin-bottom: 13px;
+}
+
+.media-hero.media-hero-filtered h1 {
+  margin-bottom: 8px;
+  font-size: clamp(3rem, 5vw, 4.6rem);
+}
+
+.media-hero.media-hero-filtered p:last-child {
+  font-size: .92rem;
+}
+
+.media-hero.media-hero-filtered ~ .archive-section {
+  padding-top: 28px;
+}
+
+.media-hero.media-hero-filtered ~ .archive-section .media-section-heading {
+  margin-bottom: 16px;
+}
+
 .media-section {
   padding-top: 46px;
   padding-bottom: 50px;
@@ -221,6 +249,19 @@ main:has(.guest-results-section:not([hidden])) .archive-section {
     padding-bottom: 36px;
   }
 
+  .media-hero.media-hero-filtered {
+    padding-top: 58px;
+    padding-bottom: 26px;
+  }
+
+  .media-hero.media-hero-filtered .breadcrumbs {
+    margin-bottom: 12px;
+  }
+
+  .media-hero.media-hero-filtered h1 {
+    font-size: clamp(2.8rem, 13vw, 4rem);
+  }
+
   .media-hero .breadcrumbs,
   .detail-hero .breadcrumbs {
     margin-bottom: 18px;
@@ -236,6 +277,10 @@ main:has(.guest-results-section:not([hidden])) .archive-section {
   .guest-results-section {
     padding-top: 34px;
     padding-bottom: 38px;
+  }
+
+  .media-hero.media-hero-filtered ~ .archive-section {
+    padding-top: 24px;
   }
 
   .guest-results-section .media-section-heading h2 {
