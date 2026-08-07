@@ -39,7 +39,7 @@ export const episodes = [
     videoId: "kJWFTnWOgYM",
     title: "Chairman Michael Barnett Recaps the 2022 Midterms",
     guestIds: ["michael-barnett"],
-    detailPath: "/episodes/michael-barnett-2022-midterms/"
+    detailPath: "/episodes/michael-barnett-2022-midterms"
   },
   {
     id: "restoration-bridge-civic-battle-against-hunger",
@@ -47,7 +47,7 @@ export const episodes = [
     title: "Restoration Bridge International - The Civic Battle Against Hunger: RBI's Jason Mandle & Former County Commissioner Michael Barnett on Leadership & Hope",
     guestIds: ["michael-barnett", "jason-mandle"],
     organizationIds: ["restoration-bridge-international"],
-    detailPath: "/episodes/restoration-bridge-civic-battle-against-hunger/"
+    detailPath: "/episodes/restoration-bridge-civic-battle-against-hunger"
   }
 ];
 
