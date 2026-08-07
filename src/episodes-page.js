@@ -2,15 +2,16 @@ import { MediaHeader, setupMediaNavigation } from "./components/MediaHeader.js";
 import { Footer } from "./components/Footer.js";
 import { site } from "./data/site.js";
 import { enrichEpisode, episodes as editorialEpisodes, topics } from "./data/catalog.js";
-import { episodeCard, bindThumbnailFallbacks } from "./lib/media-page.js";
-import { searchEpisodes, uniqueEpisodes } from "./lib/episode-search.js";
+import { episodeCard, episodeThumbnailUrl, bindThumbnailFallbacks } from "./lib/media-page.js";
+import { guestEpisodes, resolveCanonicalGuestName, searchEpisodes, uniqueEpisodes } from "./lib/episode-search.js";
 import { escapeHtml } from "./lib/utils.js";
 import { setupEditorialMotion } from "./lib/motion.js";
 import { CANDIDATES_DISCLAIMER, resolveCollection } from "./data/collections.js";
 
 const PAGE_SIZE = 9;
 const initialParams = new URLSearchParams(location.search);
-const state = { episodes: [], query: initialParams.get("guest") || "", category: "", shown: PAGE_SIZE, usingFallback: false };
+const initialGuestQuery = initialParams.get("guest") || "";
+const state = { episodes: [], query: initialGuestQuery, guestContext: initialGuestQuery, category: "", shown: PAGE_SIZE, usingFallback: false, loading: true };
 const app = document.querySelector("#app");
 
 app.innerHTML = `${MediaHeader()}<main id="main-content">
@@ -19,7 +20,11 @@ app.innerHTML = `${MediaHeader()}<main id="main-content">
     <p class="eyebrow"><span></span> The conversation archive</p><h1>Episodes</h1>
     <p>Explore conversations from The Alana Show by title, topic, or verified guest.</p>
   </div></section>
-  <section class="media-section" aria-labelledby="featured-heading" data-reveal><div class="shell">
+  <section class="media-section guest-results-section" aria-labelledby="guest-results-heading" data-guest-results hidden><div class="shell">
+    <div class="media-section-heading"><div><p class="eyebrow dark"><span></span> Selected guest</p><h2 id="guest-results-heading" data-guest-results-heading></h2><p class="archive-status" data-guest-results-status role="status" aria-live="polite"></p></div></div>
+    <div class="media-grid" data-guest-results-grid></div>
+  </div></section>
+  <section class="media-section" aria-labelledby="featured-heading" data-generic-featured data-reveal><div class="shell">
     <div class="media-section-heading"><div><p class="eyebrow dark"><span></span> Selected conversation</p><h2 id="featured-heading">Featured conversation</h2></div></div>
     <div data-featured class="featured-loading" role="status">Loading the featured conversation…</div>
   </div></section>
@@ -44,7 +49,45 @@ function renderFeatured() {
   }
   const url = `https://www.youtube.com/watch?v=${episode.videoId}`;
   node.className = "featured-conversation";
-  node.innerHTML = `<div class="featured-conversation-media">${episodeCard(episode)}</div><div class="featured-conversation-copy"><p class="content-label">From the archive</p><h3>${escapeHtml(episode.title)}</h3><a class="button button-gold" href="${url}" target="_blank" rel="noopener">Watch on YouTube</a></div>`;
+  node.innerHTML = `<div class="featured-conversation-media">${episodeCard({ ...episode, thumbnail: episodeThumbnailUrl(episode) })}</div><div class="featured-conversation-copy"><p class="content-label">From the archive</p><h3>${escapeHtml(episode.title)}</h3><a class="button button-gold" href="${url}" target="_blank" rel="noopener">Watch on YouTube</a></div>`;
+  bindThumbnailFallbacks(node);
+}
+
+function updateGuestContext() {
+  state.guestContext = resolveCanonicalGuestName(state.episodes, state.query);
+}
+
+function focusedEpisodeCard(episode) {
+  const url = episode.detailPath || `https://www.youtube.com/watch?v=${encodeURIComponent(episode.videoId)}`;
+  const external = !episode.detailPath;
+  return `<div class="focused-result-card">${episodeCard({ ...episode, thumbnail: episodeThumbnailUrl(episode) })}<p class="focused-result-action"><a class="button button-gold" href="${url}"${external ? ' target="_blank" rel="noopener"' : ""}>View conversation</a></p></div>`;
+}
+
+function renderGuestResults() {
+  const section = document.querySelector("[data-guest-results]");
+  const genericFeatured = document.querySelector("[data-generic-featured]");
+  if (!state.guestContext) {
+    section.hidden = true;
+    genericFeatured.hidden = false;
+    return;
+  }
+  const matches = guestEpisodes(state.episodes, state.guestContext);
+  section.hidden = false;
+  genericFeatured.hidden = true;
+  document.querySelector("[data-guest-results-heading]").textContent = `Conversations with ${state.guestContext}`;
+  document.querySelector("[data-guest-results-status]").textContent = state.loading
+    ? "Loading verified conversations…"
+    : `${matches.length} verified conversation${matches.length === 1 ? "" : "s"}`;
+  const grid = document.querySelector("[data-guest-results-grid]");
+  if (state.loading) {
+    grid.classList.add("guest-results-single");
+    grid.innerHTML = `<div class="media-skeleton" aria-hidden="true"></div>`;
+    return;
+  }
+  grid.classList.toggle("guest-results-single", matches.length === 1);
+  grid.innerHTML = matches.map(focusedEpisodeCard).join("");
+  bindThumbnailFallbacks(grid);
+  setupEditorialMotion(grid);
 }
 
 function setCategoryFilterAvailability(isAvailable) {
@@ -89,21 +132,29 @@ async function load() {
     state.usingFallback = true;
     setCategoryFilterAvailability(false);
   }
-  renderFeatured(); render();
+  state.loading = false;
+  updateGuestContext();
+  renderGuestResults(); renderFeatured(); render();
 }
 
-document.querySelector("[data-query]").addEventListener("input", event => { state.query = event.target.value; state.shown = PAGE_SIZE; syncGuestQuery(); render(); });
+document.querySelector("[data-query]").addEventListener("input", event => {
+  state.query = event.target.value; state.shown = PAGE_SIZE;
+  updateGuestContext(); syncGuestQuery(); renderGuestResults(); renderFeatured(); render();
+});
 document.querySelector("[data-category]").addEventListener("change", event => { state.category = event.target.value; state.shown = PAGE_SIZE; render(); });
-document.querySelector("[data-controls]").addEventListener("reset", () => { state.query = ""; state.category = ""; state.shown = PAGE_SIZE; syncGuestQuery(); requestAnimationFrame(render); });
+document.querySelector("[data-controls]").addEventListener("reset", () => {
+  state.query = ""; state.guestContext = ""; state.category = ""; state.shown = PAGE_SIZE;
+  syncGuestQuery(); renderGuestResults(); renderFeatured(); requestAnimationFrame(render);
+});
 document.querySelector("[data-more]").addEventListener("click", () => { state.shown += PAGE_SIZE; render(); });
-setupMediaNavigation(); setupEditorialMotion(app); load();
+setupMediaNavigation(); setupEditorialMotion(app); renderGuestResults(); load();
 
 const queryInput = document.querySelector("[data-query]");
 queryInput.value = state.query;
 
 function syncGuestQuery() {
   const url = new URL(location.href);
-  if (state.query) url.searchParams.set("guest", state.query);
+  if (state.guestContext) url.searchParams.set("guest", state.guestContext);
   else url.searchParams.delete("guest");
   history.replaceState(null, "", `${url.pathname}${url.search}${url.hash}`);
 }
@@ -112,5 +163,5 @@ window.addEventListener("popstate", () => {
   state.query = new URLSearchParams(location.search).get("guest") || "";
   queryInput.value = state.query;
   state.shown = PAGE_SIZE;
-  render();
+  updateGuestContext(); renderGuestResults(); renderFeatured(); render();
 });

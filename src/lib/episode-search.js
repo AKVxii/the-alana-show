@@ -1,8 +1,28 @@
 import { resolveCollection } from "../data/collections.js";
 
 function personSearchKey(value = "") {
-  const parts = String(value).toLowerCase().replace(/[^a-z0-9]+/g, " ").trim().split(/\s+/).filter(Boolean);
+  const parts = String(value).toLowerCase()
+    .replace(/\b(?:sheriff|dr|mayor|commissioner|chairman|chairwoman|senator|representative|judge|pastor|attorney)\.?\b/g, " ")
+    .replace(/[^a-z0-9]+/g, " ").trim().split(/\s+/).filter(Boolean);
   return parts.length > 2 ? `${parts[0]} ${parts.at(-1)}` : parts.join(" ");
+}
+
+export function resolveCanonicalGuestName(episodes = [], value = "") {
+  const key = personSearchKey(value);
+  if (!key) return "";
+  for (const episode of episodes) {
+    const name = (episode.guestNames || []).find(guestName => personSearchKey(guestName) === key);
+    if (name) return name;
+  }
+  return "";
+}
+
+export function guestEpisodes(episodes = [], guestName = "") {
+  const key = personSearchKey(guestName);
+  if (!key) return [];
+  return uniqueEpisodes(episodes).filter(episode =>
+    (episode.guestNames || []).some(name => personSearchKey(name) === key)
+  );
 }
 
 export function uniqueEpisodes(episodes = []) {

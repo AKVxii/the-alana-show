@@ -29,7 +29,7 @@ let letter = "";
 const alphabet = document.querySelector("[data-alphabet]");
 
 function renderAlphabet() {
-  const initials = new Set(guests.map(guest => guest.name[0].toUpperCase()));
+  const initials = new Set(guests.map(guest => guest.surname[0].toUpperCase()));
   alphabet.innerHTML = `<button type="button" aria-pressed="${String(!letter)}" data-letter="">All</button>${"ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("").map(item => `<button type="button" data-letter="${item}" aria-pressed="${String(letter === item)}"${initials.has(item) ? "" : " disabled"}>${item}</button>`).join("")}`;
 }
 

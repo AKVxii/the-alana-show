@@ -1,13 +1,31 @@
 const STATIC_GUEST_IDS = new Set(["michael-barnett", "jason-mandle"]);
+const SORT_SURNAME_OVERRIDES = new Map([
+  ["ric bradshaw", "Bradshaw"],
+  ["michael barnett", "Barnett"],
+  ["nick cannon", "Cannon"],
+  ["thais glysson", "Glysson"],
+  ["jason mandle", "Mandle"],
+  ["ashley vertuno", "Vertuno"]
+]);
+const PROFESSIONAL_TITLE = /^(?:(?:sheriff|dr|mayor|commissioner|chairman|chairwoman|senator|representative|judge|pastor|attorney)\.?\s+)+/i;
+const SUFFIX = /\s+(?:jr|sr|ii|iii|iv)\.?$/i;
 
 export function guestIdentityKey(value = "") {
   return String(value).normalize("NFKD").replace(/[\u0300-\u036f]/g, "")
-    .toLocaleLowerCase("en-US").replace(/\b(?:dr|mr|mrs|ms)\.?\b/g, " ")
+    .toLocaleLowerCase("en-US").replace(/\b(?:sheriff|dr|mr|mrs|ms|mayor|commissioner|chairman|chairwoman|senator|representative|judge|pastor|attorney)\.?\b/g, " ")
     .replace(/[^a-z0-9]+/g, " ").trim().replace(/\s+/g, " ");
 }
 
 export function guestSlug(name = "") {
   return guestIdentityKey(name).replace(/\s+/g, "-");
+}
+
+export function guestSurname(name = "", override = "") {
+  if (override) return override;
+  const known = SORT_SURNAME_OVERRIDES.get(guestIdentityKey(name));
+  if (known) return known;
+  const sortable = String(name).replace(PROFESSIONAL_TITLE, "").replace(SUFFIX, "").trim();
+  return sortable.split(/\s+/).at(-1) || sortable;
 }
 
 function guestMatchKey(name = "") {
@@ -32,11 +50,13 @@ export function buildGuestDirectory(episodeRecords = [], curatedGuests = []) {
   }
   return [...records.values()].map(guest => ({
     ...guest,
+    surname: guestSurname(guest.name, guest.surname),
+    sortName: `${guestSurname(guest.name, guest.surname)}, ${guest.name}`,
     conversationCount: guest.videoIds.length
       ? new Set(guest.videoIds).size
       : new Set(guest.episodeIds).size,
     detailPath: STATIC_GUEST_IDS.has(guest.id) ? `/guests/${guest.id}/` : ""
-  })).sort((a, b) => a.name.localeCompare(b.name, "en", { sensitivity: "base" }));
+  })).sort((a, b) => a.sortName.localeCompare(b.sortName, "en", { sensitivity: "base" }));
 }
 
 export function guestConversationPath(guest) {
@@ -45,6 +65,6 @@ export function guestConversationPath(guest) {
 
 export function filterGuests(guests = [], query = "", letter = "") {
   const needle = guestIdentityKey(query);
-  return guests.filter(guest => (!letter || guest.name.toUpperCase().startsWith(letter)) &&
+  return guests.filter(guest => (!letter || guest.surname.toUpperCase().startsWith(letter)) &&
     (!needle || guestIdentityKey(guest.name).includes(needle)));
 }
