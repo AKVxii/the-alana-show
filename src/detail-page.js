@@ -28,14 +28,21 @@ function episodeDetail(episode) {
 }
 
 function guestDetail(guest) {
-  const related = guest.episodeIds.map(episodeById).filter(Boolean);
+  const related = (guest.episodeIds || []).map(episodeById).filter(Boolean);
+  const count = guest.conversationCount || related.length;
+  const archiveHref = `/episodes/?guest=${encodeURIComponent(guest.name)}`;
+  const countLabel = count === 1 ? "1 verified conversation" : `${count} verified conversations`;
   return `<section class="detail-hero"><div class="shell detail-shell">${breadcrumbs(guest.name)}<p class="eyebrow"><span></span> Guest</p><h1>${escapeHtml(guest.name)}</h1>
-    <div class="guest-detail-intro" data-reveal><div class="guest-monogram guest-monogram-large" aria-hidden="true">${escapeHtml(guest.name.split(/\s+/).map(part => part[0]).slice(0, 2).join(""))}</div><p>Verified conversations featuring ${escapeHtml(guest.name)}.</p></div>
+    <div class="guest-detail-intro" data-reveal><div class="guest-monogram guest-monogram-large" aria-hidden="true">${escapeHtml(guest.name.split(/\s+/).map(part => part[0]).slice(0, 2).join(""))}</div><div><p>${escapeHtml(countLabel)} featuring ${escapeHtml(guest.name)} on The Alana Show.</p><div class="detail-actions"><a class="button button-gold" href="${archiveHref}">View conversations</a><a class="button button-outline" href="/guests/">Guest directory</a></div></div></div>
     ${related.length ? `<section class="related-section" aria-labelledby="related-heading"><div data-reveal><p class="related-eyebrow"><span></span>${escapeHtml(guest.name.toUpperCase())} ARCHIVE</p><h2 id="related-heading">Related conversations</h2></div><div class="related-conversation-list">${related.map(relatedConversationRow).join("")}</div></section>` : ""}
   </div></section>`;
 }
 
-root.innerHTML = `${MediaHeader()}<main id="main-content">${type === "episode" ? episodeDetail(item) : guestDetail(item)}</main>${Footer({ fromSubpage: true })}`;
+if (!item) {
+  root.innerHTML = `${MediaHeader()}<main id="main-content"><section class="detail-hero"><div class="shell detail-shell"><p class="eyebrow"><span></span> Archive</p><h1>Profile unavailable</h1><p>This verified archive profile is not available.</p><div class="detail-actions"><a class="button button-gold" href="/guests/">Guest directory</a></div></div></section></main>${Footer({ fromSubpage: true })}`;
+} else {
+  root.innerHTML = `${MediaHeader()}<main id="main-content">${type === "episode" ? episodeDetail(item) : guestDetail(item)}</main>${Footer({ fromSubpage: true })}`;
+}
 setupMediaNavigation();
 bindThumbnailFallbacks(root);
 setupEditorialMotion(root);
