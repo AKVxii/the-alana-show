@@ -28,7 +28,7 @@ function topicCard(topic) {
 }
 
 app.innerHTML = `${MediaHeader()}<main id="main-content">
-  <section class="media-hero"><div class="shell media-hero-inner">
+  <section class="media-hero topics-hero"><div class="shell media-hero-inner">
     <nav class="breadcrumbs" aria-label="Breadcrumb"><ol><li><a href="/">Home</a></li><li aria-current="page">Topics</li></ol></nav>
     <p class="eyebrow"><span></span> Discover the archive</p><h1>Topics</h1>
     <p>Follow the ideas, issues, and areas of expertise that connect conversations across The Alana Show.</p>
