@@ -1,14 +1,21 @@
 import { MediaHeader, setupMediaNavigation } from "./components/MediaHeader.js";
 import { Footer } from "./components/Footer.js";
+import { isCurrentSpecialActive } from "./components/CurrentSpecial.js";
 import { site } from "./data/site.js";
 import { currentSpecial } from "./data/current-special.js";
 import { setupEditorialMotion } from "./lib/motion.js";
 
 const pageKey = document.body.dataset.page;
 const app = document.querySelector("#app");
+const specialActive = isCurrentSpecialActive(currentSpecial);
 
-const external = (href, label, className = "button button-gold") => `<a class="${className}" href="${href}" target="_blank" rel="noopener">${label}</a>`;
+const external = (href, label, className = "button button-gold") => `<a class="${className}" href="${href}" target="_blank" rel="noopener noreferrer">${label}</a>`;
 const internal = (href, label, className = "button button-gold") => `<a class="${className}" href="${href}">${label}</a>`;
+
+const candidatePanel = `<span class="growth-panel-kicker">Current special</span><strong>${currentSpecial.heading}</strong><p>${currentSpecial.urgencyText}</p><p class="growth-panel-note">${currentSpecial.disclaimer}</p>${external(currentSpecial.ctaHref, currentSpecial.ctaLabel, "button button-light")}`;
+const candidateBookPanel = `<span class="growth-panel-kicker">2026 candidate?</span><strong>Candidate Interview Series</strong><p>${currentSpecial.urgencyText}</p><p class="growth-panel-note">${currentSpecial.disclaimer}</p>${external(currentSpecial.ctaHref, "Candidate Scheduling", "button button-light")}`;
+const specialsFallbackPanel = `<span class="growth-panel-kicker">Explore the archive</span><strong>Focused conversations, all in one place.</strong><p>Browse special series, timely collections, and the full conversation archive.</p>${internal("/episodes", "Browse All Episodes", "button button-light")}`;
+const bookFallbackPanel = `<span class="growth-panel-kicker">Guest inquiries</span><strong>Bring a story worth hearing.</strong><p>Share who you are, the conversation you can add, and why the subject matters now.</p>${internal("/#contact", "Start a Guest Inquiry", "button button-light")}`;
 
 const pages = {
   "south-florida": {
@@ -20,30 +27,36 @@ const pages = {
     featureCopy: "The Alana Show brings together people shaping South Florida — from public service and entrepreneurship to community work, wellness, technology, and stories of people stepping up.",
     panel: `<span class="growth-panel-kicker">Heard on True Oldies</span><strong>South Florida &amp; the Treasure Coast</strong><p>${currentSpecial.broadcastText}</p><p class="growth-panel-note">${currentSpecial.reachText}</p>${external(site.trueOldies, "True Oldies Show Page", "button button-light")}`,
     cards: [
-      ["Community", "Local voices, organizations, and people working to strengthen the places around them.", "/episodes/?topic=Community"],
-      ["Public Service", "Conversations about service, responsibility, public life, and the people doing the work.", "/episodes/?topic=Public%20Service"],
-      ["Business", "Entrepreneurship, ownership, innovation, growth, and the lessons behind building something that lasts.", "/episodes/?topic=Business"]
+      ["Community", "Local voices, organizations, and people working to strengthen the places around them.", "/episodes?topic=Community"],
+      ["Public Service", "Conversations about service, responsibility, public life, and the people doing the work.", "/episodes?topic=Public%20Service"],
+      ["Business", "Entrepreneurship, ownership, innovation, growth, and the lessons behind building something that lasts.", "/episodes?topic=Business"]
     ],
     ctaEyebrow: "Have a South Florida story?",
     ctaTitle: "Bring a meaningful local conversation to the table.",
-    ctas: `${internal("/book/", "Be a Guest")}${internal("/#contact", "Recommend a Story", "button button-ghost")}`
+    ctas: `${internal("/book", "Be a Guest")}${internal("/#contact", "Recommend a Story", "button button-ghost")}`
   },
   specials: {
-    eyebrow: "Focused series · timely conversations",
+    eyebrow: specialActive ? "Focused series · timely conversations" : "Special series · conversation archive",
     title: "Specials",
     intro: "Focused interview series and editorial collections that make timely conversations easier to find, follow, and share.",
-    featureEyebrow: currentSpecial.eyebrow,
-    featureTitle: "2026 Candidates Special",
-    featureCopy: "Verified candidate interviews are collected in one place so listeners can hear candidates discuss their background, priorities, and vision in their own words.",
-    panel: `<span class="growth-panel-kicker">Current special</span><strong>${currentSpecial.heading}</strong><p>${currentSpecial.urgencyText}</p><p class="growth-panel-note">${currentSpecial.disclaimer}</p>${external(currentSpecial.ctaHref, currentSpecial.ctaLabel, "button button-light")}`,
-    cards: [
-      ["2026 Candidates Special", "Browse the current verified candidate interview collection.", "/episodes/?topic=2026%20Candidates%20Special"],
-      ["Stepping Up", "Meet people who saw a need, took responsibility, and chose to make a difference.", "/episodes/?topic=Stepping%20Up"],
-      ["Community & Public Service", "Explore conversations centered on civic life, service, organizations, and local leadership.", "/topics/"]
+    featureEyebrow: specialActive ? currentSpecial.eyebrow : "Explore special series",
+    featureTitle: specialActive ? "2026 Candidates Special" : "Focused conversations, collected in one place.",
+    featureCopy: specialActive
+      ? "Verified candidate interviews are collected in one place so listeners can hear candidates discuss their background, priorities, and vision in their own words."
+      : "Browse focused interview series, public-service conversations, community stories, and other editorial collections from The Alana Show.",
+    panel: specialActive ? candidatePanel : specialsFallbackPanel,
+    cards: specialActive ? [
+      ["2026 Candidates Special", "Browse the current verified candidate interview collection.", "/episodes?topic=2026%20Candidates%20Special"],
+      ["Stepping Up", "Meet people who saw a need, took responsibility, and chose to make a difference.", "/episodes?topic=Stepping%20Up"],
+      ["Community & Public Service", "Explore conversations centered on civic life, service, organizations, and local leadership.", "/topics"]
+    ] : [
+      ["Stepping Up", "Meet people who saw a need, took responsibility, and chose to make a difference.", "/episodes?topic=Stepping%20Up"],
+      ["Community & Public Service", "Explore conversations centered on civic life, service, organizations, and local leadership.", "/topics"],
+      ["All Topics", "Browse the ideas, issues, and areas of expertise across the full archive.", "/topics"]
     ],
     ctaEyebrow: "Explore more",
     ctaTitle: "Move from a special series into the full conversation archive.",
-    ctas: `${internal("/topics/", "Browse Topics")}${internal("/episodes/", "All Episodes", "button button-ghost")}`
+    ctas: `${internal("/topics", "Browse Topics")}${internal("/episodes", "All Episodes", "button button-ghost")}`
   },
   advertise: {
     eyebrow: "Partnerships · sponsorships · visibility",
@@ -60,7 +73,7 @@ const pages = {
     ],
     ctaEyebrow: "Built around fit",
     ctaTitle: "Tell us what you are trying to reach, support, or accomplish.",
-    ctas: `${internal("/#contact", "Advertising Inquiry")}${internal("/south-florida/", "See South Florida Reach", "button button-ghost")}`
+    ctas: `${internal("/#contact", "Advertising Inquiry")}${internal("/south-florida", "See South Florida Reach", "button button-ghost")}`
   },
   book: {
     eyebrow: "Guest inquiries · story ideas · interviews",
@@ -69,7 +82,7 @@ const pages = {
     featureEyebrow: "A good interview starts before the microphone",
     featureTitle: "Bring a meaningful conversation to the table.",
     featureCopy: "The strongest guest pitches explain who you are, what you can add to the conversation, why the subject matters now, and where listeners can learn more about your work.",
-    panel: `<span class="growth-panel-kicker">2026 candidate?</span><strong>Candidate Interview Series</strong><p>${currentSpecial.urgencyText}</p><p class="growth-panel-note">${currentSpecial.disclaimer}</p>${external(currentSpecial.ctaHref, "Candidate Scheduling", "button button-light")}`,
+    panel: specialActive ? candidateBookPanel : bookFallbackPanel,
     cards: [
       ["Who Fits", "Leaders, entrepreneurs, public servants, advocates, experts, community builders, and people with stories worth hearing.", "/#contact"],
       ["What to Send", "Share the proposed topic, why it matters now, your background, and a website or social link that helps verify the story.", "/#contact"],
@@ -77,7 +90,7 @@ const pages = {
     ],
     ctaEyebrow: "Ready to reach out?",
     ctaTitle: "Tell us the story you think The Alana Show should hear.",
-    ctas: `${internal("/#contact", "Submit a Guest Inquiry")}${internal("/guests/", "Browse Past Guests", "button button-ghost")}`
+    ctas: `${internal("/#contact", "Submit a Guest Inquiry")}${internal("/guests", "Browse Past Guests", "button button-ghost")}`
   }
 };
 
