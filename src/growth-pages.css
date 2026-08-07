@@ -22,7 +22,7 @@
   font-size: .66rem;
   letter-spacing: .01em;
 }
-.media-site-header .primary-nav a::after { inset-bottom: 13px; }
+.media-site-header .primary-nav a::after { bottom: 13px; }
 .media-site-header .header-actions .button-small { min-height: 40px; padding: 9px 16px; }
 
 .growth-hero .breadcrumbs { margin-bottom: 12px; }
