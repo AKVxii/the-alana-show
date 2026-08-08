@@ -1,6 +1,8 @@
 import { icon } from "../lib/icons.js";
+import { scheduleContactContext } from "../lib/contact-context.js";
 
 export function Contact() {
+  scheduleContactContext();
   return `
     <section class="section contact-section" id="contact">
       <div class="shell contact-grid">
@@ -16,6 +18,7 @@ export function Contact() {
         </div>
 
         <form class="contact-form reveal reveal-delay" data-contact-form novalidate>
+          <input type="hidden" name="source" value="" data-inquiry-source>
           <div class="form-heading">
             <span>Direct inquiry</span>
             <h3>How can we connect?</h3>

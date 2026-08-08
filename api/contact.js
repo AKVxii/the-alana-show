@@ -8,6 +8,10 @@ function validEmail(value = "") {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
 }
 
+function safeSource(value = "") {
+  return String(value).replace(/[^a-z0-9._/-]/gi, "").slice(0, 80);
+}
+
 module.exports = async function handler(req, res) {
   if (req.method !== "POST") {
     res.setHeader("Allow", "POST");
@@ -16,7 +20,7 @@ module.exports = async function handler(req, res) {
 
   const {
     name = "", email = "", organization = "", phone = "", inquiry = "",
-    website = "", message = "", company_website = ""
+    website = "", message = "", company_website = "", source = ""
   } = req.body || {};
 
   if (company_website) return res.status(200).json({ ok: true });
@@ -38,6 +42,7 @@ module.exports = async function handler(req, res) {
   }
 
   const subject = `The Alana Show inquiry: ${inquiry}`;
+  const inquirySource = safeSource(source);
   const html = `
     <h2>${escapeHtml(subject)}</h2>
     <p><strong>Name:</strong> ${escapeHtml(name)}</p>
@@ -46,6 +51,7 @@ module.exports = async function handler(req, res) {
     <p><strong>Phone:</strong> ${escapeHtml(phone)}</p>
     <p><strong>Website:</strong> ${escapeHtml(website)}</p>
     <p><strong>Inquiry type:</strong> ${escapeHtml(inquiry)}</p>
+    ${inquirySource ? `<p><strong>Inquiry source:</strong> ${escapeHtml(inquirySource)}</p>` : ""}
     <hr>
     <p>${escapeHtml(message).replace(/\n/g, "<br>")}</p>
   `;
