@@ -114,13 +114,18 @@ function applyStaticMetadata(detailType, detailItem) {
   const canonical = detailUrl(detailType, detailItem.id);
   const isEpisode = detailType === "episode";
   const guestNames = isEpisode ? episodeGuestNames(detailItem) : [];
-  const pageTitle = isEpisode
+  const generatedPageTitle = isEpisode
     ? `${detailItem.title} | The Alana Show`
     : `${detailItem.name} | Guest | The Alana Show`;
-  const description = isEpisode
+  const generatedDescription = isEpisode
     ? `Watch The Alana Show conversation${guestNames.length ? ` with ${guestNames.join(" & ")}` : ""}.`
     : `Explore verified conversations featuring ${detailItem.name} on The Alana Show.`;
-  const image = isEpisode ? `https://i.ytimg.com/vi/${detailItem.videoId}/maxresdefault.jpg` : DEFAULT_SOCIAL_IMAGE;
+  const generatedImage = isEpisode ? `https://i.ytimg.com/vi/${detailItem.videoId}/maxresdefault.jpg` : DEFAULT_SOCIAL_IMAGE;
+  const pageTitle = document.title.trim() || generatedPageTitle;
+  const description = document.head.querySelector('meta[name="description"]')?.content?.trim() || generatedDescription;
+  const image = document.head.querySelector('meta[property="og:image"]')?.content?.trim()
+    || document.head.querySelector('meta[name="twitter:image"]')?.content?.trim()
+    || generatedImage;
   const currentName = isEpisode ? detailItem.title : detailItem.name;
 
   document.title = pageTitle;
