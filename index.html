@@ -25,17 +25,36 @@
     <link rel="canonical" href="https://thealanashow.com/">
     <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
     <link rel="manifest" href="/site.webmanifest">
+    <link rel="preload" as="image" href="/assets/alana-portrait-cutout.png" type="image/png" fetchpriority="high">
     <link rel="stylesheet" href="/src/styles.css">
     <link rel="stylesheet" href="/src/portrait-polish.css?v=4">
     <link rel="stylesheet" href="/src/current-special-flag.css?v=2">
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
-        "@type": "WebSite",
-        "@id": "https://thealanashow.com/#website",
-        "name": "The Alana Show",
-        "alternateName": "TAS",
-        "url": "https://thealanashow.com/"
+        "@graph": [
+          {
+            "@type": "WebSite",
+            "@id": "https://thealanashow.com/#website",
+            "name": "The Alana Show",
+            "alternateName": "TAS",
+            "url": "https://thealanashow.com/",
+            "description": "Real conversations, distinct voices, and thoughtful perspective from South Florida to worldwide streaming.",
+            "creator": { "@id": "https://thealanashow.com/#alana-k-vandeveer" }
+          },
+          {
+            "@type": "Person",
+            "@id": "https://thealanashow.com/#alana-k-vandeveer",
+            "name": "Alana K. Vandeveer",
+            "url": "https://thealanashow.com/",
+            "sameAs": [
+              "https://www.youtube.com/@alanakvandeveer/videos",
+              "https://www.instagram.com/alanakvandeveer",
+              "https://x.com/alanakvandeveer",
+              "https://www.linkedin.com/in/alanakvandeveer"
+            ]
+          }
+        ]
       }
     </script>
   </head>
