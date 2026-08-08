@@ -18,6 +18,7 @@ assert(context.includes('params.get("inquiry")'), "Contact context must preselec
 assert(context.includes('params.get("source")'), "Contact context must preserve the non-personal source label.");
 assert(context.includes("alignContactSection"), "Contextual contact links must stabilize their landing position.");
 assert(context.includes("window.scrollTo"), "Contact landing alignment must account for late layout shifts.");
+assert(context.includes('root.style.scrollBehavior = "auto"'), "Contact deep-link correction must not visibly self-scroll.");
 assert(api.includes("safeSource"), "Contact API must sanitize inquiry source context.");
 assert(api.includes("Inquiry source:"), "Contact email must surface safe inquiry source context.");
 
