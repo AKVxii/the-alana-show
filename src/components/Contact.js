@@ -1,6 +1,8 @@
 import { icon } from "../lib/icons.js";
+import { scheduleContactContext } from "../lib/contact-context.js";
 
 export function Contact() {
+  scheduleContactContext();
   return `
     <section class="section contact-section" id="contact">
       <div class="shell contact-grid">
