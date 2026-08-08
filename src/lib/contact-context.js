@@ -19,7 +19,23 @@ function alignContactSection() {
     if (cancelled) return;
     const header = document.querySelector("[data-header]");
     const headerHeight = header?.getBoundingClientRect().height || 66;
-    const top = Math.max(0, window.scrollY + contact.getBoundingClientRect().top - headerHeight - 18);
+    const currentScroll = window.scrollY;
+    let top = Math.max(0, currentScroll + contact.getBoundingClientRect().top - headerHeight - 18);
+
+    // Contextual partnership/guest links should present the inquiry as a complete,
+    // composed moment on desktop. If the form footer would sit just below the
+    // viewport after the normal anchor alignment, move only the amount needed to
+    // reveal it, while preserving generous space around the editorial heading.
+    const params = new URLSearchParams(window.location.search);
+    const isContextualInquiry = Boolean(params.get("inquiry"));
+    const form = document.querySelector("[data-contact-form]");
+    if (isContextualInquiry && form && window.innerWidth >= 1024) {
+      const scrollDelta = top - currentScroll;
+      const projectedFormBottom = form.getBoundingClientRect().bottom - scrollDelta;
+      const viewportFloor = window.innerHeight - 18;
+      const overflow = projectedFormBottom - viewportFloor;
+      if (overflow > 0) top += Math.min(overflow + 12, 56);
+    }
 
     // The site intentionally uses smooth scrolling for user navigation. Deep-link
     // correction is different: it should arrive at the final position without a
