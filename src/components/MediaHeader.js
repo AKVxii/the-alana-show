@@ -1,7 +1,9 @@
 import { icon } from "../lib/icons.js";
 import { site } from "../data/site.js";
+import { setupMeasurement } from "../lib/measurement.js";
 
 export function MediaHeader() {
+  setupMeasurement();
   return `<header class="site-header media-site-header" data-header>
     <div class="shell header-inner">
       <a class="brand" href="/" aria-label="The Alana Show home">
