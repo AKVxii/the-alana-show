@@ -5,6 +5,9 @@ import { escapeHtml } from "./lib/utils.js";
 import { bindThumbnailFallbacks, relatedConversationRow } from "./lib/media-page.js";
 import { setupEditorialMotion } from "./lib/motion.js";
 
+const SITE_ORIGIN = "https://thealanashow.com";
+const DEFAULT_SOCIAL_IMAGE = `${SITE_ORIGIN}/assets/alana-show-social-card-2026-imessage-v2.png`;
+
 const compactDetailStyles = document.createElement("style");
 compactDetailStyles.textContent = `
   .detail-hero { padding: 84px 0 42px; }
@@ -35,6 +38,185 @@ const type = document.body.dataset.detailType;
 const pathId = location.pathname.split("/").filter(Boolean).pop();
 const id = document.body.dataset.detailId || pathId;
 const item = type === "episode" ? episodeById(id) : guestById(id);
+
+function detailUrl(detailType, detailId) {
+  const section = detailType === "episode" ? "episodes" : "guests";
+  return `${SITE_ORIGIN}/${section}/${detailId}`;
+}
+
+function upsertMeta(attribute, key, content) {
+  if (!content) return;
+  let node = document.head.querySelector(`meta[${attribute}="${key}"]`);
+  if (!node) {
+    node = document.createElement("meta");
+    node.setAttribute(attribute, key);
+    document.head.append(node);
+  }
+  node.setAttribute("content", content);
+}
+
+function upsertCanonical(url) {
+  let node = document.head.querySelector('link[rel="canonical"]');
+  if (!node) {
+    node = document.createElement("link");
+    node.rel = "canonical";
+    document.head.append(node);
+  }
+  node.href = url;
+}
+
+function upsertJsonLd(id, data) {
+  let node = document.getElementById(id);
+  if (!node) {
+    node = document.createElement("script");
+    node.id = id;
+    node.type = "application/ld+json";
+    document.head.append(node);
+  }
+  node.textContent = JSON.stringify(data);
+}
+
+function isoDuration(seconds = 0) {
+  const total = Number(seconds || 0);
+  if (!total || total < 0) return "";
+  const hours = Math.floor(total / 3600);
+  const minutes = Math.floor((total % 3600) / 60);
+  const secs = Math.floor(total % 60);
+  return `PT${hours ? `${hours}H` : ""}${minutes ? `${minutes}M` : ""}${secs || (!hours && !minutes) ? `${secs}S` : ""}`;
+}
+
+function episodeGuestNames(episode) {
+  return (episode.guestIds || []).map(guestById).filter(Boolean).map(guest => guest.name);
+}
+
+function breadcrumbSchema(detailType, currentName, canonical) {
+  const parentName = detailType === "episode" ? "Episodes" : "Guests";
+  const parentUrl = `${SITE_ORIGIN}/${parentName.toLowerCase()}`;
+  return {
+    "@type": "BreadcrumbList",
+    "@id": `${canonical}#breadcrumb`,
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: `${SITE_ORIGIN}/` },
+      { "@type": "ListItem", position: 2, name: parentName, item: parentUrl },
+      { "@type": "ListItem", position: 3, name: currentName, item: canonical }
+    ]
+  };
+}
+
+function applyStaticMetadata(detailType, detailItem) {
+  const canonical = detailUrl(detailType, detailItem.id);
+  const isEpisode = detailType === "episode";
+  const guestNames = isEpisode ? episodeGuestNames(detailItem) : [];
+  const pageTitle = isEpisode
+    ? `${detailItem.title} | The Alana Show`
+    : `${detailItem.name} | Guest | The Alana Show`;
+  const description = isEpisode
+    ? `Watch The Alana Show conversation${guestNames.length ? ` with ${guestNames.join(" & ")}` : ""}.`
+    : `Explore verified conversations featuring ${detailItem.name} on The Alana Show.`;
+  const image = isEpisode ? `https://i.ytimg.com/vi/${detailItem.videoId}/maxresdefault.jpg` : DEFAULT_SOCIAL_IMAGE;
+  const currentName = isEpisode ? detailItem.title : detailItem.name;
+
+  document.title = pageTitle;
+  upsertCanonical(canonical);
+  upsertMeta("name", "description", description);
+  upsertMeta("name", "robots", "index,follow,max-image-preview:large");
+  upsertMeta("property", "og:site_name", "The Alana Show");
+  upsertMeta("property", "og:title", pageTitle);
+  upsertMeta("property", "og:description", description);
+  upsertMeta("property", "og:type", isEpisode ? "video.other" : "profile");
+  upsertMeta("property", "og:url", canonical);
+  upsertMeta("property", "og:image", image);
+  upsertMeta("name", "twitter:card", "summary_large_image");
+  upsertMeta("name", "twitter:title", pageTitle);
+  upsertMeta("name", "twitter:description", description);
+  upsertMeta("name", "twitter:image", image);
+
+  const graph = [
+    {
+      "@type": "WebPage",
+      "@id": `${canonical}#webpage`,
+      url: canonical,
+      name: pageTitle,
+      description,
+      breadcrumb: { "@id": `${canonical}#breadcrumb` }
+    },
+    breadcrumbSchema(detailType, currentName, canonical)
+  ];
+
+  if (!isEpisode) {
+    graph[0].mainEntity = { "@id": `${canonical}#person` };
+    graph.push({
+      "@type": "Person",
+      "@id": `${canonical}#person`,
+      name: detailItem.name,
+      url: canonical,
+      subjectOf: (detailItem.episodeIds || []).map(episodeId => ({
+        "@type": "WebPage",
+        url: `${SITE_ORIGIN}/episodes/${episodeId}`
+      }))
+    });
+  }
+
+  upsertJsonLd("detail-structured-data", {
+    "@context": "https://schema.org",
+    "@graph": graph
+  });
+}
+
+function applyLiveEpisodeMetadata(episode, enriched) {
+  const canonical = detailUrl("episode", episode.id);
+  const title = enriched.title || episode.title;
+  const pageTitle = `${title} | The Alana Show`;
+  const description = (enriched.description || `Watch ${title} on The Alana Show.`).replace(/\s+/g, " ").trim();
+  const conciseDescription = description.length > 220 ? `${description.slice(0, 217).trim()}…` : description;
+  const thumbnailUrl = enriched.thumbnailUrl || `https://i.ytimg.com/vi/${episode.videoId}/maxresdefault.jpg`;
+  const uploadDate = enriched.publishedAt || "";
+  const duration = isoDuration(enriched.durationSeconds);
+
+  document.title = pageTitle;
+  upsertMeta("name", "description", conciseDescription);
+  upsertMeta("property", "og:title", pageTitle);
+  upsertMeta("property", "og:description", conciseDescription);
+  upsertMeta("property", "og:image", thumbnailUrl);
+  upsertMeta("name", "twitter:title", pageTitle);
+  upsertMeta("name", "twitter:description", conciseDescription);
+  upsertMeta("name", "twitter:image", thumbnailUrl);
+
+  const graph = [
+    {
+      "@type": "WebPage",
+      "@id": `${canonical}#webpage`,
+      url: canonical,
+      name: pageTitle,
+      description: conciseDescription,
+      breadcrumb: { "@id": `${canonical}#breadcrumb` },
+      primaryImageOfPage: { "@type": "ImageObject", url: thumbnailUrl }
+    },
+    breadcrumbSchema("episode", title, canonical)
+  ];
+
+  if (uploadDate) {
+    const videoObject = {
+      "@type": "VideoObject",
+      "@id": `${canonical}#video`,
+      name: title,
+      description,
+      thumbnailUrl: [thumbnailUrl],
+      uploadDate,
+      embedUrl: `https://www.youtube-nocookie.com/embed/${episode.videoId}`,
+      url: canonical,
+      mainEntityOfPage: { "@id": `${canonical}#webpage` }
+    };
+    if (duration) videoObject.duration = duration;
+    graph.push(videoObject);
+    graph[0].mainEntity = { "@id": `${canonical}#video` };
+  }
+
+  upsertJsonLd("detail-structured-data", {
+    "@context": "https://schema.org",
+    "@graph": graph
+  });
+}
 
 function breadcrumbs(current) {
   const parent = type === "episode" ? "Episodes" : "Guests";
@@ -92,7 +274,7 @@ async function hydrateEpisode(episode) {
     const enriched = enrichEpisode(live);
     const titleNode = document.querySelector("#episode-title");
     if (titleNode && enriched.title) titleNode.textContent = enriched.title;
-    document.title = `${enriched.title || episode.title} | The Alana Show`;
+    applyLiveEpisodeMetadata(episode, enriched);
 
     const date = formatDate(enriched.publishedAt);
     const duration = formatDuration(enriched.durationSeconds);
@@ -121,6 +303,7 @@ async function hydrateEpisode(episode) {
 if (!item) {
   root.innerHTML = `${MediaHeader()}<main id="main-content"><section class="detail-hero"><div class="shell detail-shell"><p class="eyebrow"><span></span> Archive</p><h1>Profile unavailable</h1><p>This verified archive profile is not available.</p><div class="detail-actions"><a class="button button-gold" href="/episodes">Episodes</a></div></div></section></main>${Footer({ fromSubpage: true })}`;
 } else {
+  applyStaticMetadata(type, item);
   root.innerHTML = `${MediaHeader()}<main id="main-content">${type === "episode" ? episodeDetail(item) : guestDetail(item)}</main>${Footer({ fromSubpage: true })}`;
 }
 setupMediaNavigation();
