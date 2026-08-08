@@ -7,25 +7,25 @@ import { setupEditorialMotion } from "./lib/motion.js";
 
 const compactDetailStyles = document.createElement("style");
 compactDetailStyles.textContent = `
-  .detail-hero { padding: 96px 0 48px; }
-  .detail-hero .breadcrumbs { margin-bottom: 24px; }
+  .detail-hero { padding: 84px 0 42px; }
+  .detail-hero .breadcrumbs { margin-bottom: 20px; }
   .detail-hero h1 {
-    max-width: 900px;
-    margin-bottom: 14px;
-    font-size: clamp(2.15rem, 3.6vw, 3.5rem);
-    line-height: 1.02;
-    letter-spacing: -.03em;
+    max-width: 860px;
+    margin-bottom: 12px;
+    font-size: clamp(2rem, 3.2vw, 3.15rem);
+    line-height: 1.03;
+    letter-spacing: -.028em;
     text-wrap: balance;
   }
-  .detail-byline { margin-bottom: 24px; font-size: 1rem; }
-  .guest-detail-intro { padding: 22px 0; gap: 20px; }
-  .guest-monogram-large { width: 88px; height: 88px; flex: 0 0 88px; font-size: 1.7rem; }
-  .related-section { padding-top: 22px; margin-top: 18px; }
+  .detail-byline { margin-bottom: 20px; font-size: .98rem; }
+  .guest-detail-intro { padding: 18px 0; gap: 18px; }
+  .guest-monogram-large { width: 82px; height: 82px; flex: 0 0 82px; font-size: 1.6rem; }
+  .related-section { padding-top: 18px; margin-top: 14px; }
   @media (max-width: 640px) {
-    .detail-hero { padding: 96px 0 40px; }
-    .detail-hero .breadcrumbs { margin-bottom: 20px; }
-    .detail-hero h1 { font-size: clamp(2rem, 9.5vw, 2.75rem); line-height: 1.04; }
-    .guest-detail-intro { padding: 18px 0; }
+    .detail-hero { padding: 90px 0 36px; }
+    .detail-hero .breadcrumbs { margin-bottom: 18px; }
+    .detail-hero h1 { font-size: clamp(1.9rem, 9vw, 2.55rem); line-height: 1.04; }
+    .guest-detail-intro { padding: 16px 0; }
   }
 `;
 document.head.append(compactDetailStyles);
