@@ -5,6 +5,31 @@ import { escapeHtml } from "./lib/utils.js";
 import { bindThumbnailFallbacks, relatedConversationRow } from "./lib/media-page.js";
 import { setupEditorialMotion } from "./lib/motion.js";
 
+const compactDetailStyles = document.createElement("style");
+compactDetailStyles.textContent = `
+  .detail-hero { padding: 96px 0 48px; }
+  .detail-hero .breadcrumbs { margin-bottom: 24px; }
+  .detail-hero h1 {
+    max-width: 900px;
+    margin-bottom: 14px;
+    font-size: clamp(2.15rem, 3.6vw, 3.5rem);
+    line-height: 1.02;
+    letter-spacing: -.03em;
+    text-wrap: balance;
+  }
+  .detail-byline { margin-bottom: 24px; font-size: 1rem; }
+  .guest-detail-intro { padding: 22px 0; gap: 20px; }
+  .guest-monogram-large { width: 88px; height: 88px; flex: 0 0 88px; font-size: 1.7rem; }
+  .related-section { padding-top: 22px; margin-top: 18px; }
+  @media (max-width: 640px) {
+    .detail-hero { padding: 96px 0 40px; }
+    .detail-hero .breadcrumbs { margin-bottom: 20px; }
+    .detail-hero h1 { font-size: clamp(2rem, 9.5vw, 2.75rem); line-height: 1.04; }
+    .guest-detail-intro { padding: 18px 0; }
+  }
+`;
+document.head.append(compactDetailStyles);
+
 const root = document.querySelector("#app");
 const type = document.body.dataset.detailType;
 const pathId = location.pathname.split("/").filter(Boolean).pop();
