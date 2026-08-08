@@ -19,6 +19,9 @@ assert(context.includes('params.get("source")'), "Contact context must preserve 
 assert(context.includes("alignContactSection"), "Contextual contact links must stabilize their landing position.");
 assert(context.includes("window.scrollTo"), "Contact landing alignment must account for late layout shifts.");
 assert(context.includes('root.style.scrollBehavior = "auto"'), "Contact deep-link correction must not visibly self-scroll.");
+assert(context.includes("projectedFormBottom"), "Contextual desktop inquiries must account for the form footer within the viewport.");
+assert(context.includes("viewportFloor"), "Contextual desktop inquiries must preserve breathing room below the form.");
+assert(context.includes("Math.min(overflow + 12, 56)"), "Contact viewport fitting must remain subtle and capped.");
 assert(api.includes("safeSource"), "Contact API must sanitize inquiry source context.");
 assert(api.includes("Inquiry source:"), "Contact email must surface safe inquiry source context.");
 
