@@ -20,7 +20,15 @@ function alignContactSection() {
     const header = document.querySelector("[data-header]");
     const headerHeight = header?.getBoundingClientRect().height || 66;
     const top = Math.max(0, window.scrollY + contact.getBoundingClientRect().top - headerHeight - 18);
-    window.scrollTo({ top, behavior: "auto" });
+
+    // The site intentionally uses smooth scrolling for user navigation. Deep-link
+    // correction is different: it should arrive at the final position without a
+    // visible animated "self-scroll" while late layout settles.
+    const root = document.documentElement;
+    const previousScrollBehavior = root.style.scrollBehavior;
+    root.style.scrollBehavior = "auto";
+    window.scrollTo(0, top);
+    root.style.scrollBehavior = previousScrollBehavior;
   };
 
   requestAnimationFrame(() => requestAnimationFrame(align));
