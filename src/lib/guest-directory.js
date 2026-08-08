@@ -1,4 +1,11 @@
-const STATIC_GUEST_IDS = new Set(["michael-barnett", "jason-mandle"]);
+const STATIC_GUEST_IDS = new Set([
+  "al-cacace", "ashley-vertuno", "bob-sutton", "caden-veltkamp", "celeste-ellich",
+  "diana-davis", "elijah-knight", "george-lemieux", "gillian-lieberman", "jason-mandle",
+  "jesse-rack", "johana-villafuerte", "john-rourke", "josh-smith", "mark-khachaturian",
+  "marvens-beauge", "matthew-yeandle", "michael-barnett", "michael-castellano", "michael-saldana",
+  "nick-cannon", "noel-j-guillama-alvarez", "ric-bradshaw", "rick-morris", "sabrina-maschue",
+  "scott-diament", "stacey-ibarra", "steve-cisneros", "thais-glysson", "vaughn-mitchell"
+]);
 const SORT_SURNAME_OVERRIDES = new Map([
   ["ric bradshaw", "Bradshaw"],
   ["michael barnett", "Barnett"],
@@ -54,7 +61,9 @@ export function buildGuestDirectory(episodeRecords = [], curatedGuests = []) {
     sortName: `${guestSurname(guest.name, guest.surname)}, ${guest.name}`,
     conversationCount: guest.videoIds.length
       ? new Set(guest.videoIds).size
-      : new Set(guest.episodeIds).size,
+      : guest.episodeIds.length
+        ? new Set(guest.episodeIds).size
+        : guest.conversationCount || 0,
     detailPath: STATIC_GUEST_IDS.has(guest.id) ? `/guests/${guest.id}/` : ""
   })).sort((a, b) => a.sortName.localeCompare(b.sortName, "en", { sensitivity: "base" }));
 }

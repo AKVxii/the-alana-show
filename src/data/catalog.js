@@ -18,19 +18,36 @@ export const organizations = site.organizations.map(organization => ({
 }));
 
 export const guests = [
-  {
-    id: "michael-barnett",
-    name: "Michael Barnett",
-    episodeIds: [
-      "michael-barnett-2022-midterms",
-      "restoration-bridge-civic-battle-against-hunger"
-    ]
-  },
-  {
-    id: "jason-mandle",
-    name: "Jason Mandle",
-    episodeIds: ["restoration-bridge-civic-battle-against-hunger"]
-  }
+  { id: "al-cacace", name: "Al Cacace", episodeIds: [], conversationCount: 1 },
+  { id: "ashley-vertuno", name: "Ashley Vertuno", episodeIds: [], conversationCount: 1 },
+  { id: "bob-sutton", name: "Bob Sutton", episodeIds: [], conversationCount: 1 },
+  { id: "caden-veltkamp", name: "Caden Veltkamp", episodeIds: [], conversationCount: 1 },
+  { id: "celeste-ellich", name: "Celeste Ellich", episodeIds: [], conversationCount: 1 },
+  { id: "diana-davis", name: "Diana Davis", episodeIds: [], conversationCount: 1 },
+  { id: "elijah-knight", name: "Elijah Knight", episodeIds: [], conversationCount: 1 },
+  { id: "george-lemieux", name: "George LeMieux", episodeIds: [], conversationCount: 1 },
+  { id: "gillian-lieberman", name: "Gillian Lieberman", episodeIds: [], conversationCount: 1 },
+  { id: "jason-mandle", name: "Jason Mandle", episodeIds: ["restoration-bridge-civic-battle-against-hunger"], conversationCount: 1 },
+  { id: "jesse-rack", name: "Jesse Rack", episodeIds: [], conversationCount: 1 },
+  { id: "johana-villafuerte", name: "Johana Villafuerte", episodeIds: [], conversationCount: 1 },
+  { id: "john-rourke", name: "John Rourke", episodeIds: [], conversationCount: 2 },
+  { id: "josh-smith", name: "Josh Smith", episodeIds: [], conversationCount: 1 },
+  { id: "mark-khachaturian", name: "Mark Khachaturian", episodeIds: [], conversationCount: 1 },
+  { id: "marvens-beauge", name: "Marvens Beauge", episodeIds: [], conversationCount: 1 },
+  { id: "matthew-yeandle", name: "Matthew Yeandle", episodeIds: [], conversationCount: 2 },
+  { id: "michael-barnett", name: "Michael Barnett", episodeIds: ["michael-barnett-2022-midterms", "restoration-bridge-civic-battle-against-hunger"], conversationCount: 2 },
+  { id: "michael-castellano", name: "Michael Castellano", episodeIds: [], conversationCount: 3 },
+  { id: "michael-saldana", name: "Michael Saldana", episodeIds: [], conversationCount: 1 },
+  { id: "nick-cannon", name: "Nick Cannon", episodeIds: [], conversationCount: 1 },
+  { id: "noel-j-guillama-alvarez", name: "Noel J. Guillama-Alvarez", episodeIds: [], conversationCount: 1 },
+  { id: "ric-bradshaw", name: "Sheriff Ric Bradshaw", episodeIds: [], conversationCount: 1 },
+  { id: "rick-morris", name: "Rick Morris", episodeIds: [], conversationCount: 1 },
+  { id: "sabrina-maschue", name: "Sabrina Maschue", episodeIds: [], conversationCount: 1 },
+  { id: "scott-diament", name: "Scott Diament", episodeIds: [], conversationCount: 1 },
+  { id: "stacey-ibarra", name: "Stacey Ibarra", episodeIds: [], conversationCount: 1 },
+  { id: "steve-cisneros", name: "Steve Cisneros", episodeIds: [], conversationCount: 1 },
+  { id: "thais-glysson", name: "Thais Glysson", episodeIds: [], conversationCount: 1 },
+  { id: "vaughn-mitchell", name: "Vaughn Mitchell", episodeIds: [], conversationCount: 1 }
 ];
 
 export const episodes = [
