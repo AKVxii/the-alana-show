@@ -9,6 +9,11 @@ const app = document.querySelector("#app");
 
 const external = (href, label, className = "button button-gold") => `<a class="${className}" href="${href}" target="_blank" rel="noopener">${label}</a>`;
 const internal = (href, label, className = "button button-gold") => `<a class="${className}" href="${href}">${label}</a>`;
+const contactHref = (inquiry, source) => `/?inquiry=${encodeURIComponent(inquiry)}&source=${encodeURIComponent(source)}#contact`;
+
+const partnerContact = contactHref("Advertising or partnership", "advertise");
+const guestContact = contactHref("Recommend a guest", "book");
+const southFloridaContact = contactHref("General contact", "south-florida");
 
 const pages = {
   "south-florida": {
@@ -26,7 +31,7 @@ const pages = {
     ],
     ctaEyebrow: "Have a South Florida story?",
     ctaTitle: "Bring a meaningful local conversation to the table.",
-    ctas: `${internal("/book/", "Be a Guest")}${internal("/#contact", "Recommend a Story", "button button-ghost")}`
+    ctas: `${internal("/book/", "Be a Guest")}${internal(southFloridaContact, "Recommend a Story", "button button-ghost")}`
   },
   specials: {
     eyebrow: "Focused series · timely conversations",
@@ -48,19 +53,19 @@ const pages = {
   advertise: {
     eyebrow: "Partnerships · sponsorships · visibility",
     title: "Advertise & Partner",
-    intro: "Connect your organization with a thoughtful interview platform spanning radio, podcast, video, and the web.",
+    intro: "Connect your organization with a premium interview platform spanning radio, podcast, video, the web, and a growing archive of evergreen conversations.",
     featureEyebrow: "Partnership opportunities",
-    featureTitle: "Support conversations people choose to spend time with.",
-    featureCopy: "Partnerships are built around fit, audience relevance, and clear separation between editorial conversations and paid promotion. Opportunities can be discussed across on-air, website, and digital distribution, subject to availability.",
-    panel: `<span class="growth-panel-kicker">Regional broadcast</span><strong>True Oldies</strong><p>${currentSpecial.broadcastText}</p><p class="growth-panel-note">${currentSpecial.reachText}</p>${internal("/#contact", "Start a Partnership Conversation", "button button-light")}`,
+    featureTitle: "Build a partnership around relevance, not clutter.",
+    featureCopy: "The strongest partnerships fit naturally around the audience and subject matter. Sponsorship is clearly identified, editorial independence remains intact, and packages can be shaped around recurring programming, individual conversations, regional reach, or a relevant editorial collection.",
+    panel: `<span class="growth-panel-kicker">Regional broadcast</span><strong>True Oldies</strong><p>${currentSpecial.broadcastText}</p><p class="growth-panel-note">${currentSpecial.reachText}</p>${internal(partnerContact, "Start a Partnership Conversation", "button button-light")}`,
     cards: [
-      ["Show Sponsorship", "Discuss brand visibility around The Alana Show and its recurring programming.", "/#contact"],
-      ["Digital & Website", "Explore placements and integrations connected to the show website and digital audience journey.", "/#contact"],
-      ["Custom Partnerships", "Build a thoughtful package around a relevant series, community initiative, event, or campaign.", "/#contact"]
+      ["Show & Episode Sponsorship", "Discuss premium brand visibility around recurring programming or a specific conversation, with clear sponsor identification.", partnerContact],
+      ["South Florida & Topic Partnerships", "Explore a partnership aligned with regional coverage or a subject-area collection where the audience fit is natural.", partnerContact],
+      ["Custom Integrations", "Build a thoughtful package around a relevant series, community initiative, event, digital placement, or campaign.", partnerContact]
     ],
     ctaEyebrow: "Built around fit",
     ctaTitle: "Tell us what you are trying to reach, support, or accomplish.",
-    ctas: `${internal("/#contact", "Advertising Inquiry")}${internal("/south-florida/", "See South Florida Reach", "button button-ghost")}`
+    ctas: `${internal(partnerContact, "Advertising & Partnership Inquiry")}${internal("/south-florida/", "See South Florida Reach", "button button-ghost")}`
   },
   book: {
     eyebrow: "Guest inquiries · story ideas · interviews",
@@ -71,13 +76,13 @@ const pages = {
     featureCopy: "The strongest guest pitches explain who you are, what you can add to the conversation, why the subject matters now, and where listeners can learn more about your work.",
     panel: `<span class="growth-panel-kicker">2026 candidate?</span><strong>Candidate Interview Series</strong><p>${currentSpecial.urgencyText}</p><p class="growth-panel-note">${currentSpecial.disclaimer}</p>${external(currentSpecial.ctaHref, "Candidate Scheduling", "button button-light")}`,
     cards: [
-      ["Who Fits", "Leaders, entrepreneurs, public servants, advocates, experts, community builders, and people with stories worth hearing.", "/#contact"],
-      ["What to Send", "Share the proposed topic, why it matters now, your background, and a website or social link that helps verify the story.", "/#contact"],
-      ["What Happens Next", "Submissions are reviewed for editorial fit and availability. An inquiry does not guarantee an appearance.", "/#contact"]
+      ["Who Fits", "Leaders, entrepreneurs, public servants, advocates, experts, community builders, and people with stories worth hearing.", guestContact],
+      ["What to Send", "Share the proposed topic, why it matters now, your background, and a website or social link that helps verify the story.", guestContact],
+      ["What Happens Next", "Submissions are reviewed for editorial fit and availability. An inquiry does not guarantee an appearance.", guestContact]
     ],
     ctaEyebrow: "Ready to reach out?",
     ctaTitle: "Tell us the story you think The Alana Show should hear.",
-    ctas: `${internal("/#contact", "Submit a Guest Inquiry")}${internal("/guests/", "Browse Past Guests", "button button-ghost")}`
+    ctas: `${internal(guestContact, "Submit a Guest Inquiry")}${internal("/guests/", "Browse Past Guests", "button button-ghost")}`
   }
 };
 
