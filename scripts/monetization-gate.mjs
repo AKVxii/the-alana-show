@@ -16,6 +16,8 @@ assert(growth.includes("South Florida & Topic Partnerships"), "Advertise page mu
 assert(contact.includes('name="source"'), "Contact form must carry a non-personal inquiry source field.");
 assert(context.includes('params.get("inquiry")'), "Contact context must preselect inquiry type from the URL.");
 assert(context.includes('params.get("source")'), "Contact context must preserve the non-personal source label.");
+assert(context.includes("alignContactSection"), "Contextual contact links must stabilize their landing position.");
+assert(context.includes("window.scrollTo"), "Contact landing alignment must account for late layout shifts.");
 assert(api.includes("safeSource"), "Contact API must sanitize inquiry source context.");
 assert(api.includes("Inquiry source:"), "Contact email must surface safe inquiry source context.");
 
