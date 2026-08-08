@@ -10,6 +10,21 @@ const app = document.querySelector("#app");
 const topicId = document.body.dataset.topicId;
 const topic = topicPageById(topicId);
 
+// Topic authority pages use the compact Topics hero, but the global site header is
+// fixed at 66px. Keep the breadcrumb comfortably below it without making the hero
+// materially taller by trading bottom padding for the extra top clearance.
+const topicDetailStyle = document.createElement("style");
+topicDetailStyle.textContent = `
+  body[data-topic-id] .topics-hero { padding-top: 82px; padding-bottom: 0; }
+  @media (max-width: 980px) {
+    body[data-topic-id] .topics-hero { padding-top: 78px; padding-bottom: 0; }
+  }
+  @media (max-width: 640px) {
+    body[data-topic-id] .topics-hero { padding-top: 76px; padding-bottom: 0; }
+  }
+`;
+document.head.append(topicDetailStyle);
+
 if (!topic) {
   location.replace("/topics/");
 } else {
