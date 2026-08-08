@@ -3,12 +3,12 @@ import { site } from "../data/site.js";
 
 export function SearchDialog() {
   return `
-    <dialog class="search-dialog" data-search-dialog>
+    <dialog class="search-dialog" data-search-dialog aria-labelledby="site-search-title">
       <div class="search-panel">
         <div class="search-topline">
           <div>
             <span>Conversation finder</span>
-            <strong>Search recent conversations</strong>
+            <strong id="site-search-title">Search recent conversations</strong>
           </div>
           <button type="button" data-search-close aria-label="Close episode search">${icon("close")}</button>
         </div>
