@@ -24,18 +24,37 @@ export function setupMediaNavigation() {
   const button = document.querySelector("[data-menu-button]");
   const nav = document.querySelector("[data-nav]");
   const label = button?.querySelector(".sr-only");
-  const setOpen = open => {
+  const links = [...(nav?.querySelectorAll("a") || [])];
+
+  const normalizePath = value => {
+    const pathname = new URL(value, location.origin).pathname;
+    return pathname === "/" ? "/" : pathname.replace(/\/+$/, "");
+  };
+  const currentPath = normalizePath(location.href);
+  links.forEach(link => {
+    const href = link.getAttribute("href") || "";
+    if (!href.startsWith("/#") && normalizePath(link.href) === currentPath) {
+      link.setAttribute("aria-current", "page");
+    }
+  });
+
+  const setOpen = (open, { focusFirst = false, restoreFocus = false } = {}) => {
     nav?.classList.toggle("open", open);
     document.body.classList.toggle("menu-open", open);
     button?.setAttribute("aria-expanded", String(open));
     if (label) label.textContent = open ? "Close navigation" : "Open navigation";
+    if (open && focusFirst) window.requestAnimationFrame(() => links[0]?.focus());
+    if (!open && restoreFocus) window.requestAnimationFrame(() => button?.focus());
   };
-  button?.addEventListener("click", () => setOpen(!nav?.classList.contains("open")));
-  nav?.querySelectorAll("a").forEach(link => link.addEventListener("click", () => setOpen(false)));
+
+  button?.addEventListener("click", () => {
+    const opening = !nav?.classList.contains("open");
+    setOpen(opening, { focusFirst: opening });
+  });
+  links.forEach(link => link.addEventListener("click", () => setOpen(false)));
   document.addEventListener("keydown", event => {
     if (event.key === "Escape" && nav?.classList.contains("open")) {
-      setOpen(false);
-      button?.focus();
+      setOpen(false, { restoreFocus: true });
     }
   });
   document.querySelectorAll("[data-year]").forEach(node => { node.textContent = new Date().getFullYear(); });
