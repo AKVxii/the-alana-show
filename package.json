@@ -4,6 +4,8 @@
   "version": "1.0.0",
   "description": "Official landing page for The Alana Show",
   "scripts": {
-    "dev": "vercel dev"
+    "dev": "vercel dev",
+    "quality": "node scripts/quality-gate.mjs",
+    "test": "npm run quality"
   }
 }
