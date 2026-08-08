@@ -1,0 +1,148 @@
+.brief-signup {
+  position: relative;
+  overflow: hidden;
+  padding: 74px 0;
+  color: var(--white);
+  background:
+    radial-gradient(circle at 88% 18%, rgba(216,184,102,.13), transparent 26%),
+    radial-gradient(circle at 8% 88%, rgba(36,75,115,.36), transparent 34%),
+    linear-gradient(118deg, #030914 0%, #07172a 58%, #0d2c4b 100%);
+  border-block: 1px solid rgba(216,184,102,.16);
+}
+.brief-signup::after {
+  content: "";
+  position: absolute;
+  width: 560px;
+  height: 560px;
+  right: -250px;
+  top: -290px;
+  border: 1px solid rgba(216,184,102,.12);
+  border-radius: 50%;
+  box-shadow: 0 0 0 54px rgba(216,184,102,.025), 0 0 0 112px rgba(255,255,255,.015);
+  pointer-events: none;
+}
+.brief-signup-shell {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: minmax(0, .92fr) minmax(440px, .78fr);
+  gap: clamp(52px, 7vw, 104px);
+  align-items: center;
+}
+.brief-signup-copy { max-width: 650px; }
+.brief-kicker {
+  margin: 0 0 16px;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--gold-400);
+  font-size: .72rem;
+  font-weight: 800;
+  letter-spacing: .19em;
+  text-transform: uppercase;
+}
+.brief-kicker span { width: 42px; height: 1px; background: currentColor; }
+.brief-signup-copy h2 {
+  max-width: 620px;
+  color: var(--white);
+  font-size: clamp(3rem, 5vw, 5.15rem);
+  line-height: .98;
+}
+.brief-deck { max-width: 590px; margin-top: 21px; color: #cbd5e2; font-size: 1.02rem; line-height: 1.7; }
+.brief-promises { margin-top: 28px; display: flex; flex-wrap: wrap; gap: 10px 24px; color: #aebfd0; font-size: .72rem; font-weight: 700; letter-spacing: .035em; text-transform: uppercase; }
+.brief-promises span { display: inline-flex; align-items: center; gap: 9px; }
+.brief-promises span::before { content: ""; width: 5px; height: 5px; border-radius: 50%; background: var(--gold-400); }
+
+.brief-signup-card {
+  padding: 34px;
+  color: var(--ink);
+  border: 1px solid rgba(216,184,102,.5);
+  border-radius: 22px;
+  background: linear-gradient(145deg, #fffdf8, #f7f0e3);
+  box-shadow: 0 28px 80px rgba(0,0,0,.28);
+}
+.brief-card-label { color: var(--gold-600); font-size: .68rem; font-weight: 800; letter-spacing: .17em; text-transform: uppercase; }
+.brief-signup-card h3 { margin: 8px 0 24px; color: var(--navy-900); font-size: clamp(2rem, 3vw, 2.8rem); }
+.brief-form { display: grid; gap: 15px; }
+.brief-form label { display: grid; gap: 7px; }
+.brief-form label > span { color: var(--navy-900); font-size: .7rem; font-weight: 800; }
+.brief-form label small { color: var(--muted); font-size: .65rem; font-weight: 600; }
+.brief-form input {
+  min-height: 52px;
+  padding: 13px 15px;
+  color: var(--navy-950);
+  border: 1px solid rgba(20,35,58,.18);
+  border-radius: 10px;
+  background: rgba(255,255,255,.72);
+  outline: 0;
+  transition: border-color .18s ease, box-shadow .18s ease, background .18s ease;
+}
+.brief-form input:focus { border-color: var(--gold-500); background: #fff; box-shadow: 0 0 0 4px rgba(189,150,63,.12); }
+.brief-submit { width: 100%; margin-top: 4px; }
+.brief-submit:disabled { opacity: .68; cursor: wait; transform: none; }
+.brief-consent { color: #6f7886; font-size: .68rem; line-height: 1.55; text-align: center; }
+.brief-form-status { min-height: 1.2em; color: var(--muted); font-size: .74rem; font-weight: 700; text-align: center; }
+.brief-form-status.success { color: #255f47; }
+.brief-form-status.error { color: #8a3f34; }
+.brief-honeypot { position: absolute !important; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+
+.brief-page { min-height: 100vh; background: var(--ivory-50); }
+.brief-page-hero {
+  padding: 132px 0 76px;
+  position: relative;
+  overflow: hidden;
+  color: var(--white);
+  text-align: center;
+  background:
+    radial-gradient(circle at 72% 24%, rgba(36,75,115,.42), transparent 34%),
+    linear-gradient(120deg, #030914 0%, #07182b 54%, #0c2a47 100%);
+}
+.brief-page-hero::after {
+  content: "BRIEF";
+  position: absolute;
+  right: -18px;
+  bottom: -88px;
+  color: rgba(255,255,255,.025);
+  font-family: var(--serif);
+  font-size: clamp(10rem, 22vw, 22rem);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -.08em;
+  pointer-events: none;
+}
+.brief-page-hero .shell { position: relative; z-index: 1; }
+.brief-page-hero .breadcrumbs { margin-bottom: 32px; text-align: left; }
+.brief-page-mark { margin-bottom: 14px; color: var(--gold-400); font-size: .77rem; font-weight: 800; letter-spacing: .22em; text-transform: uppercase; }
+.brief-page-hero h1 { margin-bottom: 18px; font-size: clamp(4rem, 8vw, 7.5rem); letter-spacing: -.045em; }
+.brief-page-hero > .shell > p:last-child { max-width: 760px; margin-inline: auto; color: #c8d3e0; font-size: 1.08rem; }
+
+.brief-value { padding: 70px 0 78px; background: linear-gradient(180deg, #f8f2e6, #fffdf8); }
+.brief-value-heading { max-width: 800px; margin-bottom: 38px; }
+.brief-value-heading h2 { font-size: clamp(2.8rem, 4.5vw, 4.7rem); }
+.brief-value-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+.brief-value-card { min-height: 235px; padding: 28px; border: 1px solid rgba(20,35,58,.12); border-radius: 17px; background: rgba(255,255,255,.72); box-shadow: var(--shadow-sm); }
+.brief-value-card span { color: var(--gold-600); font-size: .67rem; font-weight: 800; letter-spacing: .18em; }
+.brief-value-card h3 { margin: 23px 0 14px; color: var(--navy-900); font-size: 2rem; }
+.brief-value-card p { color: var(--muted); font-size: .92rem; }
+.brief-page .brief-signup { border-top: 0; }
+.brief-page-note { padding: 34px 0; color: #7a8595; background: var(--ivory-50); text-align: center; font-size: .75rem; }
+
+@media (max-width: 980px) {
+  .brief-signup-shell { grid-template-columns: 1fr; gap: 36px; }
+  .brief-signup-copy { max-width: 760px; }
+  .brief-signup-card { max-width: 680px; width: 100%; }
+  .brief-value-grid { grid-template-columns: 1fr; }
+  .brief-value-card { min-height: 0; }
+}
+
+@media (max-width: 640px) {
+  .brief-signup { padding: 54px 0; }
+  .brief-signup-card { padding: 26px 22px; border-radius: 17px; }
+  .brief-signup-copy h2 { font-size: clamp(2.65rem, 13vw, 4rem); }
+  .brief-deck { font-size: .94rem; }
+  .brief-promises { display: grid; gap: 8px; }
+  .brief-page-hero { padding: 108px 0 58px; text-align: left; }
+  .brief-page-hero h1 { font-size: clamp(3.7rem, 18vw, 5.5rem); }
+  .brief-page-hero > .shell > p:last-child { margin-inline: 0; }
+  .brief-value { padding: 54px 0; }
+}

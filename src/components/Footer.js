@@ -19,6 +19,7 @@ export function Footer({ fromSubpage = false } = {}) {
           <a href="/episodes/">Episodes</a>
           <a href="/guests/">Guests</a>
           <a href="/topics/">Topics</a>
+          <a href="/brief/">The Alana Brief</a>
           <a href="/specials/">Specials</a>
           <a href="/south-florida/">South Florida</a>
           <a href="${home}#listen">Listen</a>
