@@ -8,6 +8,7 @@ if (location.pathname === '/' || location.pathname === '') {
 }
 
 menuButton?.addEventListener('click', () => {
-  if (menuButton.getAttribute('aria-expanded') !== 'true') return;
-  window.requestAnimationFrame(() => links[0]?.focus());
+  window.requestAnimationFrame(() => {
+    if (menuButton.getAttribute('aria-expanded') === 'true') links[0]?.focus();
+  });
 });
