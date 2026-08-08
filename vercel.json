@@ -11,12 +11,6 @@
       "permanent": true
     }
   ],
-  "rewrites": [
-    {
-      "source": "/episodes/:slug",
-      "destination": "/episodes/detail.html"
-    }
-  ],
   "headers": [
     {
       "source": "/(.*)",
