@@ -34,6 +34,13 @@ compactDetailStyles.textContent = `
 document.head.append(compactDetailStyles);
 
 const root = document.querySelector("#app");
+if (root && !document.querySelector(".skip-link")) {
+  const skipLink = document.createElement("a");
+  skipLink.className = "skip-link";
+  skipLink.href = "#main-content";
+  skipLink.textContent = "Skip to main content";
+  root.before(skipLink);
+}
 const type = document.body.dataset.detailType;
 const pathId = location.pathname.split("/").filter(Boolean).pop();
 const id = document.body.dataset.detailId || pathId;
@@ -169,7 +176,7 @@ function applyLiveEpisodeMetadata(episode, enriched) {
   const pageTitle = `${title} | The Alana Show`;
   const description = (enriched.description || `Watch ${title} on The Alana Show.`).replace(/\s+/g, " ").trim();
   const conciseDescription = description.length > 220 ? `${description.slice(0, 217).trim()}…` : description;
-  const thumbnailUrl = enriched.thumbnailUrl || `https://i.ytimg.com/vi/${episode.videoId}/maxresdefault.jpg`;
+  const thumbnailUrl = enriched.thumbnail || enriched.thumbnailUrl || `https://i.ytimg.com/vi/${episode.videoId}/maxresdefault.jpg`;
   const uploadDate = enriched.publishedAt || "";
   const duration = isoDuration(enriched.durationSeconds);
 
