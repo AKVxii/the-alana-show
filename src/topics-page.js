@@ -1,6 +1,7 @@
 import { MediaHeader, setupMediaNavigation } from "./components/MediaHeader.js";
 import { Footer } from "./components/Footer.js";
 import { site } from "./data/site.js";
+import { topicHref } from "./data/topic-pages.js";
 import { escapeHtml } from "./lib/utils.js";
 import { setupEditorialMotion } from "./lib/motion.js";
 
@@ -19,7 +20,7 @@ const topicDescriptions = {
 const app = document.querySelector("#app");
 
 function topicCard(topic) {
-  return `<a class="topic-card" href="/episodes/?topic=${encodeURIComponent(topic)}" data-topic-card="${escapeHtml(topic)}" data-reveal data-reveal-stagger="true">
+  return `<a class="topic-card" href="${topicHref(topic)}" data-topic-card="${escapeHtml(topic)}" data-reveal data-reveal-stagger="true">
     <span class="topic-card-kicker">Explore topic</span>
     <h2>${escapeHtml(topic)}</h2>
     <p>${escapeHtml(topicDescriptions[topic] || "Browse conversations from The Alana Show connected to this verified topic.")}</p>
@@ -34,7 +35,7 @@ app.innerHTML = `${MediaHeader()}<main id="main-content">
     <p>Follow the ideas, issues, and areas of expertise that connect conversations across The Alana Show.</p>
   </div></section>
   <section class="media-section topics-section" aria-labelledby="topics-heading"><div class="shell">
-    <div class="media-section-heading topics-heading" data-reveal><div><p class="eyebrow dark"><span></span> Explore by subject</p><h2 id="topics-heading">Find the conversations that matter to you</h2></div><p>Choose a topic to open the conversation archive with that verified filter already applied.</p></div>
+    <div class="media-section-heading topics-heading" data-reveal><div><p class="eyebrow dark"><span></span> Explore by subject</p><h2 id="topics-heading">Find the conversations that matter to you</h2></div><p>Choose a topic to open a permanent editorial collection of related conversations.</p></div>
     <div class="topics-grid" data-topics-grid>${site.topics.map(topicCard).join("")}</div>
   </div></section>
   <section class="topics-cta"><div class="shell topics-cta-inner" data-reveal><div><p class="eyebrow"><span></span> Looking for someone specific?</p><h2>Browse the people behind the conversations.</h2></div><div class="topics-cta-actions"><a class="button button-gold" href="/guests/">Guest Directory</a><a class="button button-ghost" href="/episodes/">All Episodes</a></div></div></section>
