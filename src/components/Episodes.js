@@ -62,6 +62,7 @@ export function Episodes() {
                 data-featured-video
                 src="https://www.youtube-nocookie.com/embed/kJWFTnWOgYM?rel=0"
                 title="Featured conversation from The Alana Show"
+                loading="lazy"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                 referrerpolicy="strict-origin-when-cross-origin"
                 allowfullscreen>
