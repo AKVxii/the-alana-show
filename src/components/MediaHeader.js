@@ -33,9 +33,10 @@ export function setupMediaNavigation() {
   const currentPath = normalizePath(location.href);
   links.forEach(link => {
     const href = link.getAttribute("href") || "";
-    if (!href.startsWith("/#") && normalizePath(link.href) === currentPath) {
-      link.setAttribute("aria-current", "page");
-    }
+    if (href.startsWith("/#")) return;
+    const linkPath = normalizePath(link.href);
+    const isCurrent = linkPath === currentPath || (linkPath !== "/" && currentPath.startsWith(`${linkPath}/`));
+    if (isCurrent) link.setAttribute("aria-current", "page");
   });
 
   const setOpen = (open, { focusFirst = false, restoreFocus = false } = {}) => {
