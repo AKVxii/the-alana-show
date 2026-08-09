@@ -14,10 +14,15 @@ export function MediaHeader() {
         <span class="sr-only">Open navigation</span>${icon("menu")}
       </button>
       <nav id="primary-nav" class="primary-nav" aria-label="Primary navigation" data-nav>
-        <a href="/">Home</a><a href="/episodes/">Episodes</a><a href="/guests/">Guests</a><a href="/topics/">Topics</a><a href="/specials/">Specials</a><a href="/south-florida/">South Florida</a>
-        <a href="/#listen">Listen</a><a href="/#on-air">On Air</a><a href="/#about">About</a><a href="/#contact">Contact</a>
+        <a href="/episodes/">Watch</a>
+        <a href="/guests/">Guests</a>
+        <a href="/#listen">Listen</a>
+        <a href="/#on-air">On Air</a>
+        <a href="/#about">About</a>
+        <a href="/#partner">Partner</a>
+        <a href="/#contact">Contact</a>
       </nav>
-      <div class="header-actions"><a class="button button-gold button-small" href="${site.trueOldies}" target="_blank" rel="noopener">True Oldies</a></div>
+      <div class="header-actions"><a class="button button-gold button-small" href="${site.trueOldiesLive}" target="_blank" rel="noopener">Listen Live</a></div>
     </div>
   </header>`;
 }
