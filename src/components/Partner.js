@@ -9,7 +9,7 @@ export function Partner() {
             <p class="eyebrow"><span></span> Advertise &amp; partner</p>
             <h2>Partner with conversations that matter.</h2>
             <p>
-              Connect your organization with thoughtful conversations centered on leadership, business, public life, service, community, culture, and purpose.
+              Connect your organization with thoughtful conversations centered on leadership, business, public life, service, community, culture, and purpose — with South Florida terrestrial radio reach and worldwide digital streaming.
             </p>
             <div class="partner-actions">
               <a class="button button-gold" href="#contact" data-inquiry="Advertising or partnership">Request partnership information ${icon("arrow")}</a>
