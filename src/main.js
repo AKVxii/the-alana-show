@@ -98,19 +98,23 @@ function setupInquiryLinks() {
 }
 
 function episodeCard(episode) {
-  const videoUrl = `https://www.youtube.com/watch?v=${encodeURIComponent(episode.videoId)}`;
+  const enriched = enrichEpisode(episode);
+  const youtubeUrl = `https://www.youtube.com/watch?v=${encodeURIComponent(enriched.videoId)}`;
+  const cardUrl = enriched.detailPath || youtubeUrl;
+  const external = !enriched.detailPath;
+  const linkAttrs = external ? ' target="_blank" rel="noopener"' : "";
   return `
     <article class="episode-card">
-      <a class="episode-thumb" href="${videoUrl}" target="_blank" rel="noopener" aria-label="Watch ${escapeHtml(episode.title)}">
-        ${EpisodeThumbnail(episode, { latest: false })}
+      <a class="episode-thumb" href="${cardUrl}"${linkAttrs} aria-label="Watch ${escapeHtml(enriched.title)}">
+        ${EpisodeThumbnail(enriched, { latest: false })}
         <span class="episode-play">${icon("play")}</span>
-        <small>${escapeHtml(formatDuration(episode.durationSeconds))}</small>
+        <small>${escapeHtml(formatDuration(enriched.durationSeconds))}</small>
       </a>
       <div class="episode-body">
-        <span>${escapeHtml(formatDate(episode.publishedAt))}</span>
-        <h3>${escapeHtml(episode.title)}</h3>
-        <p>${escapeHtml(excerpt(episode.description, 120))}</p>
-        <a href="${videoUrl}" target="_blank" rel="noopener">Watch conversation ${icon("arrow")}</a>
+        <span>${escapeHtml(formatDate(enriched.publishedAt))}</span>
+        <h3>${escapeHtml(enriched.title)}</h3>
+        <p>${escapeHtml(excerpt(enriched.description, 120))}</p>
+        <a href="${cardUrl}"${linkAttrs}>Watch conversation ${icon("arrow")}</a>
       </div>
     </article>
   `;
