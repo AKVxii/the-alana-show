@@ -78,9 +78,8 @@ export function nextBroadcastLabel() {
   const value = type => easternParts.find(part => part.type === type)?.value;
   const weekday = value("weekday");
   const hour = Number(value("hour"));
-  const minute = Number(value("minute"));
 
-  if (weekday === "Tue" && hour === 20 && minute < 30) {
+  if (weekday === "Tue" && hour === 20) {
     return { label: "On Air Now", live: true };
   }
 
