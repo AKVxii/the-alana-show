@@ -33,6 +33,13 @@ body {
   box-shadow: none;
 }
 
+/* Media hub mastheads should establish the page without consuming a third of
+   a desktop viewport. Detail pages retain their larger title treatment. */
+.media-hero:not(.topics-hero) {
+  padding-top: 86px;
+  padding-bottom: 38px;
+}
+
 /* Topic collections should read as an editorial index rather than a grid of
    decorative app cards. */
 .topics-hero::before,
@@ -81,6 +88,33 @@ body {
   gap: 18px;
 }
 
+/* Alphabetical controls stay highly usable without reading as 27 miniature
+   app buttons. */
+.alphabet-nav {
+  gap: 3px;
+  border-bottom: 1px solid rgba(20, 35, 58, .1);
+}
+
+.alphabet-nav button {
+  width: auto;
+  min-width: 31px;
+  height: 34px;
+  padding-inline: 7px;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  background: transparent;
+}
+
+.alphabet-nav button[aria-pressed="true"] {
+  color: var(--navy-900);
+  border-color: var(--gold-500);
+  background: transparent;
+}
+
+.alphabet-nav button:disabled {
+  opacity: .24;
+}
+
 /* Long episode titles should remain editorial rather than becoming a wall of
    type at the top of a detail page. */
 .detail-hero h1 {
@@ -125,6 +159,42 @@ body {
 .current-special-broadcast,
 .current-special-urgency {
   max-width: 820px;
+}
+
+/* Stepping Up is a recurring editorial franchise. Let the names and stories
+   read like a curated index rather than another collection of boxed widgets. */
+.organization-grid {
+  gap: 0 32px;
+  border-top: 1px solid rgba(216, 184, 102, .18);
+}
+
+.organization-card,
+.organization-callout {
+  min-height: 0;
+  padding: 20px 0 19px;
+  border: 0;
+  border-bottom: 1px solid rgba(255, 255, 255, .1);
+  border-radius: 0;
+  background: transparent;
+}
+
+.organization-card:hover,
+.organization-card:focus-within {
+  transform: none;
+  border-color: rgba(216, 184, 102, .18);
+  background: rgba(255, 255, 255, .018);
+}
+
+.organization-card h3 {
+  margin-top: 7px;
+}
+
+.organization-card p {
+  margin-top: 8px;
+}
+
+.organization-card a {
+  margin-top: 13px;
 }
 
 /* Partnership options should read like an editorial offering index, not four
@@ -273,6 +343,21 @@ body {
     width: auto;
     min-width: 0;
   }
+
+  /* The artwork and title are enough on a homepage scan. Removing excerpts
+     makes four cards feel like editorial recommendations rather than mini pages. */
+  .watch-section .episode-rail .episode-body > p {
+    display: none;
+  }
+
+  .watch-section .episode-rail .episode-body {
+    padding: 16px 16px 18px;
+  }
+
+  .watch-section .episode-rail .episode-body h3 {
+    font-size: 1.28rem;
+    line-height: 1.08;
+  }
 }
 
 @media (max-width: 680px) {
@@ -405,6 +490,24 @@ body {
 
   .current-special {
     padding-block: 18px 25px;
+  }
+
+  .organization-grid {
+    gap: 0;
+  }
+
+  .organization-card,
+  .organization-callout {
+    padding-block: 18px;
+  }
+
+  .alphabet-nav {
+    gap: 1px;
+  }
+
+  .alphabet-nav button {
+    min-width: 29px;
+    padding-inline: 5px;
   }
 
   .footer-links a {
