@@ -1,3 +1,5 @@
+import { setupEditorialMotion } from "./lib/motion.js";
+
 function newsletterMarkup() {
   return `
     <section class="newsletter-section" id="updates" aria-labelledby="newsletter-title">
@@ -91,8 +93,14 @@ function mountNewsletter(attempt = 0) {
   }
 
   contact.insertAdjacentHTML("beforebegin", newsletterMarkup());
-  const form = document.querySelector("[data-newsletter-form]");
+  const section = document.querySelector("#updates");
+  const form = section?.querySelector("[data-newsletter-form]");
   if (form) bindNewsletter(form);
+
+  // This section is injected after the homepage's initial reveal observer is
+  // created, so register its reveal nodes immediately instead of leaving them
+  // permanently transparent in the pre-animation state.
+  if (section) setupEditorialMotion(section);
 }
 
 mountNewsletter();
