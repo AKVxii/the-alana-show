@@ -28,6 +28,7 @@ export function Header() {
           <a href="#about">About</a>
           <a href="#partner">Partner</a>
           <a href="#contact">Contact</a>
+          <a class="mobile-listen-live" href="${site.trueOldiesLive}" target="_blank" rel="noopener">Listen Live</a>
         </nav>
 
         <div class="header-actions">
