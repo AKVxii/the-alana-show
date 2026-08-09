@@ -28,7 +28,7 @@ function newsletterMarkup() {
             </label>
 
             <button class="button button-gold newsletter-submit" type="submit">Join the list →</button>
-            <p class="newsletter-note">By subscribing, you agree to receive email updates from The Alana Show. Unsubscribe anytime. Your information is never sold.</p>
+            <p class="newsletter-note">By subscribing, you agree to receive email updates from The Alana Show. Check your inbox to confirm your subscription. Unsubscribe anytime. Your information is never sold.</p>
             <div class="newsletter-status" data-newsletter-status role="status" aria-live="polite"></div>
           </form>
         </div>
@@ -72,7 +72,7 @@ function bindNewsletter(form) {
       if (!response.ok) throw new Error(result.error || "Unable to subscribe");
 
       form.reset();
-      status.textContent = "You're on the list. Welcome to The Alana Show.";
+      status.textContent = "Almost there — check your inbox to confirm your subscription.";
       status.classList.add("success");
     } catch {
       status.textContent = "We couldn't complete your signup just now. Please try again shortly.";
