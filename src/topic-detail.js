@@ -5,6 +5,7 @@ import { topicPageById } from "./data/topic-pages.js";
 import { bindThumbnailFallbacks, episodeCard } from "./lib/media-page.js";
 import { escapeHtml } from "./lib/utils.js";
 import { setupEditorialMotion } from "./lib/motion.js";
+import { loadYouTubeFeed } from "./lib/youtube-feed.js";
 
 const app = document.querySelector("#app");
 const topicId = document.body.dataset.topicId;
@@ -62,9 +63,7 @@ async function loadTopicEpisodes() {
   if (!grid || !status || !topic) return;
 
   try {
-    const response = await fetch("/api/youtube", { headers: { Accept: "application/json" } });
-    if (!response.ok) throw new Error("Conversation feed unavailable");
-    const payload = await response.json();
+    const payload = await loadYouTubeFeed();
     const episodes = (Array.isArray(payload.episodes) ? payload.episodes : [])
       .filter(episode => Array.isArray(episode.categories) && episode.categories.includes(topic.name))
       .map(enrichEpisode)
