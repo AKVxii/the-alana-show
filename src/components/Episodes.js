@@ -81,8 +81,6 @@ export function Episodes() {
           ${Broadcast()}
         </div>
 
-        ${Sponsor()}
-
         <div class="watch-tools">
           <aside class="watch-aside">
             <article class="latest-card reveal reveal-delay" data-latest>
@@ -103,7 +101,7 @@ export function Episodes() {
               <span class="discovery-icon">${icon("search")}</span>
               <span>
                 <small>Find a conversation</small>
-                <strong>Search recent conversations by guest, topic, or idea.</strong>
+                <strong>Search the conversation archive by guest, topic, or idea.</strong>
               </span>
               ${icon("arrow")}
             </button>
@@ -115,7 +113,7 @@ export function Episodes() {
             <p class="eyebrow dark"><span></span> Guests &amp; ideas</p>
             <h3>Recent conversations</h3>
           </div>
-          <a href="${site.youtube}" target="_blank" rel="noopener">View the full channel ${icon("arrow")}</a>
+          <a href="/episodes">Browse the full archive ${icon("arrow")}</a>
         </div>
 
         <div class="episode-rail" data-episode-rail aria-live="polite">
@@ -123,6 +121,8 @@ export function Episodes() {
           <div class="episode-skeleton"></div>
           <div class="episode-skeleton"></div>
         </div>
+
+        ${Sponsor()}
       </div>
     </section>
   `;
