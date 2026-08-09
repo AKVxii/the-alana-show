@@ -1,4 +1,4 @@
-import { setupEditorialMotion } from "./lib/motion.js";
+import { trackEvent } from "./lib/measurement.js";
 
 export function Newsletter() {
   return `
@@ -52,6 +52,7 @@ function bindNewsletter(form) {
     if (!form.checkValidity()) {
       form.reportValidity();
       status.textContent = "Please enter a valid email address.";
+      trackEvent("Newsletter Invalid", { page: location.pathname });
       return;
     }
 
@@ -60,6 +61,7 @@ function bindNewsletter(form) {
     form.setAttribute("aria-busy", "true");
     button.disabled = true;
     button.textContent = "Joining…";
+    trackEvent("Newsletter Attempt", { page: location.pathname });
 
     try {
       const response = await fetch("/api/subscribe", {
@@ -77,8 +79,10 @@ function bindNewsletter(form) {
       form.reset();
       status.textContent = "Almost there — check your inbox to confirm your subscription.";
       status.classList.add("success");
+      trackEvent("Newsletter Success", { page: location.pathname });
     } catch {
       status.textContent = "We couldn't complete your signup just now. Please try again shortly.";
+      trackEvent("Newsletter Failure", { page: location.pathname });
     } finally {
       form.setAttribute("aria-busy", "false");
       button.disabled = false;
@@ -87,24 +91,6 @@ function bindNewsletter(form) {
   });
 }
 
-function mountNewsletter(attempt = 0) {
-  const existing = document.querySelector("[data-newsletter-form]");
-  if (existing) {
-    bindNewsletter(existing);
-    return;
-  }
-
-  const contact = document.querySelector("#contact");
-  if (!contact) {
-    if (attempt < 30) requestAnimationFrame(() => mountNewsletter(attempt + 1));
-    return;
-  }
-
-  contact.insertAdjacentHTML("beforebegin", Newsletter());
-  const section = document.querySelector("#updates");
-  const form = section?.querySelector("[data-newsletter-form]");
-  if (form) bindNewsletter(form);
-  if (section) setupEditorialMotion(section);
+export function setupNewsletter(root = document) {
+  bindNewsletter(root.querySelector("[data-newsletter-form]"));
 }
-
-mountNewsletter();
