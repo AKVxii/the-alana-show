@@ -7,6 +7,7 @@ import { guestEpisodes, resolveCanonicalGuestName, searchEpisodes, uniqueEpisode
 import { escapeHtml } from "./lib/utils.js";
 import { setupEditorialMotion } from "./lib/motion.js";
 import { CANDIDATES_DISCLAIMER, resolveCollection } from "./data/collections.js";
+import { lengthBucket, trackEvent } from "./lib/measurement.js";
 
 const PAGE_SIZE = 9;
 const initialParams = new URLSearchParams(location.search);
@@ -107,9 +108,13 @@ function setCategoryFilterAvailability(isAvailable) {
   select.options[0].textContent = "Topic filter unavailable offline";
 }
 
+function currentMatches() {
+  return searchEpisodes(state.episodes, state.query, state.category);
+}
+
 function render() {
   const activeCollection = resolveCollection(state.category) || resolveCollection(state.query);
-  const matches = searchEpisodes(state.episodes, state.query, state.category);
+  const matches = currentMatches();
   const visible = matches.slice(0, state.shown);
   const grid = document.querySelector("[data-grid]");
   const archiveHeading = document.querySelector("#archive-heading");
@@ -126,6 +131,7 @@ function render() {
   document.querySelector("[data-more]").hidden = visible.length >= matches.length;
   bindThumbnailFallbacks(grid);
   setupEditorialMotion(grid);
+  return matches.length;
 }
 
 async function load() {
@@ -150,6 +156,7 @@ const queryInput = document.querySelector("[data-query]");
 const categorySelect = document.querySelector("[data-category]");
 queryInput.value = state.query;
 categorySelect.value = state.category;
+let archiveMeasureTimer = null;
 
 function syncFilters() {
   const url = new URL(location.href);
@@ -162,17 +169,31 @@ function syncFilters() {
 
 document.querySelector("[data-query]").addEventListener("input", event => {
   state.query = event.target.value; state.shown = PAGE_SIZE;
-  updateGuestContext(); syncFilters(); renderGuestResults(); renderFeatured(); render();
+  updateGuestContext(); syncFilters(); renderGuestResults(); renderFeatured();
+  const results = render();
+  clearTimeout(archiveMeasureTimer);
+  if (state.query.trim() && !state.loading) {
+    archiveMeasureTimer = setTimeout(() => {
+      trackEvent("Archive Search", { length: lengthBucket(state.query), results });
+    }, 650);
+  }
 });
 document.querySelector("[data-category]").addEventListener("change", event => {
   state.category = event.target.value; state.shown = PAGE_SIZE;
-  syncFilters(); renderGuestResults(); renderFeatured(); render();
+  syncFilters(); renderGuestResults(); renderFeatured();
+  const results = render();
+  trackEvent("Archive Topic Filter", { topic: state.category || "all", results });
 });
 document.querySelector("[data-controls]").addEventListener("reset", () => {
   state.query = ""; state.guestContext = ""; state.category = ""; state.shown = PAGE_SIZE;
   syncFilters(); renderGuestResults(); renderFeatured(); requestAnimationFrame(render);
 });
-document.querySelector("[data-more]").addEventListener("click", () => { state.shown += PAGE_SIZE; render(); });
+document.querySelector("[data-more]").addEventListener("click", () => {
+  const total = currentMatches().length;
+  state.shown += PAGE_SIZE;
+  render();
+  trackEvent("Archive Load More", { shown: Math.min(state.shown, total), total });
+});
 setupMediaNavigation(); setupEditorialMotion(app); renderGuestResults(); load();
 
 window.addEventListener("popstate", () => {
