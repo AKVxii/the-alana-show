@@ -1,0 +1,62 @@
+.broadcast-reach {
+  padding: 30px 0 48px;
+  color: var(--white);
+  background: linear-gradient(180deg, var(--navy-1000), #061326 72%, #07172a);
+}
+
+.broadcast-artwork-frame {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1672 / 941;
+  overflow: hidden;
+  border-radius: 24px;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, .28);
+}
+
+.broadcast-artwork {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: contain;
+}
+
+.broadcast-hotspot {
+  position: absolute;
+  z-index: 2;
+  top: 64.3%;
+  height: 9.4%;
+  border-radius: 8px;
+  background: transparent;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.broadcast-hotspot-listen { left: 5.55%; width: 15.65%; }
+.broadcast-hotspot-episodes { left: 22.78%; width: 15.85%; }
+
+.broadcast-hotspot:focus-visible {
+  outline: 3px solid var(--ivory-50);
+  outline-offset: 3px;
+  box-shadow: 0 0 0 6px rgba(216, 184, 102, .55);
+}
+
+.broadcast-mobile-actions {
+  display: none;
+  margin-top: 14px;
+  gap: 10px;
+}
+
+@media (max-width: 720px) {
+  .broadcast-reach { padding: 20px 0 36px; }
+  .broadcast-artwork-frame { border-radius: 14px; }
+  .broadcast-hotspot { display: none; }
+  .broadcast-mobile-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+  .broadcast-mobile-actions .button { width: 100%; }
+}
+
+@media (max-width: 460px) {
+  .broadcast-mobile-actions { grid-template-columns: 1fr; }
+}
