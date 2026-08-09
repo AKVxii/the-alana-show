@@ -1,0 +1,46 @@
+name: Publishing Helper Gate
+
+on:
+  pull_request:
+    paths:
+      - "scripts/publish-conversation.mjs"
+      - "content/conversation.example.json"
+      - "PUBLISHING.md"
+      - "package.json"
+      - ".github/workflows/publishing-helper.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  publish-smoke-test:
+    name: Publish a disposable conversation and validate the site
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Create disposable conversation intake
+        run: |
+          cat > /tmp/alana-conversation-smoke-test.json <<'JSON'
+          {
+            "videoId": "A1b2C3d4E5F",
+            "slug": "publishing-helper-ci-smoke-test",
+            "title": "Publishing Helper CI Smoke Test",
+            "description": "Disposable CI-only record used to verify The Alana Show publishing workflow.",
+            "guests": [
+              {
+                "name": "Publishing Helper Test Guest",
+                "slug": "publishing-helper-test-guest"
+              }
+            ]
+          }
+          JSON
+
+      - name: Exercise publishing helper and full quality suite
+        run: node scripts/publish-conversation.mjs /tmp/alana-conversation-smoke-test.json
