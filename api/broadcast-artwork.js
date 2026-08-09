@@ -29,13 +29,16 @@ export default async function handler(req, res) {
       throw new Error("Approved broadcast artwork failed WebP validation");
     }
 
+    res.statusCode = 200;
     res.setHeader("Content-Type", "image/webp");
-    res.setHeader("Cache-Control", "public, max-age=86400, s-maxage=31536000, stale-while-revalidate=86400");
+    res.setHeader("Cache-Control", "public, max-age=3600, s-maxage=86400, stale-while-revalidate=3600");
     res.setHeader("Content-Length", String(image.length));
-    return res.status(200).send(image);
+    return res.end(image);
   } catch (error) {
     console.error("broadcast artwork error", error);
+    res.statusCode = 503;
+    res.setHeader("Content-Type", "text/plain; charset=utf-8");
     res.setHeader("Cache-Control", "no-store");
-    return res.status(503).send("Broadcast artwork temporarily unavailable");
+    return res.end("Broadcast artwork temporarily unavailable");
   }
 }
