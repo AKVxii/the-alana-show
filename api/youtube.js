@@ -198,9 +198,12 @@ module.exports = async function handler(req, res) {
       .map(episode => episode.unresolvedGuestAudit)
       .filter(Boolean);
 
+    // The public channel feed changes infrequently. A 15-minute CDN window
+    // reduces repeated serverless work and YouTube API quota while still
+    // allowing newly published episodes to surface promptly.
     res.setHeader(
       "Cache-Control",
-      "s-maxage=300, stale-while-revalidate=3600"
+      "s-maxage=900, stale-while-revalidate=21600"
     );
 
     return res.status(200).json({
