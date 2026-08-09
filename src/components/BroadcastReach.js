@@ -12,10 +12,11 @@ export function BroadcastReach() {
         <div class="broadcast-artwork-frame reveal">
           <img
             class="broadcast-artwork"
-            src="/api/broadcast-artwork"
+            src="/api/broadcast-artwork?v=20260809-3"
             width="1672"
             height="941"
-            loading="lazy"
+            loading="eager"
+            fetchpriority="high"
             decoding="async"
             alt="The Alana Show broadcast reach across South Florida, airing Tuesdays 8:00 PM to 9:00 PM Eastern on the True Oldies Channel, with six dial positions, South Florida county coverage, and worldwide streaming."
           >
