@@ -11,8 +11,10 @@ const context = read("src/lib/contact-context.js");
 const api = read("api/contact.js");
 
 assert(growth.includes('contactHref("Advertising or partnership", "advertise")'), "Advertise page must preserve partnership inquiry context.");
-assert(growth.includes("Show & Episode Sponsorship"), "Advertise page must expose premium sponsorship formats.");
-assert(growth.includes("South Florida & Topic Partnerships"), "Advertise page must expose regional/topic partnership inventory.");
+assert(growth.includes("Program & Conversation Sponsorship"), "Advertise page must expose program/conversation sponsorship inventory.");
+assert(growth.includes("Regional & Topic Alignment"), "Advertise page must expose regional/topic sponsorship inventory.");
+assert(growth.includes("Custom Sponsorship Packages"), "Advertise page must expose a clearly identified custom sponsorship pathway.");
+assert(growth.includes("Sponsorship remains clearly identified") && growth.includes("editorial independence stays intact"), "Advertise page must preserve clear sponsor identification and editorial independence.");
 assert(contact.includes('name="source"'), "Contact form must carry a non-personal inquiry source field.");
 assert(context.includes('params.get("inquiry")'), "Contact context must preselect inquiry type from the URL.");
 assert(context.includes('params.get("source")'), "Contact context must preserve the non-personal source label.");
