@@ -9,7 +9,6 @@ import { Partner } from "./components/Partner.js";
 import { Contact } from "./components/Contact.js";
 import { Footer } from "./components/Footer.js";
 import { SearchDialog } from "./components/SearchDialog.js";
-import { Conversions } from "./components/Conversions.js";
 import { icon } from "./lib/icons.js";
 import { site } from "./data/site.js";
 import { enrichEpisode } from "./data/catalog.js";
@@ -31,7 +30,6 @@ app.innerHTML = `
     ${CurrentSpecial()}
     ${Impact()}
     ${About()}
-    ${Conversions()}
     ${Partner()}
     ${Contact()}
   </main>
