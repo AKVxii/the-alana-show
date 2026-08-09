@@ -17,6 +17,7 @@ const contactHref = (inquiry, source) => `/?inquiry=${encodeURIComponent(inquiry
 const partnerContact = contactHref("Advertising or partnership", "advertise");
 const guestContact = contactHref("Recommend a guest", "book");
 const southFloridaContact = contactHref("General contact", "south-florida");
+const broadcastSchedule = "Tuesdays · 8:00–8:30 PM ET";
 
 const candidatePanel = candidateSpecialActive
   ? `<span class="growth-panel-kicker">2026 candidate?</span><strong>Candidate Interview Series</strong><p>${currentSpecial.urgencyText}</p><p class="growth-panel-note">${currentSpecial.disclaimer}</p>${external(currentSpecial.ctaHref, "Candidate Scheduling", "button button-light")}`
@@ -31,7 +32,9 @@ const specialsPage = candidateSpecialActive
       featureTitle: "2026 Candidates Special",
       featureCopy: "Verified candidate interviews are collected in one place so listeners can hear candidates discuss their background, priorities, and vision in their own words.",
       panel: `<span class="growth-panel-kicker">Current special</span><strong>${currentSpecial.heading}</strong><p>${currentSpecial.urgencyText}</p><p class="growth-panel-note">${currentSpecial.disclaimer}</p>${external(currentSpecial.ctaHref, currentSpecial.ctaLabel, "button button-light")}`,
+      exploreEyebrow: "Collections",
       exploreTitle: "Follow a focused series.",
+      cardAction: "View collection",
       cards: [
         ["2026 Candidates Special", "Browse the current verified candidate interview collection.", "/episodes/?topic=2026%20Candidates%20Special"],
         ["Stepping Up", "Meet people who saw a need, took responsibility, and chose to make a difference.", topicHref("Stepping Up")],
@@ -49,7 +52,9 @@ const specialsPage = candidateSpecialActive
       featureTitle: "Focused conversations, organized with purpose.",
       featureCopy: "The Alana Show groups selected interviews around meaningful themes, communities, and recurring series without turning the archive into a maze.",
       panel: `<span class="growth-panel-kicker">Explore the archive</span><strong>Stories worth returning to.</strong><p>Special collections connect individual conversations to the larger subjects and communities around them.</p>${internal("/episodes/", "Browse Conversations", "button button-light")}`,
+      exploreEyebrow: "Collections",
       exploreTitle: "Explore a collection.",
+      cardAction: "View collection",
       cards: [
         ["Stepping Up", "Meet people who saw a need, took responsibility, and chose to make a difference.", topicHref("Stepping Up")],
         ["South Florida", "Explore conversations rooted in the people, organizations, and issues shaping the region.", "/south-florida/"],
@@ -68,8 +73,10 @@ const pages = {
     featureEyebrow: "From the community outward",
     featureTitle: "Local voices. Wider conversation.",
     featureCopy: "The Alana Show brings together people shaping South Florida—from public service and entrepreneurship to community work, wellness, technology, and stories of people stepping up.",
-    panel: `<span class="growth-panel-kicker">Heard on True Oldies</span><strong>South Florida &amp; the Treasure Coast</strong><p>${currentSpecial.broadcastText}</p><p class="growth-panel-note">${currentSpecial.reachText}</p>${external(site.trueOldies, "True Oldies Show Page", "button button-light")}`,
+    panel: `<span class="growth-panel-kicker">Heard on True Oldies</span><strong>South Florida &amp; the Treasure Coast</strong><p class="growth-panel-schedule">${broadcastSchedule}</p><p>${currentSpecial.broadcastText}</p><p class="growth-panel-note">${currentSpecial.reachText}</p>${external(site.trueOldies, "True Oldies Show Page", "button button-light")}`,
+    exploreEyebrow: "Regional index",
     exploreTitle: "Explore conversations shaping the region.",
+    cardAction: "Explore",
     cards: [
       ["Community", "Local voices, organizations, and people working to strengthen the places around them.", topicHref("Community")],
       ["Public Service", "Conversations about service, responsibility, public life, and the people doing the work.", topicHref("Public Service")],
@@ -87,8 +94,10 @@ const pages = {
     featureEyebrow: "Partnership opportunities",
     featureTitle: "Build around audience fit—not clutter.",
     featureCopy: "The strongest partnerships make sense beside the audience and subject matter. Sponsorship remains clearly identified, editorial independence stays intact, and opportunities can be shaped around recurring programming, individual conversations, regional visibility, or a relevant collection.",
-    panel: `<span class="growth-panel-kicker">Regional broadcast</span><strong>True Oldies</strong><p>${currentSpecial.broadcastText}</p><p class="growth-panel-note">${currentSpecial.reachText}</p>${internal(partnerContact, "Start a Partnership Conversation", "button button-light")}`,
+    panel: `<span class="growth-panel-kicker">Regional broadcast</span><strong>True Oldies</strong><p class="growth-panel-schedule">${broadcastSchedule}</p><p>${currentSpecial.broadcastText}</p><p class="growth-panel-note">${currentSpecial.reachText}</p>${internal(partnerContact, "Start a Partnership Conversation", "button button-light")}`,
+    exploreEyebrow: "Partnership structure",
     exploreTitle: "Partnership formats, clearly defined.",
+    cardAction: "Discuss",
     cards: [
       ["Program & Conversation Sponsorship", "Discuss clearly identified brand visibility around recurring programming or a specific conversation.", partnerContact],
       ["Regional & Topic Alignment", "Explore sponsorship aligned with South Florida coverage or a subject-area collection where the fit is natural.", partnerContact],
@@ -106,7 +115,9 @@ const pages = {
     featureTitle: "Bring a meaningful conversation to the table.",
     featureCopy: "The strongest guest pitches explain who you are, what you can add to the conversation, why the subject matters now, and where listeners can learn more about your work.",
     panel: candidatePanel,
+    exploreEyebrow: "Editorial fit",
     exploreTitle: "What makes a strong guest inquiry.",
+    cardAction: "Submit",
     cards: [
       ["Who Fits", "Leaders, entrepreneurs, public servants, advocates, experts, community builders, and people with stories worth hearing.", guestContact],
       ["What to Send", "Share the proposed topic, why it matters now, your background, and a website or social link that helps verify the story.", guestContact],
@@ -118,12 +129,12 @@ const pages = {
   }
 };
 
-function card([title, copy, href], index) {
-  return `<a class="growth-card" href="${href}" data-reveal data-reveal-stagger="true" style="--growth-index:${index}"><span class="growth-card-number">0${index + 1}</span><h2>${title}</h2><p>${copy}</p><span class="growth-card-link">Explore <span aria-hidden="true">→</span></span></a>`;
+function card([title, copy, href], index, actionLabel = "Explore") {
+  return `<a class="growth-card" href="${href}" data-reveal data-reveal-stagger="true" style="--growth-index:${index}"><span class="growth-card-number">0${index + 1}</span><h2>${title}</h2><p>${copy}</p><span class="growth-card-link">${actionLabel} <span aria-hidden="true">→</span></span></a>`;
 }
 
 const page = pages[pageKey] || pages["south-florida"];
-app.innerHTML = `${MediaHeader()}<main id="main-content">
+app.innerHTML = `${MediaHeader()}<main id="main-content" class="growth-page growth-page-${pageKey}">
   <section class="media-hero growth-hero"><div class="shell media-hero-inner">
     <nav class="breadcrumbs" aria-label="Breadcrumb"><ol><li><a href="/">Home</a></li><li aria-current="page">${page.title}</li></ol></nav>
     <p class="eyebrow"><span></span> ${page.eyebrow}</p><h1>${page.title}</h1><p>${page.intro}</p>
@@ -134,7 +145,7 @@ app.innerHTML = `${MediaHeader()}<main id="main-content">
     <aside class="growth-feature-panel" data-reveal>${page.panel}</aside>
   </div></section>
 
-  <section class="growth-explore"><div class="shell"><div class="growth-section-heading" data-reveal><p class="eyebrow dark"><span></span> Explore</p><h2>${page.exploreTitle}</h2></div><div class="growth-grid">${page.cards.map(card).join("")}</div></div></section>
+  <section class="growth-explore"><div class="shell"><div class="growth-section-heading" data-reveal><p class="eyebrow dark"><span></span> ${page.exploreEyebrow}</p><h2>${page.exploreTitle}</h2></div><div class="growth-grid">${page.cards.map((item, index) => card(item, index, page.cardAction)).join("")}</div></div></section>
 
   <section class="growth-cta"><div class="shell growth-cta-inner" data-reveal><div><p class="eyebrow"><span></span> ${page.ctaEyebrow}</p><h2>${page.ctaTitle}</h2></div><div class="growth-cta-actions">${page.ctas}</div></div></section>
 </main>${Footer({ fromSubpage: true })}`;
