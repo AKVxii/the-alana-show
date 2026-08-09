@@ -5,6 +5,7 @@ import { CANDIDATES_LABEL, isVerifiedCandidateGuest } from "./data/collections.j
 import { escapeHtml } from "./lib/utils.js";
 import { setupEditorialMotion } from "./lib/motion.js";
 import { buildGuestDirectory, filterGuests, guestConversationPath } from "./lib/guest-directory.js";
+import { loadYouTubeFeed } from "./lib/youtube-feed.js";
 
 const app = document.querySelector("#app");
 app.innerHTML = `${MediaHeader()}<main id="main-content">
@@ -56,9 +57,7 @@ async function load() {
   renderAlphabet();
   render();
   try {
-    const response = await fetch("/api/youtube", { headers: { Accept: "application/json" } });
-    if (!response.ok) throw new Error("feed unavailable");
-    const data = await response.json();
+    const data = await loadYouTubeFeed();
     episodeRecords = (data.episodes || []).map(enrichEpisode);
     guests = buildGuestDirectory(episodeRecords, curatedGuests);
     renderAlphabet();
