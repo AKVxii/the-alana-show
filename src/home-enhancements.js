@@ -1,3 +1,4 @@
+import "./main.js";
 import { BroadcastReach } from "./components/BroadcastReach.js";
 import { Newsletter, setupNewsletter } from "./newsletter.js";
 import { setupEditorialMotion } from "./lib/motion.js";
