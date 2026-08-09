@@ -1,0 +1,236 @@
+/*
+ * Recording-led visual QA refinements.
+ *
+ * This layer is intentionally narrow: it fixes issues observed in desktop and
+ * mobile screen recordings without changing content architecture, SEO, data,
+ * or publishing behavior.
+ */
+
+html,
+body {
+  background-color: #030914;
+}
+
+/* Dense archive surfaces should be immediately readable while scrolling.
+   Entrance motion on repeated cards created blank/faded states in recordings. */
+.media-card[data-reveal],
+.guest-card[data-reveal],
+.topic-card[data-reveal],
+.media-section-heading[data-reveal],
+.guest-results-section [data-reveal],
+.related-section [data-reveal],
+.topics-cta-inner[data-reveal] {
+  opacity: 1 !important;
+  transform: none !important;
+  transition: none !important;
+  transition-delay: 0s !important;
+}
+
+.media-card,
+.guest-card,
+.topic-card,
+.related-conversation-card {
+  box-shadow: none;
+}
+
+/* Topic collections should read as an editorial index rather than a grid of
+   decorative app cards. */
+.topics-hero::before,
+.topics-hero::after,
+.topics-section::before {
+  display: none;
+}
+
+.topic-card {
+  min-height: 188px;
+  border-radius: 4px;
+  background: #fffdf8;
+  box-shadow: none;
+}
+
+.topic-card::before,
+.topic-card::after {
+  display: none;
+}
+
+.topic-card:hover,
+.topic-card:focus-visible {
+  transform: translateY(-1px);
+  box-shadow: none;
+}
+
+/* Guest cards keep the useful directory structure while losing the CRM/app
+   appearance. */
+.guest-card {
+  border-radius: 4px;
+  background: #fffdf8;
+}
+
+.guest-card h3 {
+  margin-bottom: 8px;
+}
+
+.guest-monogram,
+.guest-monogram-large {
+  border-radius: 3px;
+  box-shadow: none;
+}
+
+.guest-detail-intro {
+  padding-block: 20px 12px;
+  gap: 18px;
+}
+
+/* Long episode titles should remain editorial rather than becoming a wall of
+   type at the top of a detail page. */
+.detail-hero h1 {
+  max-width: 900px;
+  text-wrap: balance;
+}
+
+/* Footer remains quiet, but not at the expense of legibility. */
+.footer-brand > p {
+  font-size: .8rem;
+}
+
+.footer-links a {
+  font-size: .78rem;
+}
+
+.footer-heard small,
+.footer-heard a {
+  font-size: .72rem;
+}
+
+.footer-bottom {
+  font-size: .68rem;
+}
+
+@media (max-width: 680px) {
+  /* Shorter mobile chrome gives content more room while preserving tap size. */
+  .header-inner {
+    height: 56px;
+  }
+
+  .brand-seal {
+    width: 36px;
+    height: 36px;
+  }
+
+  .menu-button {
+    width: 38px;
+    height: 38px;
+  }
+
+  .primary-nav {
+    inset-block-start: 56px;
+  }
+
+  html {
+    scroll-padding-top: 72px;
+  }
+
+  /* topics.css previously reduced this to 42px, which put the first content
+     underneath the fixed 60px mobile header. */
+  .topics-hero {
+    padding-top: 92px;
+  }
+
+  .media-hero,
+  .detail-hero {
+    padding-top: 92px;
+  }
+
+  /* On phones, Topics becomes a publication-style vertical index. */
+  .topics-grid {
+    gap: 0;
+    border-top: 1px solid rgba(20, 35, 58, .12);
+  }
+
+  .topic-card {
+    min-height: 0;
+    padding: 21px 2px 19px;
+    border: 0;
+    border-bottom: 1px solid rgba(20, 35, 58, .12);
+    border-radius: 0;
+    background: transparent;
+  }
+
+  .topic-card:hover,
+  .topic-card:focus-visible {
+    transform: none;
+    background: rgba(255, 255, 255, .28);
+  }
+
+  .topic-card-footer {
+    margin-top: 17px;
+  }
+
+  /* Preserve alphabetical/search functionality, but present each guest as a
+     compact editorial index entry instead of a large profile tile. */
+  .guest-grid {
+    gap: 0;
+    border-top: 1px solid rgba(20, 35, 58, .12);
+  }
+
+  .guest-card {
+    padding: 19px 2px;
+    grid-template-columns: 48px minmax(0, 1fr);
+    gap: 14px;
+    border: 0;
+    border-bottom: 1px solid rgba(20, 35, 58, .12);
+    border-radius: 0;
+    background: transparent;
+  }
+
+  .guest-monogram {
+    width: 48px;
+    height: 48px;
+    font-size: 1rem;
+  }
+
+  .guest-card h3 {
+    margin-bottom: 5px;
+    font-size: 1.58rem;
+    line-height: 1.04;
+  }
+
+  .guest-card p:last-child a {
+    font-size: .73rem;
+  }
+
+  .guest-detail-intro {
+    padding-block: 14px 4px;
+    gap: 14px;
+  }
+
+  .guest-monogram-large {
+    width: 76px;
+    height: 76px;
+    flex-basis: 76px;
+    font-size: 1.45rem;
+  }
+
+  .detail-hero h1 {
+    font-size: clamp(2.2rem, 10.4vw, 3.15rem);
+    line-height: 1.01;
+  }
+
+  .footer-links a {
+    font-size: .8rem;
+  }
+
+  .footer-bottom {
+    font-size: .7rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .topic-card,
+  .guest-card,
+  .media-card,
+  .related-conversation-card {
+    transform: none !important;
+    transition: none !important;
+  }
+}
