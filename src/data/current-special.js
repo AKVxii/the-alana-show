@@ -11,6 +11,6 @@ export const currentSpecial = Object.freeze({
   ctaExternal: true,
   disclaimer: "Scheduling is subject to availability and editorial standards. Participation does not constitute an endorsement. Advertising and sponsorship arrangements are handled separately.",
   startDate: null,
-  endDate: null,
+  endDate: "2026-11-03",
   theme: "gold"
 });
