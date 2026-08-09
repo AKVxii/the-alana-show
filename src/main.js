@@ -16,6 +16,8 @@ import { enrichEpisode } from "./data/catalog.js";
 import { compactNumber, escapeHtml, excerpt, formatDate, formatDuration, isValidWebsiteOrSocial, nextBroadcastLabel, normalizeWebsiteOrSocial } from "./lib/utils.js";
 import { searchEpisodes, uniqueEpisodes } from "./lib/episode-search.js";
 import { setupEditorialMotion } from "./lib/motion.js";
+import { lengthBucket, trackEvent } from "./lib/measurement.js";
+import { setupNewsletter } from "./newsletter.js";
 
 const app = document.querySelector("#app");
 
@@ -188,11 +190,11 @@ function searchResult(episode) {
 function renderSearchResults(query, category = state.selectedCategory) {
   const container = document.querySelector("[data-search-results]");
   const status = document.querySelector("[data-search-status]");
-  if (!container) return;
+  if (!container) return 0;
   if (!state.episodes.length) {
     if (status) status.textContent = "The conversation archive is temporarily unavailable.";
     container.innerHTML = `<div class="search-empty"><p>The conversation archive is temporarily unavailable.</p><a href="${site.youtube}" target="_blank" rel="noopener">Visit The Alana Show on YouTube ${icon("arrow")}</a></div>`;
-    return;
+    return 0;
   }
   const matches = searchEpisodes(state.episodes, query, category);
   const description = category
@@ -202,16 +204,18 @@ function renderSearchResults(query, category = state.selectedCategory) {
   if ((query.trim() || category) && !matches.length) {
     const term = category || query;
     container.innerHTML = `<p class="search-empty">No conversations matched “${escapeHtml(term)}.” Try another guest, topic, or category.</p>`;
-    return;
+    return 0;
   }
   container.innerHTML = matches.map(searchResult).join("");
   setupThumbnailFallbacks(container);
+  return matches.length;
 }
 
 function setupSearch() {
   const dialog = document.querySelector("[data-search-dialog]");
   const input = document.querySelector("[data-search-input]");
   let opener = null;
+  let measureTimer = null;
   const open = event => {
     if (!dialog || !input || typeof dialog.showModal !== "function") return;
     opener = event?.currentTarget || document.activeElement;
@@ -235,13 +239,20 @@ function setupSearch() {
   };
   input?.addEventListener("input", () => {
     selectCategory("");
-    renderSearchResults(input.value, "");
+    const results = renderSearchResults(input.value, "");
+    clearTimeout(measureTimer);
+    if (input.value.trim() && state.episodes.length) {
+      measureTimer = setTimeout(() => {
+        trackEvent("Search Query", { length: lengthBucket(input.value), results });
+      }, 650);
+    }
   });
   chips.forEach(button => button.addEventListener("click", () => {
     const category = state.selectedCategory === button.dataset.searchChip ? "" : button.dataset.searchChip;
     selectCategory(category);
     input.value = "";
-    renderSearchResults("", category);
+    const results = renderSearchResults("", category);
+    trackEvent("Search Filter", { category: category || "all", results });
   }));
   window.addEventListener("keydown", event => {
     if (event.key === "Escape" && dialog?.open) close();
@@ -275,6 +286,7 @@ function setupContactForm() {
       status.textContent = website?.validity.customError
         ? "Enter a valid website address or social username."
         : "Please complete the required fields.";
+      trackEvent("Contact Form Invalid", { page: location.pathname });
       return;
     }
     const data = Object.fromEntries(new FormData(form).entries());
@@ -294,9 +306,11 @@ function setupContactForm() {
       form.reset();
       status.textContent = "Thank you. Your inquiry has been sent to The Alana Show.";
       status.classList.add("success");
+      trackEvent("Contact Form Success", { page: location.pathname });
     } catch (error) {
       status.textContent = "Your message could not be sent. Please email Alana@AlanaKVandeveer.com.";
       status.classList.remove("success");
+      trackEvent("Contact Form Failure", { page: location.pathname });
     } finally {
       form.setAttribute("aria-busy", "false");
       button.disabled = false;
@@ -309,6 +323,7 @@ function setupYear() {
   document.querySelectorAll("[data-year]").forEach(node => node.textContent = new Date().getFullYear());
 }
 
+setupNewsletter();
 setupNavigation();
 setupReveals();
 setupBroadcastStatus();
