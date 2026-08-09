@@ -17,6 +17,7 @@ import { compactNumber, escapeHtml, excerpt, formatDate, formatDuration, isValid
 import { searchEpisodes, uniqueEpisodes } from "./lib/episode-search.js";
 import { setupEditorialMotion } from "./lib/motion.js";
 import { lengthBucket, trackEvent } from "./lib/measurement.js";
+import { loadYouTubeFeed } from "./lib/youtube-feed.js";
 import { setupNewsletter } from "./newsletter.js";
 
 const app = document.querySelector("#app");
@@ -160,9 +161,7 @@ function updateLatest(episode) {
 
 async function loadYouTube() {
   try {
-    const response = await fetch("/api/youtube", { headers: { Accept: "application/json" } });
-    if (!response.ok) throw new Error("YouTube feed unavailable");
-    const data = await response.json();
+    const data = await loadYouTubeFeed();
     state.episodes = uniqueEpisodes(data.episodes?.length ? data.episodes : (data.recent || [])).map(enrichEpisode);
     updateFeatured(data.featured || data.mostWatched || data.latest);
     updateLatest(data.latest);
