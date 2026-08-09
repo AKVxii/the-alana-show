@@ -1,4 +1,5 @@
 import { icon } from "../lib/icons.js";
+import { Newsletter } from "../newsletter.js";
 
 export function Partner() {
   return `
@@ -27,5 +28,6 @@ export function Partner() {
         <p class="editorial-independence">Advertising support never purchases guest appearances, controls questions, or determines editorial positions.</p>
       </div>
     </section>
+    ${Newsletter()}
   `;
 }
