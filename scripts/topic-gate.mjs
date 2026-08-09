@@ -29,7 +29,8 @@ const detailRenderer = read('src/topic-detail.js');
 
 assert(topicHub.includes('topicHref(topic)'), 'Topics hub must route cards through topicHref().');
 assert(topicData.includes('2026 Candidates Special') && topicData.includes('/specials/'), 'Candidates Special must continue to route to /specials/.');
-assert(detailRenderer.includes('/api/youtube'), 'Topic detail renderer must hydrate from the live conversation feed.');
+assert(detailRenderer.includes('loadYouTubeFeed'), 'Topic detail renderer must hydrate from the shared live conversation feed.');
+assert(!detailRenderer.includes('fetch("/api/youtube"'), 'Topic detail renderer must not bypass shared feed caching.');
 assert(detailRenderer.includes('categories.includes(topic.name)'), 'Topic detail renderer must filter episodes by the verified topic name.');
 
 for (const [id, name] of topics) {
