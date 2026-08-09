@@ -17,6 +17,7 @@ const main = read('src/main.js');
 const episodesPage = read('src/episodes-page.js');
 const newsletter = read('src/newsletter.js');
 const broadcast = read('src/components/BroadcastReach.js');
+const youtubeFeed = read('src/lib/youtube-feed.js');
 const index = read('index.html');
 
 assert(measurement.includes('window.vaq'), 'Measurement foundation must use the Vercel Analytics queue contract.');
@@ -65,6 +66,14 @@ assert(!newsletter.includes('requestAnimationFrame(() => mountNewsletter'), 'New
 assert(!index.includes('src="/src/newsletter.js"'), 'Homepage must not load a redundant newsletter bootstrap module.');
 assert(broadcast.includes('data-track-exclusive="true"'), 'Broadcast CTA measurement must avoid duplicate outbound events.');
 
+assert(youtubeFeed.includes('sessionStorage'), 'YouTube feed helper must use browser-session caching.');
+assert(youtubeFeed.includes('FRESH_FOR_MS = 10 * 60 * 1000'), 'YouTube session cache must remain short-lived.');
+assert(youtubeFeed.includes('MAX_STORED_BYTES'), 'YouTube session cache must enforce a storage-size guard.');
+assert(main.includes('loadYouTubeFeed()'), 'Homepage must use the shared YouTube feed cache.');
+assert(episodesPage.includes('loadYouTubeFeed()'), 'Episodes archive must use the shared YouTube feed cache.');
+assert(!main.includes('fetch("/api/youtube"'), 'Homepage must not bypass the shared YouTube feed cache.');
+assert(!episodesPage.includes('fetch("/api/youtube"'), 'Episodes archive must not bypass the shared YouTube feed cache.');
+
 if (errors.length) {
   console.error(`\nMeasurement gate failed with ${errors.length} issue${errors.length === 1 ? '' : 's'}:\n`);
   errors.forEach(error => console.error(`  - ${error}`));
@@ -76,4 +85,5 @@ console.log('  Privacy-safe event taxonomy: OK');
 console.log('  Two-property custom-event cap: OK');
 console.log('  Search queries remain private: OK');
 console.log('  Deterministic newsletter binding: OK');
+console.log('  Shared browser-session feed cache: OK');
 console.log('  Homepage and subpage initialization: OK');
