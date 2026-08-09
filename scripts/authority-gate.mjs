@@ -20,6 +20,7 @@ const assert = (condition, message) => {
 
 const detail = read('src/detail-page.js');
 const main = read('src/main.js');
+const mediaPage = read('src/lib/media-page.js');
 const guestsPage = read('src/guests-page.js');
 const topicsPage = read('src/topics-page.js');
 const topicDetail = read('src/topic-detail.js');
@@ -48,6 +49,10 @@ assert(main.includes('const resultUrl = episode.detailPath || youtubeUrl;'), 'Ho
 assert(main.includes('trackEvent("Search Open"'), 'Homepage search-open intent must be measurable.');
 assert(main.includes('clearTimeout(measureTimer);\n    const category ='), 'Category selection must cancel the pending search debounce event.');
 assert(main.includes('const queryLength = lengthBucket(input.value);'), 'Search measurement must snapshot the query-length bucket before debounce.');
+
+assert(mediaPage.includes('topicHref(item)'), 'Episode-card topic pills must link to permanent topic authority pages.');
+assert(mediaPage.includes('<li><a href="${topicHref(item)}">'), 'Episode-card topic pills must be ordinary crawlable anchor links.');
+assert(mediaPage.includes('color: inherit') && mediaPage.includes('text-decoration: none'), 'Crawlable topic-pill links must preserve the approved visual treatment.');
 
 const topicIds = [...topicPages.matchAll(/\bid:\s*"([a-z0-9-]+)"/g)].map(match => match[1]);
 assert(topicIds.length >= 8, `Expected at least 8 permanent topic authority pages; found ${topicIds.length}.`);
