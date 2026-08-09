@@ -1,4 +1,5 @@
 const MEASUREMENT_GUARD = "__tasMeasurementBound";
+const MAX_EVENT_PROPERTIES = 2;
 
 function ensureQueue() {
   if (typeof window === "undefined") return null;
@@ -14,14 +15,24 @@ function cleanData(data = {}) {
   return Object.fromEntries(
     Object.entries(data)
       .filter(([, value]) => value !== undefined && value !== null && value !== "")
+      .slice(0, MAX_EVENT_PROPERTIES)
       .map(([key, value]) => [key, typeof value === "string" ? value.slice(0, 120) : value])
   );
 }
 
 export function trackEvent(name, data = {}) {
   const va = ensureQueue();
-  if (!va) return;
+  if (!va || !name) return;
   va("event", { name, data: cleanData(data) });
+}
+
+export function lengthBucket(value = "") {
+  const length = String(value).trim().length;
+  if (!length) return "0";
+  if (length <= 3) return "1-3";
+  if (length <= 8) return "4-8";
+  if (length <= 20) return "9-20";
+  return "21+";
 }
 
 function slugAfter(pathname, prefix) {
@@ -75,6 +86,15 @@ function classifyAnchor(anchor) {
   return null;
 }
 
+function customEventFor(element) {
+  const name = element?.dataset?.trackEvent;
+  if (!name) return null;
+  return [name, {
+    location: element.dataset.trackLocation,
+    label: element.dataset.trackLabel
+  }];
+}
+
 export function setupMeasurement() {
   if (typeof window === "undefined" || window[MEASUREMENT_GUARD]) return;
   window[MEASUREMENT_GUARD] = true;
@@ -83,6 +103,13 @@ export function setupMeasurement() {
   document.addEventListener("click", event => {
     const target = event.target instanceof Element ? event.target : null;
     if (!target) return;
+
+    const customTarget = target.closest("[data-track-event]");
+    const custom = customEventFor(customTarget);
+    if (custom) {
+      trackEvent(custom[0], custom[1]);
+      if (customTarget.dataset.trackExclusive === "true") return;
+    }
 
     if (target.closest("[data-search-open]")) {
       trackEvent("Search Open", { page: location.pathname });

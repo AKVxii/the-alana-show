@@ -20,13 +20,13 @@ export function BroadcastReach() {
             decoding="async"
             alt="The Alana Show broadcast reach across South Florida, airing Tuesdays 8:00 PM to 9:00 PM Eastern on the True Oldies Channel, with six dial positions, South Florida county coverage, and worldwide streaming."
           >
-          <a class="broadcast-hotspot broadcast-hotspot-listen" href="${site.trueOldies}" target="_blank" rel="noopener" aria-label="Open The Alana Show on the True Oldies Channel"><span class="sr-only">Listen Live</span></a>
-          <a class="broadcast-hotspot broadcast-hotspot-episodes" href="/episodes" aria-label="View The Alana Show episodes"><span class="sr-only">View Episodes</span></a>
+          <a class="broadcast-hotspot broadcast-hotspot-listen" href="${site.trueOldies}" target="_blank" rel="noopener" aria-label="Open The Alana Show on the True Oldies Channel" data-track-event="Broadcast Listen" data-track-location="broadcast-reach" data-track-exclusive="true"><span class="sr-only">Listen Live</span></a>
+          <a class="broadcast-hotspot broadcast-hotspot-episodes" href="/episodes" aria-label="View The Alana Show episodes" data-track-event="Broadcast Episodes" data-track-location="broadcast-reach" data-track-exclusive="true"><span class="sr-only">View Episodes</span></a>
         </div>
 
         <div class="broadcast-mobile-actions" aria-label="Broadcast actions">
-          <a class="button button-gold" href="${site.trueOldies}" target="_blank" rel="noopener">Listen Live</a>
-          <a class="button button-ghost" href="/episodes">View Episodes</a>
+          <a class="button button-gold" href="${site.trueOldies}" target="_blank" rel="noopener" data-track-event="Broadcast Listen" data-track-location="broadcast-reach-mobile" data-track-exclusive="true">Listen Live</a>
+          <a class="button button-ghost" href="/episodes" data-track-event="Broadcast Episodes" data-track-location="broadcast-reach-mobile" data-track-exclusive="true">View Episodes</a>
         </div>
       </div>
     </section>
