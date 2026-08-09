@@ -21,6 +21,7 @@ const assert = (condition, message) => {
 const detail = read('src/detail-page.js');
 const main = read('src/main.js');
 const mediaPage = read('src/lib/media-page.js');
+const growthPage = read('src/growth-page.js');
 const guestsPage = read('src/guests-page.js');
 const topicsPage = read('src/topics-page.js');
 const topicDetail = read('src/topic-detail.js');
@@ -53,6 +54,14 @@ assert(main.includes('const queryLength = lengthBucket(input.value);'), 'Search 
 assert(mediaPage.includes('topicHref(item)'), 'Episode-card topic pills must link to permanent topic authority pages.');
 assert(mediaPage.includes('<li><a href="${topicHref(item)}">'), 'Episode-card topic pills must be ordinary crawlable anchor links.');
 assert(mediaPage.includes('color: inherit') && mediaPage.includes('text-decoration: none'), 'Crawlable topic-pill links must preserve the approved visual treatment.');
+
+for (const topic of ['Community', 'Public Service', 'Business', 'Stepping Up']) {
+  assert(growthPage.includes(`topicHref("${topic}")`), `Growth pages must route ${topic} cards to the permanent topic authority page.`);
+}
+assert(!growthPage.includes('"/episodes/?topic=Community"'), 'South Florida Community card must not point to a query-filter URL.');
+assert(!growthPage.includes('"/episodes/?topic=Public%20Service"'), 'South Florida Public Service card must not point to a query-filter URL.');
+assert(!growthPage.includes('"/episodes/?topic=Business"'), 'South Florida Business card must not point to a query-filter URL.');
+assert(!growthPage.includes('"/episodes/?topic=Stepping%20Up"'), 'Specials Stepping Up card must not point to a query-filter URL.');
 
 const topicIds = [...topicPages.matchAll(/\bid:\s*"([a-z0-9-]+)"/g)].map(match => match[1]);
 assert(topicIds.length >= 8, `Expected at least 8 permanent topic authority pages; found ${topicIds.length}.`);
