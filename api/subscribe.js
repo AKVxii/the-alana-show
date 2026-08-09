@@ -8,10 +8,18 @@ function cleanName(value = "") {
 
 function sameOriginRequest(req) {
   const origin = req.headers.origin;
-  const host = req.headers.host;
-  if (!origin || !host) return true;
+  const forwardedHost = req.headers["x-forwarded-host"];
+  const host = String(forwardedHost || req.headers.host || "").split(",")[0].trim();
+  const forwardedProto = String(req.headers["x-forwarded-proto"] || "https").split(",")[0].trim().toLowerCase();
+
+  // This endpoint is called only by first-party browser JavaScript, so a
+  // missing Origin is rejected rather than treated as implicitly trusted.
+  if (!origin || !host || !["https", "http"].includes(forwardedProto)) return false;
+
   try {
-    return new URL(origin).host === host;
+    const requestOrigin = new URL(origin).origin;
+    const expectedOrigin = `${forwardedProto}://${host}`;
+    return requestOrigin === expectedOrigin;
   } catch {
     return false;
   }
