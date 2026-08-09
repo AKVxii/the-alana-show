@@ -47,6 +47,8 @@ for (const [file, source] of [
 }
 
 assert(main.includes('const resultUrl = episode.detailPath || youtubeUrl;'), 'Homepage search must prefer internal verified episode pages.');
+assert(main.includes('const cardUrl = enriched.detailPath || youtubeUrl;'), 'Homepage recent-conversation cards must prefer internal verified episode pages.');
+assert(main.includes('const external = !enriched.detailPath;'), 'Homepage recent cards must only open a new tab for external fallbacks.');
 assert(main.includes('trackEvent("Search Open"'), 'Homepage search-open intent must be measurable.');
 assert(main.includes('clearTimeout(measureTimer);\n    const category ='), 'Category selection must cancel the pending search debounce event.');
 assert(main.includes('const queryLength = lengthBucket(input.value);'), 'Search measurement must snapshot the query-length bucket before debounce.');
