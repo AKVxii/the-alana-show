@@ -8,6 +8,7 @@ import { escapeHtml } from "./lib/utils.js";
 import { setupEditorialMotion } from "./lib/motion.js";
 import { CANDIDATES_DISCLAIMER, resolveCollection } from "./data/collections.js";
 import { lengthBucket, trackEvent } from "./lib/measurement.js";
+import { loadYouTubeFeed } from "./lib/youtube-feed.js";
 
 const PAGE_SIZE = 9;
 const initialParams = new URLSearchParams(location.search);
@@ -136,9 +137,7 @@ function render() {
 
 async function load() {
   try {
-    const response = await fetch("/api/youtube", { headers: { Accept: "application/json" } });
-    if (!response.ok) throw new Error("feed unavailable");
-    const data = await response.json();
+    const data = await loadYouTubeFeed();
     state.episodes = uniqueEpisodes(data.episodes || []).map(enrichEpisode);
     state.usingFallback = false;
     setCategoryFilterAvailability(true);
