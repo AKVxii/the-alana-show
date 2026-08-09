@@ -11,7 +11,7 @@ export function Broadcast() {
         </div>
 
         <div class="broadcast-copy">
-          <div class="broadcast-status" data-broadcast-status><span></span> Tuesdays · 8:00–9:00 PM ET</div>
+          <div class="broadcast-status" data-broadcast-status><span></span> Tuesdays · 8:00–8:30 PM ET</div>
           <h2 id="broadcast-heading">Airing on True Oldies across South Florida.</h2>
           <p>
             The Alana Show airs on True Oldies in South Florida, with worldwide online streaming and video access.
