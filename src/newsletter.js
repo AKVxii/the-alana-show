@@ -1,6 +1,6 @@
 import { setupEditorialMotion } from "./lib/motion.js";
 
-function newsletterMarkup() {
+export function Newsletter() {
   return `
     <section class="newsletter-section" id="updates" aria-labelledby="newsletter-title">
       <div class="shell">
@@ -38,6 +38,9 @@ function newsletterMarkup() {
 }
 
 function bindNewsletter(form) {
+  if (!form || form.dataset.newsletterBound === "true") return;
+  form.dataset.newsletterBound = "true";
+
   const status = form.querySelector("[data-newsletter-status]");
   const button = form.querySelector('button[type="submit"]');
 
@@ -63,7 +66,7 @@ function bindNewsletter(form) {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Accept": "application/json"
+          Accept: "application/json"
         },
         body: JSON.stringify(data)
       });
@@ -85,21 +88,22 @@ function bindNewsletter(form) {
 }
 
 function mountNewsletter(attempt = 0) {
-  if (document.querySelector("#updates")) return;
+  const existing = document.querySelector("[data-newsletter-form]");
+  if (existing) {
+    bindNewsletter(existing);
+    return;
+  }
+
   const contact = document.querySelector("#contact");
   if (!contact) {
     if (attempt < 30) requestAnimationFrame(() => mountNewsletter(attempt + 1));
     return;
   }
 
-  contact.insertAdjacentHTML("beforebegin", newsletterMarkup());
+  contact.insertAdjacentHTML("beforebegin", Newsletter());
   const section = document.querySelector("#updates");
   const form = section?.querySelector("[data-newsletter-form]");
   if (form) bindNewsletter(form);
-
-  // This section is injected after the homepage's initial reveal observer is
-  // created, so register its reveal nodes immediately instead of leaving them
-  // permanently transparent in the pre-animation state.
   if (section) setupEditorialMotion(section);
 }
 
