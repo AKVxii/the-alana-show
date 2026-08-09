@@ -3,6 +3,16 @@ import { EpisodeThumbnail, revealThumbnailFallback } from "../components/Episode
 import { topicHref } from "../data/topic-pages.js";
 import { icon } from "./icons.js";
 
+if (typeof document !== "undefined" && !document.querySelector("#topic-authority-link-style")) {
+  const style = document.createElement("style");
+  style.id = "topic-authority-link-style";
+  style.textContent = `
+    .tag-list a { display: block; margin: -4px -9px; padding: 4px 9px; color: inherit; border-radius: 999px; text-decoration: none; }
+    .tag-list a:focus-visible { outline: 2px solid var(--gold-500); outline-offset: 2px; }
+  `;
+  document.head.append(style);
+}
+
 export function episodeThumbnailUrl(episode = {}) {
   if (episode.thumbnail) {
     try {
