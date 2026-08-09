@@ -177,9 +177,11 @@ async function loadYouTube() {
 }
 
 function searchResult(episode) {
-  const videoUrl = `https://www.youtube.com/watch?v=${encodeURIComponent(episode.videoId)}`;
+  const youtubeUrl = `https://www.youtube.com/watch?v=${encodeURIComponent(episode.videoId)}`;
+  const resultUrl = episode.detailPath || youtubeUrl;
+  const external = !episode.detailPath;
   const categories = (episode.categories || []).slice(0, 3);
-  return `<a class="search-result" href="${videoUrl}" target="_blank" rel="noopener">
+  return `<a class="search-result" href="${resultUrl}"${external ? ' target="_blank" rel="noopener"' : ""}>
     <span class="search-result-media">${EpisodeThumbnail(episode, { latest: false })}</span>
     <span><small>${escapeHtml(formatDate(episode.publishedAt))}</small><strong>${escapeHtml(episode.title)}</strong><p>${escapeHtml(excerpt(episode.description, 110))}</p>${categories.length ? `<span class="search-categories">${categories.map(category => `<span>${escapeHtml(category)}</span>`).join("")}</span>` : ""}</span>
     ${icon("arrow")}
@@ -220,6 +222,7 @@ function setupSearch() {
     opener = event?.currentTarget || document.activeElement;
     if (dialog.open) return;
     dialog.showModal();
+    trackEvent("Search Open", { page: location.pathname });
     setTimeout(() => input.focus(), 50);
     renderSearchResults(input.value);
   };
@@ -241,12 +244,14 @@ function setupSearch() {
     const results = renderSearchResults(input.value, "");
     clearTimeout(measureTimer);
     if (input.value.trim() && state.episodes.length) {
+      const queryLength = lengthBucket(input.value);
       measureTimer = setTimeout(() => {
-        trackEvent("Search Query", { length: lengthBucket(input.value), results });
+        trackEvent("Search Query", { length: queryLength, results });
       }, 650);
     }
   });
   chips.forEach(button => button.addEventListener("click", () => {
+    clearTimeout(measureTimer);
     const category = state.selectedCategory === button.dataset.searchChip ? "" : button.dataset.searchChip;
     selectCategory(category);
     input.value = "";
