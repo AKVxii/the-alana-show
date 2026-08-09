@@ -2,7 +2,17 @@ import { icon } from "../lib/icons.js";
 import { site } from "../data/site.js";
 import { setupMeasurement } from "../lib/measurement.js";
 
+function ensureMediaEditorialStyles() {
+  if (document.querySelector('link[data-media-editorial]')) return;
+  const stylesheet = document.createElement("link");
+  stylesheet.rel = "stylesheet";
+  stylesheet.href = "/src/media-editorial.css?v=1";
+  stylesheet.dataset.mediaEditorial = "true";
+  document.head.append(stylesheet);
+}
+
 export function MediaHeader() {
+  ensureMediaEditorialStyles();
   setupMeasurement();
   return `<header class="site-header media-site-header" data-header>
     <div class="shell header-inner">
