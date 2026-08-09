@@ -26,9 +26,9 @@ app.innerHTML = `
   ${Header()}
   <main id="main-content">
     ${Hero()}
+    ${Episodes()}
     ${Platforms()}
     ${CurrentSpecial()}
-    ${Episodes()}
     ${Impact()}
     ${About()}
     ${Conversions()}
