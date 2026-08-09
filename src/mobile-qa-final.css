@@ -1,0 +1,60 @@
+/* Final mobile QA fixes observed in the August 9 phone recordings. */
+
+/* Entire archive sections should never fade to blank while the user is already
+   scrolling them. Repeated cards are intentionally immediate on media hubs. */
+.media-section[data-reveal],
+.archive-section[data-reveal] {
+  opacity: 1 !important;
+  transform: none !important;
+  transition: none !important;
+  transition-delay: 0s !important;
+}
+
+.mobile-listen-live {
+  display: none;
+}
+
+@media (max-width: 960px) {
+  /* Make mobile navigation a true navigation layer instead of a short dropdown
+     that can expose footer/content navigation beneath it. */
+  .primary-nav {
+    inset: 64px 0 0;
+    min-height: calc(100dvh - 64px);
+    padding: 18px 22px 30px;
+    align-content: start;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    background: #030914;
+    border-bottom: 0;
+  }
+
+  .primary-nav a {
+    padding-block: 15px;
+  }
+
+  .primary-nav .mobile-listen-live {
+    min-height: 46px;
+    margin-top: 18px;
+    padding: 12px 16px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--navy-1000);
+    border: 1px solid var(--gold-400);
+    border-radius: 4px;
+    background: var(--gold-400);
+    font-weight: 800;
+    letter-spacing: .03em;
+  }
+
+  .primary-nav .mobile-listen-live::after {
+    display: none;
+  }
+}
+
+@media (max-width: 680px) {
+  .primary-nav {
+    inset: 56px 0 0;
+    min-height: calc(100dvh - 56px);
+  }
+}
