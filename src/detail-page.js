@@ -1,11 +1,15 @@
 import { MediaHeader, setupMediaNavigation } from "./components/MediaHeader.js";
 import { Footer } from "./components/Footer.js";
 import { episodeById, guestById, organizationById, enrichEpisode } from "./data/catalog.js";
+import { topicHref } from "./data/topic-pages.js";
 import { escapeHtml } from "./lib/utils.js";
 import { bindThumbnailFallbacks, relatedConversationRow } from "./lib/media-page.js";
 import { setupEditorialMotion } from "./lib/motion.js";
+import { loadYouTubeFeed } from "./lib/youtube-feed.js";
 
 const SITE_ORIGIN = "https://thealanashow.com";
+const WEBSITE_ID = `${SITE_ORIGIN}/#website`;
+const SHOW_ID = `${SITE_ORIGIN}/#show`;
 const DEFAULT_SOCIAL_IMAGE = `${SITE_ORIGIN}/assets/alana-show-social-card-2026-imessage-v2.png`;
 
 const compactDetailStyles = document.createElement("style");
@@ -92,8 +96,31 @@ function isoDuration(seconds = 0) {
   return `PT${hours ? `${hours}H` : ""}${minutes ? `${minutes}M` : ""}${secs || (!hours && !minutes) ? `${secs}S` : ""}`;
 }
 
+function episodeGuests(episode) {
+  return (episode.guestIds || []).map(guestById).filter(Boolean);
+}
+
 function episodeGuestNames(episode) {
-  return (episode.guestIds || []).map(guestById).filter(Boolean).map(guest => guest.name);
+  return episodeGuests(episode).map(guest => guest.name);
+}
+
+function websiteSchema() {
+  return {
+    "@type": "WebSite",
+    "@id": WEBSITE_ID,
+    url: `${SITE_ORIGIN}/`,
+    name: "The Alana Show"
+  };
+}
+
+function showSchema() {
+  return {
+    "@type": "PodcastSeries",
+    "@id": SHOW_ID,
+    url: `${SITE_ORIGIN}/`,
+    name: "The Alana Show",
+    isPartOf: { "@id": WEBSITE_ID }
+  };
 }
 
 function breadcrumbSchema(detailType, currentName, canonical) {
@@ -144,19 +171,22 @@ function applyStaticMetadata(detailType, detailItem) {
   upsertMeta("name", "twitter:image", image);
 
   const graph = [
+    websiteSchema(),
+    showSchema(),
     {
       "@type": "WebPage",
       "@id": `${canonical}#webpage`,
       url: canonical,
       name: pageTitle,
       description,
+      isPartOf: { "@id": WEBSITE_ID },
       breadcrumb: { "@id": `${canonical}#breadcrumb` }
     },
     breadcrumbSchema(detailType, currentName, canonical)
   ];
 
   if (!isEpisode) {
-    graph[0].mainEntity = { "@id": `${canonical}#person` };
+    graph[2].mainEntity = { "@id": `${canonical}#person` };
     graph.push({
       "@type": "Person",
       "@id": `${canonical}#person`,
@@ -164,6 +194,7 @@ function applyStaticMetadata(detailType, detailItem) {
       url: canonical,
       subjectOf: (detailItem.episodeIds || []).map(episodeId => ({
         "@type": "WebPage",
+        "@id": `${SITE_ORIGIN}/episodes/${episodeId}#webpage`,
         url: `${SITE_ORIGIN}/episodes/${episodeId}`
       }))
     });
@@ -184,6 +215,8 @@ function applyLiveEpisodeMetadata(episode, enriched) {
   const thumbnailUrl = enriched.thumbnail || enriched.thumbnailUrl || `https://i.ytimg.com/vi/${episode.videoId}/maxresdefault.jpg`;
   const uploadDate = enriched.publishedAt || "";
   const duration = isoDuration(enriched.durationSeconds);
+  const relatedGuests = episodeGuests(episode);
+  const relatedOrganizations = (episode.organizationIds || []).map(organizationById).filter(Boolean);
 
   document.title = pageTitle;
   upsertMeta("name", "description", conciseDescription);
@@ -195,12 +228,15 @@ function applyLiveEpisodeMetadata(episode, enriched) {
   upsertMeta("name", "twitter:image", thumbnailUrl);
 
   const graph = [
+    websiteSchema(),
+    showSchema(),
     {
       "@type": "WebPage",
       "@id": `${canonical}#webpage`,
       url: canonical,
       name: pageTitle,
       description: conciseDescription,
+      isPartOf: { "@id": WEBSITE_ID },
       breadcrumb: { "@id": `${canonical}#breadcrumb` },
       primaryImageOfPage: { "@type": "ImageObject", url: thumbnailUrl }
     },
@@ -217,11 +253,24 @@ function applyLiveEpisodeMetadata(episode, enriched) {
       uploadDate,
       embedUrl: `https://www.youtube-nocookie.com/embed/${episode.videoId}`,
       url: canonical,
-      mainEntityOfPage: { "@id": `${canonical}#webpage` }
+      mainEntityOfPage: { "@id": `${canonical}#webpage` },
+      isPartOf: { "@id": SHOW_ID },
+      about: relatedGuests.map(guest => ({
+        "@type": "Person",
+        "@id": `${detailUrl("guest", guest.id)}#person`,
+        name: guest.name,
+        url: detailUrl("guest", guest.id)
+      }))
     };
+    if (relatedOrganizations.length) {
+      videoObject.mentions = relatedOrganizations.map(organization => ({
+        "@type": "Organization",
+        name: organization.name
+      }));
+    }
     if (duration) videoObject.duration = duration;
     graph.push(videoObject);
-    graph[0].mainEntity = { "@id": `${canonical}#video` };
+    graph[2].mainEntity = { "@id": `${canonical}#video` };
   }
 
   upsertJsonLd("detail-structured-data", {
@@ -278,9 +327,7 @@ function guestDetail(guest) {
 
 async function hydrateEpisode(episode) {
   try {
-    const response = await fetch("/api/youtube");
-    if (!response.ok) return;
-    const payload = await response.json();
+    const payload = await loadYouTubeFeed();
     const live = (payload.episodes || []).find(candidate => candidate.videoId === episode.videoId);
     if (!live) return;
     const enriched = enrichEpisode(live);
@@ -305,7 +352,7 @@ async function hydrateEpisode(episode) {
 
     const topicNode = document.querySelector("#episode-topics");
     if (topicNode && enriched.categories?.length) {
-      topicNode.innerHTML = `<section class="related-section" aria-labelledby="topics-heading"><p class="related-eyebrow"><span></span>EXPLORE MORE</p><h2 id="topics-heading">Topics</h2><div class="detail-actions">${enriched.categories.map(category => `<a class="button button-outline" href="/episodes?topic=${encodeURIComponent(category)}">${escapeHtml(category)}</a>`).join("")}</div></section>`;
+      topicNode.innerHTML = `<section class="related-section" aria-labelledby="topics-heading"><p class="related-eyebrow"><span></span>EXPLORE MORE</p><h2 id="topics-heading">Topics</h2><div class="detail-actions">${enriched.categories.map(category => `<a class="button button-outline" href="${topicHref(category)}">${escapeHtml(category)}</a>`).join("")}</div></section>`;
     }
   } catch {
     // Static verified episode data keeps the page useful if the live feed is unavailable.
