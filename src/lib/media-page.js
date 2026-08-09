@@ -1,5 +1,6 @@
 import { escapeHtml, formatDate, formatDuration } from "./utils.js";
 import { EpisodeThumbnail, revealThumbnailFallback } from "../components/Episodes.js";
+import { topicHref } from "../data/topic-pages.js";
 import { icon } from "./icons.js";
 
 export function episodeThumbnailUrl(episode = {}) {
@@ -48,7 +49,7 @@ export function episodeCard(episode) {
     <div class="media-card-body">
       <p class="media-card-meta">${escapeHtml(formatDate(episode.publishedAt))}${episode.durationSeconds ? ` · ${escapeHtml(formatDuration(episode.durationSeconds))}` : ""}</p>
       <h2><a href="${url}"${external ? ' target="_blank" rel="noopener"' : ""}>${escapeHtml(episode.title)}</a></h2>
-      ${(episode.categories || []).length ? `<ul class="tag-list" aria-label="Topics">${episode.categories.map(item => `<li>${escapeHtml(item)}</li>`).join("")}</ul>` : ""}
+      ${(episode.categories || []).length ? `<ul class="tag-list" aria-label="Topics">${episode.categories.map(item => `<li><a href="${topicHref(item)}">${escapeHtml(item)}</a></li>`).join("")}</ul>` : ""}
     </div>
   </article>`;
 }
