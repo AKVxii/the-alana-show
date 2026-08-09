@@ -1,3 +1,5 @@
+const KIT_FORM_ID = 9780619;
+
 function validEmail(value = "") {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(value).trim());
 }
@@ -22,6 +24,14 @@ function sameOriginRequest(req) {
     return requestOrigin === expectedOrigin;
   } catch {
     return false;
+  }
+}
+
+async function jsonOrEmpty(response) {
+  try {
+    return await response.json();
+  } catch {
+    return {};
   }
 }
 
@@ -58,7 +68,10 @@ module.exports = async function handler(req, res) {
   const timeout = setTimeout(() => controller.abort(), 8000);
 
   try {
-    const response = await fetch("https://api.kit.com/v4/subscribers", {
+    // Upsert the subscriber first. New subscribers remain inactive until they
+    // confirm through the Kit form below; existing subscribers keep their
+    // current state because Kit does not change state on an upsert.
+    const subscriberResponse = await fetch("https://api.kit.com/v4/subscribers", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -67,27 +80,53 @@ module.exports = async function handler(req, res) {
       body: JSON.stringify({
         email_address: emailAddress,
         ...(firstName ? { first_name: firstName } : {}),
-        state: "active"
+        state: "inactive"
       }),
       signal: controller.signal
     });
 
-    let result = {};
-    try {
-      result = await response.json();
-    } catch {
-      result = {};
-    }
+    const subscriberResult = await jsonOrEmpty(subscriberResponse);
 
-    if (!response.ok) {
+    if (!subscriberResponse.ok) {
       console.error("Kit subscriber request failed", {
-        status: response.status,
-        code: result?.error || result?.errors?.[0]?.code || "unknown"
+        status: subscriberResponse.status,
+        code: subscriberResult?.error || subscriberResult?.errors?.[0]?.code || subscriberResult?.errors?.[0] || "unknown"
       });
       return res.status(502).json({ error: "Unable to complete signup right now" });
     }
 
-    return res.status(200).json({ ok: true });
+    const subscriberId = subscriberResult?.subscriber?.id;
+    if (!subscriberId) {
+      console.error("Kit subscriber request returned no subscriber id");
+      return res.status(502).json({ error: "Unable to complete signup right now" });
+    }
+
+    // Add the subscriber to The Alana Show — Website Subscribers form.
+    // When confirmation email is enabled and auto-confirm is disabled in Kit,
+    // this form assignment triggers the double-opt-in confirmation flow.
+    const formResponse = await fetch(`https://api.kit.com/v4/forms/${KIT_FORM_ID}/subscribers/${subscriberId}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-Kit-Api-Key": apiKey
+      },
+      body: JSON.stringify({
+        referrer: String(req.headers.origin || "https://thealanashow.com/").slice(0, 2048)
+      }),
+      signal: controller.signal
+    });
+
+    const formResult = await jsonOrEmpty(formResponse);
+
+    if (!formResponse.ok) {
+      console.error("Kit form subscription request failed", {
+        status: formResponse.status,
+        code: formResult?.error || formResult?.errors?.[0]?.code || formResult?.errors?.[0] || "unknown"
+      });
+      return res.status(502).json({ error: "Unable to complete signup right now" });
+    }
+
+    return res.status(200).json({ ok: true, confirmation_required: true });
   } catch (error) {
     console.error("Kit subscriber request failed", {
       name: error?.name || "Error"
