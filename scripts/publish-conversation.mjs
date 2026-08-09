@@ -131,9 +131,14 @@ catalog = appendArrayRecord(catalog, "episodes", episodeRecord);
 
 function insertCrawlLink(html, href, label) {
   if (html.includes(`href="${href}"`)) return html;
-  const marker = html.match(/<ul class="static-crawl-list"[^>]*>/)?.[0];
-  if (!marker) fail("Could not find static crawl fallback list.");
-  return html.replace(marker, `${marker}<li><a href="${escapeHtml(href)}">${escapeHtml(label)}</a></li>`);
+  const fallbackIndex = html.indexOf('class="static-crawl-fallback"');
+  if (fallbackIndex < 0) fail("Could not find static crawl fallback container.");
+  const listStart = html.indexOf("<ul", fallbackIndex);
+  if (listStart < 0) fail("Could not find crawl fallback list.");
+  const listTagEnd = html.indexOf(">", listStart);
+  if (listTagEnd < 0) fail("Crawl fallback list markup is incomplete.");
+  const item = `<li><a href="${escapeHtml(href)}">${escapeHtml(label)}</a></li>`;
+  return `${html.slice(0, listTagEnd + 1)}${item}${html.slice(listTagEnd + 1)}`;
 }
 
 episodeHub = insertCrawlLink(episodeHub, `/episodes/${slug}`, title);
