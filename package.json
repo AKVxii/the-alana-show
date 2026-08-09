@@ -5,7 +5,7 @@
   "description": "Official landing page for The Alana Show",
   "scripts": {
     "dev": "vercel dev",
-    "quality": "node scripts/quality-gate.mjs && node scripts/resilience-gate.mjs && node scripts/topic-gate.mjs && node scripts/measurement-gate.mjs && node scripts/monetization-gate.mjs",
+    "quality": "node scripts/quality-gate.mjs && node scripts/resilience-gate.mjs && node scripts/topic-gate.mjs && node scripts/authority-gate.mjs && node scripts/measurement-gate.mjs && node scripts/monetization-gate.mjs",
     "test": "npm run quality"
   }
 }

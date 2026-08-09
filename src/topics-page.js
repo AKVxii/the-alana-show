@@ -4,6 +4,7 @@ import { site } from "./data/site.js";
 import { topicHref } from "./data/topic-pages.js";
 import { escapeHtml } from "./lib/utils.js";
 import { setupEditorialMotion } from "./lib/motion.js";
+import { loadYouTubeFeed } from "./lib/youtube-feed.js";
 
 const topicDescriptions = {
   "2026 Candidates Special": "Verified candidate conversations and election-focused interviews from the current special series.",
@@ -46,9 +47,7 @@ setupEditorialMotion(app);
 
 async function loadTopicCounts() {
   try {
-    const response = await fetch("/api/youtube", { headers: { Accept: "application/json" } });
-    if (!response.ok) return;
-    const data = await response.json();
+    const data = await loadYouTubeFeed();
     const episodes = Array.isArray(data.episodes) ? data.episodes : [];
     site.topics.forEach(topic => {
       const count = episodes.filter(episode => Array.isArray(episode.categories) && episode.categories.includes(topic)).length;
