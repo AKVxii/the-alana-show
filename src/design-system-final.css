@@ -223,6 +223,114 @@
   box-shadow: none;
 }
 
+/* Broadcast credibility belongs beside the content, not inside animation. */
+.broadcast-rings {
+  display: none;
+}
+
+.broadcast-mark {
+  border-color: rgba(216, 184, 102, .22);
+  box-shadow: none;
+}
+
+.broadcast-facts span {
+  border-radius: 3px;
+  background: transparent;
+}
+
+/* Sponsor acknowledgement: clear and credible, without another nested luxury
+   frame competing with the episode content around it. */
+.sponsor-logo-card,
+.sponsor-invitation {
+  border-radius: 4px;
+  box-shadow: none;
+}
+
+.sponsor-logo-card:hover,
+.sponsor-logo-card:focus-within {
+  transform: none;
+  box-shadow: none;
+}
+
+/* Stepping Up reads as an editorial franchise rather than a badge-and-card UI. */
+.impact-section {
+  background: linear-gradient(120deg, #0d2845, var(--navy-900) 58%, #08172b);
+}
+
+.impact-emblem {
+  width: fit-content;
+  height: auto;
+  margin-bottom: 28px;
+  padding: 0 0 13px;
+  display: block;
+  border: 0;
+  border-bottom: 1px solid rgba(216, 184, 102, .52);
+  border-radius: 0;
+  background: none;
+  box-shadow: none;
+  text-align: left;
+}
+
+.impact-emblem span {
+  display: block;
+  font-size: 1.45rem;
+  line-height: 1;
+}
+
+.impact-emblem strong {
+  display: block;
+  margin-top: 3px;
+  font-size: 3.2rem;
+  line-height: .9;
+}
+
+.organization-card {
+  border-radius: 4px;
+  background: rgba(255, 255, 255, .025);
+}
+
+.organization-card:hover,
+.organization-card:focus-within {
+  transform: translateY(-2px);
+}
+
+.organization-callout {
+  background: rgba(216, 184, 102, .07);
+}
+
+/* About: typography and portrait carry the section; quote treatment stays
+   quiet enough to read as editorial matter rather than a testimonial card. */
+.host-principle {
+  border-radius: 4px;
+  background: rgba(255, 255, 255, .46);
+  box-shadow: none;
+}
+
+/* Partnership and contact surfaces should feel substantial but not like SaaS
+   pricing/forms UI. */
+.partner-panel {
+  border-radius: 6px;
+  background: rgba(255, 255, 255, .018);
+  box-shadow: none;
+}
+
+.partner-menu article {
+  border-radius: 4px;
+  background: transparent;
+}
+
+.contact-form {
+  border-radius: 6px;
+  box-shadow: 0 18px 48px rgba(3, 12, 28, .18);
+}
+
+.form-grid input,
+.form-grid select,
+.form-grid textarea {
+  border-radius: 3px;
+  background: #fffefd;
+}
+
 /* Search should feel like an editorial index rather than a SaaS palette. */
 .search-dialog {
   border-radius: 8px;
@@ -303,15 +411,23 @@
   .latest-card,
   .discovery-card,
   .episode-card,
-  .search-dialog {
+  .search-dialog,
+  .partner-panel,
+  .contact-form {
     border-radius: 4px;
+  }
+
+  .impact-emblem {
+    width: fit-content;
+    height: auto;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .button,
   .platform-card,
-  .episode-card {
+  .episode-card,
+  .organization-card {
     transform: none !important;
   }
 }
