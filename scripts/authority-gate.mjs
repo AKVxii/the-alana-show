@@ -18,6 +18,7 @@ const assert = (condition, message) => {
   if (!condition) errors.push(message);
 };
 
+const homepage = read('index.html');
 const detail = read('src/detail-page.js');
 const main = read('src/main.js');
 const mediaPage = read('src/lib/media-page.js');
@@ -27,6 +28,13 @@ const topicsPage = read('src/topics-page.js');
 const topicDetail = read('src/topic-detail.js');
 const topicPages = read('src/data/topic-pages.js');
 const sitemap = read('sitemap.xml');
+
+assert(homepage.includes('"@type": "PodcastSeries"'), 'Homepage must publish The Alana Show as a persistent PodcastSeries entity.');
+assert(homepage.includes('"@id": "https://thealanashow.com/#show"'), 'Homepage show entity must use the stable #show identifier.');
+assert(homepage.includes('"creator": { "@id": "https://thealanashow.com/#alana-k-vandeveer" }'), 'Show identity must connect to the established host Person entity.');
+for (const platform of ['podcasts.apple.com', 'open.spotify.com', 'music.amazon.com', 'trueoldiesfla.com/on-air/the-alana-show']) {
+  assert(homepage.includes(platform), `Homepage show entity is missing a verified platform identity: ${platform}.`);
+}
 
 assert(detail.includes('topicHref(category)'), 'Episode topic links must use canonical topic authority URLs.');
 assert(!detail.includes('href="/episodes?topic=${encodeURIComponent(category)}"'), 'Episode detail must not use archive-filter URLs as its primary topic links.');
@@ -87,4 +95,4 @@ if (errors.length) {
 
 console.log('Search authority gate passed.');
 console.log(`  Permanent topic authority pages: ${topicIds.length}`);
-console.log('  Canonical topic links, entity graph, internal search links and shared feed caching: OK');
+console.log('  Show identity, canonical topic links, entity graph, internal episode links and shared feed caching: OK');
