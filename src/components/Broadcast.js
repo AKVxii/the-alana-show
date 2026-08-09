@@ -3,7 +3,7 @@ import { site } from "../data/site.js";
 
 export function Broadcast() {
   return `
-    <aside class="broadcast reveal" id="broadcast-card" aria-labelledby="broadcast-heading">
+    <aside class="broadcast reveal" id="on-air" aria-labelledby="broadcast-heading">
       <div class="broadcast-grid">
         <div class="broadcast-mark" aria-hidden="true">
           <div class="broadcast-mic">${icon("radio")}</div>
