@@ -7,11 +7,6 @@ const ALANA_PORTRAIT_HEIGHT = 968;
 export function Hero() {
   return `
     <section class="hero" id="home">
-      <div class="hero-aurora" aria-hidden="true"></div>
-      <div class="signal-field" aria-hidden="true">
-        <span></span><span></span><span></span><span></span><span></span>
-      </div>
-
       <div class="shell hero-grid">
         <div class="hero-copy reveal">
           <p class="eyebrow"><span></span> Voice of the Gold Coast</p>
@@ -22,7 +17,7 @@ export function Hero() {
           </h1>
           <p class="hero-line">Real conversations. <em>Distinct voices.</em> Thoughtful perspective.</p>
           <p class="hero-intro">
-            A curated introduction to the people, ideas, and stories at the heart of The Alana Show.
+            In-depth interviews with people shaping business, public service, culture, and community—grounded in South Florida and available wherever you watch or listen.
           </p>
 
           <div class="hero-actions">
@@ -38,7 +33,6 @@ export function Hero() {
         </div>
 
         <div class="portrait-stage reveal reveal-delay">
-          <div class="portrait-orbit" aria-hidden="true"></div>
           <div class="portrait-frame">
             <div class="portrait-inner">
               <img src="${ALANA_PORTRAIT_SRC}" alt="Alana K. Vandeveer, host of The Alana Show" width="${ALANA_PORTRAIT_WIDTH}" height="${ALANA_PORTRAIT_HEIGHT}" fetchpriority="high" decoding="async">
@@ -50,7 +44,6 @@ export function Hero() {
           </div>
         </div>
       </div>
-
     </section>
   `;
 }
