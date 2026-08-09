@@ -15,6 +15,7 @@ The site has a privacy-safe Vercel Web Analytics event queue (`window.va` / `win
 - Prefer high-intent events over noisy scroll/mouse events.
 - Debounce search events so typing does not generate an event for every keystroke.
 - Do not send Web Vitals as custom events; use a dedicated performance product only if explicitly approved later.
+- Reuse the YouTube catalog within the same browser session instead of repeating server requests during ordinary Home ↔ Episodes navigation.
 
 ## Core audience events
 
@@ -64,4 +65,9 @@ The site has a privacy-safe Vercel Web Analytics event queue (`window.va` / `win
 
 ## Performance posture
 
-The YouTube feed is CDN-cached for 15 minutes with a six-hour stale-while-revalidate window. This keeps newly published episodes reasonably fresh while reducing repeated serverless execution and YouTube API quota consumption.
+The YouTube feed uses two conservative cache layers:
+
+1. **Browser session cache:** a successful feed response may be reused for up to 10 minutes while a visitor moves between Home and Episodes. A size guard prevents oversized responses from being written to session storage, and failure to use storage never blocks the site.
+2. **Vercel CDN cache:** the server response is cached for 15 minutes with a six-hour stale-while-revalidate window.
+
+Together these keep newly published episodes reasonably fresh while reducing repeated browser requests, serverless execution, and YouTube API quota consumption.
