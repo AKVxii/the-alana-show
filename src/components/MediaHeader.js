@@ -8,7 +8,8 @@ function ensureMediaEditorialStyles() {
 
   const stylesheets = [
     { selector: 'link[data-media-editorial]', href: "/src/media-editorial.css?v=1", dataset: "mediaEditorial" },
-    { selector: 'link[data-visual-qa]', href: "/src/visual-qa-refinement.css?v=1", dataset: "visualQa" }
+    { selector: 'link[data-visual-qa]', href: "/src/visual-qa-refinement.css?v=1", dataset: "visualQa" },
+    { selector: 'link[data-mobile-qa-final]', href: "/src/mobile-qa-final.css?v=1", dataset: "mobileQaFinal" }
   ];
 
   stylesheets.forEach(({ selector, href, dataset }) => {
@@ -41,6 +42,7 @@ export function MediaHeader() {
         <a href="/#about">About</a>
         <a href="/#partner">Partner</a>
         <a href="/#contact">Contact</a>
+        <a class="mobile-listen-live" href="${site.trueOldiesLive}" target="_blank" rel="noopener">Listen Live</a>
       </nav>
       <div class="header-actions"><a class="button button-gold button-small" href="${site.trueOldiesLive}" target="_blank" rel="noopener">Listen Live</a></div>
     </div>
