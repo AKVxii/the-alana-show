@@ -3,12 +3,22 @@ import { site } from "../data/site.js";
 import { setupMeasurement } from "../lib/measurement.js";
 
 function ensureMediaEditorialStyles() {
-  if (document.querySelector('link[data-media-editorial]')) return;
-  const stylesheet = document.createElement("link");
-  stylesheet.rel = "stylesheet";
-  stylesheet.href = "/src/media-editorial.css?v=1";
-  stylesheet.dataset.mediaEditorial = "true";
-  document.head.append(stylesheet);
+  document.documentElement.style.backgroundColor = "#030914";
+  document.body.style.backgroundColor = "#030914";
+
+  const stylesheets = [
+    { selector: 'link[data-media-editorial]', href: "/src/media-editorial.css?v=1", dataset: "mediaEditorial" },
+    { selector: 'link[data-visual-qa]', href: "/src/visual-qa-refinement.css?v=1", dataset: "visualQa" }
+  ];
+
+  stylesheets.forEach(({ selector, href, dataset }) => {
+    if (document.querySelector(selector)) return;
+    const stylesheet = document.createElement("link");
+    stylesheet.rel = "stylesheet";
+    stylesheet.href = href;
+    stylesheet.dataset[dataset] = "true";
+    document.head.append(stylesheet);
+  });
 }
 
 export function MediaHeader() {
