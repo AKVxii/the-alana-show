@@ -57,4 +57,12 @@
     inset: 56px 0 0;
     min-height: calc(100dvh - 56px);
   }
+
+  /* Restore the restrained detail-page mobile scale. The visual-QA layer is
+     loaded later than detail-page.js and was unintentionally enlarging long
+     episode headlines enough to dominate most of the phone viewport. */
+  body[data-detail-type="episode"] .detail-hero h1 {
+    font-size: clamp(1.9rem, 9vw, 2.55rem);
+    line-height: 1.04;
+  }
 }
