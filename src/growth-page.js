@@ -2,6 +2,7 @@ import { MediaHeader, setupMediaNavigation } from "./components/MediaHeader.js";
 import { Footer } from "./components/Footer.js";
 import { site } from "./data/site.js";
 import { currentSpecial } from "./data/current-special.js";
+import { topicHref } from "./data/topic-pages.js";
 import { setupEditorialMotion } from "./lib/motion.js";
 
 const pageKey = document.body.dataset.page;
@@ -25,9 +26,9 @@ const pages = {
     featureCopy: "The Alana Show brings together people shaping South Florida — from public service and entrepreneurship to community work, wellness, technology, and stories of people stepping up.",
     panel: `<span class="growth-panel-kicker">Heard on True Oldies</span><strong>South Florida &amp; the Treasure Coast</strong><p>${currentSpecial.broadcastText}</p><p class="growth-panel-note">${currentSpecial.reachText}</p>${external(site.trueOldies, "True Oldies Show Page", "button button-light")}`,
     cards: [
-      ["Community", "Local voices, organizations, and people working to strengthen the places around them.", "/episodes/?topic=Community"],
-      ["Public Service", "Conversations about service, responsibility, public life, and the people doing the work.", "/episodes/?topic=Public%20Service"],
-      ["Business", "Entrepreneurship, ownership, innovation, growth, and the lessons behind building something that lasts.", "/episodes/?topic=Business"]
+      ["Community", "Local voices, organizations, and people working to strengthen the places around them.", topicHref("Community")],
+      ["Public Service", "Conversations about service, responsibility, public life, and the people doing the work.", topicHref("Public Service")],
+      ["Business", "Entrepreneurship, ownership, innovation, growth, and the lessons behind building something that lasts.", topicHref("Business")]
     ],
     ctaEyebrow: "Have a South Florida story?",
     ctaTitle: "Bring a meaningful local conversation to the table.",
@@ -43,7 +44,7 @@ const pages = {
     panel: `<span class="growth-panel-kicker">Current special</span><strong>${currentSpecial.heading}</strong><p>${currentSpecial.urgencyText}</p><p class="growth-panel-note">${currentSpecial.disclaimer}</p>${external(currentSpecial.ctaHref, currentSpecial.ctaLabel, "button button-light")}`,
     cards: [
       ["2026 Candidates Special", "Browse the current verified candidate interview collection.", "/episodes/?topic=2026%20Candidates%20Special"],
-      ["Stepping Up", "Meet people who saw a need, took responsibility, and chose to make a difference.", "/episodes/?topic=Stepping%20Up"],
+      ["Stepping Up", "Meet people who saw a need, took responsibility, and chose to make a difference.", topicHref("Stepping Up")],
       ["Community & Public Service", "Explore conversations centered on civic life, service, organizations, and local leadership.", "/topics/"]
     ],
     ctaEyebrow: "Explore more",
