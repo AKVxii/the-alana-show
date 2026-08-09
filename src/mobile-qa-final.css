@@ -60,7 +60,8 @@
 
   /* Restore the restrained detail-page mobile scale. The visual-QA layer is
      loaded later than detail-page.js and was unintentionally enlarging long
-     episode headlines enough to dominate most of the phone viewport. */
+     episode headlines enough to dominate most of the phone viewport. Keep the
+     editorial scale, but preserve enough first-screen space for context/video. */
   body[data-detail-type="episode"] .detail-hero h1 {
     font-size: clamp(1.9rem, 9vw, 2.55rem);
     line-height: 1.04;
