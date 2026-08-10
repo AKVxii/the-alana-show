@@ -1,4 +1,4 @@
-/* Final archive-density refinements for the Episodes and Guests hubs. */
+/* Editorial archive refinements for the Episodes and Guests hubs. */
 
 .media-hero,
 .detail-hero {
@@ -21,8 +21,16 @@
   font-size: 1rem;
 }
 
-/* Topic deep-links are already a focused destination, so compress the generic
-   Episodes masthead and get visitors to the selected conversations faster. */
+.media-site-header .button,
+.media-section .button {
+  border-radius: 4px;
+  box-shadow: none;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+}
+
+/* Topic deep-links are focused destinations, so compress the generic masthead
+   and get visitors to the selected conversations quickly. */
 .media-hero.media-hero-filtered {
   padding-top: 66px;
   padding-bottom: 30px;
@@ -66,6 +74,22 @@
   font-size: clamp(2.35rem, 3.8vw, 3.55rem);
 }
 
+/* Search/filter controls should feel like publication tools, not a dashboard. */
+.archive-controls {
+  padding: 0 0 22px;
+  margin-bottom: 18px;
+  border: 0;
+  border-bottom: 1px solid var(--line-light);
+  background: transparent;
+}
+
+.archive-controls input,
+.archive-controls select,
+.guest-search input {
+  border-radius: 3px;
+  background: #fffefd;
+}
+
 .guest-search {
   margin-bottom: 14px;
 }
@@ -73,6 +97,28 @@
 .alphabet-nav {
   margin-top: 18px;
   margin-bottom: 16px;
+}
+
+.alphabet-nav button {
+  border-radius: 3px;
+}
+
+/* Cards rely on imagery and type rather than depth effects. */
+.media-card,
+.guest-card {
+  border-radius: 4px;
+  box-shadow: none;
+}
+
+.media-card:hover,
+.media-card:focus-within {
+  transform: translateY(-1px);
+  box-shadow: none;
+}
+
+.guest-monogram {
+  border-radius: 4px;
+  background: #0b1d38;
 }
 
 .guest-results-section {
@@ -106,19 +152,18 @@
   text-align: center;
 }
 
-/* The featured archive card is inserted after the initial motion scan.
-   Keep that nested card visible; the surrounding section already provides
-   the entrance animation. */
+/* The featured archive card is inserted after the initial motion scan. */
 .featured-conversation .media-card[data-reveal] {
   opacity: 1;
   transform: none;
 }
 
-/* On desktop, let the artwork fill the full height of the featured card so
-   the image and editorial copy finish on the same baseline without a blank
-   white shelf beneath the thumbnail. */
 .featured-conversation {
   align-items: stretch;
+  overflow: hidden;
+  border-color: rgba(189, 150, 63, .22);
+  border-radius: 6px;
+  box-shadow: none;
 }
 
 .featured-conversation-media,
@@ -145,45 +190,24 @@
   object-position: center;
 }
 
-/* Soften the featured title treatment so the image and copy read as one
-   premium editorial card instead of two hard-edged rectangles. */
-.featured-conversation {
-  overflow: hidden;
-  border-color: rgba(189, 150, 63, .3);
-  border-radius: 18px;
-  box-shadow: 0 22px 58px rgba(5, 18, 38, .15);
-}
-
 .featured-conversation-copy {
   padding: clamp(34px, 3.3vw, 52px);
   position: relative;
   overflow: hidden;
   border-left: 0;
-  background:
-    radial-gradient(circle at 88% 16%, rgba(36, 75, 115, .42), transparent 34%),
-    linear-gradient(145deg, #102947 0%, #0b1d38 58%, #08172d 100%);
+  background: linear-gradient(145deg, #102947 0%, #0b1d38 62%, #08172d 100%);
 }
 
 .featured-conversation-copy::before {
   content: "";
-  width: 2px;
+  width: 1px;
   position: absolute;
-  inset: 11% auto 11% 0;
-  border-radius: 999px;
-  background: linear-gradient(180deg, transparent, rgba(234, 215, 158, .86) 22%, rgba(189, 150, 63, .72) 78%, transparent);
+  inset: 12% auto 12% 0;
+  background: rgba(216, 184, 102, .5);
 }
 
 .featured-conversation-copy::after {
-  content: "";
-  width: 220px;
-  height: 220px;
-  position: absolute;
-  right: -92px;
-  bottom: -108px;
-  border: 1px solid rgba(216, 184, 102, .11);
-  border-radius: 50%;
-  box-shadow: 0 0 0 34px rgba(216, 184, 102, .025), 0 0 0 68px rgba(216, 184, 102, .014);
-  pointer-events: none;
+  display: none;
 }
 
 .featured-conversation-copy > * {
@@ -199,9 +223,9 @@
 
 .featured-conversation-copy .content-label::after {
   content: "";
-  width: 38px;
+  width: 34px;
   height: 1px;
-  background: linear-gradient(90deg, var(--gold-400), transparent);
+  background: rgba(216, 184, 102, .58);
 }
 
 .featured-conversation-copy h3 {
@@ -210,8 +234,8 @@
   text-wrap: balance;
 }
 
-/* A verified guest link already provides the exact matching conversations.
-   Avoid repeating the same result again in the generic archive below it. */
+/* A verified guest link already provides the exact matching conversations;
+   avoid repeating the same result in the generic archive below it. */
 main:has(.guest-results-section:not([hidden])) .archive-section {
   display: none;
 }
@@ -236,9 +260,8 @@ main:has(.guest-results-section:not([hidden])) .archive-section {
 
   .featured-conversation-copy::before {
     width: auto;
-    height: 2px;
+    height: 1px;
     inset: 0 10% auto;
-    background: linear-gradient(90deg, transparent, rgba(234, 215, 158, .82), transparent);
   }
 }
 
@@ -294,7 +317,7 @@ main:has(.guest-results-section:not([hidden])) .archive-section {
   }
 
   .featured-conversation {
-    border-radius: 14px;
+    border-radius: 4px;
   }
 
   .featured-conversation-copy {

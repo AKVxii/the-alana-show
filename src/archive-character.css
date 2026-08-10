@@ -1,0 +1,93 @@
+/* Brand character around archive discovery. Intentionally uses the existing
+   editorial serif in italic rather than adding a decorative webfont. */
+
+.archive-signature {
+  color: var(--navy-900);
+  background: var(--ivory-100);
+  border-top: 1px solid rgba(20, 35, 58, .08);
+  border-bottom: 1px solid rgba(20, 35, 58, .1);
+}
+
+/* The Topics breadcrumb sits directly above the masthead. Keep the breadcrumb
+   readable, but remove the default anchor underline that reads as a stray rule
+   in the otherwise uninterrupted navy hero field. */
+.topics-hero .breadcrumbs a {
+  text-decoration: none;
+}
+
+.archive-signature-inner {
+  padding: clamp(30px, 4.5vw, 54px) 0;
+  display: grid;
+  grid-template-columns: minmax(140px, .32fr) minmax(0, 1.68fr);
+  gap: clamp(24px, 5vw, 72px);
+  align-items: center;
+}
+
+.archive-signature-kicker {
+  margin: 0;
+  color: var(--gold-600);
+  font-size: .62rem;
+  font-weight: 900;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+}
+
+.archive-signature-quote {
+  max-width: 1040px;
+  margin: 0;
+  color: var(--navy-900);
+  font-family: var(--serif);
+  font-size: clamp(2.15rem, 3.8vw, 4.05rem);
+  line-height: .98;
+  letter-spacing: -.035em;
+  text-wrap: balance;
+}
+
+.archive-signature-quote span {
+  color: var(--gold-600);
+  font-size: .68em;
+  font-style: normal;
+  letter-spacing: -.02em;
+}
+
+.archive-signature-quote em {
+  font-style: italic;
+  font-weight: 400;
+}
+
+.guest-directory-discovery {
+  max-width: 390px;
+  color: var(--muted);
+  font-size: .79rem;
+  line-height: 1.5;
+}
+
+.guest-directory-discovery a {
+  color: var(--navy-800);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+
+@media (max-width: 760px) {
+  .archive-signature-inner {
+    grid-template-columns: 1fr;
+    gap: 10px;
+    padding: 28px 0 31px;
+  }
+
+  .archive-signature-quote {
+    font-size: clamp(2rem, 9.8vw, 2.8rem);
+    line-height: 1.01;
+  }
+
+  .archive-signature-quote span {
+    display: block;
+    margin-bottom: 4px;
+    font-size: .58em;
+  }
+
+  .guest-directory-discovery {
+    max-width: none;
+    margin-top: 8px;
+  }
+}

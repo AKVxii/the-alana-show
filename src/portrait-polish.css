@@ -1,13 +1,24 @@
+.portrait-stage {
+  isolation: isolate;
+}
+
+/* Keep the hero portrait editorial and architectural: one restrained frame,
+   no nested ornamental borders, no decorative orbit, and no metallic glow. */
+.portrait-orbit {
+  display: none;
+}
+
 .portrait-frame {
   aspect-ratio: 10 / 11;
-  border-color: rgba(234, 215, 158, .78);
-  background: linear-gradient(145deg, rgba(242, 218, 145, .9), rgba(156, 116, 43, .28) 48%, rgba(234, 215, 158, .82));
-  box-shadow: 0 26px 58px rgba(0, 0, 0, .28), 0 0 22px rgba(216, 184, 102, .08);
+  padding: 1px;
+  border: 1px solid rgba(234, 215, 158, .48);
+  border-radius: 4px;
+  background: rgba(255, 253, 248, .035);
+  box-shadow: 0 30px 72px rgba(0, 0, 0, .28);
 }
 
 .portrait-frame::before {
-  inset: 6px;
-  border-color: rgba(255, 253, 248, .27);
+  display: none;
 }
 
 .portrait-inner {
@@ -17,26 +28,30 @@
   justify-content: center;
   isolation: isolate;
   background:
-    radial-gradient(circle at 53% 28%, rgba(43, 94, 164, .48), transparent 38%),
-    linear-gradient(132deg, transparent 0 15%, rgba(27, 53, 114, .56) 15.2% 27%, transparent 27.2% 43%, rgba(9, 25, 74, .7) 43.2% 54%, transparent 54.2%),
-    linear-gradient(36deg, transparent 0 18%, rgba(37, 72, 151, .52) 18.2% 31%, transparent 31.2% 48%, rgba(4, 14, 46, .86) 48.2% 61%, transparent 61.2%),
-    conic-gradient(from 214deg at 69% 18%, #08132f, #142b69 13%, #07132f 25%, #1c3578 38%, #050d24 51%, #10285d 67%, #06132e 82%, #08152f);
-  box-shadow: inset 0 0 78px rgba(1, 6, 18, .34);
+    radial-gradient(circle at 52% 24%, rgba(55, 103, 145, .34), transparent 38%),
+    linear-gradient(180deg, #0a2038 0%, #07182c 54%, #04101f 100%);
+  box-shadow: inset 0 0 52px rgba(1, 6, 18, .24);
 }
 
 .portrait-inner::before {
+  content: "";
+  position: absolute;
+  inset: 0;
   z-index: 0;
-  opacity: .65;
-  background:
-    linear-gradient(145deg, transparent 0 22%, rgba(216, 184, 102, .08) 22.2% 22.6%, transparent 22.8% 61%, rgba(69, 113, 192, .16) 61.2% 61.8%, transparent 62%),
-    radial-gradient(circle at 54% 26%, rgba(75, 132, 209, .18), transparent 37%);
+  pointer-events: none;
+  opacity: .42;
+  background: linear-gradient(180deg, rgba(255, 253, 248, .04), transparent 28%);
 }
 
 .portrait-inner::after {
+  content: "";
+  position: absolute;
+  inset: 0;
   z-index: 2;
+  pointer-events: none;
   background:
-    linear-gradient(90deg, rgba(2, 8, 24, .22), transparent 13%, transparent 87%, rgba(2, 8, 24, .24)),
-    linear-gradient(180deg, rgba(2, 8, 24, .08), transparent 18%, transparent 82%, rgba(2, 8, 24, .22));
+    linear-gradient(90deg, rgba(2, 8, 24, .15), transparent 14%, transparent 86%, rgba(2, 8, 24, .15)),
+    linear-gradient(180deg, transparent 74%, rgba(2, 8, 24, .18));
 }
 
 .portrait-inner img {
@@ -47,18 +62,21 @@
   object-fit: contain;
   object-position: center bottom;
   mix-blend-mode: normal;
-  filter: drop-shadow(0 17px 22px rgba(1, 6, 18, .34));
+  filter: drop-shadow(0 16px 22px rgba(1, 6, 18, .28));
 }
 
+/* About photography should feel like a magazine portrait rather than a framed
+   graphic. Use the same restrained geometry with a warm editorial field. */
 .about-photo-frame {
   overflow: hidden;
-  background: linear-gradient(145deg, rgba(234, 215, 158, .92), rgba(156, 116, 43, .68));
+  border-radius: 4px;
+  border-color: rgba(20, 35, 58, .14);
+  background: var(--ivory-100);
+  box-shadow: 0 20px 48px rgba(5, 18, 38, .09);
 }
 
 .about-photo-frame::before {
-  background:
-    linear-gradient(90deg, rgba(6, 16, 32, .05), transparent 18%, transparent 82%, rgba(6, 16, 32, .09)),
-    linear-gradient(180deg, rgba(255, 253, 248, .18), transparent 30%);
+  background: linear-gradient(180deg, rgba(255, 253, 248, .22), transparent 32%);
 }
 
 .about-photo-frame img {
@@ -68,10 +86,20 @@
   object-fit: contain;
   object-position: center bottom;
   background:
-    radial-gradient(circle at 50% 25%, rgba(255, 253, 248, .96), rgba(248, 242, 230, .94) 58%, rgba(229, 216, 190, .92));
+    radial-gradient(circle at 50% 24%, rgba(255, 253, 248, .98), rgba(248, 242, 230, .95) 62%, rgba(238, 227, 206, .92));
 }
 
 @media (max-width: 720px) {
-  .portrait-frame { aspect-ratio: 10 / 11; }
-  .portrait-inner img { width: 100%; height: auto; object-fit: contain; object-position: center bottom; }
+  .portrait-frame {
+    aspect-ratio: 10 / 11;
+    border-radius: 3px;
+    box-shadow: 0 22px 52px rgba(0, 0, 0, .24);
+  }
+
+  .portrait-inner img {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    object-position: center bottom;
+  }
 }

@@ -1,0 +1,433 @@
+/*
+ * The Alana Show — final editorial design-system overrides
+ *
+ * This layer intentionally removes decorative UI noise without changing the
+ * site's content architecture or functionality. It is loaded after the
+ * feature-specific stylesheets so the visual rules remain centralized and
+ * easy to audit or roll back.
+ */
+
+:root {
+  --radius-sm: 4px;
+  --radius-md: 7px;
+  --radius-lg: 10px;
+  --shadow-sm: 0 10px 28px rgba(5, 18, 38, .08);
+  --shadow-md: 0 18px 46px rgba(5, 18, 38, .12);
+  --shadow-lg: 0 28px 76px rgba(3, 12, 28, .24);
+}
+
+/* Editorial rhythm */
+.section {
+  padding-block: clamp(54px, 6vw, 82px);
+}
+
+.section-heading {
+  margin-bottom: clamp(30px, 3vw, 44px);
+}
+
+/* Buttons are actions, not decorative pills. Keep chips/tags rounded where
+   their compact shape communicates taxonomy rather than hierarchy. */
+.button {
+  min-height: 48px;
+  padding: 12px 21px;
+  border-radius: 4px;
+  font-size: .76rem;
+  letter-spacing: .055em;
+  text-transform: uppercase;
+  box-shadow: none;
+  transition: color .2s ease, background .2s ease, border-color .2s ease,
+    transform .2s ease, box-shadow .2s ease;
+}
+
+.button:hover {
+  transform: translateY(-1px);
+}
+
+.button-gold {
+  color: var(--navy-1000);
+  border-color: rgba(234, 215, 158, .62);
+  background: linear-gradient(180deg, #e5ce8b 0%, var(--gold-400) 100%);
+  box-shadow: 0 10px 24px rgba(189, 150, 63, .12);
+}
+
+.button-gold:hover {
+  box-shadow: 0 13px 30px rgba(189, 150, 63, .18);
+}
+
+.button-ghost {
+  color: var(--ivory-50);
+  border-color: rgba(255, 255, 255, .22);
+  background: transparent;
+}
+
+.button-ghost:hover {
+  border-color: rgba(234, 215, 158, .48);
+  background: rgba(255, 255, 255, .035);
+}
+
+.button-light {
+  border-color: rgba(20, 35, 58, .12);
+  background: var(--ivory-50);
+}
+
+/* Header controls use the same restrained geometry. Circular shapes remain
+   only where they are meaningful marks or icons. */
+.search-trigger {
+  border-radius: 4px;
+  background: transparent;
+}
+
+.menu-button {
+  border-radius: 4px;
+}
+
+/* Hero: let typography, portrait and message create the drama. */
+.hero {
+  background:
+    radial-gradient(circle at 82% 22%, rgba(40, 91, 137, .22), transparent 34%),
+    linear-gradient(120deg, #020812 0%, var(--navy-1000) 45%, #071a30 100%);
+}
+
+.hero::after {
+  opacity: .32;
+  background-image: linear-gradient(
+    90deg,
+    transparent 0%,
+    transparent 67%,
+    rgba(234, 215, 158, .06) 67%,
+    rgba(234, 215, 158, .06) calc(67% + 1px),
+    transparent calc(67% + 1px)
+  );
+  background-size: 100% 100%;
+  mask-image: none;
+}
+
+.hero-aurora,
+.signal-field {
+  display: none;
+}
+
+.hero-grid {
+  padding-top: 96px;
+  padding-bottom: 48px;
+  gap: clamp(40px, 5vw, 72px);
+}
+
+.hero-copy {
+  max-width: 720px;
+}
+
+.title-main {
+  text-shadow: none;
+}
+
+.hero-line {
+  margin-top: 22px;
+  max-width: 640px;
+}
+
+.hero-intro {
+  margin-top: 17px;
+  max-width: 610px;
+  color: #c6d0dd;
+  line-height: 1.7;
+}
+
+.hero-actions {
+  margin-top: 24px;
+  gap: 10px;
+}
+
+.hero-credentials {
+  margin-top: 21px;
+}
+
+/* Listening destinations should read like a refined directory, not a row of
+   app widgets. */
+.listen-section .shell {
+  border-radius: 6px;
+  background: rgba(6, 16, 32, .72);
+  box-shadow: none;
+}
+
+.platform-heading h2 {
+  text-shadow: none;
+}
+
+.platform-card {
+  border-radius: 4px;
+  background: rgba(8, 25, 46, .54);
+  box-shadow: none;
+}
+
+.platform-card::before {
+  display: none;
+}
+
+.platform-card:hover,
+.platform-card:focus-visible {
+  transform: translateY(-1px);
+  border-color: rgba(234, 215, 158, .34);
+  background: rgba(16, 38, 66, .62);
+  box-shadow: none;
+}
+
+.platform-icon {
+  border-radius: 4px;
+  box-shadow: none;
+}
+
+/* Feature and archive surfaces share one architectural card language. */
+.current-special-panel,
+.featured-player,
+.latest-card,
+.discovery-card,
+.episode-card,
+.thumbnail-media {
+  border-radius: 6px;
+}
+
+.current-special-panel {
+  background: linear-gradient(120deg, #0b1d38, #061020 72%);
+  box-shadow: 0 18px 42px rgba(0, 0, 0, .18);
+}
+
+.current-special-panel::after {
+  display: none;
+}
+
+.current-special-accent {
+  background: rgba(216, 184, 102, .055);
+}
+
+.featured-player {
+  box-shadow: none;
+}
+
+.latest-card,
+.discovery-card {
+  background: rgba(11, 29, 56, .58);
+  box-shadow: none;
+}
+
+.episode-card {
+  background: rgba(255, 255, 255, .025);
+}
+
+.episode-card:hover,
+.episode-card:focus-within {
+  transform: translateY(-2px);
+}
+
+.thumbnail-media::after {
+  box-shadow: none;
+}
+
+/* Broadcast credibility belongs beside the content, not inside animation. */
+.broadcast-rings {
+  display: none;
+}
+
+.broadcast-mark {
+  border-color: rgba(216, 184, 102, .22);
+  box-shadow: none;
+}
+
+.broadcast-facts span {
+  border-radius: 3px;
+  background: transparent;
+}
+
+/* Sponsor acknowledgement: clear and credible, without another nested luxury
+   frame competing with the episode content around it. */
+.sponsor-logo-card,
+.sponsor-invitation {
+  border-radius: 4px;
+  box-shadow: none;
+}
+
+.sponsor-logo-card:hover,
+.sponsor-logo-card:focus-within {
+  transform: none;
+  box-shadow: none;
+}
+
+/* Stepping Up reads as an editorial franchise rather than a badge-and-card UI. */
+.impact-section {
+  background: linear-gradient(120deg, #0d2845, var(--navy-900) 58%, #08172b);
+}
+
+.impact-emblem {
+  width: fit-content;
+  height: auto;
+  margin-bottom: 28px;
+  padding: 0 0 13px;
+  display: block;
+  border: 0;
+  border-bottom: 1px solid rgba(216, 184, 102, .52);
+  border-radius: 0;
+  background: none;
+  box-shadow: none;
+  text-align: left;
+}
+
+.impact-emblem span {
+  display: block;
+  font-size: 1.45rem;
+  line-height: 1;
+}
+
+.impact-emblem strong {
+  display: block;
+  margin-top: 3px;
+  font-size: 3.2rem;
+  line-height: .9;
+}
+
+.organization-card {
+  border-radius: 4px;
+  background: rgba(255, 255, 255, .025);
+}
+
+.organization-card:hover,
+.organization-card:focus-within {
+  transform: translateY(-2px);
+}
+
+.organization-callout {
+  background: rgba(216, 184, 102, .07);
+}
+
+/* About: typography and portrait carry the section; quote treatment stays
+   quiet enough to read as editorial matter rather than a testimonial card. */
+.host-principle {
+  border-radius: 4px;
+  background: rgba(255, 255, 255, .46);
+  box-shadow: none;
+}
+
+/* Partnership and contact surfaces should feel substantial but not like SaaS
+   pricing/forms UI. */
+.partner-panel {
+  border-radius: 6px;
+  background: rgba(255, 255, 255, .018);
+  box-shadow: none;
+}
+
+.partner-menu article {
+  border-radius: 4px;
+  background: transparent;
+}
+
+.contact-form {
+  border-radius: 6px;
+  box-shadow: 0 18px 48px rgba(3, 12, 28, .18);
+}
+
+.form-grid input,
+.form-grid select,
+.form-grid textarea {
+  border-radius: 3px;
+  background: #fffefd;
+}
+
+/* Search should feel like an editorial index rather than a SaaS palette. */
+.search-dialog {
+  border-radius: 8px;
+  box-shadow: 0 30px 90px rgba(0, 0, 0, .48);
+}
+
+.search-input-wrap,
+.search-result,
+.search-result-media .thumbnail-media {
+  border-radius: 4px;
+}
+
+.search-topline button {
+  border-radius: 4px;
+}
+
+/* Motion stays purposeful and quiet. */
+.reveal,
+[data-reveal] {
+  transition-duration: .46s;
+}
+
+.motion-ready .reveal:not(.visible),
+.motion-ready [data-reveal]:not(.visible) {
+  transform: translateY(10px);
+}
+
+@media (max-width: 1180px) {
+  .hero-grid {
+    padding-top: 90px;
+    gap: 40px;
+  }
+}
+
+@media (max-width: 960px) {
+  .hero-grid {
+    padding-top: 94px;
+    padding-bottom: 42px;
+  }
+}
+
+@media (max-width: 680px) {
+  .section {
+    padding-block: 50px;
+  }
+
+  .hero-grid {
+    padding-top: 76px;
+    padding-bottom: 30px;
+    gap: 24px;
+  }
+
+  .hero-line {
+    margin-top: 15px;
+  }
+
+  .hero-intro {
+    margin-top: 11px;
+    line-height: 1.58;
+  }
+
+  .hero-actions {
+    margin-top: 17px;
+    gap: 7px;
+  }
+
+  .hero-actions .button {
+    min-height: 44px;
+  }
+
+  .hero-credentials {
+    margin-top: 15px;
+  }
+
+  .listen-section .shell,
+  .current-special-panel,
+  .featured-player,
+  .latest-card,
+  .discovery-card,
+  .episode-card,
+  .search-dialog,
+  .partner-panel,
+  .contact-form {
+    border-radius: 4px;
+  }
+
+  .impact-emblem {
+    width: fit-content;
+    height: auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .button,
+  .platform-card,
+  .episode-card,
+  .organization-card {
+    transform: none !important;
+  }
+}

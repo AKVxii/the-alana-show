@@ -1,3 +1,5 @@
+import { broadcastSchedule } from "../data/site.js";
+
 export function escapeHtml(value = "") {
   return String(value).replace(/[&<>"']/g, character => ({
     "&": "&amp;",
@@ -83,5 +85,5 @@ export function nextBroadcastLabel() {
     return { label: "On Air Now", live: true };
   }
 
-  return { label: "Tuesdays · 8:00–9:00 PM ET", live: false };
+  return { label: broadcastSchedule, live: false };
 }

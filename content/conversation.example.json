@@ -1,0 +1,12 @@
+{
+  "videoId": "XXXXXXXXXXX",
+  "slug": "guest-name-topic",
+  "title": "Conversation with Guest Name",
+  "description": "A concise, accurate description of this conversation for search and social sharing.",
+  "guests": [
+    {
+      "name": "Guest Name",
+      "slug": "guest-name"
+    }
+  ]
+}

@@ -35,6 +35,14 @@ app.innerHTML = `${MediaHeader()}<main id="main-content">
     <p class="eyebrow"><span></span> Discover the archive</p><h1>Topics</h1>
     <p>Follow the ideas, issues, and areas of expertise that connect conversations across The Alana Show.</p>
   </div></section>
+
+  <aside class="archive-signature" aria-label="A note from Alana">
+    <div class="shell archive-signature-inner">
+      <p class="archive-signature-kicker">A note from Alana</p>
+      <p class="archive-signature-quote"><span>The Alana Show…</span> <em>all over the map so you don’t have to be.</em></p>
+    </div>
+  </aside>
+
   <section class="media-section topics-section" aria-labelledby="topics-heading"><div class="shell">
     <div class="media-section-heading topics-heading" data-reveal><div><p class="eyebrow dark"><span></span> Explore by subject</p><h2 id="topics-heading">Find the conversations that matter to you</h2></div><p>Choose a topic to open a permanent editorial collection of related conversations.</p></div>
     <div class="topics-grid" data-topics-grid>${site.topics.map(topicCard).join("")}</div>

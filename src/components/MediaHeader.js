@@ -2,7 +2,29 @@ import { icon } from "../lib/icons.js";
 import { site } from "../data/site.js";
 import { setupMeasurement } from "../lib/measurement.js";
 
+function ensureMediaEditorialStyles() {
+  document.documentElement.style.backgroundColor = "#030914";
+  document.body.style.backgroundColor = "#030914";
+
+  const stylesheets = [
+    { selector: 'link[data-media-editorial]', href: "/src/media-editorial.css?v=1", dataset: "mediaEditorial" },
+    { selector: 'link[data-visual-qa]', href: "/src/visual-qa-refinement.css?v=1", dataset: "visualQa" },
+    { selector: 'link[data-mobile-qa-final]', href: "/src/mobile-qa-final.css?v=1", dataset: "mobileQaFinal" },
+    { selector: 'link[data-archive-character]', href: "/src/archive-character.css?v=1", dataset: "archiveCharacter" }
+  ];
+
+  stylesheets.forEach(({ selector, href, dataset }) => {
+    if (document.querySelector(selector)) return;
+    const stylesheet = document.createElement("link");
+    stylesheet.rel = "stylesheet";
+    stylesheet.href = href;
+    stylesheet.dataset[dataset] = "true";
+    document.head.append(stylesheet);
+  });
+}
+
 export function MediaHeader() {
+  ensureMediaEditorialStyles();
   setupMeasurement();
   return `<header class="site-header media-site-header" data-header>
     <div class="shell header-inner">
@@ -14,10 +36,16 @@ export function MediaHeader() {
         <span class="sr-only">Open navigation</span>${icon("menu")}
       </button>
       <nav id="primary-nav" class="primary-nav" aria-label="Primary navigation" data-nav>
-        <a href="/">Home</a><a href="/episodes/">Episodes</a><a href="/guests/">Guests</a><a href="/topics/">Topics</a><a href="/specials/">Specials</a><a href="/south-florida/">South Florida</a>
-        <a href="/#listen">Listen</a><a href="/#on-air">On Air</a><a href="/#about">About</a><a href="/#contact">Contact</a>
+        <a href="/episodes/">Watch</a>
+        <a href="/guests/">Guests</a>
+        <a href="/topics/">Topics</a>
+        <a href="/south-florida/">South Florida</a>
+        <a href="/#about">About</a>
+        <a href="/advertise/">Partner</a>
+        <a href="/#contact">Contact</a>
+        <a class="mobile-listen-live" href="${site.trueOldiesLive}" target="_blank" rel="noopener">Listen Live</a>
       </nav>
-      <div class="header-actions"><a class="button button-gold button-small" href="${site.trueOldies}" target="_blank" rel="noopener">True Oldies</a></div>
+      <div class="header-actions"><a class="button button-gold button-small" href="${site.trueOldiesLive}" target="_blank" rel="noopener">Listen Live</a></div>
     </div>
   </header>`;
 }

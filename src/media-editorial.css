@@ -1,0 +1,91 @@
+/*
+ * Shared editorial refinements for media hubs and detail pages.
+ * Loaded by MediaHeader so every episode and guest detail inherits the same
+ * visual language without editing dozens of generated/static HTML entries.
+ */
+
+.media-site-header .button,
+.detail-actions .button,
+.focused-result-action .button {
+  border-radius: 4px;
+  box-shadow: none;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+}
+
+.detail-hero {
+  background:
+    radial-gradient(circle at 82% 18%, rgba(36, 75, 115, .28), transparent 34%),
+    linear-gradient(120deg, #030914, #081a30 72%, #0b223d);
+}
+
+.detail-hero h1 {
+  text-shadow: none;
+}
+
+.video-frame {
+  border-color: rgba(216, 184, 102, .22);
+  box-shadow: 0 18px 48px rgba(3, 12, 28, .2);
+}
+
+.guest-monogram,
+.guest-monogram-large {
+  border-radius: 4px;
+  background: #0b1d38;
+  box-shadow: none;
+}
+
+.related-section h2 {
+  border-bottom-color: rgba(216, 184, 102, .16);
+}
+
+.related-conversation-card {
+  border-color: rgba(189, 150, 63, .24);
+  border-radius: 6px;
+  background: #fffaf1;
+  box-shadow: none;
+}
+
+.related-conversation-card::before {
+  display: none;
+}
+
+.related-conversation-card:hover,
+.related-conversation-card:focus-visible {
+  transform: translateY(-1px);
+  border-color: rgba(189, 150, 63, .42);
+  box-shadow: none;
+}
+
+.related-conversation-thumb {
+  border-color: rgba(156, 116, 43, .22);
+  border-radius: 4px;
+  box-shadow: none;
+}
+
+.related-conversation-action {
+  letter-spacing: .03em;
+}
+
+/* Taxonomy chips remain rounded because the shape communicates metadata,
+   rather than serving as general-purpose decoration. */
+.tag-list li {
+  box-shadow: none;
+}
+
+@media (max-width: 640px) {
+  .related-conversation-card {
+    border-radius: 4px;
+  }
+
+  .video-frame {
+    box-shadow: 0 12px 30px rgba(3, 12, 28, .18);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .related-conversation-card:hover,
+  .related-conversation-card:focus-visible {
+    transform: none;
+  }
+}

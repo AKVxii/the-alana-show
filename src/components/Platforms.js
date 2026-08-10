@@ -1,6 +1,5 @@
 import { site } from "../data/site.js";
 import { icon } from "../lib/icons.js";
-import { BroadcastReach } from "./BroadcastReach.js";
 
 export function Platforms() {
   return `
@@ -29,6 +28,5 @@ export function Platforms() {
         </div>
       </div>
     </section>
-    ${BroadcastReach()}
   `;
 }
