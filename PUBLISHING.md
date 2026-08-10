@@ -88,9 +88,27 @@ The helper will:
 10. Run the full repository quality suite.
 11. Roll back the files it changed if the quality suite fails.
 
+## Refresh discovery-hub authority
+
+After a successful conversation publish and before opening the final PR, run:
+
+`npm run sync:hubs`
+
+This zero-dependency command keeps the three main discovery hubs synchronized with the verified catalog:
+
+- `/episodes` — crawler-visible archive plus `CollectionPage` / `ItemList` graph of permanent episode URLs;
+- `/guests` — verified guest directory plus `CollectionPage` / `ItemList` graph of permanent guest profiles;
+- `/topics` — crawler-visible topic directory plus `CollectionPage` / `ItemList` graph of permanent topic authority pages.
+
+Then run:
+
+`npm run quality`
+
+The hub sync is deterministic and uses only the repository's verified catalog, existing permanent page titles, and topic authority definitions. It does not invent new guests, topics, or editorial claims.
+
 ## Review before merge
 
-After the helper succeeds:
+After the helper and hub sync succeed:
 
 1. Review the Git diff.
 2. Confirm spelling, guest identity, title, description, slug, YouTube video ID, and publication metadata.
