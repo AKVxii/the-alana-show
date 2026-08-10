@@ -8,6 +8,13 @@
   border-bottom: 1px solid rgba(20, 35, 58, .1);
 }
 
+/* The Topics breadcrumb sits directly above the masthead. Keep the breadcrumb
+   readable, but remove the default anchor underline that reads as a stray rule
+   in the otherwise uninterrupted navy hero field. */
+.topics-hero .breadcrumbs a {
+  text-decoration: none;
+}
+
 .archive-signature-inner {
   padding: clamp(30px, 4.5vw, 54px) 0;
   display: grid;
