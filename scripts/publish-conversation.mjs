@@ -121,8 +121,9 @@ function arrayBounds(source, exportName) {
 }
 
 function appendArrayRecord(source, exportName, record) {
-  const { end } = arrayBounds(source, exportName);
-  return `${source.slice(0, end)}\n${record}${source.slice(end)}`;
+  const { end, body } = arrayBounds(source, exportName);
+  const needsComma = Boolean(body.trim()) && !body.trimEnd().endsWith(",");
+  return `${source.slice(0, end)}${needsComma ? "," : ""}\n${record}${source.slice(end)}`;
 }
 
 const episodeSection = arrayBounds(catalog, "episodes").body;
@@ -260,7 +261,7 @@ if (publishedAt) {
   episodeGraph[2].mainEntity = { "@id": `${episodeCanonical}#video` };
 }
 const episodeStructuredData = safeJsonLd({ "@context": "https://schema.org", "@graph": episodeGraph });
-const episodeHtml = `<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="${escapeHtml(metaDescription)}"><meta name="robots" content="index,follow,max-image-preview:large"><meta name="theme-color" content="#030914"><meta property="og:site_name" content="The Alana Show"><meta property="og:title" content="${escapeHtml(episodeTitle)}"><meta property="og:description" content="${escapeHtml(metaDescription)}"><meta property="og:type" content="video.other"><meta property="og:url" content="${episodeCanonical}"><meta property="og:image" content="${episodeImage}"><meta property="og:image:alt" content="${escapeHtml(title)}"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="${escapeHtml(episodeTitle)}"><meta name="twitter:description" content="${escapeHtml(metaDescription)}"><meta name="twitter:image" content="${episodeImage}"><meta name="twitter:image:alt" content="${escapeHtml(title)}"><title>${escapeHtml(episodeTitle)}</title><link rel="canonical" href="${episodeCanonical}"><link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="/src/styles.css"><link rel="stylesheet" href="/src/media.css"><script type="application/ld+json">${episodeStructuredData}</script></head><body data-detail-type="episode" data-detail-id="${escapeHtml(slug)}"><a class="skip-link" href="#main-content">Skip to main content</a><div id="app"></div><script type="module" src="/src/detail-page.js"></script></body></html>`;
+const episodeHtml = `<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="${escapeHtml(metaDescription)}"><meta name="robots" content="index,follow,max-image-preview:large"><meta name="theme-color" content="#030914"><meta property="og:site_name" content="The Alana Show"><meta property="og:title" content="${escapeHtml(episodeTitle)}"><meta property="og:description" content="${escapeHtml(metaDescription)}"><meta property="og:type" content="video.other"><meta property="og:url" content="${episodeCanonical}"><meta property="og:image" content="${episodeImage}"><meta property="og:image:alt" content="${escapeHtml(title)}"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="${escapeHtml(episodeTitle)}"><meta name="twitter:description" content="${escapeHtml(metaDescription)}"><meta name="twitter:image" content="${episodeImage}"><meta name="twitter:image:alt" content="${escapeHtml(title)}"><title>${escapeHtml(episodeTitle)}</title><link rel="canonical" href="${episodeCanonical}"><link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="/src/styles.css"><link rel="stylesheet" href="/src/media.css"><script id="detail-structured-data" type="application/ld+json">${episodeStructuredData}</script></head><body data-detail-type="episode" data-detail-id="${escapeHtml(slug)}"><a class="skip-link" href="#main-content">Skip to main content</a><div id="app"></div><script type="module" src="/src/detail-page.js"></script></body></html>`;
 
 const guestFiles = newGuestPages.map(guest => {
   const canonical = `${ORIGIN}/guests/${guest.slug}`;
@@ -304,6 +305,10 @@ const snapshots = new Map([
   [guestHubPath, read(guestHubPath)],
   [sitemapPath, read(sitemapPath)]
 ]);
+for (const guest of guests) {
+  const guestPath = `guests/${guest.slug}/index.html`;
+  if (fs.existsSync(path.join(ROOT, guestPath))) snapshots.set(guestPath, read(guestPath));
+}
 const createdPaths = [episodeRelativePath, ...guestFiles.map(file => file.relativePath)];
 
 function write(relative, content) {
@@ -327,6 +332,16 @@ try {
   write(sitemapPath, sitemap);
   write(episodeRelativePath, episodeHtml);
   guestFiles.forEach(file => write(file.relativePath, file.html));
+
+  const crawlResult = spawnSync(process.execPath, [
+    "scripts/backfill-static-crawl.mjs",
+    `--episode=${slug}`,
+    `--guests=${guests.map(guest => guest.slug).join(",")}`
+  ], { cwd: ROOT, stdio: "inherit" });
+  if (crawlResult.status !== 0) {
+    rollback();
+    fail("Static crawl backfill failed. Publishing changes were rolled back.");
+  }
 
   if (!skipChecks) {
     const npm = process.platform === "win32" ? "npm.cmd" : "npm";
