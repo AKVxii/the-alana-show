@@ -41,7 +41,7 @@ export function Footer({ fromSubpage = false } = {}) {
         <div class="footer-heard">
           <span>Heard on</span>
           <strong>True Oldies</strong>
-          <small>South Florida · Tuesdays · 8:00–8:30 PM ET</small>
+          <small>South Florida · ${site.broadcastSchedule}</small>
           <a href="${site.trueOldies}" target="_blank" rel="noopener">Official show page ${icon("external")}</a>
         </div>
       </div>
