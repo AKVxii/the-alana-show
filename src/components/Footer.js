@@ -27,7 +27,7 @@ export function Footer({ fromSubpage = false } = {}) {
 
         <div class="footer-links">
           <strong>Connect</strong>
-          <a href="${home}#about">About Alana</a>
+          <a href="/about/">About Alana</a>
           <a href="/book/">Be a Guest</a>
           <a href="/advertise/">Advertise &amp; Partner</a>
           <a href="${home}#sponsor">Commercial Real Estate Sponsor — The Fitzgerald Group</a>
