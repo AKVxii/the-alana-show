@@ -10,6 +10,8 @@ const catalogUrl = pathToFileURL(path.join(ROOT, "src/data/catalog.js")).href;
 const { episodes, guests, episodeById, guestById } = await import(catalogUrl);
 const profilesUrl = pathToFileURL(path.join(ROOT, "src/data/guest-profiles.js")).href;
 const { guestProfileById } = await import(profilesUrl);
+const topicsUrl = pathToFileURL(path.join(ROOT, "src/data/topic-pages.js")).href;
+const { topicHref } = await import(topicsUrl);
 const episodeArg = process.argv.find(arg => arg.startsWith("--episode="));
 const guestsArg = process.argv.find(arg => arg.startsWith("--guests="));
 const targetEpisodeId = episodeArg ? episodeArg.slice("--episode=".length).trim() : "";
@@ -77,6 +79,28 @@ function isoDuration(seconds = 0) {
   return `PT${hours ? `${hours}H` : ""}${minutes ? `${minutes}M` : ""}${secs || (!hours && !minutes) ? `${secs}S` : ""}`;
 }
 
+function formatDuration(seconds = 0) {
+  const total = Number(seconds || 0);
+  if (!Number.isFinite(total) || total <= 0) return "";
+  const hours = Math.floor(total / 3600);
+  const minutes = Math.floor((total % 3600) / 60);
+  const secs = Math.floor(total % 60);
+  return hours ? `${hours}:${String(minutes).padStart(2, "0")}:${String(secs).padStart(2, "0")}` : `${minutes}:${String(secs).padStart(2, "0")}`;
+}
+
+function formatDate(value = "") {
+  if (!value) return "";
+  const date = new Date(value);
+  if (Number.isNaN(date.valueOf())) return "";
+  return new Intl.DateTimeFormat("en-US", { year: "numeric", month: "long", day: "numeric", timeZone: "UTC" }).format(date);
+}
+
+function conciseOverview(value = "", fallback = "") {
+  const normalized = String(value || fallback).replace(/\s+/g, " ").trim();
+  if (!normalized) return "";
+  return normalized.length > 420 ? `${normalized.slice(0, 417).trim()}…` : normalized;
+}
+
 function replaceApp(html, fallback) {
   if (html.includes("data-static-crawl-fallback")) return html;
   const marker = '<div id="app"></div>';
@@ -94,11 +118,20 @@ function breadcrumbs(parent, current) {
 }
 
 function episodeFallback(episode, html) {
+  const live = liveByVideoId.get(episode.videoId) || null;
   const title = pageTitle(html) || episode.title;
   const description = pageDescription(html) || "Watch this verified conversation on The Alana Show.";
+  const overview = conciseOverview(live?.description, description);
   const relatedGuests = (episode.guestIds || []).map(guestById).filter(Boolean);
   const guestLinks = relatedGuests.map(guest => `<a href="/guests/${escapeHtml(guest.id)}">${escapeHtml(guest.name)}</a>`).join(" and ");
-  return `<main id="main-content" class="static-detail-fallback" data-static-crawl-fallback="episode"><section class="detail-hero"><div class="shell detail-shell">${breadcrumbs("Episodes", title)}<p class="eyebrow"><span></span> Episode</p><h1>${escapeHtml(title)}</h1>${guestLinks ? `<p class="detail-byline">A conversation with ${guestLinks}</p>` : ""}<p>${escapeHtml(description)}</p><div class="detail-actions"><a class="button button-gold" href="https://www.youtube.com/watch?v=${encodeURIComponent(episode.videoId)}" target="_blank" rel="noopener">Watch on YouTube</a><a class="button button-outline" href="/episodes">More conversations</a></div></div></section></main>`;
+  const date = formatDate(live?.publishedAt || "");
+  const duration = formatDuration(live?.durationSeconds || 0);
+  const meta = [date, duration].filter(Boolean).join(" · ");
+  const categories = Array.isArray(live?.categories) ? live.categories.filter(Boolean) : [];
+  const topicLinks = categories.map(category => `<a class="button button-outline" href="${escapeHtml(topicHref(category))}">${escapeHtml(category)}</a>`).join("");
+  const overviewSection = overview ? `<section class="related-section" data-static-episode-overview aria-labelledby="static-overview-heading"><p class="related-eyebrow"><span></span>ABOUT THIS CONVERSATION</p><h2 id="static-overview-heading">Episode overview</h2><p>${escapeHtml(overview)}</p></section>` : "";
+  const topicsSection = topicLinks ? `<section class="related-section" data-static-episode-topics aria-labelledby="static-topics-heading"><p class="related-eyebrow"><span></span>EXPLORE MORE</p><h2 id="static-topics-heading">Topics</h2><div class="detail-actions">${topicLinks}</div></section>` : "";
+  return `<main id="main-content" class="static-detail-fallback" data-static-crawl-fallback="episode"><section class="detail-hero"><div class="shell detail-shell">${breadcrumbs("Episodes", title)}<p class="eyebrow"><span></span> Episode</p><h1>${escapeHtml(title)}</h1>${guestLinks ? `<p class="detail-byline">A conversation with ${guestLinks}</p>` : ""}${meta ? `<p class="detail-byline">${escapeHtml(meta)}</p>` : ""}${overviewSection}${topicsSection}<div class="detail-actions"><a class="button button-gold" href="https://www.youtube.com/watch?v=${encodeURIComponent(episode.videoId)}" target="_blank" rel="noopener">Watch on YouTube</a><a class="button button-outline" href="/episodes">More conversations</a></div></div></section></main>`;
 }
 
 function guestFallback(guest, html) {
@@ -270,7 +303,7 @@ let changedGuests = 0;
 for (const episode of targetEpisodes) {
   const relative = `episodes/${episode.id}/index.html`;
   const original = read(relative);
-  let updated = replaceApp(original, episodeFallback(episode, original));
+  let updated = replaceStaticFallback(original, "episode", episodeFallback(episode, original));
   updated = ensureImageAltMeta(updated, pageTitle(updated) || episode.title);
   const hasStaticDetailData = updated.includes('id="detail-structured-data"');
   if (liveByVideoId.has(episode.videoId) || !hasStaticDetailData) {
