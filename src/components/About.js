@@ -32,7 +32,7 @@ export function About() {
           </blockquote>
 
           <div class="host-signature">Alana K. Vandeveer</div>
-          <a class="button button-outline" href="/about/">Full host profile ${icon("arrow")}</a>
+          <div class="hero-actions"><a class="button button-outline" href="/about/">Full host profile ${icon("arrow")}</a></div>
         </div>
       </div>
     </section>
