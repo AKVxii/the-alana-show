@@ -1,6 +1,6 @@
 # Publishing a New Conversation
 
-The public YouTube feed updates automatically, but a verified internal episode page gives The Alana Show stronger internal linking, guest relationships, social metadata, crawlable fallbacks, sitemap coverage, and search authority.
+The public YouTube feed updates automatically, but a verified internal episode page gives The Alana Show stronger internal linking, guest relationships, social metadata, crawler-visible content, sitemap coverage, and search authority.
 
 This repository includes a zero-dependency publishing helper so that enrichment does not require a CMS or routine developer billing.
 
@@ -74,45 +74,55 @@ Run:
 
 `npm run publish:conversation`
 
-The helper will:
+The safe publishing command will:
 
-1. Reject duplicate YouTube IDs and episode slugs.
-2. Attempt to enrich the page from the verified YouTube feed.
-3. Add the episode to the verified editorial catalog.
-4. Add the episode to existing guest relationships.
-5. Create new verified guest records when needed.
-6. Generate the internal episode detail shell with canonical/social metadata and static search schema when the required video metadata is available.
-7. Generate new guest detail shells when needed.
-8. Add the episode and new guests to the crawlable archive fallbacks.
-9. Add their canonical URLs to `sitemap.xml`.
-10. Run the full repository quality suite.
-11. Roll back the files it changed if the quality suite fails.
+1. Refuse to start unless the Git working tree is clean.
+2. Reject duplicate YouTube IDs and episode slugs.
+3. Attempt to enrich the page from the verified YouTube feed.
+4. Add the episode to the verified editorial catalog.
+5. Add the episode to existing guest relationships.
+6. Create new verified guest records when needed.
+7. Generate the permanent episode page with canonical/social metadata and static search schema when the required video metadata is available.
+8. Generate new guest detail pages when needed.
+9. Backfill crawler-visible episode and guest content.
+10. Refresh the `/episodes`, `/guests`, and `/topics` canonical CollectionPage/ItemList graphs from the verified catalog.
+11. Refresh `sitemap.xml` with canonical URLs and trustworthy `lastmod` dates derived from actual page changes or Git history.
+12. Run the full repository quality suite, including sitemap/canonical validation.
+13. Restore the clean starting state if a post-publish synchronization or quality step fails.
 
-## Refresh discovery-hub authority
+## Sitemap freshness
 
-After a successful conversation publish and before opening the final PR, run:
+Google ignores sitemap `priority` and `changefreq` values. The site therefore uses a simpler sitemap focused on canonical URLs and accurate `lastmod` dates.
+
+The command:
+
+`npm run sync:sitemap`
+
+rebuilds sitemap metadata from the site's actual static pages. For committed pages it uses the latest Git modification date for that page. For a page being meaningfully changed in the current clean publishing transaction, it uses the current UTC date. It never invents a future date.
+
+The normal conversation publishing command runs this automatically. Use `npm run sync:sitemap` directly only when a meaningful static-page update is made outside the conversation publisher.
+
+## Discovery-hub authority
+
+The command:
 
 `npm run sync:hubs`
 
-This zero-dependency command keeps the three main discovery hubs synchronized with the verified catalog:
+keeps the three main discovery hubs synchronized with the verified catalog:
 
 - `/episodes` — crawler-visible archive plus `CollectionPage` / `ItemList` graph of permanent episode URLs;
 - `/guests` — verified guest directory plus `CollectionPage` / `ItemList` graph of permanent guest profiles;
 - `/topics` — crawler-visible topic directory plus `CollectionPage` / `ItemList` graph of permanent topic authority pages.
 
-Then run:
-
-`npm run quality`
-
-The hub sync is deterministic and uses only the repository's verified catalog, existing permanent page titles, and topic authority definitions. It does not invent new guests, topics, or editorial claims.
+The normal conversation publishing command now runs this automatically. The hub sync remains available as a standalone maintenance command for catalog changes made outside the publisher.
 
 ## Review before merge
 
-After the helper and hub sync succeed:
+After the publishing command succeeds:
 
 1. Review the Git diff.
 2. Confirm spelling, guest identity, title, description, slug, YouTube video ID, and publication metadata.
-3. Run or confirm the normal GitHub quality checks.
+3. Confirm the normal GitHub quality checks.
 4. Review the Vercel Preview on desktop and mobile.
 5. Only then merge through the normal reviewed pull-request workflow.
 

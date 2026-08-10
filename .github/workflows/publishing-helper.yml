@@ -4,9 +4,14 @@ on:
   pull_request:
     paths:
       - "scripts/publish-conversation.mjs"
+      - "scripts/publish-conversation-safe.mjs"
+      - "scripts/sync-hub-authority.mjs"
+      - "scripts/sync-sitemap-freshness.mjs"
+      - "scripts/sitemap-gate.mjs"
       - "content/conversation.example.json"
       - "PUBLISHING.md"
       - "package.json"
+      - "sitemap.xml"
       - ".github/workflows/publishing-helper.yml"
 
 permissions:
@@ -19,11 +24,13 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: 24
 
       - name: Create disposable conversation intake
         run: |
@@ -45,8 +52,8 @@ jobs:
           }
           JSON
 
-      - name: Exercise publishing helper and full quality suite
-        run: node scripts/publish-conversation.mjs /tmp/alana-conversation-smoke-test.json
+      - name: Exercise complete safe publishing transaction
+        run: npm run publish:conversation -- /tmp/alana-conversation-smoke-test.json
 
       - name: Verify generated static video search metadata
         run: |
@@ -55,3 +62,13 @@ jobs:
           grep -q '"uploadDate":"2026-08-10T12:00:00Z"' episodes/publishing-helper-ci-smoke-test/index.html
           grep -q '"duration":"PT30M"' episodes/publishing-helper-ci-smoke-test/index.html
           grep -q 'publishing-helper-ci-smoke-test?t={seek_to_second_number}' episodes/publishing-helper-ci-smoke-test/index.html
+
+      - name: Verify discovery hubs and sitemap stayed synchronized
+        run: |
+          grep -q 'publishing-helper-ci-smoke-test' episodes/index.html
+          grep -q 'publishing-helper-test-guest' guests/index.html
+          grep -q '<loc>https://thealanashow.com/episodes/publishing-helper-ci-smoke-test</loc>' sitemap.xml
+          grep -q '<loc>https://thealanashow.com/guests/publishing-helper-test-guest</loc>' sitemap.xml
+          grep -q '<lastmod>' sitemap.xml
+          ! grep -q '<priority>' sitemap.xml
+          ! grep -q '<changefreq>' sitemap.xml
