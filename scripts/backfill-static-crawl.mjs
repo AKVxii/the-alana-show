@@ -84,6 +84,11 @@ function replaceApp(html, fallback) {
   return html.replace(marker, `<div id="app">${fallback}</div>`);
 }
 
+function replaceStaticFallback(html, type, fallback) {
+  const pattern = new RegExp(`<main id="main-content" class="static-detail-fallback" data-static-crawl-fallback="${type}">[\\s\\S]*?<\\/main>`, "i");
+  return pattern.test(html) ? html.replace(pattern, fallback) : replaceApp(html, fallback);
+}
+
 function breadcrumbs(parent, current) {
   return `<nav class="breadcrumbs" aria-label="Breadcrumb"><ol><li><a href="/">Home</a></li><li><a href="/${parent.toLowerCase()}">${escapeHtml(parent)}</a></li><li aria-current="page">${escapeHtml(current)}</li></ol></nav>`;
 }
@@ -281,7 +286,7 @@ for (const guest of targetGuests) {
   const relative = `guests/${guest.id}/index.html`;
   const original = read(relative);
   const profile = guestProfileById(guest.id);
-  let updated = replaceApp(original, guestFallback(guest, original));
+  let updated = replaceStaticFallback(original, "guest", guestFallback(guest, original));
   if (profile?.summary) {
     updated = replaceMetaContent(updated, "name", "description", profile.summary);
     updated = replaceMetaContent(updated, "property", "og:description", profile.summary);
