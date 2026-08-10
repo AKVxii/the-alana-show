@@ -1,0 +1,58 @@
+name: Phase 8 guest fallback refresh
+
+on:
+  push:
+    branches:
+      - phase-8-guest-entities
+
+permissions:
+  contents: write
+
+jobs:
+  refresh:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v4
+        with:
+          ref: phase-8-guest-entities
+          fetch-depth: 0
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Make static guest fallbacks refreshable
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p = Path('scripts/backfill-static-crawl.mjs')
+          s = p.read_text()
+          anchor = '''function replaceApp(html, fallback) {\n  if (html.includes("data-static-crawl-fallback")) return html;\n  const marker = '<div id="app"></div>';\n  if (!html.includes(marker)) throw new Error("Expected empty #app shell was not found.");\n  return html.replace(marker, `<div id="app">${fallback}</div>`);\n}\n'''
+          helper = anchor + '''\nfunction replaceStaticFallback(html, type, fallback) {\n  const pattern = new RegExp(`<main id="main-content" class="static-detail-fallback" data-static-crawl-fallback="${type}">[\\\\s\\\\S]*?<\\\\/main>`, "i");\n  return pattern.test(html) ? html.replace(pattern, fallback) : replaceApp(html, fallback);\n}\n'''
+          if helper not in s:
+              if anchor not in s:
+                  raise SystemExit('replaceApp anchor missing')
+              s = s.replace(anchor, helper, 1)
+          old = '  let updated = replaceApp(original, guestFallback(guest, original));\n'
+          new = '  let updated = replaceStaticFallback(original, "guest", guestFallback(guest, original));\n'
+          if old not in s:
+              raise SystemExit('guest fallback loop line missing')
+          s = s.replace(old, new, 1)
+          p.write_text(s)
+          PY
+      - name: Regenerate static guest pages
+        run: node scripts/backfill-static-crawl.mjs
+      - name: Commit refreshed guest fallbacks
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add scripts/backfill-static-crawl.mjs guests
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+            exit 0
+          fi
+          git commit -m "Refresh sourced guest fallback content"
+          git push origin HEAD:phase-8-guest-entities
