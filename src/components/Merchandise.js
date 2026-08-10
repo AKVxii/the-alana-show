@@ -7,14 +7,14 @@ export function Merchandise() {
         <div class="merchandise-teaser-copy reveal">
           <p class="eyebrow dark"><span></span> Merchandise</p>
           <h2 id="merchandise-teaser-title">Wear the message.</h2>
-          <p>Limited shirts and hats inspired by The Alana Show, available individually by request.</p>
+          <p>Limited organic-cotton tees and hats inspired by The Alana Show, available individually by request.</p>
           <div class="merchandise-teaser-actions">
             <a class="button button-gold" href="/merchandise/" data-track-event="Merchandise Explore" data-track-location="home">View merchandise ${icon("arrow")}</a>
           </div>
           <small>Made to order · Availability, timing, shipping, and payment confirmed personally before purchase.</small>
         </div>
         <a class="merchandise-teaser-art reveal" href="/merchandise/" aria-label="View The Alana Show merchandise collection" data-track-event="Merchandise Explore" data-track-location="home-image">
-          <img src="/assets/merchandise-collection.svg" width="1440" height="960" loading="lazy" alt="The Alana Show merchandise collection featuring four quote shirts and a Save it for the show hat">
+          <img src="/assets/alana-show-merchandise-collection.png" width="1600" height="1200" loading="lazy" alt="The Alana Show merchandise collection featuring four light organic-cotton quote tees and a Save it for the show hat">
         </a>
       </div>
     </section>
