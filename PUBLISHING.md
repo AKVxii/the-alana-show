@@ -87,9 +87,10 @@ The safe publishing command will:
 9. Backfill crawler-visible episode and guest content.
 10. Refresh the `/episodes`, `/guests`, and `/topics` canonical CollectionPage/ItemList graphs from the verified catalog.
 11. Refresh `sitemap.xml` with canonical URLs and trustworthy `lastmod` dates derived from actual page changes or Git history.
-12. Run the full repository quality suite, including sitemap/canonical validation.
-13. Restore the clean starting state if a post-publish synchronization or quality step fails.
-14. Print a post-publish distribution brief with the permanent episode URL, guest profile URLs, YouTube link, exact website-link line, media resources, and a practical backlink/share checklist.
+12. Refresh `video-sitemap.xml` from the permanent episode pages so Google's specialized video discovery stays synchronized with the verified conversation archive.
+13. Run the full repository quality suite, including canonical, video-sitemap, security, trust, accessibility, distribution, and publishing protections.
+14. Restore the clean starting state if a post-publish synchronization or quality step fails.
+15. Print a post-publish distribution brief with the permanent episode URL, guest profile URLs, YouTube link, exact website-link line, media resources, and a practical backlink/share checklist.
 
 ## Post-publish distribution brief
 
@@ -110,17 +111,39 @@ This is intentionally a checklist, not automated outreach. The publisher does no
 
 The distribution principle is simple: external platforms distribute the conversation; the permanent The Alana Show page owns the long-term context, guest relationship, topic links, search authority, and reference URL.
 
-## Sitemap freshness
+## Canonical sitemap freshness
 
-Google ignores sitemap `priority` and `changefreq` values. The site therefore uses a simpler sitemap focused on canonical URLs and accurate `lastmod` dates.
+Google ignores sitemap `priority` and `changefreq` values. The site therefore uses a simpler canonical sitemap focused on permanent URLs and accurate `lastmod` dates.
 
 The command:
 
 `npm run sync:sitemap`
 
-rebuilds sitemap metadata from the site's actual static pages. For committed pages it uses the latest Git modification date for that page. For a page being meaningfully changed in the current clean publishing transaction, it uses the current UTC date. It never invents a future date.
+rebuilds canonical sitemap metadata from the site's actual static pages. For committed pages it uses the latest Git modification date for that page. For a page being meaningfully changed in the current clean publishing transaction, it uses the current UTC date. It never invents a future date.
 
 The normal conversation publishing command runs this automatically. Use `npm run sync:sitemap` directly only when a meaningful static-page update is made outside the conversation publisher.
+
+## Google video sitemap
+
+The site also maintains a specialized video sitemap at:
+
+`https://thealanashow.com/video-sitemap.xml`
+
+The command:
+
+`npm run sync:video-sitemap`
+
+rebuilds that file from the verified episode catalog and the metadata already published in each permanent episode's static HTML. It uses:
+
+- the canonical The Alana Show episode URL as the video landing page;
+- the page's existing title and description;
+- the page's preferred YouTube thumbnail;
+- the verified privacy-enhanced `youtube-nocookie.com` player URL;
+- the matching canonical sitemap `lastmod` date.
+
+This avoids maintaining a second hand-written metadata source. The video sitemap is specialized discovery infrastructure; `sitemap.xml` remains the canonical URL inventory for the full site.
+
+`robots.txt` advertises both sitemap files. The normal conversation publishing command refreshes the video sitemap automatically after the canonical sitemap is updated and before quality checks run.
 
 ## Discovery-hub authority
 
@@ -134,7 +157,7 @@ keeps the three main discovery hubs synchronized with the verified catalog:
 - `/guests` — verified guest directory plus `CollectionPage` / `ItemList` graph of permanent guest profiles;
 - `/topics` — crawler-visible topic directory plus `CollectionPage` / `ItemList` graph of permanent topic authority pages.
 
-The normal conversation publishing command now runs this automatically. The hub sync remains available as a standalone maintenance command for catalog changes made outside the publisher.
+The normal conversation publishing command runs this automatically. The hub sync remains available as a standalone maintenance command for catalog changes made outside the publisher.
 
 ## Review before merge
 
