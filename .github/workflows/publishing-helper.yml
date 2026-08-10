@@ -33,6 +33,9 @@ jobs:
             "slug": "publishing-helper-ci-smoke-test",
             "title": "Publishing Helper CI Smoke Test",
             "description": "Disposable CI-only record used to verify The Alana Show publishing workflow.",
+            "publishedAt": "2026-08-10T12:00:00Z",
+            "durationSeconds": 1800,
+            "thumbnail": "https://i.ytimg.com/vi/A1b2C3d4E5F/hqdefault.jpg",
             "guests": [
               {
                 "name": "Publishing Helper Test Guest",
@@ -44,3 +47,11 @@ jobs:
 
       - name: Exercise publishing helper and full quality suite
         run: node scripts/publish-conversation.mjs /tmp/alana-conversation-smoke-test.json
+
+      - name: Verify generated static video search metadata
+        run: |
+          grep -q '"@type":"VideoObject"' episodes/publishing-helper-ci-smoke-test/index.html
+          grep -q '"@type":"SeekToAction"' episodes/publishing-helper-ci-smoke-test/index.html
+          grep -q '"uploadDate":"2026-08-10T12:00:00Z"' episodes/publishing-helper-ci-smoke-test/index.html
+          grep -q '"duration":"PT30M"' episodes/publishing-helper-ci-smoke-test/index.html
+          grep -q 'publishing-helper-ci-smoke-test?t={seek_to_second_number}' episodes/publishing-helper-ci-smoke-test/index.html
