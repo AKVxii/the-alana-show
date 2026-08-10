@@ -36,6 +36,28 @@ const slugify = value => String(value)
   .replace(/-{2,}/g, "-");
 const safeJsonLd = value => JSON.stringify(value).replace(/</g, "\\u003c");
 
+function isoDuration(seconds = 0) {
+  const total = Number(seconds || 0);
+  if (!Number.isFinite(total) || total <= 0) return "";
+  const hours = Math.floor(total / 3600);
+  const minutes = Math.floor((total % 3600) / 60);
+  const secs = Math.floor(total % 60);
+  return `PT${hours ? `${hours}H` : ""}${minutes ? `${minutes}M` : ""}${secs || (!hours && !minutes) ? `${secs}S` : ""}`;
+}
+
+async function fetchVerifiedVideoMetadata(videoId) {
+  try {
+    const response = await fetch(`${ORIGIN}/api/youtube`, {
+      headers: { Accept: "application/json" }
+    });
+    if (!response.ok) return null;
+    const payload = await response.json();
+    return (payload.episodes || []).find(episode => episode.videoId === videoId) || null;
+  } catch {
+    return null;
+  }
+}
+
 if (!fs.existsSync(inputPath)) fail(`Input file not found: ${path.relative(ROOT, inputPath)}`);
 
 const gitStatus = spawnSync("git", ["status", "--porcelain"], { cwd: ROOT, encoding: "utf8" });
@@ -65,11 +87,19 @@ if (!guests.length || guests.some(guest => !guest.name || !/^[a-z0-9]+(?:-[a-z0-
 }
 if (new Set(guests.map(guest => guest.slug)).size !== guests.length) fail("Guest slugs must be unique within the conversation record.");
 
+const verifiedVideo = await fetchVerifiedVideoMetadata(videoId);
 const guestNames = guests.map(guest => guest.name);
-const title = String(input.title || `Conversation with ${guestNames.join(" & ")}`).trim();
-const description = String(input.description || `Watch The Alana Show conversation with ${guestNames.join(" and ")}.`).replace(/\s+/g, " ").trim();
+const title = String(input.title || verifiedVideo?.title || `Conversation with ${guestNames.join(" & ")}`).trim();
+const description = String(input.description || verifiedVideo?.description || `Watch The Alana Show conversation with ${guestNames.join(" and ")}.`).replace(/\s+/g, " ").trim();
+const publishedAt = String(input.publishedAt || verifiedVideo?.publishedAt || "").trim();
+const durationSeconds = Number(input.durationSeconds || verifiedVideo?.durationSeconds || 0);
+const thumbnail = String(input.thumbnail || verifiedVideo?.thumbnail || `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`).trim();
+const viewCount = Number(verifiedVideo?.viewCount ?? -1);
 if (!title) fail("title cannot be empty.");
 if (!description) fail("description cannot be empty.");
+if (publishedAt && Number.isNaN(Date.parse(publishedAt))) fail("publishedAt must be a valid ISO-8601 date or datetime when provided.");
+if (durationSeconds && (!Number.isFinite(durationSeconds) || durationSeconds <= 0)) fail("durationSeconds must be a positive number when provided.");
+if (!/^https:\/\//i.test(thumbnail)) fail("thumbnail must be an absolute HTTPS URL when provided.");
 
 const catalogPath = "src/data/catalog.js";
 const episodeHubPath = "episodes/index.html";
@@ -155,9 +185,82 @@ sitemap = insertSitemapUrl(sitemap, `${ORIGIN}/episodes/${slug}`, "0.8");
 for (const guest of newGuestPages) sitemap = insertSitemapUrl(sitemap, `${ORIGIN}/guests/${guest.slug}`, "0.7");
 
 const episodeCanonical = `${ORIGIN}/episodes/${slug}`;
-const episodeImage = `https://i.ytimg.com/vi/${videoId}/maxresdefault.jpg`;
+const episodeImage = thumbnail;
 const episodeTitle = `${title} | The Alana Show`;
-const episodeHtml = `<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="${escapeHtml(description)}"><meta name="robots" content="index,follow,max-image-preview:large"><meta name="theme-color" content="#030914"><meta property="og:site_name" content="The Alana Show"><meta property="og:title" content="${escapeHtml(episodeTitle)}"><meta property="og:description" content="${escapeHtml(description)}"><meta property="og:type" content="video.other"><meta property="og:url" content="${episodeCanonical}"><meta property="og:image" content="${episodeImage}"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="${escapeHtml(episodeTitle)}"><meta name="twitter:description" content="${escapeHtml(description)}"><meta name="twitter:image" content="${episodeImage}"><title>${escapeHtml(episodeTitle)}</title><link rel="canonical" href="${episodeCanonical}"><link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="/src/styles.css"><link rel="stylesheet" href="/src/media.css"></head><body data-detail-type="episode" data-detail-id="${escapeHtml(slug)}"><a class="skip-link" href="#main-content">Skip to main content</a><div id="app"></div><script type="module" src="/src/detail-page.js"></script></body></html>`;
+const metaDescription = description.length > 220 ? `${description.slice(0, 217).trim()}…` : description;
+const episodeGraph = [
+  {
+    "@type": "WebSite",
+    "@id": `${ORIGIN}/#website`,
+    url: `${ORIGIN}/`,
+    name: "The Alana Show"
+  },
+  {
+    "@type": "PodcastSeries",
+    "@id": `${ORIGIN}/#show`,
+    url: `${ORIGIN}/`,
+    name: "The Alana Show",
+    isPartOf: { "@id": `${ORIGIN}/#website` }
+  },
+  {
+    "@type": "WebPage",
+    "@id": `${episodeCanonical}#webpage`,
+    url: episodeCanonical,
+    name: episodeTitle,
+    description: metaDescription,
+    isPartOf: { "@id": `${ORIGIN}/#website` },
+    breadcrumb: { "@id": `${episodeCanonical}#breadcrumb` },
+    primaryImageOfPage: { "@type": "ImageObject", url: episodeImage },
+    ...(publishedAt ? { datePublished: publishedAt } : {})
+  },
+  {
+    "@type": "BreadcrumbList",
+    "@id": `${episodeCanonical}#breadcrumb`,
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: `${ORIGIN}/` },
+      { "@type": "ListItem", position: 2, name: "Episodes", item: `${ORIGIN}/episodes` },
+      { "@type": "ListItem", position: 3, name: title, item: episodeCanonical }
+    ]
+  }
+];
+if (publishedAt) {
+  const videoObject = {
+    "@type": "VideoObject",
+    "@id": `${episodeCanonical}#video`,
+    name: title,
+    description,
+    thumbnailUrl: [episodeImage],
+    uploadDate: publishedAt,
+    embedUrl: `https://www.youtube-nocookie.com/embed/${videoId}`,
+    url: episodeCanonical,
+    mainEntityOfPage: { "@id": `${episodeCanonical}#webpage` },
+    isPartOf: { "@id": `${ORIGIN}/#show` },
+    potentialAction: {
+      "@type": "SeekToAction",
+      target: `${episodeCanonical}?t={seek_to_second_number}`,
+      "startOffset-input": "required name=seek_to_second_number"
+    },
+    about: guests.map(guest => ({
+      "@type": "Person",
+      "@id": `${ORIGIN}/guests/${guest.slug}#person`,
+      name: guest.name,
+      url: `${ORIGIN}/guests/${guest.slug}`
+    }))
+  };
+  const duration = isoDuration(durationSeconds);
+  if (duration) videoObject.duration = duration;
+  if (Number.isFinite(viewCount) && viewCount >= 0) {
+    videoObject.interactionStatistic = {
+      "@type": "InteractionCounter",
+      interactionType: { "@type": "WatchAction" },
+      userInteractionCount: viewCount
+    };
+  }
+  episodeGraph.push(videoObject);
+  episodeGraph[2].mainEntity = { "@id": `${episodeCanonical}#video` };
+}
+const episodeStructuredData = safeJsonLd({ "@context": "https://schema.org", "@graph": episodeGraph });
+const episodeHtml = `<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="${escapeHtml(metaDescription)}"><meta name="robots" content="index,follow,max-image-preview:large"><meta name="theme-color" content="#030914"><meta property="og:site_name" content="The Alana Show"><meta property="og:title" content="${escapeHtml(episodeTitle)}"><meta property="og:description" content="${escapeHtml(metaDescription)}"><meta property="og:type" content="video.other"><meta property="og:url" content="${episodeCanonical}"><meta property="og:image" content="${episodeImage}"><meta property="og:image:alt" content="${escapeHtml(title)}"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="${escapeHtml(episodeTitle)}"><meta name="twitter:description" content="${escapeHtml(metaDescription)}"><meta name="twitter:image" content="${episodeImage}"><meta name="twitter:image:alt" content="${escapeHtml(title)}"><title>${escapeHtml(episodeTitle)}</title><link rel="canonical" href="${episodeCanonical}"><link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="/src/styles.css"><link rel="stylesheet" href="/src/media.css"><script type="application/ld+json">${episodeStructuredData}</script></head><body data-detail-type="episode" data-detail-id="${escapeHtml(slug)}"><a class="skip-link" href="#main-content">Skip to main content</a><div id="app"></div><script type="module" src="/src/detail-page.js"></script></body></html>`;
 
 const guestFiles = newGuestPages.map(guest => {
   const canonical = `${ORIGIN}/guests/${guest.slug}`;
@@ -169,7 +272,7 @@ const guestFiles = newGuestPages.map(guest => {
     url: canonical,
     mainEntity: { "@type": "Person", name: guest.name }
   });
-  const html = `<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="${escapeHtml(guestDescription)}"><meta name="robots" content="index,follow,max-image-preview:large"><meta name="theme-color" content="#030914"><meta property="og:site_name" content="The Alana Show"><meta property="og:title" content="${escapeHtml(pageTitle)}"><meta property="og:description" content="${escapeHtml(guestDescription)}"><meta property="og:type" content="profile"><meta property="og:url" content="${canonical}"><meta property="og:image" content="${DEFAULT_SOCIAL_IMAGE}"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="${escapeHtml(pageTitle)}"><meta name="twitter:description" content="${escapeHtml(guestDescription)}"><meta name="twitter:image" content="${DEFAULT_SOCIAL_IMAGE}"><title>${escapeHtml(pageTitle)}</title><link rel="canonical" href="${canonical}"><link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="/src/styles.css"><link rel="stylesheet" href="/src/media.css"><script type="application/ld+json">${structuredData}</script></head><body data-detail-type="guest" data-detail-id="${escapeHtml(guest.slug)}"><a class="skip-link" href="#main-content">Skip to main content</a><div id="app"></div><script type="module" src="/src/detail-page.js"></script></body></html>`;
+  const html = `<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="${escapeHtml(guestDescription)}"><meta name="robots" content="index,follow,max-image-preview:large"><meta name="theme-color" content="#030914"><meta property="og:site_name" content="The Alana Show"><meta property="og:title" content="${escapeHtml(pageTitle)}"><meta property="og:description" content="${escapeHtml(guestDescription)}"><meta property="og:type" content="profile"><meta property="og:url" content="${canonical}"><meta property="og:image" content="${DEFAULT_SOCIAL_IMAGE}"><meta property="og:image:alt" content="${escapeHtml(`${guest.name} on The Alana Show`)}"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="${escapeHtml(pageTitle)}"><meta name="twitter:description" content="${escapeHtml(guestDescription)}"><meta name="twitter:image" content="${DEFAULT_SOCIAL_IMAGE}"><meta name="twitter:image:alt" content="${escapeHtml(`${guest.name} on The Alana Show`)}"><title>${escapeHtml(pageTitle)}</title><link rel="canonical" href="${canonical}"><link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="/src/styles.css"><link rel="stylesheet" href="/src/media.css"><script type="application/ld+json">${structuredData}</script></head><body data-detail-type="guest" data-detail-id="${escapeHtml(guest.slug)}"><a class="skip-link" href="#main-content">Skip to main content</a><div id="app"></div><script type="module" src="/src/detail-page.js"></script></body></html>`;
   return { guest, html, relativePath: `guests/${guest.slug}/index.html` };
 });
 
@@ -184,6 +287,8 @@ const summary = [
   `Slug: ${slug}`,
   `YouTube: ${videoId}`,
   `Guests: ${guests.map(guest => `${guest.name} (${guest.slug})`).join(", ")}`,
+  `Verified YouTube metadata: ${verifiedVideo ? "yes" : "no"}`,
+  `Static VideoObject: ${publishedAt ? "yes" : "no"}`,
   `New guest pages: ${newGuestPages.length}`
 ];
 
