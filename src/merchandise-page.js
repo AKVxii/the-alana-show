@@ -6,6 +6,9 @@ const header = document.querySelector("[data-merchandise-header]");
 const footer = document.querySelector("[data-merchandise-footer]");
 const form = document.querySelector("[data-merchandise-form]");
 const status = document.querySelector("[data-merchandise-status]");
+const itemSelect = form?.querySelector('[name="item"]');
+const sizeSelect = form?.querySelector('[name="size"]');
+const hatSizeValue = "Hat — adjustable / one size";
 
 if (header) header.innerHTML = MediaHeader();
 if (footer) footer.innerHTML = Footer({ fromSubpage: true });
@@ -14,6 +17,35 @@ setupMediaNavigation();
 function clean(value = "") {
   return String(value).trim();
 }
+
+function syncSizeOptions() {
+  if (!itemSelect || !sizeSelect) return;
+
+  const item = clean(itemSelect.value);
+  const hatSelected = item.startsWith("Show Hat");
+  const teeSelected = Boolean(item) && !hatSelected;
+
+  for (const option of sizeSelect.options) {
+    if (!option.value) {
+      option.disabled = false;
+      option.hidden = false;
+      continue;
+    }
+
+    const isHatSize = option.value === hatSizeValue;
+    option.disabled = hatSelected ? !isHatSize : teeSelected ? isHatSize : false;
+    option.hidden = option.disabled;
+  }
+
+  if (hatSelected) {
+    sizeSelect.value = hatSizeValue;
+  } else if (sizeSelect.value === hatSizeValue) {
+    sizeSelect.value = "";
+  }
+}
+
+itemSelect?.addEventListener("change", syncSizeOptions);
+syncSizeOptions();
 
 form?.addEventListener("submit", async event => {
   event.preventDefault();
@@ -68,6 +100,7 @@ form?.addEventListener("submit", async event => {
     if (!response.ok) throw new Error(result.error || "Unable to send inquiry");
 
     form.reset();
+    syncSizeOptions();
     status.textContent = "Thank you. Your merchandise inquiry has been sent. Alana will confirm the details by email.";
     status.classList.add("success");
     trackEvent("Merchandise Inquiry Success", { item: clean(values.item) });
