@@ -32,6 +32,7 @@ export function Footer({ fromSubpage = false } = {}) {
           <a href="/advertise/">Advertise &amp; Partner</a>
           <a href="${home}#sponsor">Commercial Real Estate Sponsor — The Fitzgerald Group</a>
           <a href="${home}#contact">Contact</a>
+          <a href="/press/">Press &amp; Media</a>
           <a href="/standards/">Editorial Standards</a>
           <a href="/privacy/">Privacy</a>
           <a href="/accessibility/">Accessibility</a>
