@@ -42,6 +42,13 @@ assert(detail.includes('"@type": "VideoObject"'), 'Episode detail must retain Vi
 assert(detail.includes('"@type": "PodcastSeries"'), 'Episode detail must connect videos to The Alana Show series.');
 assert(detail.includes('about: relatedGuests.map'), 'Episode VideoObject must connect to verified guest entities.');
 assert(detail.includes('isPartOf: { "@id": SHOW_ID }'), 'Episode VideoObject must connect to the show entity.');
+assert(detail.includes('"@type": "SeekToAction"'), 'Episode VideoObject must expose Google-compatible key-moment seeking.');
+assert(detail.includes('target: `${canonical}?t={seek_to_second_number}`'), 'SeekToAction must target the canonical episode URL with a numeric t parameter.');
+assert(detail.includes('"startOffset-input": "required name=seek_to_second_number"'), 'SeekToAction must declare the required seek offset input.');
+assert(detail.includes('const startSeconds = requestedStartSeconds();'), 'Episode rendering must honor timestamp deep links.');
+assert(detail.includes('`&start=${startSeconds}`'), 'Episode embeds must translate the page timestamp into the YouTube start parameter.');
+assert(detail.includes('graph[2].datePublished = uploadDate;'), 'Episode WebPage schema must retain the verified YouTube publication date when available.');
+assert(detail.includes('"@type": "InteractionCounter"'), 'Episode VideoObject should retain the live YouTube view count when available.');
 assert(detail.includes('loadYouTubeFeed'), 'Episode detail must reuse the shared YouTube feed cache.');
 assert(!detail.includes('fetch("/api/youtube")'), 'Episode detail must not bypass the shared YouTube feed cache.');
 
@@ -95,4 +102,4 @@ if (errors.length) {
 
 console.log('Search authority gate passed.');
 console.log(`  Permanent topic authority pages: ${topicIds.length}`);
-console.log('  Show identity, canonical topic links, entity graph, internal episode links and shared feed caching: OK');
+console.log('  Show identity, canonical topic links, video key moments, entity graph, internal episode links and shared feed caching: OK');
