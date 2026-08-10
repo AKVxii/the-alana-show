@@ -1,0 +1,130 @@
+name: Phase 8 guest entity integration
+
+on:
+  push:
+    branches:
+      - phase-8-guest-entities
+
+permissions:
+  contents: write
+
+jobs:
+  integrate:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v4
+        with:
+          ref: phase-8-guest-entities
+          fetch-depth: 0
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Wire verified profiles into detail rendering and static search pages
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          # Runtime guest detail rendering + schema.
+          p = Path('src/detail-page.js')
+          s = p.read_text()
+          import_anchor = 'import { topicHref } from "./data/topic-pages.js";\n'
+          import_line = 'import { guestProfileById } from "./data/guest-profiles.js";\n'
+          if import_line not in s:
+              if import_anchor not in s:
+                  raise SystemExit('detail-page import anchor missing')
+              s = s.replace(import_anchor, import_anchor + import_line, 1)
+
+          static_anchor = '  const isEpisode = detailType === "episode";\n  const guestNames = isEpisode ? episodeGuestNames(detailItem) : [];\n'
+          static_replacement = '  const isEpisode = detailType === "episode";\n  const guestProfile = !isEpisode ? guestProfileById(detailItem.id) : null;\n  const guestNames = isEpisode ? episodeGuestNames(detailItem) : [];\n'
+          if static_replacement not in s:
+              if static_anchor not in s:
+                  raise SystemExit('applyStaticMetadata anchor missing')
+              s = s.replace(static_anchor, static_replacement, 1)
+
+          old_desc = '  const description = document.head.querySelector(\'meta[name="description"]\')?.content?.trim() || generatedDescription;\n'
+          new_desc = '  const description = guestProfile?.summary || document.head.querySelector(\'meta[name="description"]\')?.content?.trim() || generatedDescription;\n'
+          if old_desc in s:
+              s = s.replace(old_desc, new_desc, 1)
+
+          old_type = '      "@type": "WebPage",\n      "@id": `${canonical}#webpage`,\n'
+          new_type = '      "@type": isEpisode ? "WebPage" : "ProfilePage",\n      "@id": `${canonical}#webpage`,\n'
+          if old_type not in s:
+              raise SystemExit('detail page graph type anchor missing')
+          s = s.replace(old_type, new_type, 1)
+
+          old_person = '''  if (!isEpisode) {\n    graph[2].mainEntity = { "@id": `${canonical}#person` };\n    graph.push({\n      "@type": "Person",\n      "@id": `${canonical}#person`,\n      name: detailItem.name,\n      url: canonical,\n      subjectOf: (detailItem.episodeIds || []).map(episodeId => ({\n        "@type": "WebPage",\n        "@id": `${SITE_ORIGIN}/episodes/${episodeId}#webpage`,\n        url: `${SITE_ORIGIN}/episodes/${episodeId}`\n      }))\n    });\n  }\n'''
+          new_person = '''  if (!isEpisode) {\n    graph[2].mainEntity = { "@id": `${canonical}#person` };\n    const person = {\n      "@type": "Person",\n      "@id": `${canonical}#person`,\n      name: detailItem.name,\n      url: canonical,\n      subjectOf: (detailItem.episodeIds || []).map(episodeId => ({\n        "@type": "WebPage",\n        "@id": `${SITE_ORIGIN}/episodes/${episodeId}#webpage`,\n        url: `${SITE_ORIGIN}/episodes/${episodeId}`\n      }))\n    };\n    if (guestProfile?.summary) person.description = guestProfile.summary;\n    if (guestProfile?.role) person.jobTitle = guestProfile.role;\n    if (guestProfile?.organization) {\n      person.worksFor = {\n        "@type": "Organization",\n        name: guestProfile.organization.name,\n        url: guestProfile.organization.url\n      };\n    }\n    if (guestProfile?.sameAs?.length) person.sameAs = guestProfile.sameAs;\n    graph.push(person);\n  }\n'''
+          if old_person not in s:
+              raise SystemExit('guest Person schema block missing')
+          s = s.replace(old_person, new_person, 1)
+
+          old_guest = '''function guestDetail(guest) {\n  const related = (guest.episodeIds || []).map(episodeById).filter(Boolean);\n  const count = guest.conversationCount || related.length;\n  const archiveHref = `/episodes?guest=${encodeURIComponent(guest.name)}`;\n  const countLabel = count === 1 ? "1 verified conversation" : `${count} verified conversations`;\n  return `<section class="detail-hero"><div class="shell detail-shell">${breadcrumbs(guest.name)}<p class="eyebrow"><span></span> Guest</p><h1>${escapeHtml(guest.name)}</h1>\n    <div class="guest-detail-intro" data-reveal><div class="guest-monogram guest-monogram-large" aria-hidden="true">${escapeHtml(guest.name.split(/\\s+/).map(part => part[0]).slice(0, 2).join(""))}</div><div><p>${escapeHtml(countLabel)} featuring ${escapeHtml(guest.name)} on The Alana Show.</p><div class="detail-actions"><a class="button button-gold" href="${archiveHref}">View conversations</a><a class="button button-outline" href="/guests">Guest directory</a></div></div></div>\n    ${related.length ? `<section class="related-section" aria-labelledby="related-heading"><div data-reveal><p class="related-eyebrow"><span></span>${escapeHtml(guest.name.toUpperCase())} ARCHIVE</p><h2 id="related-heading">Related conversations</h2></div><div class="related-conversation-list">${related.map(relatedConversationRow).join("")}</div></section>` : ""}\n  </div></section>`;\n}\n'''
+          new_guest = '''function guestDetail(guest) {\n  const related = (guest.episodeIds || []).map(episodeById).filter(Boolean);\n  const profile = guestProfileById(guest.id);\n  const count = guest.conversationCount || related.length;\n  const archiveHref = `/episodes?guest=${encodeURIComponent(guest.name)}`;\n  const countLabel = count === 1 ? "1 verified conversation" : `${count} verified conversations`;\n  const intro = profile?.summary || `${countLabel} featuring ${guest.name} on The Alana Show.`;\n  const role = profile?.role ? `<p class="detail-byline">${escapeHtml(profile.role)}</p>` : "";\n  const officialAction = profile?.officialUrl ? `<a class="button button-outline" href="${escapeHtml(profile.officialUrl)}" target="_blank" rel="noopener">Official profile</a>` : "";\n  return `<section class="detail-hero"><div class="shell detail-shell">${breadcrumbs(guest.name)}<p class="eyebrow"><span></span> Guest</p><h1>${escapeHtml(guest.name)}</h1>\n    <div class="guest-detail-intro" data-reveal><div class="guest-monogram guest-monogram-large" aria-hidden="true">${escapeHtml(guest.name.split(/\\s+/).map(part => part[0]).slice(0, 2).join(""))}</div><div>${role}<p>${escapeHtml(intro)}</p><p class="detail-byline">${escapeHtml(countLabel)} on The Alana Show.</p><div class="detail-actions"><a class="button button-gold" href="${archiveHref}">View conversations</a>${officialAction}<a class="button button-outline" href="/guests">Guest directory</a></div></div></div>\n    ${related.length ? `<section class="related-section" aria-labelledby="related-heading"><div data-reveal><p class="related-eyebrow"><span></span>${escapeHtml(guest.name.toUpperCase())} ARCHIVE</p><h2 id="related-heading">Related conversations</h2></div><div class="related-conversation-list">${related.map(relatedConversationRow).join("")}</div></section>` : ""}\n  </div></section>`;\n}\n'''
+          if old_guest not in s:
+              raise SystemExit('guestDetail block missing')
+          s = s.replace(old_guest, new_guest, 1)
+          p.write_text(s)
+
+          # Static crawl generator: use the same verified profile source.
+          p = Path('scripts/backfill-static-crawl.mjs')
+          s = p.read_text()
+          catalog_import = 'const catalogUrl = pathToFileURL(path.join(ROOT, "src/data/catalog.js")).href;\nconst { episodes, guests, episodeById, guestById } = await import(catalogUrl);\n'
+          profile_import = catalog_import + 'const profilesUrl = pathToFileURL(path.join(ROOT, "src/data/guest-profiles.js")).href;\nconst { guestProfileById } = await import(profilesUrl);\n'
+          if profile_import not in s:
+              if catalog_import not in s:
+                  raise SystemExit('backfill catalog import anchor missing')
+              s = s.replace(catalog_import, profile_import, 1)
+
+          meta_anchor = '''function pageImage(html) {\n  const match = html.match(/<meta\\s+property="og:image"\\s+content="([^"]*)"/i);\n  return decodeHtml(match?.[1] || "").trim();\n}\n'''
+          meta_helper = meta_anchor + '''\nfunction replaceMetaContent(html, attribute, key, content) {\n  const escaped = escapeHtml(content);\n  const pattern = new RegExp(`<meta\\\\s+${attribute}="${key}"\\\\s+content="[^"]*">`, "i");\n  return pattern.test(html) ? html.replace(pattern, `<meta ${attribute}="${key}" content="${escaped}">`) : html;\n}\n'''
+          if meta_helper not in s:
+              if meta_anchor not in s:
+                  raise SystemExit('backfill meta helper anchor missing')
+              s = s.replace(meta_anchor, meta_helper, 1)
+
+          start = s.index('function guestFallback(guest, html) {')
+          end = s.index('\n}\n\nfunction websiteSchema()', start) + 2
+          old = s[start:end]
+          new = '''function guestFallback(guest, html) {\n  const title = pageTitle(html) || guest.name;\n  const profile = guestProfileById(guest.id);\n  const description = profile?.summary || pageDescription(html) || `Explore verified conversations featuring ${guest.name} on The Alana Show.`;\n  const relatedEpisodes = (guest.episodeIds || []).map(episodeById).filter(Boolean);\n  const episodeLinks = relatedEpisodes.map(episode => {\n    const relatedPath = `episodes/${episode.id}/index.html`;\n    const relatedTitle = fs.existsSync(path.join(ROOT, relatedPath)) ? (pageTitle(read(relatedPath)) || episode.title) : episode.title;\n    return `<li><a href="/episodes/${escapeHtml(episode.id)}">${escapeHtml(relatedTitle)}</a></li>`;\n  }).join("");\n  const role = profile?.role ? `<p class="detail-byline">${escapeHtml(profile.role)}</p>` : "";\n  const officialAction = profile?.officialUrl ? `<a class="button button-outline" href="${escapeHtml(profile.officialUrl)}" target="_blank" rel="noopener">Official profile</a>` : "";\n  return `<main id="main-content" class="static-detail-fallback" data-static-crawl-fallback="guest"><section class="detail-hero"><div class="shell detail-shell">${breadcrumbs("Guests", title)}<p class="eyebrow"><span></span> Guest</p><h1>${escapeHtml(title)}</h1>${role}<p>${escapeHtml(description)}</p>${episodeLinks ? `<section class="related-section" aria-labelledby="static-related-heading"><p class="related-eyebrow"><span></span> VERIFIED ARCHIVE</p><h2 id="static-related-heading">Related conversations</h2><ul>${episodeLinks}</ul></section>` : ""}<div class="detail-actions"><a class="button button-gold" href="/episodes?guest=${encodeURIComponent(guest.name)}">View conversations</a>${officialAction}<a class="button button-outline" href="/guests">Guest directory</a></div></div></section></main>`;\n}'''
+          s = s[:start] + new + s[end:]
+
+          start = s.index('function guestGraph(guest, html) {')
+          end = s.index('\n}\n\nlet changedEpisodes', start) + 2
+          old = s[start:end]
+          new = '''function guestGraph(guest, html) {\n  const canonical = `${ORIGIN}/guests/${guest.id}`;\n  const profile = guestProfileById(guest.id);\n  const name = pageTitle(html) || guest.name;\n  const pageTitleValue = rawPageTitle(html) || `${name} | Guest | The Alana Show`;\n  const description = profile?.summary || pageDescription(html) || `Explore verified conversations featuring ${name} on The Alana Show.`;\n  const person = {\n    "@type": "Person",\n    "@id": `${canonical}#person`,\n    name,\n    url: canonical,\n    subjectOf: (guest.episodeIds || []).map(episodeId => ({\n      "@type": "WebPage",\n      "@id": `${ORIGIN}/episodes/${episodeId}#webpage`,\n      url: `${ORIGIN}/episodes/${episodeId}`\n    }))\n  };\n  if (profile?.summary) person.description = profile.summary;\n  if (profile?.role) person.jobTitle = profile.role;\n  if (profile?.organization) person.worksFor = { "@type": "Organization", name: profile.organization.name, url: profile.organization.url };\n  if (profile?.sameAs?.length) person.sameAs = profile.sameAs;\n  return [\n    websiteSchema(),\n    showSchema(),\n    {\n      "@type": "ProfilePage",\n      "@id": `${canonical}#webpage`,\n      url: canonical,\n      name: pageTitleValue,\n      description,\n      isPartOf: { "@id": WEBSITE_ID },\n      breadcrumb: { "@id": `${canonical}#breadcrumb` },\n      mainEntity: { "@id": `${canonical}#person` }\n    },\n    breadcrumbSchema("Guests", name, canonical),\n    person\n  ];\n}'''
+          s = s[:start] + new + s[end:]
+
+          old_loop = '''for (const guest of targetGuests) {\n  const relative = `guests/${guest.id}/index.html`;\n  const original = read(relative);\n  let updated = replaceApp(original, guestFallback(guest, original));\n  updated = ensureImageAltMeta(updated, `${guest.name} on The Alana Show`);\n  updated = replaceStructuredData(updated, guestGraph(guest, updated));\n'''
+          new_loop = '''for (const guest of targetGuests) {\n  const relative = `guests/${guest.id}/index.html`;\n  const original = read(relative);\n  const profile = guestProfileById(guest.id);\n  let updated = replaceApp(original, guestFallback(guest, original));\n  if (profile?.summary) {\n    updated = replaceMetaContent(updated, "name", "description", profile.summary);\n    updated = replaceMetaContent(updated, "property", "og:description", profile.summary);\n    updated = replaceMetaContent(updated, "name", "twitter:description", profile.summary);\n  }\n  updated = ensureImageAltMeta(updated, `${guest.name} on The Alana Show`);\n  updated = replaceStructuredData(updated, guestGraph(guest, updated));\n'''
+          if old_loop not in s:
+              raise SystemExit('guest backfill loop anchor missing')
+          s = s.replace(old_loop, new_loop, 1)
+          p.write_text(s)
+
+          # Quality suite includes the verified profile gate.
+          p = Path('package.json')
+          s = p.read_text()
+          old = 'node scripts/static-crawl-gate.mjs && node scripts/measurement-gate.mjs'
+          new = 'node scripts/static-crawl-gate.mjs && node scripts/guest-profile-gate.mjs && node scripts/measurement-gate.mjs'
+          if old not in s:
+              raise SystemExit('package quality anchor missing')
+          p.write_text(s.replace(old, new, 1))
+          PY
+      - name: Regenerate verified guest static pages
+        run: node scripts/backfill-static-crawl.mjs
+      - name: Commit integrated guest entities
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add src scripts package.json guests
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+            exit 0
+          fi
+          git commit -m "Integrate verified guest entity profiles"
+          git push origin HEAD:phase-8-guest-entities
