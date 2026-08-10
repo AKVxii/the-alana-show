@@ -78,11 +78,14 @@ if (hubs.status !== 0) abort("Discovery-hub authority sync failed.");
 const sitemap = run(process.execPath, ["scripts/sync-sitemap-freshness.mjs"]);
 if (sitemap.status !== 0) abort("Sitemap freshness sync failed.");
 
+const videoSitemap = run(process.execPath, ["scripts/sync-video-sitemap.mjs"]);
+if (videoSitemap.status !== 0) abort("Video sitemap sync failed.");
+
 const npm = process.platform === "win32" ? "npm.cmd" : "npm";
 const quality = run(npm, ["run", "quality"]);
 if (quality.status !== 0) abort("Repository quality checks failed.");
 
-console.log("Conversation publishing complete: archive pages, discovery hubs, sitemap freshness, and quality gates are synchronized.");
+console.log("Conversation publishing complete: archive pages, discovery hubs, canonical sitemap freshness, video discovery, and quality gates are synchronized.");
 
 const distribution = run(process.execPath, ["scripts/distribution-brief.mjs", inputArg]);
 if (distribution.status !== 0) {

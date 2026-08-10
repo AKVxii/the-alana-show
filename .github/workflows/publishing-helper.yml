@@ -8,11 +8,15 @@ on:
       - "scripts/distribution-brief.mjs"
       - "scripts/sync-hub-authority.mjs"
       - "scripts/sync-sitemap-freshness.mjs"
+      - "scripts/sync-video-sitemap.mjs"
       - "scripts/sitemap-gate.mjs"
+      - "scripts/video-sitemap-gate.mjs"
       - "content/conversation.example.json"
       - "PUBLISHING.md"
       - "package.json"
+      - "robots.txt"
       - "sitemap.xml"
+      - "video-sitemap.xml"
       - ".github/workflows/publishing-helper.yml"
 
 permissions:
@@ -64,7 +68,7 @@ jobs:
           grep -q '"duration":"PT30M"' episodes/publishing-helper-ci-smoke-test/index.html
           grep -q 'publishing-helper-ci-smoke-test?t={seek_to_second_number}' episodes/publishing-helper-ci-smoke-test/index.html
 
-      - name: Verify discovery hubs and sitemap stayed synchronized
+      - name: Verify discovery hubs and canonical sitemap stayed synchronized
         run: |
           grep -q 'publishing-helper-ci-smoke-test' episodes/index.html
           grep -q 'publishing-helper-test-guest' guests/index.html
@@ -73,6 +77,15 @@ jobs:
           grep -q '<lastmod>' sitemap.xml
           ! grep -q '<priority>' sitemap.xml
           ! grep -q '<changefreq>' sitemap.xml
+
+      - name: Verify specialized video sitemap stayed synchronized
+        run: |
+          grep -q '<loc>https://thealanashow.com/episodes/publishing-helper-ci-smoke-test</loc>' video-sitemap.xml
+          grep -q '<video:thumbnail_loc>https://i.ytimg.com/vi/A1b2C3d4E5F/hqdefault.jpg</video:thumbnail_loc>' video-sitemap.xml
+          grep -q '<video:title>Publishing Helper CI Smoke Test</video:title>' video-sitemap.xml
+          grep -q '<video:description>Disposable CI-only record used to verify The Alana Show publishing workflow.</video:description>' video-sitemap.xml
+          grep -q '<video:player_loc allow_embed="yes">https://www.youtube-nocookie.com/embed/A1b2C3d4E5F</video:player_loc>' video-sitemap.xml
+          grep -q 'Sitemap: https://thealanashow.com/video-sitemap.xml' robots.txt
 
       - name: Verify post-publish distribution brief
         run: |
