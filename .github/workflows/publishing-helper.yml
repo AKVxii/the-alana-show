@@ -8,11 +8,13 @@ on:
       - "scripts/distribution-brief.mjs"
       - "scripts/sync-hub-authority.mjs"
       - "scripts/sync-sitemap-freshness.mjs"
+      - "scripts/sync-video-sitemap.mjs"
       - "scripts/sitemap-gate.mjs"
       - "content/conversation.example.json"
       - "PUBLISHING.md"
       - "package.json"
       - "sitemap.xml"
+      - "video-sitemap.xml"
       - ".github/workflows/publishing-helper.yml"
 
 permissions:
@@ -32,6 +34,13 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 24
+
+      - name: Bootstrap current video sitemap for review
+        run: |
+          node scripts/sync-video-sitemap.mjs
+          echo 'BEGIN_VIDEO_SITEMAP'
+          cat video-sitemap.xml
+          echo 'END_VIDEO_SITEMAP'
 
       - name: Create disposable conversation intake
         run: |
