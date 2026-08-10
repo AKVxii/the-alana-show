@@ -5,6 +5,7 @@ const ALLOWED_INQUIRIES = new Set([
   "Recommend an organization",
   "Media inquiry",
   "Support the show",
+  "Merchandise order",
   "General contact"
 ]);
 
