@@ -29,6 +29,12 @@ for (const episode of episodes) {
   if (!html.includes('id="detail-structured-data"')) {
     errors.push(`${file} must ship static detail structured data before JavaScript runs.`);
   }
+  if (!html.includes('data-static-episode-overview')) {
+    errors.push(`${file} must expose a crawler-visible episode overview before JavaScript runs.`);
+  }
+  if (html.includes('data-static-episode-topics') && !html.includes('href="/topics/')) {
+    errors.push(`${file} static topic discovery must use permanent topic authority links.`);
+  }
   if (!html.includes('"@type":"VideoObject"')) {
     errors.push(`${file} must ship a static VideoObject from verified YouTube metadata.`);
   }
