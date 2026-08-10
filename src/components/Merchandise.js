@@ -7,7 +7,7 @@ export function Merchandise() {
         <div class="merchandise-teaser-copy reveal">
           <p class="eyebrow dark"><span></span> Merchandise</p>
           <h2 id="merchandise-teaser-title">Wear the message.</h2>
-          <p>Limited organic-cotton tees and hats inspired by The Alana Show, available individually by request.</p>
+          <p>Limited organic-cotton tees and a natural show hat inspired by The Alana Show, available individually by request.</p>
           <div class="merchandise-teaser-actions">
             <a class="button button-gold" href="/merchandise/" data-track-event="Merchandise Explore" data-track-location="home">View merchandise ${icon("arrow")}</a>
           </div>
