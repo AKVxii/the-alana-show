@@ -41,6 +41,8 @@ jobs:
           echo 'BEGIN_VIDEO_SITEMAP'
           cat video-sitemap.xml
           echo 'END_VIDEO_SITEMAP'
+          rm video-sitemap.xml
+          test -z "$(git status --porcelain)"
 
       - name: Create disposable conversation intake
         run: |
