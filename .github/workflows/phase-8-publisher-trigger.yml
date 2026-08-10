@@ -1,0 +1,47 @@
+name: Phase 8 publisher trigger
+
+on:
+  push:
+    branches:
+      - phase-8-episode-depth
+
+permissions:
+  contents: write
+
+jobs:
+  document:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v4
+        with:
+          ref: phase-8-episode-depth
+          fetch-depth: 0
+      - name: Document scoped episode overview fallback
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p = Path('scripts/publish-conversation.mjs')
+          s = p.read_text()
+          anchor = '''  const crawlResult = spawnSync(process.execPath, [\n    "scripts/backfill-static-crawl.mjs",\n'''
+          replacement = '''  // Scoped crawl backfill gives a new episode a crawler-visible overview immediately,\n  // even when the public YouTube feed has not propagated the upload yet.\n  const crawlResult = spawnSync(process.execPath, [\n    "scripts/backfill-static-crawl.mjs",\n'''
+          if replacement not in s:
+              if anchor not in s:
+                  raise SystemExit('publisher crawl backfill anchor missing')
+              s = s.replace(anchor, replacement, 1)
+          p.write_text(s)
+          PY
+      - name: Commit publisher documentation
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add scripts/publish-conversation.mjs
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+            exit 0
+          fi
+          git commit -m "Document immediate episode overview publishing fallback"
+          git push origin HEAD:phase-8-episode-depth
