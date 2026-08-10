@@ -8,6 +8,13 @@ const catalogUrl = pathToFileURL(path.join(ROOT, "src/data/catalog.js")).href;
 const { episodes } = await import(catalogUrl);
 
 const read = relative => fs.readFileSync(path.join(ROOT, relative), "utf8");
+const decodeHtml = value => String(value ?? "")
+  .replace(/&amp;/g, "&")
+  .replace(/&quot;/g, '"')
+  .replace(/&#0?39;/g, "'")
+  .replace(/&apos;/g, "'")
+  .replace(/&lt;/g, "<")
+  .replace(/&gt;/g, ">");
 const xmlEscape = value => String(value ?? "")
   .replace(/&/g, "&amp;")
   .replace(/</g, "&lt;")
@@ -15,14 +22,17 @@ const xmlEscape = value => String(value ?? "")
   .replace(/"/g, "&quot;")
   .replace(/'/g, "&apos;");
 
-function staticGraph(html, relative) {
-  const match = html.match(/<script\s+id="detail-structured-data"\s+type="application\/ld\+json">([\s\S]*?)<\/script>/i);
-  if (!match) throw new Error(`${relative} is missing static detail structured data.`);
-  try {
-    return JSON.parse(match[1]);
-  } catch (error) {
-    throw new Error(`${relative} contains invalid detail structured data: ${error.message}`);
-  }
+function attribute(html, tagPattern, attributeName) {
+  const tag = html.match(tagPattern)?.[0] || "";
+  const match = tag.match(new RegExp(`${attributeName}=["']([^"']+)["']`, "i"));
+  return decodeHtml(match?.[1] || "").trim();
+}
+
+function titleFromPage(html) {
+  const ogTitle = attribute(html, /<meta\s+[^>]*property=["']og:title["'][^>]*>/i, "content");
+  if (ogTitle) return ogTitle.replace(/\s*\|\s*The Alana Show\s*$/i, "").trim();
+  const title = decodeHtml(html.match(/<title>([\s\S]*?)<\/title>/i)?.[1] || "");
+  return title.replace(/\s*\|\s*The Alana Show\s*$/i, "").trim();
 }
 
 function sitemapLastmodMap() {
@@ -34,15 +44,6 @@ function sitemapLastmodMap() {
   return map;
 }
 
-function isoDurationToSeconds(value = "") {
-  const match = String(value).match(/^P(?:(\d+)D)?T(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?$/i);
-  if (!match) return 0;
-  return Number(match[1] || 0) * 86400
-    + Number(match[2] || 0) * 3600
-    + Number(match[3] || 0) * 60
-    + Number(match[4] || 0);
-}
-
 const lastmods = sitemapLastmodMap();
 const entries = [];
 
@@ -52,29 +53,20 @@ for (const episode of episodes) {
   if (!fs.existsSync(absolute)) throw new Error(`Missing permanent episode page: ${relative}`);
 
   const html = read(relative);
-  const data = staticGraph(html, relative);
-  const graph = Array.isArray(data?.["@graph"]) ? data["@graph"] : [];
-  const video = graph.find(item => item?.["@type"] === "VideoObject");
-  if (!video) throw new Error(`${relative} is missing a static VideoObject.`);
-
-  const canonical = String(video.url || `${ORIGIN}/episodes/${episode.id}`);
-  const title = String(video.name || "").trim();
-  const description = String(video.description || "").replace(/\s+/g, " ").trim().slice(0, 2048);
-  const thumbnail = Array.isArray(video.thumbnailUrl) ? video.thumbnailUrl[0] : video.thumbnailUrl;
-  const player = String(video.embedUrl || `https://www.youtube-nocookie.com/embed/${episode.videoId}`);
-  const uploadDate = String(video.uploadDate || "").trim();
-  const durationSeconds = isoDurationToSeconds(video.duration);
+  const canonical = attribute(html, /<link\s+[^>]*rel=["']canonical["'][^>]*>/i, "href") || `${ORIGIN}/episodes/${episode.id}`;
+  const title = titleFromPage(html);
+  const description = attribute(html, /<meta\s+[^>]*name=["']description["'][^>]*>/i, "content").replace(/\s+/g, " ").slice(0, 2048);
+  const thumbnail = attribute(html, /<meta\s+[^>]*property=["']og:image["'][^>]*>/i, "content");
+  const player = `https://www.youtube-nocookie.com/embed/${episode.videoId}`;
   const lastmod = lastmods.get(canonical);
 
-  if (!canonical.startsWith(`${ORIGIN}/episodes/`)) throw new Error(`${relative} has an unexpected canonical video URL.`);
+  if (!canonical.startsWith(`${ORIGIN}/episodes/`)) throw new Error(`${relative} has an unexpected canonical URL.`);
   if (!title) throw new Error(`${relative} is missing a video title.`);
-  if (!description) throw new Error(`${relative} is missing a video description.`);
-  if (!/^https:\/\//i.test(String(thumbnail || ""))) throw new Error(`${relative} is missing an absolute HTTPS video thumbnail.`);
-  if (!/^https:\/\/www\.youtube-nocookie\.com\/embed\/[A-Za-z0-9_-]{11}$/i.test(player)) {
-    throw new Error(`${relative} has an unexpected or non-crawlable player URL.`);
-  }
+  if (!description) throw new Error(`${relative} is missing a meta description.`);
+  if (!/^https:\/\//i.test(thumbnail)) throw new Error(`${relative} is missing an absolute HTTPS video thumbnail.`);
+  if (!/^[A-Za-z0-9_-]{11}$/.test(episode.videoId)) throw new Error(`${relative} has an invalid verified YouTube video ID.`);
 
-  const lines = [
+  entries.push([
     "  <url>",
     `    <loc>${xmlEscape(canonical)}</loc>`,
     ...(lastmod ? [`    <lastmod>${xmlEscape(lastmod)}</lastmod>`] : []),
@@ -83,12 +75,9 @@ for (const episode of episodes) {
     `      <video:title>${xmlEscape(title)}</video:title>`,
     `      <video:description>${xmlEscape(description)}</video:description>`,
     `      <video:player_loc allow_embed="yes">${xmlEscape(player)}</video:player_loc>`,
-    ...(durationSeconds > 0 && durationSeconds <= 28800 ? [`      <video:duration>${durationSeconds}</video:duration>`] : []),
-    ...(uploadDate ? [`      <video:publication_date>${xmlEscape(uploadDate)}</video:publication_date>`] : []),
     "    </video:video>",
     "  </url>"
-  ];
-  entries.push(lines.join("\n"));
+  ].join("\n"));
 }
 
 const output = [
