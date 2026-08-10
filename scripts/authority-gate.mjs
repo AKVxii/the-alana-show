@@ -33,6 +33,11 @@ const vercel = read('vercel.json');
 assert(homepage.includes('"@type": "PodcastSeries"'), 'Homepage must publish The Alana Show as a persistent PodcastSeries entity.');
 assert(homepage.includes('"@id": "https://thealanashow.com/#show"'), 'Homepage show entity must use the stable #show identifier.');
 assert(homepage.includes('"creator": { "@id": "https://thealanashow.com/#alana-k-vandeveer" }'), 'Show identity must connect to the established host Person entity.');
+assert(homepage.includes('"@type": "Organization"'), 'Homepage must publish The Alana Show as an Organization entity for brand identity.');
+assert(homepage.includes('"@id": "https://thealanashow.com/#organization"'), 'Organization entity must use the stable #organization identifier.');
+assert(homepage.includes('"url": "https://thealanashow.com/assets/alana-show-logo.svg"'), 'Organization entity must identify the existing crawlable show logo.');
+assert(homepage.includes('"publisher": { "@id": "https://thealanashow.com/#organization" }'), 'WebSite and PodcastSeries must connect to the show Organization publisher.');
+assert(homepage.includes('"founder": { "@id": "https://thealanashow.com/#alana-k-vandeveer" }'), 'Organization identity must connect to Alana as founder.');
 for (const platform of ['podcasts.apple.com', 'open.spotify.com', 'music.amazon.com', 'trueoldiesfla.com/on-air/the-alana-show']) {
   assert(homepage.includes(platform), `Homepage show entity is missing a verified platform identity: ${platform}.`);
 }
@@ -106,4 +111,4 @@ if (errors.length) {
 
 console.log('Search authority gate passed.');
 console.log(`  Permanent topic authority pages: ${topicIds.length}`);
-console.log('  Show identity, search previews, canonical topic links, video key moments, entity graph, internal episode links and shared feed caching: OK');
+console.log('  Organization/show identity, search previews, canonical topic links, video key moments, entity graph, internal episode links and shared feed caching: OK');
