@@ -1,5 +1,6 @@
 import { MediaHeader, setupMediaNavigation } from "./components/MediaHeader.js";
 import { Footer } from "./components/Footer.js";
+import { BroadcastReach } from "./components/BroadcastReach.js";
 import { isCurrentSpecialActive } from "./components/CurrentSpecial.js";
 import { site } from "./data/site.js";
 import { currentSpecial } from "./data/current-special.js";
@@ -17,7 +18,6 @@ const contactHref = (inquiry, source) => `/?inquiry=${encodeURIComponent(inquiry
 const partnerContact = contactHref("Advertising or partnership", "advertise");
 const guestContact = contactHref("Recommend a guest", "book");
 const southFloridaContact = contactHref("General contact", "south-florida");
-const broadcastSchedule = "Tuesdays · 8:00–8:30 PM ET";
 
 const candidatePanel = candidateSpecialActive
   ? `<span class="growth-panel-kicker">2026 candidate?</span><strong>Candidate Interview Series</strong><p>${currentSpecial.urgencyText}</p><p class="growth-panel-note">${currentSpecial.disclaimer}</p>${external(currentSpecial.ctaHref, "Candidate Scheduling", "button button-light")}`
@@ -73,7 +73,7 @@ const pages = {
     featureEyebrow: "From the community outward",
     featureTitle: "Local voices. Wider conversation.",
     featureCopy: "The Alana Show brings together people shaping South Florida—from public service and entrepreneurship to community work, wellness, technology, and stories of people stepping up.",
-    panel: `<span class="growth-panel-kicker">Heard on True Oldies</span><strong>South Florida &amp; the Treasure Coast</strong><p class="growth-panel-schedule">${broadcastSchedule}</p><p>${currentSpecial.broadcastText}</p><p class="growth-panel-note">${currentSpecial.reachText}</p>${external(site.trueOldies, "True Oldies Show Page", "button button-light")}`,
+    panel: `<span class="growth-panel-kicker">Heard on True Oldies</span><strong>South Florida &amp; the Treasure Coast</strong><p class="growth-panel-schedule">${site.broadcastSchedule}</p><p>${currentSpecial.broadcastText}</p><p class="growth-panel-note">${currentSpecial.reachText}</p>${external(site.trueOldies, "True Oldies Show Page", "button button-light")}`,
     exploreEyebrow: "Regional index",
     exploreTitle: "Explore conversations shaping the region.",
     cardAction: "Explore",
@@ -94,7 +94,7 @@ const pages = {
     featureEyebrow: "Partnership opportunities",
     featureTitle: "Build around audience fit—not clutter.",
     featureCopy: "The strongest partnerships make sense beside the audience and subject matter. Sponsorship remains clearly identified, editorial independence stays intact, and opportunities can be shaped around recurring programming, individual conversations, regional visibility, or a relevant collection.",
-    panel: `<span class="growth-panel-kicker">Regional broadcast</span><strong>True Oldies</strong><p class="growth-panel-schedule">${broadcastSchedule}</p><p>${currentSpecial.broadcastText}</p><p class="growth-panel-note">${currentSpecial.reachText}</p>${internal(partnerContact, "Start a Partnership Conversation", "button button-light")}`,
+    panel: `<span class="growth-panel-kicker">Regional broadcast</span><strong>True Oldies</strong><p class="growth-panel-schedule">${site.broadcastSchedule}</p><p>${currentSpecial.broadcastText}</p><p class="growth-panel-note">${currentSpecial.reachText}</p>${internal(partnerContact, "Start a Partnership Conversation", "button button-light")}`,
     exploreEyebrow: "Partnership structure",
     exploreTitle: "Partnership formats, clearly defined.",
     cardAction: "Discuss",
@@ -105,12 +105,12 @@ const pages = {
     ],
     ctaEyebrow: "Built around fit",
     ctaTitle: "Tell us what you want to reach, support, or accomplish.",
-    ctas: `${internal(partnerContact, "Advertising & Partnership Inquiry")}${internal("/south-florida/", "See South Florida Reach", "button button-ghost")}`
+    ctas: `${internal(partnerContact, "Advertising & Partnership Inquiry")}${internal("/south-florida/#broadcast-reach", "See South Florida Reach", "button button-ghost")}`
   },
   book: {
     eyebrow: "Guest inquiries · story ideas · interviews",
     title: "Be a Guest",
-    intro: "Have expertise, experience, a public-service story, a business journey, or a perspective worth exploring? Start the conversation here.",
+    intro: "Have expertise, experience, a public-service story, a business journey, an artistic body of work, or a perspective worth exploring? Start the conversation here.",
     featureEyebrow: "A good interview starts before the microphone",
     featureTitle: "Bring a meaningful conversation to the table.",
     featureCopy: "The strongest guest pitches explain who you are, what you can add to the conversation, why the subject matters now, and where listeners can learn more about your work.",
@@ -119,7 +119,7 @@ const pages = {
     exploreTitle: "What makes a strong guest inquiry.",
     cardAction: "Submit",
     cards: [
-      ["Who Fits", "Leaders, entrepreneurs, public servants, advocates, experts, community builders, and people with stories worth hearing.", guestContact],
+      ["Who Fits", "Leaders, entrepreneurs, public servants, artists, actors, musicians, advocates, experts, community builders, public figures, and people with stories worth hearing.", guestContact],
       ["What to Send", "Share the proposed topic, why it matters now, your background, and a website or social link that helps verify the story.", guestContact],
       ["What Happens Next", "Submissions are reviewed for editorial fit and availability. An inquiry does not guarantee an appearance.", guestContact]
     ],
@@ -134,6 +134,12 @@ function card([title, copy, href], index, actionLabel = "Explore") {
 }
 
 const page = pages[pageKey] || pages["south-florida"];
+const broadcastReachSection = pageKey === "south-florida"
+  ? BroadcastReach()
+  : pageKey === "advertise"
+    ? BroadcastReach({ compact: true })
+    : "";
+
 app.innerHTML = `${MediaHeader()}<main id="main-content" class="growth-page growth-page-${pageKey}">
   <section class="media-hero growth-hero"><div class="shell media-hero-inner">
     <nav class="breadcrumbs" aria-label="Breadcrumb"><ol><li><a href="/">Home</a></li><li aria-current="page">${page.title}</li></ol></nav>
@@ -144,6 +150,8 @@ app.innerHTML = `${MediaHeader()}<main id="main-content" class="growth-page grow
     <div class="growth-feature-copy" data-reveal><p class="eyebrow dark"><span></span> ${page.featureEyebrow}</p><h2>${page.featureTitle}</h2><p>${page.featureCopy}</p></div>
     <aside class="growth-feature-panel" data-reveal>${page.panel}</aside>
   </div></section>
+
+  ${broadcastReachSection}
 
   <section class="growth-explore"><div class="shell"><div class="growth-section-heading" data-reveal><p class="eyebrow dark"><span></span> ${page.exploreEyebrow}</p><h2>${page.exploreTitle}</h2></div><div class="growth-grid">${page.cards.map((item, index) => card(item, index, page.cardAction)).join("")}</div></div></section>
 
