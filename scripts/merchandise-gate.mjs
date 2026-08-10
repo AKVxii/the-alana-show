@@ -36,14 +36,17 @@ for (const phrase of [
 }
 
 if (!page.includes("organic-cotton") || !home.includes("organic-cotton")) fail("organic-cotton launch material is not stated consistently");
+if (page.includes("organic-cotton tees and hats") || home.includes("organic-cotton tees and hats")) fail("organic-cotton wording must not imply an unverified hat composition");
 if (!page.includes("/assets/alana-show-merchandise-collection.png") || !home.includes("/assets/alana-show-merchandise-collection.png")) fail("approved merchandise collection artwork is not canonical");
 if (!page.includes('name="size"') || !page.includes('name="quantity"') || !page.includes('name="payment"')) fail("order inquiry fields are incomplete");
 if (!page.includes("No card information is collected here")) fail("payment/privacy boundary is missing");
 if (!script.includes('fetch("/api/contact"') || !script.includes('inquiry: "Merchandise order"')) fail("order form is not wired to the first-party contact API");
+if (!script.includes("syncSizeOptions") || !script.includes("Hat — adjustable / one size")) fail("item-aware merchandise sizing is missing");
 if (!api.includes('"Merchandise order"')) fail("contact API does not allow merchandise inquiries");
 if (!home.includes('href="/merchandise/"') || !homeMount.includes("Merchandise()") || !index.includes("/src/merchandise-home.js")) fail("homepage merchandise discovery is missing");
 if (!footer.includes('href="/merchandise/"')) fail("footer merchandise discovery is missing");
 if (!sitemap.includes("https://thealanashow.com/merchandise")) fail("merchandise page is missing from sitemap");
+if (fs.existsSync("assets/alana-show-merchandise-collection.webp.png")) fail("accidental double-extension merchandise asset still exists");
 
 console.log("Merchandise gate passed.");
-console.log("  Five-item light organic-cotton launch collection, approved artwork, inquiry-only payment boundary, homepage/footer discovery, contact delivery, and sitemap coverage: OK");
+console.log("  Five-item light organic-cotton tee launch plus show hat, approved artwork, item-aware sizing, inquiry-only payment boundary, homepage/footer discovery, contact delivery, and sitemap coverage: OK");
