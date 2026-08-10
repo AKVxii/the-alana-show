@@ -36,14 +36,16 @@ function normalizeDescription(description = "") {
 }
 
 async function getJson(url) {
-  const response = await fetch(url);
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 8000);
 
-  if (!response.ok) {
-    const text = await response.text();
-    throw new Error(`YouTube API error ${response.status}: ${text}`);
+  try {
+    const response = await fetch(url, { signal: controller.signal });
+    if (!response.ok) throw new Error(`YouTube API error ${response.status}`);
+    return response.json();
+  } finally {
+    clearTimeout(timeout);
   }
-
-  return response.json();
 }
 
 function normalizeVideo(video) {
@@ -77,6 +79,8 @@ function isEligible(video) {
 }
 
 module.exports = async function handler(req, res) {
+  res.setHeader("Cache-Control", "no-store");
+
   if (req.method !== "GET") {
     res.setHeader("Allow", "GET");
     return res.status(405).json({ error: "Method not allowed" });
@@ -86,7 +90,7 @@ module.exports = async function handler(req, res) {
 
   if (!key) {
     return res.status(503).json({
-      error: "YOUTUBE_API_KEY is not configured"
+      error: "YouTube feed is temporarily unavailable"
     });
   }
 
@@ -217,10 +221,12 @@ module.exports = async function handler(req, res) {
       unresolvedGuestAudit
     });
   } catch (error) {
-    console.error(error);
-    return res.status(500).json({
-      error: "Unable to load YouTube episodes",
-      detail: error.message
+    console.error("YouTube feed request failed", {
+      name: error?.name || "Error",
+      message: error?.message || "Unknown failure"
+    });
+    return res.status(502).json({
+      error: "Unable to load YouTube episodes"
     });
   }
 };
