@@ -12,7 +12,7 @@ const requiredFiles = [
   "src/merchandise-home.js",
   "src/merchandise.css",
   "src/components/Merchandise.js",
-  "assets/merchandise-collection.webp"
+  "assets/merchandise-collection.svg"
 ];
 requiredFiles.forEach(path => { if (!fs.existsSync(path)) fail(`missing ${path}`); });
 
