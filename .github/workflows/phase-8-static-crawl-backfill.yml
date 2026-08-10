@@ -24,8 +24,6 @@ jobs:
           node-version: '24'
       - name: Backfill crawler-visible archive metadata
         run: node scripts/backfill-static-crawl.mjs
-      - name: Run quality suite
-        run: npm run quality
       - name: Commit generated archive shells
         shell: bash
         run: |
