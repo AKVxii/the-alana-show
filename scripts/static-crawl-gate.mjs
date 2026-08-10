@@ -26,6 +26,18 @@ for (const episode of episodes) {
   if (html.includes('<div id="app"></div>')) {
     errors.push(`${file} must not ship as an empty JavaScript-only app shell.`);
   }
+  if (!html.includes('id="detail-structured-data"')) {
+    errors.push(`${file} must ship static detail structured data before JavaScript runs.`);
+  }
+  if (!html.includes('"@type":"VideoObject"')) {
+    errors.push(`${file} must ship a static VideoObject from verified YouTube metadata.`);
+  }
+  if (!html.includes('"@type":"SeekToAction"')) {
+    errors.push(`${file} must retain static video key-moment seeking markup.`);
+  }
+  if (!html.includes('property="og:image:alt"') || !html.includes('name="twitter:image:alt"')) {
+    errors.push(`${file} must include accessible social-image alt metadata.`);
+  }
   for (const guestId of episode.guestIds || []) {
     if (!html.includes(`href="/guests/${guestId}"`)) {
       errors.push(`${file} must expose a direct crawlable link to guest ${guestId}.`);
@@ -46,6 +58,15 @@ for (const guest of guests) {
   if (html.includes('<div id="app"></div>')) {
     errors.push(`${file} must not ship as an empty JavaScript-only app shell.`);
   }
+  if (!html.includes('id="detail-structured-data"')) {
+    errors.push(`${file} must ship static guest entity structured data before JavaScript runs.`);
+  }
+  if (!html.includes('"@type":"Person"') || !html.includes('"subjectOf"')) {
+    errors.push(`${file} must connect the guest Person entity to verified related episode pages.`);
+  }
+  if (!html.includes('property="og:image:alt"') || !html.includes('name="twitter:image:alt"')) {
+    errors.push(`${file} must include accessible social-image alt metadata.`);
+  }
   for (const episodeId of guest.episodeIds || []) {
     if (!html.includes(`href="/episodes/${episodeId}"`)) {
       errors.push(`${file} must expose a direct crawlable link to episode ${episodeId}.`);
@@ -60,5 +81,5 @@ if (errors.length) {
 }
 
 console.log("Static archive crawl gate passed.");
-console.log(`  Episode pages with crawler-visible fallbacks: ${episodes.length}`);
-console.log(`  Guest pages with crawler-visible fallbacks: ${guests.length}`);
+console.log(`  Episode pages with crawler-visible fallbacks + static VideoObject: ${episodes.length}`);
+console.log(`  Guest pages with crawler-visible fallbacks + Person entity links: ${guests.length}`);
