@@ -23,7 +23,7 @@ export function Header() {
         <nav id="primary-nav" class="primary-nav" aria-label="Primary navigation" data-nav>
           <a href="/episodes/">Watch</a>
           <a href="/guests/">Guests</a>
-          <a href="#listen">Listen</a>
+          <a href="/topics/">Topics</a>
           <a href="/south-florida/">South Florida</a>
           <a href="#about">About</a>
           <a href="/advertise/">Partner</a>
