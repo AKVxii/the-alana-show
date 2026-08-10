@@ -1,6 +1,9 @@
 name: Hub Authority Generator
 
 on:
+  pull_request:
+    branches:
+      - main
   push:
     branches:
       - phase-8-hub-authority
@@ -12,6 +15,7 @@ permissions:
 
 jobs:
   generate:
+    if: github.event_name == 'push' || github.event.pull_request.head.ref == 'phase-8-hub-authority'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
