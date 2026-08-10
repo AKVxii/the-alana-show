@@ -333,6 +333,8 @@ try {
   write(episodeRelativePath, episodeHtml);
   guestFiles.forEach(file => write(file.relativePath, file.html));
 
+  // Scoped crawl backfill gives a new episode a crawler-visible overview immediately,
+  // even when the public YouTube feed has not propagated the upload yet.
   const crawlResult = spawnSync(process.execPath, [
     "scripts/backfill-static-crawl.mjs",
     `--episode=${slug}`,
