@@ -1,6 +1,6 @@
 # Publishing a New Conversation
 
-The public YouTube feed updates automatically, but a verified internal episode page gives The Alana Show stronger internal linking, guest relationships, social metadata, crawlable fallbacks, and sitemap coverage.
+The public YouTube feed updates automatically, but a verified internal episode page gives The Alana Show stronger internal linking, guest relationships, social metadata, crawlable fallbacks, sitemap coverage, and search authority.
 
 This repository includes a zero-dependency publishing helper so that enrichment does not require a CMS or routine developer billing.
 
@@ -8,7 +8,7 @@ This repository includes a zero-dependency publishing helper so that enrichment 
 
 1. Publish the finished conversation on the verified The Alana Show YouTube channel.
 2. Copy the 11-character YouTube video ID from the published video URL.
-3. Confirm the guest name(s), episode title, and a concise factual description.
+3. Confirm the guest name(s) and permanent episode slug.
 4. Work on a feature branch or other non-production branch. Do not run the publishing helper directly on an unreviewed production working tree.
 5. Make sure the Git working tree is clean. The helper intentionally refuses to run with unrelated local changes.
 
@@ -28,11 +28,37 @@ Fill in:
 
 - `videoId` — required 11-character YouTube video ID.
 - `slug` — permanent lowercase episode URL slug, such as `jane-doe-community-leadership`.
-- `title` — the accurate conversation title.
-- `description` — concise search/social description. Keep it factual and useful.
 - `guests` — one or more verified guest names. Reuse the existing guest slug when the guest has appeared before.
+- `title` — optional editorial override. When omitted, the helper attempts to use the current title from The Alana Show's verified YouTube feed.
+- `description` — optional editorial override. When omitted, the helper attempts to use the current YouTube description.
+- `publishedAt` — optional ISO-8601 publication date/datetime fallback. Normally the helper receives this from the verified YouTube feed.
+- `durationSeconds` — optional positive-number fallback. Normally the helper receives this from the verified YouTube feed.
+- `thumbnail` — optional absolute HTTPS thumbnail fallback. Normally the helper receives this from the verified YouTube feed.
 
 For multiple guests, add another object to the `guests` array.
+
+## Verified YouTube enrichment
+
+Before generating the episode shell, the helper makes a best-effort read from:
+
+`https://thealanashow.com/api/youtube`
+
+That endpoint is the site's existing verified-channel feed. When the supplied video ID is present, the helper can reuse accurate public metadata already maintained by YouTube:
+
+- title;
+- description;
+- publication timestamp;
+- thumbnail;
+- duration;
+- current view count.
+
+User-supplied intake values remain editorial overrides. If the network/feed is temporarily unavailable, the helper still works with the supplied intake values and its existing safe fallbacks.
+
+When a publication timestamp is available, the generated permanent episode HTML includes static `VideoObject` structured data with the required title, thumbnail and upload date plus duration when available. It also includes `SeekToAction`, allowing Google-compatible timestamp URLs such as:
+
+`/episodes/example?t=120`
+
+The live episode page honors that URL by starting the embedded conversation at 2:00.
 
 ## Preview without changing files
 
@@ -40,7 +66,7 @@ Run:
 
 `npm run publish:conversation -- --dry-run`
 
-The helper validates the intake and reports what it would publish without modifying the repository.
+The helper validates the intake and reports what it would publish without modifying the repository. The summary also reports whether verified YouTube metadata was found and whether static `VideoObject` markup will be generated.
 
 ## Publish the repository changes
 
@@ -51,22 +77,23 @@ Run:
 The helper will:
 
 1. Reject duplicate YouTube IDs and episode slugs.
-2. Add the episode to the verified editorial catalog.
-3. Add the episode to existing guest relationships.
-4. Create new verified guest records when needed.
-5. Generate the internal episode detail shell.
-6. Generate new guest detail shells when needed.
-7. Add the episode and new guests to the crawlable archive fallbacks.
-8. Add their canonical URLs to `sitemap.xml`.
-9. Run the full repository quality suite.
-10. Roll back the files it changed if the quality suite fails.
+2. Attempt to enrich the page from the verified YouTube feed.
+3. Add the episode to the verified editorial catalog.
+4. Add the episode to existing guest relationships.
+5. Create new verified guest records when needed.
+6. Generate the internal episode detail shell with canonical/social metadata and static search schema when the required video metadata is available.
+7. Generate new guest detail shells when needed.
+8. Add the episode and new guests to the crawlable archive fallbacks.
+9. Add their canonical URLs to `sitemap.xml`.
+10. Run the full repository quality suite.
+11. Roll back the files it changed if the quality suite fails.
 
 ## Review before merge
 
 After the helper succeeds:
 
 1. Review the Git diff.
-2. Confirm spelling, guest identity, title, description, slug, and YouTube video ID.
+2. Confirm spelling, guest identity, title, description, slug, YouTube video ID, and publication metadata.
 3. Run or confirm the normal GitHub quality checks.
 4. Review the Vercel Preview on desktop and mobile.
 5. Only then merge through the normal reviewed pull-request workflow.
@@ -85,7 +112,7 @@ Automation should not decide identity or editorial truth. A person should still 
 
 - the correct guest identity;
 - the permanent guest and episode slugs;
-- the episode title and description;
+- whether the YouTube title/description should be used as-is or replaced with a more concise factual editorial version;
 - whether multiple people should each be represented as verified guests;
 - whether an organization or special editorial relationship needs separate curation.
 
