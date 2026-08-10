@@ -215,7 +215,7 @@ function guestGraph(guest, html) {
     websiteSchema(),
     showSchema(),
     {
-      "@type": "WebPage",
+      "@type": "ProfilePage",
       "@id": `${canonical}#webpage`,
       url: canonical,
       name: pageTitleValue,
