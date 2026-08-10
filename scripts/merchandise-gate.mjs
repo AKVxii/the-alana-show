@@ -12,7 +12,7 @@ const requiredFiles = [
   "src/merchandise-home.js",
   "src/merchandise.css",
   "src/components/Merchandise.js",
-  "assets/merchandise-collection.svg"
+  "assets/alana-show-merchandise-collection.png"
 ];
 requiredFiles.forEach(path => { if (!fs.existsSync(path)) fail(`missing ${path}`); });
 
@@ -35,6 +35,8 @@ for (const phrase of [
   if (!page.includes(phrase)) fail(`merchandise page is missing item: ${phrase}`);
 }
 
+if (!page.includes("organic-cotton") || !home.includes("organic-cotton")) fail("organic-cotton launch material is not stated consistently");
+if (!page.includes("/assets/alana-show-merchandise-collection.png") || !home.includes("/assets/alana-show-merchandise-collection.png")) fail("approved merchandise collection artwork is not canonical");
 if (!page.includes('name="size"') || !page.includes('name="quantity"') || !page.includes('name="payment"')) fail("order inquiry fields are incomplete");
 if (!page.includes("No card information is collected here")) fail("payment/privacy boundary is missing");
 if (!script.includes('fetch("/api/contact"') || !script.includes('inquiry: "Merchandise order"')) fail("order form is not wired to the first-party contact API");
@@ -44,4 +46,4 @@ if (!footer.includes('href="/merchandise/"')) fail("footer merchandise discovery
 if (!sitemap.includes("https://thealanashow.com/merchandise")) fail("merchandise page is missing from sitemap");
 
 console.log("Merchandise gate passed.");
-console.log("  Five-item collection, inquiry-only payment boundary, homepage/footer discovery, contact delivery, and sitemap coverage: OK");
+console.log("  Five-item light organic-cotton launch collection, approved artwork, inquiry-only payment boundary, homepage/footer discovery, contact delivery, and sitemap coverage: OK");
