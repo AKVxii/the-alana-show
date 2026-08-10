@@ -8,6 +8,8 @@ const WEBSITE_ID = `${ORIGIN}/#website`;
 const SHOW_ID = `${ORIGIN}/#show`;
 const catalogUrl = pathToFileURL(path.join(ROOT, "src/data/catalog.js")).href;
 const { episodes, guests, episodeById, guestById } = await import(catalogUrl);
+const profilesUrl = pathToFileURL(path.join(ROOT, "src/data/guest-profiles.js")).href;
+const { guestProfileById } = await import(profilesUrl);
 const episodeArg = process.argv.find(arg => arg.startsWith("--episode="));
 const guestsArg = process.argv.find(arg => arg.startsWith("--guests="));
 const targetEpisodeId = episodeArg ? episodeArg.slice("--episode=".length).trim() : "";
@@ -60,6 +62,12 @@ function pageImage(html) {
   return decodeHtml(match?.[1] || "").trim();
 }
 
+function replaceMetaContent(html, attribute, key, content) {
+  const escaped = escapeHtml(content);
+  const pattern = new RegExp(`<meta\\s+${attribute}="${key}"\\s+content="[^"]*">`, "i");
+  return pattern.test(html) ? html.replace(pattern, `<meta ${attribute}="${key}" content="${escaped}">`) : html;
+}
+
 function isoDuration(seconds = 0) {
   const total = Number(seconds || 0);
   if (!Number.isFinite(total) || total <= 0) return "";
@@ -76,6 +84,11 @@ function replaceApp(html, fallback) {
   return html.replace(marker, `<div id="app">${fallback}</div>`);
 }
 
+function replaceStaticFallback(html, type, fallback) {
+  const pattern = new RegExp(`<main id="main-content" class="static-detail-fallback" data-static-crawl-fallback="${type}">[\\s\\S]*?<\\/main>`, "i");
+  return pattern.test(html) ? html.replace(pattern, fallback) : replaceApp(html, fallback);
+}
+
 function breadcrumbs(parent, current) {
   return `<nav class="breadcrumbs" aria-label="Breadcrumb"><ol><li><a href="/">Home</a></li><li><a href="/${parent.toLowerCase()}">${escapeHtml(parent)}</a></li><li aria-current="page">${escapeHtml(current)}</li></ol></nav>`;
 }
@@ -90,10 +103,17 @@ function episodeFallback(episode, html) {
 
 function guestFallback(guest, html) {
   const title = pageTitle(html) || guest.name;
-  const description = pageDescription(html) || `Explore verified conversations featuring ${guest.name} on The Alana Show.`;
+  const profile = guestProfileById(guest.id);
+  const description = profile?.summary || pageDescription(html) || `Explore verified conversations featuring ${guest.name} on The Alana Show.`;
   const relatedEpisodes = (guest.episodeIds || []).map(episodeById).filter(Boolean);
-  const episodeLinks = relatedEpisodes.map(episode => `<li><a href="/episodes/${escapeHtml(episode.id)}">${escapeHtml(episode.title)}</a></li>`).join("");
-  return `<main id="main-content" class="static-detail-fallback" data-static-crawl-fallback="guest"><section class="detail-hero"><div class="shell detail-shell">${breadcrumbs("Guests", title)}<p class="eyebrow"><span></span> Guest</p><h1>${escapeHtml(title)}</h1><p>${escapeHtml(description)}</p>${episodeLinks ? `<section class="related-section" aria-labelledby="static-related-heading"><p class="related-eyebrow"><span></span> VERIFIED ARCHIVE</p><h2 id="static-related-heading">Related conversations</h2><ul>${episodeLinks}</ul></section>` : ""}<div class="detail-actions"><a class="button button-gold" href="/episodes?guest=${encodeURIComponent(guest.name)}">View conversations</a><a class="button button-outline" href="/guests">Guest directory</a></div></div></section></main>`;
+  const episodeLinks = relatedEpisodes.map(episode => {
+    const relatedPath = `episodes/${episode.id}/index.html`;
+    const relatedTitle = fs.existsSync(path.join(ROOT, relatedPath)) ? (pageTitle(read(relatedPath)) || episode.title) : episode.title;
+    return `<li><a href="/episodes/${escapeHtml(episode.id)}">${escapeHtml(relatedTitle)}</a></li>`;
+  }).join("");
+  const role = profile?.role ? `<p class="detail-byline">${escapeHtml(profile.role)}</p>` : "";
+  const officialAction = profile?.officialUrl ? `<a class="button button-outline" href="${escapeHtml(profile.officialUrl)}" target="_blank" rel="noopener">Official profile</a>` : "";
+  return `<main id="main-content" class="static-detail-fallback" data-static-crawl-fallback="guest"><section class="detail-hero"><div class="shell detail-shell">${breadcrumbs("Guests", title)}<p class="eyebrow"><span></span> Guest</p><h1>${escapeHtml(title)}</h1>${role}<p>${escapeHtml(description)}</p>${episodeLinks ? `<section class="related-section" aria-labelledby="static-related-heading"><p class="related-eyebrow"><span></span> VERIFIED ARCHIVE</p><h2 id="static-related-heading">Related conversations</h2><ul>${episodeLinks}</ul></section>` : ""}<div class="detail-actions"><a class="button button-gold" href="/episodes?guest=${encodeURIComponent(guest.name)}">View conversations</a>${officialAction}<a class="button button-outline" href="/guests">Guest directory</a></div></div></section></main>`;
 }
 
 function websiteSchema() {
@@ -207,9 +227,25 @@ function episodeGraph(episode, html) {
 
 function guestGraph(guest, html) {
   const canonical = `${ORIGIN}/guests/${guest.id}`;
+  const profile = guestProfileById(guest.id);
   const name = pageTitle(html) || guest.name;
   const pageTitleValue = rawPageTitle(html) || `${name} | Guest | The Alana Show`;
-  const description = pageDescription(html) || `Explore verified conversations featuring ${name} on The Alana Show.`;
+  const description = profile?.summary || pageDescription(html) || `Explore verified conversations featuring ${name} on The Alana Show.`;
+  const person = {
+    "@type": "Person",
+    "@id": `${canonical}#person`,
+    name,
+    url: canonical,
+    subjectOf: (guest.episodeIds || []).map(episodeId => ({
+      "@type": "WebPage",
+      "@id": `${ORIGIN}/episodes/${episodeId}#webpage`,
+      url: `${ORIGIN}/episodes/${episodeId}`
+    }))
+  };
+  if (profile?.summary) person.description = profile.summary;
+  if (profile?.role) person.jobTitle = profile.role;
+  if (profile?.organization) person.worksFor = { "@type": "Organization", name: profile.organization.name, url: profile.organization.url };
+  if (profile?.sameAs?.length) person.sameAs = profile.sameAs;
   return [
     websiteSchema(),
     showSchema(),
@@ -224,17 +260,7 @@ function guestGraph(guest, html) {
       mainEntity: { "@id": `${canonical}#person` }
     },
     breadcrumbSchema("Guests", name, canonical),
-    {
-      "@type": "Person",
-      "@id": `${canonical}#person`,
-      name,
-      url: canonical,
-      subjectOf: (guest.episodeIds || []).map(episodeId => ({
-        "@type": "WebPage",
-        "@id": `${ORIGIN}/episodes/${episodeId}#webpage`,
-        url: `${ORIGIN}/episodes/${episodeId}`
-      }))
-    }
+    person
   ];
 }
 
@@ -259,7 +285,13 @@ for (const episode of targetEpisodes) {
 for (const guest of targetGuests) {
   const relative = `guests/${guest.id}/index.html`;
   const original = read(relative);
-  let updated = replaceApp(original, guestFallback(guest, original));
+  const profile = guestProfileById(guest.id);
+  let updated = replaceStaticFallback(original, "guest", guestFallback(guest, original));
+  if (profile?.summary) {
+    updated = replaceMetaContent(updated, "name", "description", profile.summary);
+    updated = replaceMetaContent(updated, "property", "og:description", profile.summary);
+    updated = replaceMetaContent(updated, "name", "twitter:description", profile.summary);
+  }
   updated = ensureImageAltMeta(updated, `${guest.name} on The Alana Show`);
   updated = replaceStructuredData(updated, guestGraph(guest, updated));
   if (updated !== original) {
