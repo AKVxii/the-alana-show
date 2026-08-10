@@ -28,6 +28,7 @@ const topicsPage = read('src/topics-page.js');
 const topicDetail = read('src/topic-detail.js');
 const topicPages = read('src/data/topic-pages.js');
 const sitemap = read('sitemap.xml');
+const vercel = read('vercel.json');
 
 assert(homepage.includes('"@type": "PodcastSeries"'), 'Homepage must publish The Alana Show as a persistent PodcastSeries entity.');
 assert(homepage.includes('"@id": "https://thealanashow.com/#show"'), 'Homepage show entity must use the stable #show identifier.');
@@ -36,12 +37,22 @@ for (const platform of ['podcasts.apple.com', 'open.spotify.com', 'music.amazon.
   assert(homepage.includes(platform), `Homepage show entity is missing a verified platform identity: ${platform}.`);
 }
 
+assert(vercel.includes('"X-Robots-Tag"'), 'Hosting config must retain global search preview permissions.');
+assert(vercel.includes('max-image-preview:large, max-video-preview:-1'), 'Search previews must allow large images and unrestricted video preview length.');
+
 assert(detail.includes('topicHref(category)'), 'Episode topic links must use canonical topic authority URLs.');
 assert(!detail.includes('href="/episodes?topic=${encodeURIComponent(category)}"'), 'Episode detail must not use archive-filter URLs as its primary topic links.');
 assert(detail.includes('"@type": "VideoObject"'), 'Episode detail must retain VideoObject structured data.');
 assert(detail.includes('"@type": "PodcastSeries"'), 'Episode detail must connect videos to The Alana Show series.');
 assert(detail.includes('about: relatedGuests.map'), 'Episode VideoObject must connect to verified guest entities.');
 assert(detail.includes('isPartOf: { "@id": SHOW_ID }'), 'Episode VideoObject must connect to the show entity.');
+assert(detail.includes('"@type": "SeekToAction"'), 'Episode VideoObject must expose Google-compatible key-moment seeking.');
+assert(detail.includes('target: `${canonical}?t={seek_to_second_number}`'), 'SeekToAction must target the canonical episode URL with a numeric t parameter.');
+assert(detail.includes('"startOffset-input": "required name=seek_to_second_number"'), 'SeekToAction must declare the required seek offset input.');
+assert(detail.includes('const startSeconds = requestedStartSeconds();'), 'Episode rendering must honor timestamp deep links.');
+assert(detail.includes('`&start=${startSeconds}`'), 'Episode embeds must translate the page timestamp into the YouTube start parameter.');
+assert(detail.includes('graph[2].datePublished = uploadDate;'), 'Episode WebPage schema must retain the verified YouTube publication date when available.');
+assert(detail.includes('"@type": "InteractionCounter"'), 'Episode VideoObject should retain the live YouTube view count when available.');
 assert(detail.includes('loadYouTubeFeed'), 'Episode detail must reuse the shared YouTube feed cache.');
 assert(!detail.includes('fetch("/api/youtube")'), 'Episode detail must not bypass the shared YouTube feed cache.');
 
@@ -95,4 +106,4 @@ if (errors.length) {
 
 console.log('Search authority gate passed.');
 console.log(`  Permanent topic authority pages: ${topicIds.length}`);
-console.log('  Show identity, canonical topic links, entity graph, internal episode links and shared feed caching: OK');
+console.log('  Show identity, search previews, canonical topic links, video key moments, entity graph, internal episode links and shared feed caching: OK');
