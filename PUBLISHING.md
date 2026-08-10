@@ -89,6 +89,26 @@ The safe publishing command will:
 11. Refresh `sitemap.xml` with canonical URLs and trustworthy `lastmod` dates derived from actual page changes or Git history.
 12. Run the full repository quality suite, including sitemap/canonical validation.
 13. Restore the clean starting state if a post-publish synchronization or quality step fails.
+14. Print a post-publish distribution brief with the permanent episode URL, guest profile URLs, YouTube link, exact website-link line, media resources, and a practical backlink/share checklist.
+
+## Post-publish distribution brief
+
+After all repository changes and quality checks succeed, the publishing command prints a zero-dependency distribution brief generated from the newly published catalog entry.
+
+The brief treats the permanent website page as the owned canonical destination and includes:
+
+- the canonical episode URL;
+- the YouTube watch URL;
+- each related permanent guest profile URL;
+- an exact line to add near the top of the YouTube description;
+- the permanent link to send to guests and organizations;
+- a reminder to seek relevant official-site/newsroom/resource backlinks when appropriate;
+- the `/press` resource page for approved show/host assets;
+- the episode page's native **Share conversation** control, including timestamp-specific sharing.
+
+This is intentionally a checklist, not automated outreach. The publisher does not send messages, alter YouTube descriptions, make social posts, or contact guests on its own.
+
+The distribution principle is simple: external platforms distribute the conversation; the permanent The Alana Show page owns the long-term context, guest relationship, topic links, search authority, and reference URL.
 
 ## Sitemap freshness
 
@@ -125,6 +145,7 @@ After the publishing command succeeds:
 3. Confirm the normal GitHub quality checks.
 4. Review the Vercel Preview on desktop and mobile.
 5. Only then merge through the normal reviewed pull-request workflow.
+6. Complete the printed distribution brief after the production deployment is verified.
 
 ## Existing guests
 
@@ -142,6 +163,7 @@ Automation should not decide identity or editorial truth. A person should still 
 - the permanent guest and episode slugs;
 - whether the YouTube title/description should be used as-is or replaced with a more concise factual editorial version;
 - whether multiple people should each be represented as verified guests;
-- whether an organization or special editorial relationship needs separate curation.
+- whether an organization or special editorial relationship needs separate curation;
+- whether an official organization or guest backlink request is contextually appropriate.
 
-This keeps the publishing workflow inexpensive without sacrificing accuracy or the site's authority structure.
+This keeps the publishing workflow inexpensive without sacrificing accuracy, relationships, or the site's authority structure.

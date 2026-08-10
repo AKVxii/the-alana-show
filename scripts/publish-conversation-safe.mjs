@@ -5,6 +5,7 @@ import { spawnSync } from "node:child_process";
 const ROOT = process.cwd();
 const args = process.argv.slice(2);
 const dryRun = args.includes("--dry-run");
+const inputArg = args.find(arg => !arg.startsWith("--")) || "content/conversation.json";
 
 function run(command, commandArgs, options = {}) {
   return spawnSync(command, commandArgs, {
@@ -82,3 +83,8 @@ const quality = run(npm, ["run", "quality"]);
 if (quality.status !== 0) abort("Repository quality checks failed.");
 
 console.log("Conversation publishing complete: archive pages, discovery hubs, sitemap freshness, and quality gates are synchronized.");
+
+const distribution = run(process.execPath, ["scripts/distribution-brief.mjs", inputArg]);
+if (distribution.status !== 0) {
+  console.warn("Publishing succeeded, but the optional distribution brief could not be generated. The repository changes remain valid.");
+}

@@ -5,6 +5,7 @@ on:
     paths:
       - "scripts/publish-conversation.mjs"
       - "scripts/publish-conversation-safe.mjs"
+      - "scripts/distribution-brief.mjs"
       - "scripts/sync-hub-authority.mjs"
       - "scripts/sync-sitemap-freshness.mjs"
       - "scripts/sitemap-gate.mjs"
@@ -53,7 +54,7 @@ jobs:
           JSON
 
       - name: Exercise complete safe publishing transaction
-        run: npm run publish:conversation -- /tmp/alana-conversation-smoke-test.json
+        run: npm run publish:conversation -- /tmp/alana-conversation-smoke-test.json | tee /tmp/alana-publish-output.txt
 
       - name: Verify generated static video search metadata
         run: |
@@ -72,3 +73,12 @@ jobs:
           grep -q '<lastmod>' sitemap.xml
           ! grep -q '<priority>' sitemap.xml
           ! grep -q '<changefreq>' sitemap.xml
+
+      - name: Verify post-publish distribution brief
+        run: |
+          grep -q 'THE ALANA SHOW — POST-PUBLISH DISTRIBUTION BRIEF' /tmp/alana-publish-output.txt
+          grep -q 'Canonical episode: https://thealanashow.com/episodes/publishing-helper-ci-smoke-test' /tmp/alana-publish-output.txt
+          grep -q 'Publishing Helper Test Guest: https://thealanashow.com/guests/publishing-helper-test-guest' /tmp/alana-publish-output.txt
+          grep -q 'YouTube: https://www.youtube.com/watch?v=A1b2C3d4E5F' /tmp/alana-publish-output.txt
+          grep -q 'More from The Alana Show: https://thealanashow.com/episodes/publishing-helper-ci-smoke-test' /tmp/alana-publish-output.txt
+          grep -q 'https://thealanashow.com/press' /tmp/alana-publish-output.txt
