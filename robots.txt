@@ -2,3 +2,4 @@ User-agent: *
 Allow: /
 
 Sitemap: https://thealanashow.com/sitemap.xml
+Sitemap: https://thealanashow.com/video-sitemap.xml
