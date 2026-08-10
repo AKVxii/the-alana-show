@@ -18,7 +18,7 @@ export function Contact() {
         </div>
 
         <form class="contact-form reveal reveal-delay" data-contact-form novalidate>
-          <input type="hidden" name="source" value="" data-inquiry-source>
+          <input type="hidden" name="source" value="" maxlength="80" data-inquiry-source>
           <div class="form-heading">
             <span>Direct inquiry</span>
             <h3>How can we connect?</h3>
@@ -27,19 +27,19 @@ export function Contact() {
           <div class="form-grid">
             <label>
               <span>Name *</span>
-              <input name="name" autocomplete="name" required>
+              <input name="name" autocomplete="name" maxlength="120" required>
             </label>
             <label>
               <span>Email *</span>
-              <input name="email" type="email" autocomplete="email" required>
+              <input name="email" type="email" autocomplete="email" maxlength="320" required>
             </label>
             <label>
               <span>Organization</span>
-              <input name="organization" autocomplete="organization">
+              <input name="organization" autocomplete="organization" maxlength="160">
             </label>
             <label>
               <span>Phone</span>
-              <input name="phone" type="tel" autocomplete="tel">
+              <input name="phone" type="tel" autocomplete="tel" maxlength="80">
             </label>
             <label class="full">
               <span>Inquiry *</span>
@@ -56,16 +56,16 @@ export function Contact() {
             </label>
             <label class="full">
               <span>Website or social link</span>
-              <input name="website" type="text" inputmode="url" autocomplete="url" placeholder="example.com or @username" aria-describedby="website-help">
+              <input name="website" type="text" inputmode="url" autocomplete="url" maxlength="500" placeholder="example.com or @username" aria-describedby="website-help">
               <small class="field-help" id="website-help">Enter a website address, full link, or social username.</small>
             </label>
             <label class="full">
               <span>Message *</span>
-              <textarea name="message" required placeholder="Tell us about the opportunity, guest, organization, or story."></textarea>
+              <textarea name="message" maxlength="8000" required placeholder="Tell us about the opportunity, guest, organization, or story."></textarea>
             </label>
           </div>
 
-          <label class="honeypot" aria-hidden="true">Leave blank<input name="company_website" tabindex="-1" autocomplete="off"></label>
+          <label class="honeypot" aria-hidden="true">Leave blank<input name="company_website" maxlength="200" tabindex="-1" autocomplete="off"></label>
 
           <div class="form-footer">
             <p>Submission does not guarantee an appearance. Selected community-service guests are not charged an appearance fee.</p>
