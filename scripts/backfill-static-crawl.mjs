@@ -8,6 +8,12 @@ const WEBSITE_ID = `${ORIGIN}/#website`;
 const SHOW_ID = `${ORIGIN}/#show`;
 const catalogUrl = pathToFileURL(path.join(ROOT, "src/data/catalog.js")).href;
 const { episodes, guests, episodeById, guestById } = await import(catalogUrl);
+const episodeArg = process.argv.find(arg => arg.startsWith("--episode="));
+const guestsArg = process.argv.find(arg => arg.startsWith("--guests="));
+const targetEpisodeId = episodeArg ? episodeArg.slice("--episode=".length).trim() : "";
+const targetGuestIds = guestsArg ? new Set(guestsArg.slice("--guests=".length).split(",").map(value => value.trim()).filter(Boolean)) : null;
+const targetEpisodes = targetEpisodeId ? episodes.filter(episode => episode.id === targetEpisodeId) : episodes;
+const targetGuests = targetGuestIds ? guests.filter(guest => targetGuestIds.has(guest.id)) : guests;
 
 const escapeHtml = value => String(value ?? "").replace(/[&<>"']/g, char => ({
   "&": "&amp;",
@@ -193,13 +199,6 @@ function episodeGraph(episode, html) {
     };
     const duration = isoDuration(live.durationSeconds);
     if (duration) videoObject.duration = duration;
-    if (Number.isFinite(Number(live.viewCount)) && Number(live.viewCount) >= 0) {
-      videoObject.interactionStatistic = {
-        "@type": "InteractionCounter",
-        interactionType: { "@type": "WatchAction" },
-        userInteractionCount: Number(live.viewCount)
-      };
-    }
     graph.push(videoObject);
     graph[2].mainEntity = { "@id": `${canonical}#video` };
   }
@@ -242,19 +241,22 @@ function guestGraph(guest, html) {
 let changedEpisodes = 0;
 let changedGuests = 0;
 
-for (const episode of episodes) {
+for (const episode of targetEpisodes) {
   const relative = `episodes/${episode.id}/index.html`;
   const original = read(relative);
   let updated = replaceApp(original, episodeFallback(episode, original));
   updated = ensureImageAltMeta(updated, pageTitle(updated) || episode.title);
-  updated = replaceStructuredData(updated, episodeGraph(episode, updated));
+  const hasStaticDetailData = updated.includes('id="detail-structured-data"');
+  if (liveByVideoId.has(episode.videoId) || !hasStaticDetailData) {
+    updated = replaceStructuredData(updated, episodeGraph(episode, updated));
+  }
   if (updated !== original) {
     write(relative, updated);
     changedEpisodes += 1;
   }
 }
 
-for (const guest of guests) {
+for (const guest of targetGuests) {
   const relative = `guests/${guest.id}/index.html`;
   const original = read(relative);
   let updated = replaceApp(original, guestFallback(guest, original));
