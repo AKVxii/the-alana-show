@@ -121,8 +121,9 @@ function arrayBounds(source, exportName) {
 }
 
 function appendArrayRecord(source, exportName, record) {
-  const { end } = arrayBounds(source, exportName);
-  return `${source.slice(0, end)}\n${record}${source.slice(end)}`;
+  const { end, body } = arrayBounds(source, exportName);
+  const needsComma = Boolean(body.trim()) && !body.trimEnd().endsWith(",");
+  return `${source.slice(0, end)}${needsComma ? "," : ""}\n${record}${source.slice(end)}`;
 }
 
 const episodeSection = arrayBounds(catalog, "episodes").body;
