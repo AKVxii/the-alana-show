@@ -2,6 +2,7 @@ import { MediaHeader, setupMediaNavigation } from "./components/MediaHeader.js";
 import { Footer } from "./components/Footer.js";
 import { episodeById, guestById, organizationById, enrichEpisode } from "./data/catalog.js";
 import { topicHref } from "./data/topic-pages.js";
+import { guestProfileById } from "./data/guest-profiles.js";
 import { escapeHtml } from "./lib/utils.js";
 import { bindThumbnailFallbacks, relatedConversationRow } from "./lib/media-page.js";
 import { setupEditorialMotion } from "./lib/motion.js";
@@ -148,6 +149,7 @@ function breadcrumbSchema(detailType, currentName, canonical) {
 function applyStaticMetadata(detailType, detailItem) {
   const canonical = detailUrl(detailType, detailItem.id);
   const isEpisode = detailType === "episode";
+  const guestProfile = !isEpisode ? guestProfileById(detailItem.id) : null;
   const guestNames = isEpisode ? episodeGuestNames(detailItem) : [];
   const generatedPageTitle = isEpisode
     ? `${detailItem.title} | The Alana Show`
@@ -157,7 +159,7 @@ function applyStaticMetadata(detailType, detailItem) {
     : `Explore verified conversations featuring ${detailItem.name} on The Alana Show.`;
   const generatedImage = isEpisode ? `https://i.ytimg.com/vi/${detailItem.videoId}/maxresdefault.jpg` : DEFAULT_SOCIAL_IMAGE;
   const pageTitle = document.title.trim() || generatedPageTitle;
-  const description = document.head.querySelector('meta[name="description"]')?.content?.trim() || generatedDescription;
+  const description = guestProfile?.summary || document.head.querySelector('meta[name="description"]')?.content?.trim() || generatedDescription;
   const image = document.head.querySelector('meta[property="og:image"]')?.content?.trim()
     || document.head.querySelector('meta[name="twitter:image"]')?.content?.trim()
     || generatedImage;
@@ -182,7 +184,7 @@ function applyStaticMetadata(detailType, detailItem) {
     websiteSchema(),
     showSchema(),
     {
-      "@type": "WebPage",
+      "@type": isEpisode ? "WebPage" : "ProfilePage",
       "@id": `${canonical}#webpage`,
       url: canonical,
       name: pageTitle,
@@ -195,7 +197,7 @@ function applyStaticMetadata(detailType, detailItem) {
 
   if (!isEpisode) {
     graph[2].mainEntity = { "@id": `${canonical}#person` };
-    graph.push({
+    const person = {
       "@type": "Person",
       "@id": `${canonical}#person`,
       name: detailItem.name,
@@ -205,7 +207,18 @@ function applyStaticMetadata(detailType, detailItem) {
         "@id": `${SITE_ORIGIN}/episodes/${episodeId}#webpage`,
         url: `${SITE_ORIGIN}/episodes/${episodeId}`
       }))
-    });
+    };
+    if (guestProfile?.summary) person.description = guestProfile.summary;
+    if (guestProfile?.role) person.jobTitle = guestProfile.role;
+    if (guestProfile?.organization) {
+      person.worksFor = {
+        "@type": "Organization",
+        name: guestProfile.organization.name,
+        url: guestProfile.organization.url
+      };
+    }
+    if (guestProfile?.sameAs?.length) person.sameAs = guestProfile.sameAs;
+    graph.push(person);
   }
 
   upsertJsonLd("detail-structured-data", {
@@ -339,11 +352,15 @@ function episodeDetail(episode) {
 
 function guestDetail(guest) {
   const related = (guest.episodeIds || []).map(episodeById).filter(Boolean);
+  const profile = guestProfileById(guest.id);
   const count = guest.conversationCount || related.length;
   const archiveHref = `/episodes?guest=${encodeURIComponent(guest.name)}`;
   const countLabel = count === 1 ? "1 verified conversation" : `${count} verified conversations`;
+  const intro = profile?.summary || `${countLabel} featuring ${guest.name} on The Alana Show.`;
+  const role = profile?.role ? `<p class="detail-byline">${escapeHtml(profile.role)}</p>` : "";
+  const officialAction = profile?.officialUrl ? `<a class="button button-outline" href="${escapeHtml(profile.officialUrl)}" target="_blank" rel="noopener">Official profile</a>` : "";
   return `<section class="detail-hero"><div class="shell detail-shell">${breadcrumbs(guest.name)}<p class="eyebrow"><span></span> Guest</p><h1>${escapeHtml(guest.name)}</h1>
-    <div class="guest-detail-intro" data-reveal><div class="guest-monogram guest-monogram-large" aria-hidden="true">${escapeHtml(guest.name.split(/\s+/).map(part => part[0]).slice(0, 2).join(""))}</div><div><p>${escapeHtml(countLabel)} featuring ${escapeHtml(guest.name)} on The Alana Show.</p><div class="detail-actions"><a class="button button-gold" href="${archiveHref}">View conversations</a><a class="button button-outline" href="/guests">Guest directory</a></div></div></div>
+    <div class="guest-detail-intro" data-reveal><div class="guest-monogram guest-monogram-large" aria-hidden="true">${escapeHtml(guest.name.split(/\s+/).map(part => part[0]).slice(0, 2).join(""))}</div><div>${role}<p>${escapeHtml(intro)}</p><p class="detail-byline">${escapeHtml(countLabel)} on The Alana Show.</p><div class="detail-actions"><a class="button button-gold" href="${archiveHref}">View conversations</a>${officialAction}<a class="button button-outline" href="/guests">Guest directory</a></div></div></div>
     ${related.length ? `<section class="related-section" aria-labelledby="related-heading"><div data-reveal><p class="related-eyebrow"><span></span>${escapeHtml(guest.name.toUpperCase())} ARCHIVE</p><h2 id="related-heading">Related conversations</h2></div><div class="related-conversation-list">${related.map(relatedConversationRow).join("")}</div></section>` : ""}
   </div></section>`;
 }
