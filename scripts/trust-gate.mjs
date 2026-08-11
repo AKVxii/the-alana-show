@@ -26,7 +26,11 @@ const pages = [
       "Resend",
       "Kit",
       "YouTube / Google",
-      "does not run Google Analytics or a third-party advertising pixel"
+      "Google Analytics",
+      "visitor chooses “Allow analytics.”",
+      "does not send names, email addresses, phone numbers, messages, website/social fields, or raw search text",
+      "No advertising pixel by default",
+      "data-reset-analytics-consent"
     ]
   },
   {
@@ -87,6 +91,12 @@ const privacy = read("privacy/index.html");
 if (/we (?:guarantee|promise) (?:complete|absolute) security/i.test(privacy)) {
   fail("Privacy notice must not promise absolute security.");
 }
+if (/does not run Google Analytics/i.test(privacy)) {
+  fail("Privacy notice must not make the obsolete claim that Google Analytics can never run; optional analytics is now consent-gated when configured.");
+}
+if (!privacy.includes("Optional Google Analytics measurement is consent-gated")) {
+  fail("Privacy notice must state that optional Google Analytics measurement is consent-gated.");
+}
 
 const accessibility = read("accessibility/index.html");
 if (/certified (?:wcag|accessible)|fully compliant/i.test(accessibility)) {
@@ -100,4 +110,4 @@ if (failures.length) {
 }
 
 console.log("Publisher trust gate passed.");
-console.log("  Editorial standards, privacy transparency, accessibility statement, footer discovery, and sitemap coverage: OK");
+console.log("  Editorial standards, privacy transparency, consent-gated measurement disclosure, accessibility statement, footer discovery, and sitemap coverage: OK");

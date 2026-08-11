@@ -11,6 +11,9 @@ const read = file => {
 const assert = (condition, message) => { if (!condition) errors.push(message); };
 
 const measurement = read('src/lib/measurement.js');
+const measurementConfig = read('api/measurement-config.js');
+const consentCss = read('src/analytics-consent.css');
+const privacy = read('privacy/index.html');
 const header = read('src/components/Header.js');
 const mediaHeader = read('src/components/MediaHeader.js');
 const main = read('src/main.js');
@@ -25,6 +28,17 @@ assert(measurement.includes('setupMeasurement'), 'Measurement foundation must ex
 assert(measurement.includes('trackEvent'), 'Measurement foundation must export trackEvent().');
 assert(measurement.includes('MAX_EVENT_PROPERTIES = 2'), 'Custom-event payloads must stay within the Pro two-property limit.');
 assert(measurement.includes('.slice(0, MAX_EVENT_PROPERTIES)'), 'Measurement payloads must enforce the two-property limit.');
+
+assert(measurementConfig.includes('GOOGLE_ANALYTICS_ID'), 'Optional Google Analytics must be configured only through the server environment.');
+assert(measurementConfig.includes('GA_MEASUREMENT_ID_PATTERN'), 'Google Analytics IDs must be validated before exposure to the browser.');
+assert(measurement.includes('ANALYTICS_CONSENT_KEY'), 'Google Analytics must retain an explicit visitor preference.');
+assert(measurement.includes('showConsentPrompt'), 'Google Analytics must remain consent-gated.');
+assert(measurement.includes('allow_google_signals: false'), 'Google Analytics must disable Google Signals by default.');
+assert(measurement.includes('allow_ad_personalization_signals: false'), 'Google Analytics must disable ad-personalization signals by default.');
+assert(measurement.includes('data-reset-analytics-consent'), 'Visitors must be able to revisit their analytics preference.');
+assert(consentCss.includes('.analytics-consent'), 'Consent UI styling must exist when optional Google Analytics is enabled.');
+assert(privacy.includes('Google Analytics'), 'Privacy notice must explain optional Google Analytics measurement.');
+assert(privacy.includes('data-reset-analytics-consent'), 'Privacy notice must provide a way to review the analytics preference.');
 
 for (const eventName of [
   'Episode Open',
@@ -84,6 +98,8 @@ console.log('Measurement gate passed.');
 console.log('  Privacy-safe event taxonomy: OK');
 console.log('  Two-property custom-event cap: OK');
 console.log('  Search queries remain private: OK');
+console.log('  Consent-gated optional Google Analytics: OK');
+console.log('  Google Signals and ad personalization disabled: OK');
 console.log('  Deterministic newsletter binding: OK');
 console.log('  Shared browser-session feed cache: OK');
 console.log('  Homepage and subpage initialization: OK');
