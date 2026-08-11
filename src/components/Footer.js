@@ -30,6 +30,7 @@ export function Footer({ fromSubpage = false } = {}) {
           <strong>Connect</strong>
           <a href="/about/">About Alana</a>
           <a href="/book/">Be a Guest</a>
+          <a href="/on-location/">Bring the Show to You</a>
           <a href="/advertise/">Advertise &amp; Partner</a>
           <a href="${home}#sponsor">Commercial Real Estate Sponsor — The Fitzgerald Group</a>
           <a href="${home}#contact">Contact</a>

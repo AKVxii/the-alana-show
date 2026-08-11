@@ -15,6 +15,7 @@ export function Partner() {
             <div class="partner-actions">
               <a class="button button-gold" href="#contact" data-inquiry="Advertising or partnership">Request partnership information ${icon("arrow")}</a>
               <a class="button button-ghost" href="#contact" data-inquiry="Media inquiry">Request a media kit</a>
+              <a class="button button-ghost" href="/on-location/">Bring the show to you</a>
             </div>
           </div>
 
@@ -22,7 +23,7 @@ export function Partner() {
             <article><span>01</span><strong>Episode Sponsorship</strong><small>Refined opening, closing, or on-screen acknowledgment.</small></article>
             <article><span>02</span><strong>Season Partnership</strong><small>A consistent presence across a curated series.</small></article>
             <article><span>03</span><strong>Community Impact</strong><small>Underwrite service-focused storytelling and reach.</small></article>
-            <article><span>04</span><strong>Custom Collaboration</strong><small>Build a relevant initiative around shared values.</small></article>
+            <article><span>04</span><strong>On Location</strong><small>Invite The Alana Show to a business, event, community setting, or public-affairs conversation.</small></article>
           </div>
         </div>
         <p class="editorial-independence">Advertising support never purchases guest appearances, controls questions, or determines editorial positions.</p>

@@ -1,5 +1,6 @@
 import { icon } from "../lib/icons.js";
 import { scheduleContactContext } from "../lib/contact-context.js";
+import { site } from "../data/site.js";
 
 export function Contact() {
   scheduleContactContext();
@@ -9,10 +10,11 @@ export function Contact() {
         <div class="contact-copy reveal">
           <p class="eyebrow"><span></span> Connect with the show</p>
           <h2>Bring a meaningful conversation to the table.</h2>
-          <p>Reach out about a guest, organization, sponsorship, media request, community story, or general question.</p>
+          <p>Reach out about a guest, organization, sponsorship, media request, on-location interview, community story, or general question.</p>
 
           <div class="contact-direct">
-            <a href="mailto:Alana@AlanaKVandeveer.com">${icon("mail")} Alana@AlanaKVandeveer.com</a>
+            <a href="mailto:${site.email}">${icon("mail")} ${site.email}</a>
+            <a href="tel:+15614447700">${icon("phone")} ${site.phone}</a>
             <span>${icon("shield")} Your information is never sold.</span>
           </div>
         </div>
@@ -46,6 +48,7 @@ export function Contact() {
               <select name="inquiry" required data-inquiry-select>
                 <option value="">Choose an option</option>
                 <option>Candidate Interview Series</option>
+                <option>On-location interview or event</option>
                 <option>Advertising or partnership</option>
                 <option>Recommend a guest</option>
                 <option>Recommend an organization</option>
@@ -61,7 +64,7 @@ export function Contact() {
             </label>
             <label class="full">
               <span>Message *</span>
-              <textarea name="message" maxlength="8000" required placeholder="Tell us about the opportunity, guest, organization, or story."></textarea>
+              <textarea name="message" maxlength="8000" required placeholder="Tell us about the opportunity, guest, organization, event, or story."></textarea>
             </label>
           </div>
 
