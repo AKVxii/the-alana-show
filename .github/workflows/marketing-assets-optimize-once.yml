@@ -1,4 +1,4 @@
-name: One-time merchandise asset optimization
+name: One-time lossless WebP optimization
 
 on:
   pull_request:
@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   optimize:
-    name: Re-encode merchandise graphic without changing pixels
+    name: Encode exact-pixel lossless WebP marketing graphics
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
@@ -25,47 +25,50 @@ jobs:
         with:
           python-version: "3.13"
 
-      - name: Install lossless PNG encoder
+      - name: Install image encoder
         run: python -m pip install --disable-pip-version-check pillow==11.3.0
 
-      - name: Re-encode and verify exact pixels
+      - name: Encode and verify exact decoded pixels
         run: |
           python - <<'PY'
           from pathlib import Path
           from PIL import Image, ImageChops
 
-          source_path = Path("assets/alana-show-merchandise-collection.png")
-          target_path = Path("assets/alana-show-merchandise-collection-v2.png")
+          pairs = [
+              (Path("assets/broadcast-reach-south-florida.png"), Path("assets/broadcast-reach-south-florida-v2.webp")),
+              (Path("assets/alana-show-merchandise-collection.png"), Path("assets/alana-show-merchandise-collection-v2.webp")),
+          ]
 
-          with Image.open(source_path) as image:
-              source = image.convert("RGBA")
-              source.load()
-          source.save(target_path, format="PNG", optimize=True, compress_level=9)
-          with Image.open(target_path) as image:
-              optimized = image.convert("RGBA")
-              optimized.load()
+          for source_path, target_path in pairs:
+              with Image.open(source_path) as image:
+                  source = image.convert("RGBA")
+                  source.load()
+              source.save(target_path, format="WEBP", lossless=True, quality=100, method=6, exact=True)
+              with Image.open(target_path) as image:
+                  optimized = image.convert("RGBA")
+                  optimized.load()
 
-          if source.size != optimized.size:
-              raise SystemExit(f"Dimension mismatch: {source.size} != {optimized.size}")
-          if ImageChops.difference(source, optimized).getbbox() is not None:
-              raise SystemExit("Pixel verification failed")
+              if source.size != optimized.size:
+                  raise SystemExit(f"Dimension mismatch for {source_path}: {source.size} != {optimized.size}")
+              if ImageChops.difference(source, optimized).getbbox() is not None:
+                  raise SystemExit(f"Decoded pixel verification failed for {source_path}")
 
-          before = source_path.stat().st_size
-          after = target_path.stat().st_size
-          reduction = 100 * (1 - after / before)
-          print(f"{source.width}x{source.height}; {before:,} -> {after:,} bytes; {reduction:.1f}% smaller; RGBA EXACT")
-          if after >= before:
-              raise SystemExit("Optimization did not reduce merchandise asset")
+              before = source_path.stat().st_size
+              after = target_path.stat().st_size
+              reduction = 100 * (1 - after / before)
+              print(f"{source_path}: {source.width}x{source.height}; {before:,} -> {after:,} bytes; {reduction:.1f}% smaller; RGBA EXACT")
+              if reduction < 15:
+                  raise SystemExit(f"Lossless WebP savings are not material enough for {source_path}: {reduction:.1f}%")
           PY
 
-      - name: Commit verified optimized asset
+      - name: Commit verified lossless WebP assets
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add assets/alana-show-merchandise-collection-v2.png
+          git add assets/broadcast-reach-south-florida-v2.webp assets/alana-show-merchandise-collection-v2.webp
           if git diff --cached --quiet; then
-            echo "Optimized asset already committed."
+            echo "Lossless WebP assets already committed."
             exit 0
           fi
-          git commit -m "Phase 25: Add pixel-identical optimized merchandise art"
+          git commit -m "Phase 25: Add exact-pixel lossless WebP marketing assets"
           git push origin HEAD:phase-25-lossless-marketing-assets
