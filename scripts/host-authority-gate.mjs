@@ -40,7 +40,7 @@ for (const needle of [
   'href="/standards/"',
   'href="/press/">Press &amp; Media Resources</a>',
   'inquiry=Media%20inquiry',
-  'src="/assets/alana-portrait-cutout.png"',
+  'src="/assets/alana-portrait-cutout-v2.png"',
   'width="958" height="968"',
   'alt="Alana K. Vandeveer, host of The Alana Show"',
   'data-about-header',

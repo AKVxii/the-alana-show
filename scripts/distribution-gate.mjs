@@ -28,7 +28,7 @@ for (const needle of [
   'href="/about/">Official Host Profile</a>',
   'href="/assets/alana-show-logo.svg" download',
   'href="/assets/alana-show-social-card-2026-imessage-v2.png" download',
-  'href="/assets/alana-portrait-cutout.png" download',
+  'href="/assets/alana-portrait-cutout-v2.png" download',
   'Audience or reach figures are intentionally not listed here unless they can be supported by current source data.',
   'href="/standards/"',
   'inquiry=Media%20inquiry',
@@ -43,7 +43,7 @@ for (const needle of [
 for (const asset of [
   "assets/alana-show-logo.svg",
   "assets/alana-show-social-card-2026-imessage-v2.png",
-  "assets/alana-portrait-cutout.png"
+  "assets/alana-portrait-cutout-v2.png"
 ]) {
   if (!fs.existsSync(path.join(ROOT, asset))) fail(`Press page references missing official asset: ${asset}`);
 }
