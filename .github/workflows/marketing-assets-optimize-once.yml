@@ -1,0 +1,74 @@
+name: One-time marketing asset optimization
+
+on:
+  push:
+    branches:
+      - phase-25-lossless-marketing-assets
+    paths:
+      - ".github/workflows/marketing-assets-optimize-once.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  optimize:
+    name: Re-encode marketing graphics without changing pixels
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out optimization branch
+        uses: actions/checkout@v4
+        with:
+          ref: phase-25-lossless-marketing-assets
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Install lossless PNG encoder
+        run: python -m pip install --disable-pip-version-check pillow==11.3.0
+
+      - name: Re-encode and verify exact pixels
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from PIL import Image, ImageChops
+
+          pairs = [
+              (Path("assets/broadcast-reach-south-florida.png"), Path("assets/broadcast-reach-south-florida-v2.png")),
+              (Path("assets/alana-show-merchandise-collection.png"), Path("assets/alana-show-merchandise-collection-v2.png")),
+          ]
+
+          for source_path, target_path in pairs:
+              with Image.open(source_path) as image:
+                  source = image.convert("RGBA")
+                  source.load()
+              source.save(target_path, format="PNG", optimize=True, compress_level=9)
+              with Image.open(target_path) as image:
+                  optimized = image.convert("RGBA")
+                  optimized.load()
+              if source.size != optimized.size:
+                  raise SystemExit(f"Dimension mismatch for {source_path}: {source.size} != {optimized.size}")
+              if ImageChops.difference(source, optimized).getbbox() is not None:
+                  raise SystemExit(f"Pixel verification failed for {source_path}")
+              before = source_path.stat().st_size
+              after = target_path.stat().st_size
+              reduction = 100 * (1 - after / before)
+              print(f"{source_path}: {source.width}x{source.height}; {before:,} -> {after:,} bytes; {reduction:.1f}% smaller; RGBA EXACT")
+              if after >= before:
+                  raise SystemExit(f"Optimization did not reduce {source_path}")
+          PY
+
+      - name: Commit verified optimized assets
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/broadcast-reach-south-florida-v2.png assets/alana-show-merchandise-collection-v2.png
+          if git diff --cached --quiet; then
+            echo "Optimized assets already committed."
+            exit 0
+          fi
+          git commit -m "Phase 25: Add pixel-identical optimized marketing assets"
+          git push origin HEAD:phase-25-lossless-marketing-assets
