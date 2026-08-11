@@ -18,6 +18,7 @@ const contactHref = (inquiry, source) => `/?inquiry=${encodeURIComponent(inquiry
 const partnerContact = contactHref("Advertising or partnership", "advertise");
 const guestContact = contactHref("Recommend a guest", "book");
 const southFloridaContact = contactHref("General contact", "south-florida");
+const onLocationContact = contactHref("On-location interview or event", "on-location");
 
 const candidatePanel = candidateSpecialActive
   ? `<span class="growth-panel-kicker">2026 candidate?</span><strong>Candidate Interview Series</strong><p>${currentSpecial.urgencyText}</p><p class="growth-panel-note">${currentSpecial.disclaimer}</p>${external(currentSpecial.ctaHref, "Candidate Scheduling", "button button-light")}`
@@ -106,6 +107,26 @@ const pages = {
     ctaEyebrow: "Built around fit",
     ctaTitle: "Tell us what you want to reach, support, or accomplish.",
     ctas: `${internal(partnerContact, "Advertising & Partnership Inquiry")}${internal("/south-florida/#broadcast-reach", "See South Florida Reach", "button button-ghost")}`
+  },
+  "on-location": {
+    eyebrow: "Businesses · events · community · public affairs",
+    title: "The Alana Show — On Location",
+    intro: "Bring the conversation out of the studio and into the places where the story is actually happening.",
+    featureEyebrow: "The show can come to you",
+    featureTitle: "Your place. Your people. A real conversation on site.",
+    featureCopy: "Selected interviews can be recorded at businesses, organizations, events, civic gatherings, and public-affairs settings, then produced for The Alana Show's radio, podcast, video, and web channels with the same editorial care as an in-studio conversation.",
+    panel: `<span class="growth-panel-kicker">How it works</span><strong>Record on site. Produce for broadcast. Publish for replay.</strong><p>Tell us where the story is, who should be part of it, what viewers should understand, and the timing or event details.</p><p class="growth-panel-note">Editorial selection and scheduling apply. Political and public-affairs appearances do not imply endorsement.</p>${internal(onLocationContact, "Invite The Alana Show", "button button-light")}`,
+    exploreEyebrow: "Go where the story is",
+    exploreTitle: "A field format built for real places and real people.",
+    cardAction: "Invite the show",
+    cards: [
+      ["Businesses & Organizations", "Invite the show into the places where work is actually done—from offices, restaurants, studios, shops, and workshops to nonprofits and community organizations.", onLocationContact],
+      ["Events & Community", "Bring a conversation to openings, conferences, fundraisers, civic gatherings, cultural events, community initiatives, and other moments worth documenting.", onLocationContact],
+      ["Public Affairs & Debates", "Request an on-location candidate, issue, public-policy, or moderated debate conversation. Editorial standards and independent selection remain in place.", onLocationContact]
+    ],
+    ctaEyebrow: "Have the show out",
+    ctaTitle: "If the best place for the conversation is your place, tell us about it.",
+    ctas: `${internal(onLocationContact, "Request an On-Location Conversation")}${internal("/standards/", "Editorial Standards", "button button-ghost")}`
   },
   book: {
     eyebrow: "Guest inquiries · story ideas · interviews",
