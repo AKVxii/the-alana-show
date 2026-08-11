@@ -1,0 +1,69 @@
+name: One-time homepage feed resilience update
+
+on:
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    name: Add verified homepage archive fallback
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Check out resilience branch
+        uses: actions/checkout@v4
+        with:
+          ref: phase-27-homepage-feed-resilience
+          fetch-depth: 0
+
+      - name: Apply narrow verified fallback edits
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          path = Path("src/main.js")
+          text = path.read_text(encoding="utf-8")
+
+          replacements = [
+            (
+              'import { enrichEpisode } from "./data/catalog.js";',
+              'import { enrichEpisode, episodes as editorialEpisodes } from "./data/catalog.js";'
+            ),
+            (
+              '''  return `\n    <article class="episode-card">\n      <a class="episode-thumb" href="${cardUrl}"${linkAttrs} aria-label="Watch ${escapeHtml(enriched.title)}">\n        ${EpisodeThumbnail(enriched, { latest: false })}\n        <span class="episode-play">${icon("play")}</span>\n        <small>${escapeHtml(formatDuration(enriched.durationSeconds))}</small>\n      </a>\n      <div class="episode-body">\n        <span>${escapeHtml(formatDate(enriched.publishedAt))}</span>\n        <h3>${escapeHtml(enriched.title)}</h3>\n        <p>${escapeHtml(excerpt(enriched.description, 120))}</p>\n        <a href="${cardUrl}"${linkAttrs}>Watch conversation ${icon("arrow")}</a>\n      </div>\n    </article>\n  `;''',
+              '''  const dateLabel = formatDate(enriched.publishedAt) || "Verified conversation";\n  const summary = excerpt(enriched.description, 120) || "A verified conversation from The Alana Show archive.";\n  return `\n    <article class="episode-card">\n      <a class="episode-thumb" href="${cardUrl}"${linkAttrs} aria-label="Watch ${escapeHtml(enriched.title)}">\n        ${EpisodeThumbnail(enriched, { latest: false })}\n        <span class="episode-play">${icon("play")}</span>\n        <small>${escapeHtml(formatDuration(enriched.durationSeconds))}</small>\n      </a>\n      <div class="episode-body">\n        <span>${escapeHtml(dateLabel)}</span>\n        <h3>${escapeHtml(enriched.title)}</h3>\n        <p>${escapeHtml(summary)}</p>\n        <a href="${cardUrl}"${linkAttrs}>Watch conversation ${icon("arrow")}</a>\n      </div>\n    </article>\n  `;'''
+            ),
+            (
+              '  document.querySelector("[data-latest-description]").textContent = excerpt(episode.description, 145) || `Published ${formatDate(episode.publishedAt)}.`;',
+              '  document.querySelector("[data-latest-description]").textContent = excerpt(episode.description, 145) || "A verified conversation from The Alana Show archive.";'
+            ),
+            (
+              '''  } catch (error) {\n    console.info("Using the curated fallback episode while the YouTube feed is unavailable.");\n    const rail = document.querySelector("[data-episode-rail]");\n    if (rail) rail.innerHTML = `<div class="episode-fallback"><strong>Explore every conversation on YouTube.</strong><a class="button button-gold" href="${site.youtube}" target="_blank" rel="noopener">Visit the channel ${icon("arrow")}</a></div>`;\n    state.episodes = [];\n    renderSearchResults("");\n  }''',
+              '''  } catch (error) {\n    console.info("Using the verified static conversation archive while the live YouTube feed is unavailable.");\n    state.episodes = uniqueEpisodes(editorialEpisodes).map(enrichEpisode);\n    const fallbackLatest = state.episodes[0];\n    updateFeatured(fallbackLatest);\n    updateLatest(fallbackLatest);\n    renderEpisodes(state.episodes);\n    renderSearchResults("");\n  }'''
+            ),
+            (
+              '''  const categories = (episode.categories || []).slice(0, 3);\n  return `<a class="search-result" href="${resultUrl}"${external ? ' target="_blank" rel="noopener"' : ""}>\n    <span class="search-result-media">${EpisodeThumbnail(episode, { latest: false })}</span>\n    <span><small>${escapeHtml(formatDate(episode.publishedAt))}</small><strong>${escapeHtml(episode.title)}</strong><p>${escapeHtml(excerpt(episode.description, 110))}</p>${categories.length ? `<span class="search-categories">${categories.map(category => `<span>${escapeHtml(category)}</span>`).join("")}</span>` : ""}</span>\n    ${icon("arrow")}\n  </a>`;''',
+              '''  const categories = (episode.categories || []).slice(0, 3);\n  const dateLabel = formatDate(episode.publishedAt) || "Verified conversation";\n  const summary = excerpt(episode.description, 110) || "A verified conversation from The Alana Show archive.";\n  return `<a class="search-result" href="${resultUrl}"${external ? ' target="_blank" rel="noopener"' : ""}>\n    <span class="search-result-media">${EpisodeThumbnail(episode, { latest: false })}</span>\n    <span><small>${escapeHtml(dateLabel)}</small><strong>${escapeHtml(episode.title)}</strong><p>${escapeHtml(summary)}</p>${categories.length ? `<span class="search-categories">${categories.map(category => `<span>${escapeHtml(category)}</span>`).join("")}</span>` : ""}</span>\n    ${icon("arrow")}\n  </a>`;'''
+            )
+          ]
+
+          for old, new in replacements:
+              count = text.count(old)
+              if count != 1:
+                  raise SystemExit(f"Expected exactly one replacement target, found {count}: {old[:80]!r}")
+              text = text.replace(old, new)
+
+          path.write_text(text, encoding="utf-8")
+          PY
+
+      - name: Commit verified fallback edits
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add src/main.js
+          git commit -m "Phase 27: Keep homepage archive useful when YouTube is unavailable"
+          git push origin HEAD:phase-27-homepage-feed-resilience
