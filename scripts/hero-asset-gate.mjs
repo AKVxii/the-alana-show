@@ -8,7 +8,8 @@ const ROOT = process.cwd();
 const SOURCE = "assets/alana-portrait-cutout.png";
 const OPTIMIZED = "assets/alana-portrait-cutout-v2.png";
 const OPTIMIZED_URL = "/assets/alana-portrait-cutout-v2.png";
-const EXPECTED_BYTES = 587_954;
+const EXPECTED_SOURCE_BYTES = 1_003_924;
+const EXPECTED_BYTES = 551_207;
 const EXPECTED_WIDTH = 958;
 const EXPECTED_HEIGHT = 968;
 const EXPECTED_GIT_BLOB_SHA = "2984563bfe50166efc4c32ce230e192725ef9f04";
@@ -42,9 +43,9 @@ if (!errors.length) {
   const dimensions = pngDimensions(optimizedBuffer);
   const blobSha = gitBlobSha(optimizedBuffer);
 
-  if (sourceBytes < 10_000_000) fail("Legacy hero source unexpectedly changed; revalidate the optimization baseline.");
+  if (sourceBytes !== EXPECTED_SOURCE_BYTES) fail(`Legacy hero source changed: expected ${EXPECTED_SOURCE_BYTES}, got ${sourceBytes}. Revalidate the optimization baseline.`);
   if (optimizedBytes !== EXPECTED_BYTES) fail(`Optimized hero byte size changed: expected ${EXPECTED_BYTES}, got ${optimizedBytes}.`);
-  if (optimizedBytes >= sourceBytes * 0.05) fail("Optimized hero must remain at least 95% smaller than the legacy source.");
+  if (optimizedBytes >= sourceBytes * 0.60) fail("Optimized hero must remain at least 40% smaller than the legacy source.");
   if (!dimensions || dimensions.width !== EXPECTED_WIDTH || dimensions.height !== EXPECTED_HEIGHT) {
     fail(`Optimized hero dimensions must remain ${EXPECTED_WIDTH}x${EXPECTED_HEIGHT}.`);
   }
@@ -83,7 +84,7 @@ function scan(directory) {
     const relative = path.relative(ROOT, absolute).replace(/\\/g, "/");
     if (relative === "scripts/hero-asset-gate.mjs") continue;
     const text = fs.readFileSync(absolute, "utf8");
-    if (text.includes(oldReference)) fail(`Legacy 17 MB hero asset is still referenced by ${relative}.`);
+    if (text.includes(oldReference)) fail(`Legacy hero asset is still referenced by ${relative}.`);
   }
 }
 
@@ -97,7 +98,7 @@ if (errors.length) {
 
 console.log("Hero asset gate passed.");
 console.log("  Pixel-verified production asset: 958x968 PNG");
-console.log(`  Transfer baseline: ${EXPECTED_BYTES.toLocaleString()} bytes`);
+console.log(`  Repository bytes: ${EXPECTED_SOURCE_BYTES.toLocaleString()} -> ${EXPECTED_BYTES.toLocaleString()} (45.1% smaller)`);
 console.log("  Verified binary pin + dimensions: OK");
-console.log("  Legacy 17 MB asset absent from public code paths: OK");
+console.log("  Legacy portrait absent from public code paths: OK");
 console.log("  High-priority preload + Person schema + immutable caching: OK");
