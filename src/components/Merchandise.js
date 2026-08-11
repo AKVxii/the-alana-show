@@ -14,7 +14,10 @@ export function Merchandise() {
           <small>Made to order · Availability, timing, shipping, and payment confirmed personally before purchase.</small>
         </div>
         <a class="merchandise-teaser-art reveal" href="/merchandise/" aria-label="View The Alana Show merchandise collection" data-track-event="Merchandise Explore" data-track-location="home-image">
-          <img src="/assets/alana-show-merchandise-collection.png" width="1600" height="1200" loading="lazy" alt="The Alana Show merchandise collection featuring four light organic-cotton quote tees and a Save it for the show hat">
+          <picture style="display:contents">
+            <source srcset="/assets/alana-show-merchandise-collection-v2.webp" type="image/webp">
+            <img src="/assets/alana-show-merchandise-collection.png" width="1600" height="1200" loading="lazy" decoding="async" alt="The Alana Show merchandise collection featuring four light organic-cotton quote tees and a Save it for the show hat">
+          </picture>
         </a>
       </div>
     </section>

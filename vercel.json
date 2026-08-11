@@ -9,6 +9,18 @@
       ]
     },
     {
+      "source": "/assets/broadcast-reach-south-florida-v2.webp",
+      "headers": [
+        {"key": "Cache-Control", "value": "public, max-age=31556952, immutable"}
+      ]
+    },
+    {
+      "source": "/assets/alana-show-merchandise-collection-v2.webp",
+      "headers": [
+        {"key": "Cache-Control", "value": "public, max-age=31556952, immutable"}
+      ]
+    },
+    {
       "source": "/(.*)",
       "headers": [
         {"key": "X-Content-Type-Options", "value": "nosniff"},

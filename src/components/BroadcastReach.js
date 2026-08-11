@@ -1,5 +1,20 @@
 import { site } from "../data/site.js";
 
+const BROADCAST_PICTURE = ({ className = "", alt = "" } = {}) => `
+  <picture style="display:contents">
+    <source srcset="/assets/broadcast-reach-south-florida-v2.webp" type="image/webp">
+    <img
+      ${className ? `class="${className}"` : ""}
+      src="/assets/broadcast-reach-south-florida.png"
+      width="1672"
+      height="941"
+      loading="lazy"
+      decoding="async"
+      alt="${alt}"
+    >
+  </picture>
+`;
+
 export function BroadcastReach({ compact = false } = {}) {
   if (compact) {
     return `
@@ -12,14 +27,7 @@ export function BroadcastReach({ compact = false } = {}) {
             <a class="broadcast-reach-text-link" href="/south-florida/#broadcast-reach">View the full broadcast reach <span aria-hidden="true">→</span></a>
           </div>
           <a class="broadcast-artwork-preview" href="/south-florida/#broadcast-reach" aria-label="View The Alana Show full South Florida broadcast reach">
-            <img
-              src="/assets/broadcast-reach-south-florida.png"
-              width="1672"
-              height="941"
-              loading="lazy"
-              decoding="async"
-              alt="The Alana Show broadcast reach across South Florida and the Treasure Coast."
-            >
+            ${BROADCAST_PICTURE({ alt: "The Alana Show broadcast reach across South Florida and the Treasure Coast." })}
           </a>
         </div>
       </section>
@@ -36,15 +44,10 @@ export function BroadcastReach({ compact = false } = {}) {
         </div>
 
         <div class="broadcast-artwork-frame">
-          <img
-            class="broadcast-artwork"
-            src="/assets/broadcast-reach-south-florida.png"
-            width="1672"
-            height="941"
-            loading="lazy"
-            decoding="async"
-            alt="The Alana Show broadcast reach across South Florida, airing Tuesdays 8:00 PM to 9:00 PM Eastern on the True Oldies Channel, with six dial positions, South Florida county coverage, and worldwide streaming."
-          >
+          ${BROADCAST_PICTURE({
+            className: "broadcast-artwork",
+            alt: "The Alana Show broadcast reach across South Florida, airing Tuesdays 8:00 PM to 9:00 PM Eastern on the True Oldies Channel, with six dial positions, South Florida county coverage, and worldwide streaming."
+          })}
           <a class="broadcast-hotspot broadcast-hotspot-listen" href="${site.trueOldiesLive}" target="_blank" rel="noopener" aria-label="Listen live on True Oldies" data-track-event="Broadcast Listen" data-track-location="broadcast-reach" data-track-exclusive="true"><span class="sr-only">Listen Live</span></a>
           <a class="broadcast-hotspot broadcast-hotspot-episodes" href="/episodes/" aria-label="View The Alana Show episodes" data-track-event="Broadcast Episodes" data-track-location="broadcast-reach" data-track-exclusive="true"><span class="sr-only">View Episodes</span></a>
         </div>
