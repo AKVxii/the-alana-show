@@ -1,0 +1,82 @@
+name: One-time hero image optimization
+
+on:
+  push:
+    branches:
+      - phase-23-hero-image-performance
+    paths:
+      - ".github/workflows/hero-image-optimize-once.yml"
+      - "assets/alana-portrait-cutout.png"
+
+permissions:
+  contents: write
+
+jobs:
+  optimize:
+    name: Re-encode hero without changing pixels
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out optimization branch
+        uses: actions/checkout@v4
+        with:
+          ref: phase-23-hero-image-performance
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Install image encoder
+        run: python -m pip install --disable-pip-version-check pillow==11.3.0
+
+      - name: Losslessly re-encode portrait and verify pixels
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from PIL import Image, ImageChops
+
+          source_path = Path("assets/alana-portrait-cutout.png")
+          target_path = Path("assets/alana-portrait-cutout-v2.png")
+
+          with Image.open(source_path) as source_image:
+              source = source_image.convert("RGBA")
+              source.load()
+
+          source.save(target_path, format="PNG", optimize=True, compress_level=9)
+
+          with Image.open(target_path) as optimized_image:
+              optimized = optimized_image.convert("RGBA")
+              optimized.load()
+
+          if source.size != optimized.size:
+              raise SystemExit(f"Dimension mismatch: {source.size} != {optimized.size}")
+
+          if ImageChops.difference(source, optimized).getbbox() is not None:
+              raise SystemExit("Pixel verification failed: optimized image differs from source")
+
+          source_bytes = source_path.stat().st_size
+          target_bytes = target_path.stat().st_size
+          reduction = 100 * (1 - target_bytes / source_bytes)
+          print(f"Dimensions: {source.width}x{source.height}")
+          print(f"Source bytes: {source_bytes:,}")
+          print(f"Optimized bytes: {target_bytes:,}")
+          print(f"Reduction: {reduction:.1f}%")
+          print("RGBA pixel comparison: EXACT")
+
+          if target_bytes >= source_bytes:
+              raise SystemExit("Optimization did not reduce file size")
+          PY
+
+      - name: Commit verified optimized asset
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/alana-portrait-cutout-v2.png
+          if git diff --cached --quiet; then
+            echo "Optimized asset already matches committed output."
+            exit 0
+          fi
+          git commit -m "Phase 23: Add pixel-identical optimized hero portrait"
+          git push origin HEAD:phase-23-hero-image-performance
