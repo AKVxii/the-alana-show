@@ -1,11 +1,9 @@
 name: One-time marketing asset optimization
 
 on:
-  push:
+  pull_request:
     branches:
-      - phase-25-lossless-marketing-assets
-    paths:
-      - ".github/workflows/marketing-assets-optimize-once.yml"
+      - main
 
 permissions:
   contents: write
