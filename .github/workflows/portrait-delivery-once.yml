@@ -1,0 +1,69 @@
+name: One-time portrait delivery update
+
+on:
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    name: Prefer verified WebP on portrait display surfaces
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Check out portrait delivery branch
+        uses: actions/checkout@v4
+        with:
+          ref: phase-28-portrait-delivery-everywhere
+          fetch-depth: 0
+
+      - name: Apply narrow display-only replacements
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          replacements = {
+            Path("src/components/About.js"): [
+              (
+                'const ALANA_PORTRAIT_SRC = "/assets/alana-portrait-cutout-v2.png";',
+                'const ALANA_PORTRAIT_WEBP = "/assets/alana-portrait-cutout-v3.webp";\nconst ALANA_PORTRAIT_PNG = "/assets/alana-portrait-cutout-v2.png";'
+              ),
+              (
+                '<img src="${ALANA_PORTRAIT_SRC}" alt="Alana K. Vandeveer in the studio" width="${ALANA_PORTRAIT_WIDTH}" height="${ALANA_PORTRAIT_HEIGHT}" loading="lazy" decoding="async">',
+                '<picture style="display:contents"><source srcset="${ALANA_PORTRAIT_WEBP}" type="image/webp"><img src="${ALANA_PORTRAIT_PNG}" alt="Alana K. Vandeveer in the studio" width="${ALANA_PORTRAIT_WIDTH}" height="${ALANA_PORTRAIT_HEIGHT}" loading="lazy" decoding="async"></picture>'
+              )
+            ],
+            Path("about/index.html"): [
+              (
+                '<img src="/assets/alana-portrait-cutout-v2.png" alt="Alana K. Vandeveer, host of The Alana Show" width="958" height="968" fetchpriority="high" decoding="async">',
+                '<picture style="display:contents"><source srcset="/assets/alana-portrait-cutout-v3.webp" type="image/webp"><img src="/assets/alana-portrait-cutout-v2.png" alt="Alana K. Vandeveer, host of The Alana Show" width="958" height="968" fetchpriority="high" decoding="async"></picture>'
+              )
+            ],
+            Path("press/index.html"): [
+              (
+                '<div class="press-asset-preview light"><img src="/assets/alana-portrait-cutout-v2.png" alt="Alana K. Vandeveer, host of The Alana Show" width="958" height="968" loading="lazy"></div>',
+                '<div class="press-asset-preview light"><picture style="display:contents"><source srcset="/assets/alana-portrait-cutout-v3.webp" type="image/webp"><img src="/assets/alana-portrait-cutout-v2.png" alt="Alana K. Vandeveer, host of The Alana Show" width="958" height="968" loading="lazy" decoding="async"></picture></div>'
+              )
+            ]
+          }
+
+          for path, edits in replacements.items():
+              text = path.read_text(encoding="utf-8")
+              for old, new in edits:
+                  count = text.count(old)
+                  if count != 1:
+                      raise SystemExit(f"Expected one target in {path}, found {count}: {old[:100]!r}")
+                  text = text.replace(old, new)
+              path.write_text(text, encoding="utf-8")
+          PY
+
+      - name: Commit display-only updates
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add src/components/About.js about/index.html press/index.html
+          git commit -m "Phase 28: Prefer lossless WebP on portrait display surfaces"
+          git push origin HEAD:phase-28-portrait-delivery-everywhere
