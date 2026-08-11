@@ -11,7 +11,7 @@ const OPTIMIZED_URL = "/assets/alana-portrait-cutout-v2.png";
 const EXPECTED_BYTES = 587_954;
 const EXPECTED_WIDTH = 958;
 const EXPECTED_HEIGHT = 968;
-const EXPECTED_SHA256 = "";
+const EXPECTED_GIT_BLOB_SHA = "2984563bfe50166efc4c32ce230e192725ef9f04";
 
 function read(relative) {
   return fs.readFileSync(path.join(ROOT, relative), "utf8");
@@ -26,6 +26,11 @@ function pngDimensions(buffer) {
   };
 }
 
+function gitBlobSha(buffer) {
+  const header = Buffer.from(`blob ${buffer.length}\0`);
+  return crypto.createHash("sha1").update(header).update(buffer).digest("hex");
+}
+
 for (const relative of [SOURCE, OPTIMIZED]) {
   if (!fs.existsSync(path.join(ROOT, relative))) fail(`Missing hero asset: ${relative}`);
 }
@@ -35,7 +40,7 @@ if (!errors.length) {
   const optimizedBytes = fs.statSync(path.join(ROOT, OPTIMIZED)).size;
   const optimizedBuffer = fs.readFileSync(path.join(ROOT, OPTIMIZED));
   const dimensions = pngDimensions(optimizedBuffer);
-  const sha256 = crypto.createHash("sha256").update(optimizedBuffer).digest("hex");
+  const blobSha = gitBlobSha(optimizedBuffer);
 
   if (sourceBytes < 10_000_000) fail("Legacy hero source unexpectedly changed; revalidate the optimization baseline.");
   if (optimizedBytes !== EXPECTED_BYTES) fail(`Optimized hero byte size changed: expected ${EXPECTED_BYTES}, got ${optimizedBytes}.`);
@@ -44,9 +49,12 @@ if (!errors.length) {
     fail(`Optimized hero dimensions must remain ${EXPECTED_WIDTH}x${EXPECTED_HEIGHT}.`);
   }
 
-  // Pin the production asset after the one-time lossless RGBA pixel comparison.
-  // This turns any future byte change into an explicit review instead of a silent visual regression.
-  if (EXPECTED_SHA256 && sha256 !== EXPECTED_SHA256) fail("Optimized hero binary changed; re-run pixel-identical visual verification before updating the pinned checksum.");
+  // The one-time encoder verified the source and optimized file decode to exactly
+  // the same 958x968 RGBA pixels. Pin that verified binary so any future image
+  // change requires an explicit visual-verification pass instead of silently shipping.
+  if (blobSha !== EXPECTED_GIT_BLOB_SHA) {
+    fail("Optimized hero binary changed; re-run pixel-identical visual verification before updating the pinned blob SHA.");
+  }
 }
 
 const hero = read("src/components/Hero.js");
@@ -90,5 +98,6 @@ if (errors.length) {
 console.log("Hero asset gate passed.");
 console.log("  Pixel-verified production asset: 958x968 PNG");
 console.log(`  Transfer baseline: ${EXPECTED_BYTES.toLocaleString()} bytes`);
+console.log("  Verified binary pin + dimensions: OK");
 console.log("  Legacy 17 MB asset absent from public code paths: OK");
 console.log("  High-priority preload + Person schema + immutable caching: OK");
