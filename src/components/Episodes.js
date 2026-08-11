@@ -58,15 +58,12 @@ export function Episodes() {
         <div class="editorial-pair">
           <article class="featured-player reveal" data-featured>
             <div class="player-frame">
-              <iframe
+              <featured-video
                 data-featured-video
-                src="https://www.youtube-nocookie.com/embed/kJWFTnWOgYM?rel=0"
-                title="Featured conversation from The Alana Show"
-                loading="lazy"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                referrerpolicy="strict-origin-when-cross-origin"
-                allowfullscreen>
-              </iframe>
+                data-initial-src="https://www.youtube-nocookie.com/embed/kJWFTnWOgYM?rel=0"
+                data-title="Featured conversation from The Alana Show">
+                <a href="https://www.youtube.com/watch?v=kJWFTnWOgYM" target="_blank" rel="noopener">Watch the featured conversation on YouTube</a>
+              </featured-video>
             </div>
             <div class="featured-meta">
               <div>
