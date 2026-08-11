@@ -6,13 +6,17 @@ const errors = [];
 const fail = message => errors.push(message);
 const ROOT = process.cwd();
 const SOURCE = "assets/alana-portrait-cutout.png";
-const OPTIMIZED = "assets/alana-portrait-cutout-v2.png";
-const OPTIMIZED_URL = "/assets/alana-portrait-cutout-v2.png";
+const PNG = "assets/alana-portrait-cutout-v2.png";
+const WEBP = "assets/alana-portrait-cutout-v3.webp";
+const PNG_URL = "/assets/alana-portrait-cutout-v2.png";
+const WEBP_URL = "/assets/alana-portrait-cutout-v3.webp";
 const EXPECTED_SOURCE_BYTES = 1_003_924;
-const EXPECTED_BYTES = 551_207;
+const EXPECTED_PNG_BYTES = 551_207;
+const EXPECTED_WEBP_BYTES = 320_326;
 const EXPECTED_WIDTH = 958;
 const EXPECTED_HEIGHT = 968;
-const EXPECTED_GIT_BLOB_SHA = "2984563bfe50166efc4c32ce230e192725ef9f04";
+const EXPECTED_PNG_BLOB_SHA = "2984563bfe50166efc4c32ce230e192725ef9f04";
+const EXPECTED_WEBP_BLOB_SHA = "0942715896ad6e8cbad4b67834678d67d6ca000e";
 
 function read(relative) {
   return fs.readFileSync(path.join(ROOT, relative), "utf8");
@@ -21,9 +25,19 @@ function read(relative) {
 function pngDimensions(buffer) {
   const signature = buffer.subarray(0, 8).toString("hex");
   if (signature !== "89504e470d0a1a0a") return null;
+  return { width: buffer.readUInt32BE(16), height: buffer.readUInt32BE(20) };
+}
+
+function webpDimensions(buffer) {
+  if (buffer.subarray(0, 4).toString("ascii") !== "RIFF" || buffer.subarray(8, 12).toString("ascii") !== "WEBP") return null;
+  // The verified lossless asset is VP8L. The first five VP8L payload bytes encode
+  // width/height minus one in 14-bit little-endian fields.
+  const chunk = buffer.subarray(12, 16).toString("ascii");
+  if (chunk !== "VP8L" || buffer[20] !== 0x2f) return null;
+  const bits = buffer.readUInt32LE(21);
   return {
-    width: buffer.readUInt32BE(16),
-    height: buffer.readUInt32BE(20)
+    width: (bits & 0x3fff) + 1,
+    height: ((bits >> 14) & 0x3fff) + 1
   };
 }
 
@@ -32,41 +46,52 @@ function gitBlobSha(buffer) {
   return crypto.createHash("sha1").update(header).update(buffer).digest("hex");
 }
 
-for (const relative of [SOURCE, OPTIMIZED]) {
+for (const relative of [SOURCE, PNG, WEBP]) {
   if (!fs.existsSync(path.join(ROOT, relative))) fail(`Missing hero asset: ${relative}`);
 }
 
 if (!errors.length) {
   const sourceBytes = fs.statSync(path.join(ROOT, SOURCE)).size;
-  const optimizedBytes = fs.statSync(path.join(ROOT, OPTIMIZED)).size;
-  const optimizedBuffer = fs.readFileSync(path.join(ROOT, OPTIMIZED));
-  const dimensions = pngDimensions(optimizedBuffer);
-  const blobSha = gitBlobSha(optimizedBuffer);
+  const pngBuffer = fs.readFileSync(path.join(ROOT, PNG));
+  const webpBuffer = fs.readFileSync(path.join(ROOT, WEBP));
+  const pngSize = pngBuffer.length;
+  const webpSize = webpBuffer.length;
+  const pngSizeInfo = pngDimensions(pngBuffer);
+  const webpSizeInfo = webpDimensions(webpBuffer);
 
   if (sourceBytes !== EXPECTED_SOURCE_BYTES) fail(`Legacy hero source changed: expected ${EXPECTED_SOURCE_BYTES}, got ${sourceBytes}. Revalidate the optimization baseline.`);
-  if (optimizedBytes !== EXPECTED_BYTES) fail(`Optimized hero byte size changed: expected ${EXPECTED_BYTES}, got ${optimizedBytes}.`);
-  if (optimizedBytes >= sourceBytes * 0.60) fail("Optimized hero must remain at least 40% smaller than the legacy source.");
-  if (!dimensions || dimensions.width !== EXPECTED_WIDTH || dimensions.height !== EXPECTED_HEIGHT) {
-    fail(`Optimized hero dimensions must remain ${EXPECTED_WIDTH}x${EXPECTED_HEIGHT}.`);
+  if (pngSize !== EXPECTED_PNG_BYTES) fail(`PNG fallback changed: expected ${EXPECTED_PNG_BYTES}, got ${pngSize}.`);
+  if (webpSize !== EXPECTED_WEBP_BYTES) fail(`Preferred WebP changed: expected ${EXPECTED_WEBP_BYTES}, got ${webpSize}.`);
+  if (pngSize >= sourceBytes * 0.60) fail("Optimized PNG fallback must remain at least 40% smaller than the original source.");
+  if (webpSize >= pngSize * 0.90) fail("Preferred lossless WebP must remain at least 10% smaller than the optimized PNG fallback.");
+
+  for (const [label, dimensions] of [["PNG fallback", pngSizeInfo], ["WebP preferred asset", webpSizeInfo]]) {
+    if (!dimensions || dimensions.width !== EXPECTED_WIDTH || dimensions.height !== EXPECTED_HEIGHT) {
+      fail(`${label} dimensions must remain ${EXPECTED_WIDTH}x${EXPECTED_HEIGHT}.`);
+    }
   }
 
-  // The one-time encoder verified the source and optimized file decode to exactly
-  // the same 958x968 RGBA pixels. Pin that verified binary so any future image
-  // change requires an explicit visual-verification pass instead of silently shipping.
-  if (blobSha !== EXPECTED_GIT_BLOB_SHA) {
-    fail("Optimized hero binary changed; re-run pixel-identical visual verification before updating the pinned blob SHA.");
-  }
+  // One-time encoding jobs decoded each production derivative to RGBA and
+  // verified exact pixel equality. Pin those binaries so a future visual change
+  // cannot silently ride in under the same versioned filename.
+  if (gitBlobSha(pngBuffer) !== EXPECTED_PNG_BLOB_SHA) fail("PNG fallback binary changed; rerun exact-pixel verification before updating the pin.");
+  if (gitBlobSha(webpBuffer) !== EXPECTED_WEBP_BLOB_SHA) fail("Preferred WebP binary changed; rerun exact-pixel verification before updating the pin.");
 }
 
 const hero = read("src/components/Hero.js");
 const index = read("index.html");
 const vercel = read("vercel.json");
 
-if (!hero.includes(`const ALANA_PORTRAIT_SRC = "${OPTIMIZED_URL}"`)) fail("Hero component is not using the optimized portrait.");
-if (!index.includes(`rel="preload" as="image" href="${OPTIMIZED_URL}"`)) fail("Homepage is not preloading the optimized hero portrait.");
-if (!index.includes(`"image": "https://thealanashow.com${OPTIMIZED_URL}"`)) fail("Homepage Person schema is not using the optimized portrait.");
-if (!vercel.includes(`"source": "${OPTIMIZED_URL}"`)) fail("Versioned hero asset is missing its dedicated cache rule.");
-if (!vercel.includes('"value": "public, max-age=31556952, immutable"')) fail("Versioned hero asset must retain long-lived immutable browser caching.");
+if (!hero.includes(`const ALANA_PORTRAIT_WEBP = "${WEBP_URL}"`)) fail("Hero component is not using the preferred lossless WebP portrait.");
+if (!hero.includes(`const ALANA_PORTRAIT_PNG = "${PNG_URL}"`)) fail("Hero component is missing the verified PNG fallback.");
+if (!hero.includes(`<source srcset="${'${ALANA_PORTRAIT_WEBP}'}" type="image/webp">`)) fail("Hero picture source must prefer lossless WebP.");
+if (!index.includes(`rel="preload" as="image" href="${WEBP_URL}" type="image/webp"`)) fail("Homepage is not preloading the preferred hero WebP.");
+if (!index.includes(`"image": "https://thealanashow.com${PNG_URL}"`)) fail("Homepage Person schema must keep the broadly compatible verified PNG portrait.");
+for (const url of [PNG_URL, WEBP_URL]) {
+  if (!vercel.includes(`"source": "${url}"`)) fail(`Versioned hero asset is missing its dedicated cache rule: ${url}.`);
+}
+if (!vercel.includes('"value": "public, max-age=31556952, immutable"')) fail("Versioned hero assets must retain long-lived immutable browser caching.");
+if (fs.existsSync(".github/workflows/hero-webp-optimize-once.yml")) fail("One-time hero encoder workflow must be removed before merge.");
 
 const oldReference = "alana-portrait-cutout" + ".png";
 const textExtensions = new Set([".js", ".mjs", ".html", ".css", ".json", ".xml", ".md", ".txt", ".yml", ".yaml", ".webmanifest"]);
@@ -84,7 +109,7 @@ function scan(directory) {
     const relative = path.relative(ROOT, absolute).replace(/\\/g, "/");
     if (relative === "scripts/hero-asset-gate.mjs") continue;
     const text = fs.readFileSync(absolute, "utf8");
-    if (text.includes(oldReference)) fail(`Legacy hero asset is still referenced by ${relative}.`);
+    if (text.includes(oldReference)) fail(`Legacy original hero asset is still referenced by ${relative}.`);
   }
 }
 
@@ -97,8 +122,8 @@ if (errors.length) {
 }
 
 console.log("Hero asset gate passed.");
-console.log("  Pixel-verified production asset: 958x968 PNG");
-console.log(`  Repository bytes: ${EXPECTED_SOURCE_BYTES.toLocaleString()} -> ${EXPECTED_BYTES.toLocaleString()} (45.1% smaller)`);
-console.log("  Verified binary pin + dimensions: OK");
-console.log("  Legacy portrait absent from public code paths: OK");
-console.log("  High-priority preload + Person schema + immutable caching: OK");
+console.log("  Exact-pixel production derivatives: 958x968 PNG + lossless WebP");
+console.log(`  Original -> PNG: ${EXPECTED_SOURCE_BYTES.toLocaleString()} -> ${EXPECTED_PNG_BYTES.toLocaleString()} bytes (45.1% smaller)`);
+console.log(`  PNG -> preferred WebP: ${EXPECTED_PNG_BYTES.toLocaleString()} -> ${EXPECTED_WEBP_BYTES.toLocaleString()} bytes (41.9% smaller)`);
+console.log("  Original -> modern preferred delivery: 68.1% smaller");
+console.log("  Verified binary pins + PNG fallback + WebP preload + immutable caching: OK");
