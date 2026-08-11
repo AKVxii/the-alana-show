@@ -1,0 +1,64 @@
+name: One-time hero lossless WebP optimization
+
+on:
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  optimize:
+    name: Encode exact-pixel hero WebP
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out optimization branch
+        uses: actions/checkout@v4
+        with:
+          ref: phase-26-hero-lossless-webp
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Install image encoder
+        run: python -m pip install --disable-pip-version-check pillow==11.3.0
+
+      - name: Encode and verify exact decoded pixels
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from PIL import Image, ImageChops
+
+          source_path = Path("assets/alana-portrait-cutout-v2.png")
+          target_path = Path("assets/alana-portrait-cutout-v3.webp")
+          with Image.open(source_path) as image:
+              source = image.convert("RGBA")
+              source.load()
+          source.save(target_path, format="WEBP", lossless=True, quality=100, method=6, exact=True)
+          with Image.open(target_path) as image:
+              optimized = image.convert("RGBA")
+              optimized.load()
+          if source.size != optimized.size:
+              raise SystemExit(f"Dimension mismatch: {source.size} != {optimized.size}")
+          if ImageChops.difference(source, optimized).getbbox() is not None:
+              raise SystemExit("Decoded pixel verification failed")
+          before = source_path.stat().st_size
+          after = target_path.stat().st_size
+          reduction = 100 * (1 - after / before)
+          print(f"{source.width}x{source.height}; {before:,} -> {after:,} bytes; {reduction:.1f}% smaller; RGBA EXACT")
+          if reduction < 10:
+              raise SystemExit(f"Lossless WebP savings are not material enough: {reduction:.1f}%")
+          PY
+
+      - name: Commit verified hero WebP
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/alana-portrait-cutout-v3.webp
+          git commit -m "Phase 26: Add exact-pixel lossless WebP hero"
+          git push origin HEAD:phase-26-hero-lossless-webp
