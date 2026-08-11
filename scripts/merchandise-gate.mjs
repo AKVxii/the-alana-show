@@ -20,6 +20,7 @@ const page = read("merchandise/index.html");
 const home = read("src/components/Merchandise.js");
 const homeMount = read("src/merchandise-home.js");
 const index = read("index.html");
+const homeEntry = fs.existsSync("src/home-entry.js") ? read("src/home-entry.js") : "";
 const footer = read("src/components/Footer.js");
 const api = read("api/contact.js");
 const sitemap = read("sitemap.xml");
@@ -43,7 +44,13 @@ if (!page.includes("No card information is collected here")) fail("payment/priva
 if (!script.includes('fetch("/api/contact"') || !script.includes('inquiry: "Merchandise order"')) fail("order form is not wired to the first-party contact API");
 if (!script.includes("syncSizeOptions") || !script.includes("Hat — adjustable / one size")) fail("item-aware merchandise sizing is missing");
 if (!api.includes('"Merchandise order"')) fail("contact API does not allow merchandise inquiries");
-if (!home.includes('href="/merchandise/"') || !homeMount.includes("Merchandise()") || !index.includes("/src/merchandise-home.js")) fail("homepage merchandise discovery is missing");
+
+const directHomeMount = index.includes('src="/src/merchandise-home.js"');
+const orderedHomeMount = index.includes('src="/src/home-entry.js"') && homeEntry.includes('import "./merchandise-home.js"');
+if (!home.includes('href="/merchandise/"') || !homeMount.includes("Merchandise()") || !(directHomeMount || orderedHomeMount)) {
+  fail("homepage merchandise discovery is missing");
+}
+
 if (!footer.includes('href="/merchandise/"')) fail("footer merchandise discovery is missing");
 if (!sitemap.includes("https://thealanashow.com/merchandise")) fail("merchandise page is missing from sitemap");
 if (fs.existsSync("assets/alana-show-merchandise-collection.webp.png")) fail("accidental double-extension merchandise asset still exists");
