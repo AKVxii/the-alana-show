@@ -11,7 +11,7 @@ import { Footer } from "./components/Footer.js";
 import { SearchDialog } from "./components/SearchDialog.js";
 import { icon } from "./lib/icons.js";
 import { site } from "./data/site.js";
-import { enrichEpisode } from "./data/catalog.js";
+import { enrichEpisode, episodes as editorialEpisodes } from "./data/catalog.js";
 import { compactNumber, escapeHtml, excerpt, formatDate, formatDuration, isValidWebsiteOrSocial, nextBroadcastLabel, normalizeWebsiteOrSocial } from "./lib/utils.js";
 import { searchEpisodes, uniqueEpisodes } from "./lib/episode-search.js";
 import { setupEditorialMotion } from "./lib/motion.js";
@@ -101,6 +101,8 @@ function episodeCard(episode) {
   const cardUrl = enriched.detailPath || youtubeUrl;
   const external = !enriched.detailPath;
   const linkAttrs = external ? ' target="_blank" rel="noopener"' : "";
+  const dateLabel = formatDate(enriched.publishedAt) || "Verified conversation";
+  const summary = excerpt(enriched.description, 120) || "A verified conversation from The Alana Show archive.";
   return `
     <article class="episode-card">
       <a class="episode-thumb" href="${cardUrl}"${linkAttrs} aria-label="Watch ${escapeHtml(enriched.title)}">
@@ -109,9 +111,9 @@ function episodeCard(episode) {
         <small>${escapeHtml(formatDuration(enriched.durationSeconds))}</small>
       </a>
       <div class="episode-body">
-        <span>${escapeHtml(formatDate(enriched.publishedAt))}</span>
+        <span>${escapeHtml(dateLabel)}</span>
         <h3>${escapeHtml(enriched.title)}</h3>
-        <p>${escapeHtml(excerpt(enriched.description, 120))}</p>
+        <p>${escapeHtml(summary)}</p>
         <a href="${cardUrl}"${linkAttrs}>Watch conversation ${icon("arrow")}</a>
       </div>
     </article>
@@ -157,7 +159,7 @@ function updateLatest(episode) {
     setupThumbnailFallbacks(media);
   }
   document.querySelector("[data-latest-title]").textContent = episode.title;
-  document.querySelector("[data-latest-description]").textContent = excerpt(episode.description, 145) || `Published ${formatDate(episode.publishedAt)}.`;
+  document.querySelector("[data-latest-description]").textContent = excerpt(episode.description, 145) || "A verified conversation from The Alana Show archive.";
   document.querySelector("[data-latest-link]").href = `https://www.youtube.com/watch?v=${episode.videoId}`;
 }
 
@@ -170,10 +172,12 @@ async function loadYouTube() {
     renderEpisodes(data.recent || state.episodes);
     renderSearchResults("");
   } catch (error) {
-    console.info("Using the curated fallback episode while the YouTube feed is unavailable.");
-    const rail = document.querySelector("[data-episode-rail]");
-    if (rail) rail.innerHTML = `<div class="episode-fallback"><strong>Explore every conversation on YouTube.</strong><a class="button button-gold" href="${site.youtube}" target="_blank" rel="noopener">Visit the channel ${icon("arrow")}</a></div>`;
-    state.episodes = [];
+    console.info("Using the verified static conversation archive while the live YouTube feed is unavailable.");
+    state.episodes = uniqueEpisodes(editorialEpisodes).map(enrichEpisode);
+    const fallbackLatest = state.episodes[0];
+    updateFeatured(fallbackLatest);
+    updateLatest(fallbackLatest);
+    renderEpisodes(state.episodes);
     renderSearchResults("");
   }
 }
@@ -183,9 +187,11 @@ function searchResult(episode) {
   const resultUrl = episode.detailPath || youtubeUrl;
   const external = !episode.detailPath;
   const categories = (episode.categories || []).slice(0, 3);
+  const dateLabel = formatDate(episode.publishedAt) || "Verified conversation";
+  const summary = excerpt(episode.description, 110) || "A verified conversation from The Alana Show archive.";
   return `<a class="search-result" href="${resultUrl}"${external ? ' target="_blank" rel="noopener"' : ""}>
     <span class="search-result-media">${EpisodeThumbnail(episode, { latest: false })}</span>
-    <span><small>${escapeHtml(formatDate(episode.publishedAt))}</small><strong>${escapeHtml(episode.title)}</strong><p>${escapeHtml(excerpt(episode.description, 110))}</p>${categories.length ? `<span class="search-categories">${categories.map(category => `<span>${escapeHtml(category)}</span>`).join("")}</span>` : ""}</span>
+    <span><small>${escapeHtml(dateLabel)}</small><strong>${escapeHtml(episode.title)}</strong><p>${escapeHtml(summary)}</p>${categories.length ? `<span class="search-categories">${categories.map(category => `<span>${escapeHtml(category)}</span>`).join("")}</span>` : ""}</span>
     ${icon("arrow")}
   </a>`;
 }
