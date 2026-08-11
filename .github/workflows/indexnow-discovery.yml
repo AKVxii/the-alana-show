@@ -1,0 +1,38 @@
+name: IndexNow discovery
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+concurrency:
+  group: indexnow-production
+  cancel-in-progress: false
+
+jobs:
+  notify:
+    name: Notify participating search engines
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - name: Check out production commit
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Allow production deployment to settle
+        run: sleep 75
+
+      - name: Submit changed canonical URLs to IndexNow
+        env:
+          INDEXNOW_BEFORE_SHA: ${{ github.event.before }}
+          INDEXNOW_AFTER_SHA: ${{ github.sha }}
+        run: node scripts/indexnow-submit.mjs
