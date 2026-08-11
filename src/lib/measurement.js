@@ -49,6 +49,14 @@ function writeAnalyticsConsent(value) {
   }
 }
 
+function clearAnalyticsConsent() {
+  try {
+    localStorage.removeItem(ANALYTICS_CONSENT_KEY);
+  } catch {
+    // If storage is blocked there is nothing to clear.
+  }
+}
+
 function removeConsentPrompt() {
   document.querySelector("[data-analytics-consent]")?.remove();
 }
@@ -231,6 +239,12 @@ export function setupMeasurement() {
   document.addEventListener("click", event => {
     const target = event.target instanceof Element ? event.target : null;
     if (!target) return;
+
+    if (target.closest("[data-reset-analytics-consent]")) {
+      clearAnalyticsConsent();
+      location.reload();
+      return;
+    }
 
     const customTarget = target.closest("[data-track-event]");
     const custom = customEventFor(customTarget);
