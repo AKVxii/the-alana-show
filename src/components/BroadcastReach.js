@@ -1,7 +1,7 @@
 import { site } from "../data/site.js";
 
 const BROADCAST_PICTURE = ({ className = "", alt = "" } = {}) => `
-  <picture>
+  <picture style="display:contents">
     <source srcset="/assets/broadcast-reach-south-florida-v2.webp" type="image/webp">
     <img
       ${className ? `class="${className}"` : ""}
