@@ -92,6 +92,25 @@ The public `robots.txt` already advertises both sitemaps.
 
 Review Search Console after major publishing batches for indexing, video indexing, structured-data issues, and pages that are discovered but not indexed.
 
+## 8. Automatic IndexNow discovery
+
+Production pushes to `main` automatically identify changed canonical HTML pages and submit those URLs to the IndexNow global endpoint after a short deployment-settle window.
+
+The automation:
+- uses the public root ownership key hosted on TheAlanaShow.com,
+- submits only URLs on the canonical `https://thealanashow.com` origin,
+- announces new, changed, or deleted permanent pages to participating IndexNow search engines,
+- does not replace the Google sitemap/Search Console workflow,
+- adds no paid service, plugin, or analytics dependency.
+
+The submission can also be run manually when needed:
+
+```bash
+npm run indexnow:notify
+```
+
+For testing without a network request, set `INDEXNOW_DRY_RUN=1` and provide `INDEXNOW_URLS`.
+
 ## Default rule
 
 External platforms distribute the show. TheAlanaShow.com owns the relationship, context, search authority, guest network, and permanent archive.
