@@ -1,5 +1,6 @@
 const ALLOWED_INQUIRIES = new Set([
   "Candidate Interview Series",
+  "On-location interview or event",
   "Advertising or partnership",
   "Recommend a guest",
   "Recommend an organization",
