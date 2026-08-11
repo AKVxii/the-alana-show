@@ -35,6 +35,34 @@ function titleFromPage(html) {
   return title.replace(/\s*\|\s*The Alana Show\s*$/i, "").trim();
 }
 
+function structuredVideoFromPage(html) {
+  const raw = html.match(/<script\s+[^>]*id=["']detail-structured-data["'][^>]*>([\s\S]*?)<\/script>/i)?.[1]?.trim();
+  if (!raw) return null;
+  try {
+    const data = JSON.parse(raw);
+    const graph = Array.isArray(data?.["@graph"]) ? data["@graph"] : [];
+    return graph.find(node => node?.["@type"] === "VideoObject") || null;
+  } catch {
+    return null;
+  }
+}
+
+function isoDurationSeconds(value = "") {
+  const match = String(value).match(/^P(?:(\d+)D)?T(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?$/i);
+  if (!match) return 0;
+  const days = Number(match[1] || 0);
+  const hours = Number(match[2] || 0);
+  const minutes = Number(match[3] || 0);
+  const seconds = Number(match[4] || 0);
+  const total = days * 86400 + hours * 3600 + minutes * 60 + seconds;
+  return Number.isInteger(total) && total >= 1 && total <= 28800 ? total : 0;
+}
+
+function validPublicationDate(value = "") {
+  const candidate = String(value).trim();
+  return candidate && !Number.isNaN(Date.parse(candidate)) ? candidate : "";
+}
+
 function sitemapLastmodMap() {
   const xml = read("sitemap.xml");
   const map = new Map();
@@ -59,6 +87,9 @@ for (const episode of episodes) {
   const thumbnail = attribute(html, /<meta\s+[^>]*property=["']og:image["'][^>]*>/i, "content");
   const player = `https://www.youtube-nocookie.com/embed/${episode.videoId}`;
   const lastmod = lastmods.get(canonical);
+  const structuredVideo = structuredVideoFromPage(html);
+  const durationSeconds = isoDurationSeconds(structuredVideo?.duration);
+  const publicationDate = validPublicationDate(structuredVideo?.uploadDate);
 
   if (!canonical.startsWith(`${ORIGIN}/episodes/`)) throw new Error(`${relative} has an unexpected canonical URL.`);
   if (!title) throw new Error(`${relative} is missing a video title.`);
@@ -75,6 +106,8 @@ for (const episode of episodes) {
     `      <video:title>${xmlEscape(title)}</video:title>`,
     `      <video:description>${xmlEscape(description)}</video:description>`,
     `      <video:player_loc allow_embed="yes">${xmlEscape(player)}</video:player_loc>`,
+    ...(durationSeconds ? [`      <video:duration>${durationSeconds}</video:duration>`] : []),
+    ...(publicationDate ? [`      <video:publication_date>${xmlEscape(publicationDate)}</video:publication_date>`] : []),
     "    </video:video>",
     "  </url>"
   ].join("\n"));
