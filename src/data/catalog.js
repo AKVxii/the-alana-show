@@ -49,7 +49,7 @@ export const guests = [
 ];
 
 export const episodes = [
-  { id: "scott-diament-gillian-lieberman", videoId: "1M6f1v1P6Pw", title: "Conversation with Scott Diament & Gillian Lieberman", guestIds: ["scott-diament", "gillian-lieberman"], detailPath: "/episodes/scott-diament-gillian-lieberman/" },
+  { id: "scott-diament-gillian-lieberman", videoId: "NN9mSARhmIQ", title: "Gillian Lieberman & Scott Diament: Palm Beach Business, Luxury & Leadership", guestIds: ["gillian-lieberman", "scott-diament"], detailPath: "/episodes/scott-diament-gillian-lieberman/", canonical: { title: "Gillian Lieberman & Scott Diament: Palm Beach Business, Luxury & Leadership", description: "Gillian Lieberman and Scott Diament join Alana K. Vandeveer on The Alana Show for a featured conversation about Palm Beach business, luxury, leadership, entrepreneurship and legacy.\n\nDrawing from their work across Provident Realty, Provident Jewelry and the Palm Beach Show Group, Gillian and Scott share perspectives from the worlds of real estate, luxury, entrepreneurship, major events and business in South Florida.\n\nGillian Lieberman\nDirector of Real Estate Sales Operations\nProvident Realty of South Florida, Inc.\n\nScott Diament\nSouth Florida entrepreneur, luxury jeweler and event producer; co-founder of Provident Jewelry; CEO of the Palm Beach Show Group; and Founder & Licensed Florida Broker of Provident Realty.\n\nHosted by Alana K. Vandeveer, The Alana Show brings together real conversations and distinct voices from business, leadership, public service, culture, sports, innovation and the communities shaping South Florida and beyond.\n\nThe Alana Show\nReal Conversations. Distinct Voices.", publishedAt: "2026-08-06T15:17:25Z", durationSeconds: 1662, thumbnail: "https://i.ytimg.com/vi/NN9mSARhmIQ/maxresdefault.jpg" } },
   { id: "george-lemieux", videoId: "VYXrV-WGiHM", title: "Conversation with George LeMieux", guestIds: ["george-lemieux"], detailPath: "/episodes/george-lemieux/" },
   { id: "stacey-ibarra-vaughn-mitchell", videoId: "iR4cdm9Ux3U", title: "Conversation with Stacey Ibarra & Vaughn Mitchell", guestIds: ["stacey-ibarra", "vaughn-mitchell"], detailPath: "/episodes/stacey-ibarra-vaughn-mitchell/" },
   { id: "nick-cannon", videoId: "h_A5sgFQOhs", title: "Conversation with Nick Cannon", guestIds: ["nick-cannon"], detailPath: "/episodes/nick-cannon/" },
@@ -94,13 +94,20 @@ export function organizationById(id) {
 
 export function enrichEpisode(apiEpisode) {
   const editorial = episodes.find(episode => episode.videoId === apiEpisode.videoId);
-  return editorial ? {
+  if (!editorial) return apiEpisode;
+  const canonical = editorial.canonical || {};
+  return {
     ...apiEpisode,
     ...editorial,
-    title: apiEpisode.title || editorial.title,
+    ...canonical,
+    title: canonical.title || apiEpisode.title || editorial.title,
+    description: canonical.description || apiEpisode.description || "",
+    publishedAt: canonical.publishedAt || apiEpisode.publishedAt || "",
+    durationSeconds: canonical.durationSeconds || apiEpisode.durationSeconds || 0,
+    thumbnail: canonical.thumbnail || apiEpisode.thumbnail || "",
     guestNames: apiEpisode.guestNames?.length
       ? apiEpisode.guestNames
       : editorial.guestIds.map(id => guestById(id)?.name).filter(Boolean),
-    guestIds: apiEpisode.guestIds?.length ? apiEpisode.guestIds : editorial.guestIds
-  } : apiEpisode;
+    guestIds: editorial.guestIds
+  };
 }
