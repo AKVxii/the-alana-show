@@ -1,9 +1,9 @@
 name: One-time Gillian Scott overview polish
 
 on:
-  pull_request:
+  push:
     branches:
-      - main
+      - fix-gillian-scott-overview-layout
 
 permissions:
   contents: write
@@ -28,6 +28,9 @@ jobs:
           from pathlib import Path
           p = Path('src/detail-page.js')
           text = p.read_text(encoding='utf-8')
+          marker = 'body[data-detail-id="scott-diament-gillian-lieberman"] #episode-summary'
+          if marker in text:
+            raise SystemExit(0)
           needle = '  .related-section { padding-top: 18px; margin-top: 14px; }\n'
           addition = r'''  .related-section { padding-top: 18px; margin-top: 14px; }
   body[data-detail-id="scott-diament-gillian-lieberman"] #episode-summary .related-section > p:not(.related-eyebrow) {
@@ -93,12 +96,14 @@ jobs:
       - name: Run site quality suite
         run: npm test
 
-      - name: Commit overview polish
+      - name: Commit overview polish if needed
         run: |
+          if git diff --quiet; then
+            echo "Overview polish already applied; nothing to commit."
+            exit 0
+          fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add src/detail-page.js
           git commit -m "Polish Gillian Scott episode overview layout"
           git push origin HEAD:fix-gillian-scott-overview-layout
-
-# Triggered after PR creation so this one-time workflow runs against the branch.
