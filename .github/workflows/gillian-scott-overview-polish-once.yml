@@ -100,3 +100,5 @@ jobs:
           git add src/detail-page.js
           git commit -m "Polish Gillian Scott episode overview layout"
           git push origin HEAD:fix-gillian-scott-overview-layout
+
+# Triggered after PR creation so this one-time workflow runs against the branch.
