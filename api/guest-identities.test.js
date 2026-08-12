@@ -13,7 +13,7 @@ test("the complete archive mapping covers all verified guest conversations", () 
   assert.equal(Object.keys(guestIdentityByVideoId).length, 25);
   const distinctGuests = new Set(Object.values(guestIdentityByVideoId).flat());
   assert.equal(distinctGuests.size, 30);
-  assert.deepEqual(guestIdentityByVideoId["1M6f1v1P6Pw"], ["Scott Diament", "Gillian Lieberman"]);
+  assert.deepEqual(guestIdentityByVideoId["NN9mSARhmIQ"], ["Gillian Lieberman", "Scott Diament"]);
   assert.deepEqual(guestIdentityByVideoId["7hGs2kuAKMk"], [
     "Noel J. Guillama-Alvarez",
     "Michael Castellano",
