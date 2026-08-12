@@ -9,11 +9,12 @@
     "sync:hubs": "node scripts/sync-hub-authority.mjs",
     "sync:sitemap": "node scripts/sync-sitemap-freshness.mjs",
     "sync:video-sitemap": "node scripts/sync-video-sitemap.mjs",
+    "sync:episode-master": "node scripts/sync-episode-master.mjs",
     "distribution:brief": "node scripts/distribution-brief.mjs",
     "indexnow:notify": "node scripts/indexnow-submit.mjs",
     "publish:conversation:core": "node scripts/publish-conversation.mjs",
     "publish:conversation": "node scripts/publish-conversation-safe.mjs",
-    "quality": "node scripts/quality-gate.mjs && node scripts/resilience-gate.mjs && node scripts/topic-gate.mjs && node scripts/authority-gate.mjs && node scripts/static-crawl-gate.mjs && node scripts/guest-profile-gate.mjs && node scripts/sitemap-gate.mjs && node scripts/video-sitemap-gate.mjs && node scripts/video-sitemap-richness-gate.mjs && node scripts/indexnow-gate.mjs && node scripts/security-gate.mjs && node scripts/trust-gate.mjs && node scripts/host-authority-gate.mjs && node scripts/distribution-gate.mjs && node scripts/merchandise-gate.mjs && node scripts/measurement-gate.mjs && node scripts/home-performance-gate.mjs && node scripts/home-feed-resilience-gate.mjs && node scripts/hero-asset-gate.mjs && node scripts/portrait-delivery-gate.mjs && node scripts/performance-budget-gate.mjs && node scripts/marketing-asset-gate.mjs && node scripts/monetization-gate.mjs && node scripts/on-location-gate.mjs",
+    "quality": "node scripts/quality-gate.mjs && node scripts/resilience-gate.mjs && node scripts/topic-gate.mjs && node scripts/authority-gate.mjs && node scripts/static-crawl-gate.mjs && node scripts/guest-profile-gate.mjs && node scripts/sitemap-gate.mjs && node scripts/video-sitemap-gate.mjs && node scripts/video-sitemap-richness-gate.mjs && node scripts/episode-master-gate.mjs && node scripts/indexnow-gate.mjs && node scripts/security-gate.mjs && node scripts/trust-gate.mjs && node scripts/host-authority-gate.mjs && node scripts/distribution-gate.mjs && node scripts/merchandise-gate.mjs && node scripts/measurement-gate.mjs && node scripts/home-performance-gate.mjs && node scripts/home-feed-resilience-gate.mjs && node scripts/hero-asset-gate.mjs && node scripts/portrait-delivery-gate.mjs && node scripts/performance-budget-gate.mjs && node scripts/marketing-asset-gate.mjs && node scripts/monetization-gate.mjs && node scripts/on-location-gate.mjs",
     "test": "npm run quality"
   }
 }

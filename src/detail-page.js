@@ -386,8 +386,14 @@ async function hydrateEpisode(episode) {
 
     const summaryNode = document.querySelector("#episode-summary");
     if (summaryNode && enriched.description) {
-      const summary = enriched.description.length > 420 ? `${enriched.description.slice(0, 417).trim()}…` : enriched.description;
-      summaryNode.innerHTML = `<section class="related-section" aria-labelledby="summary-heading"><p class="related-eyebrow"><span></span>ABOUT THIS CONVERSATION</p><h2 id="summary-heading">Episode overview</h2><p>${escapeHtml(summary)}</p></section>`;
+      const canonicalOverview = Boolean(episode.canonical?.description);
+      const summary = canonicalOverview
+        ? enriched.description
+        : (enriched.description.length > 420 ? `${enriched.description.slice(0, 417).trim()}…` : enriched.description);
+      const summaryMarkup = canonicalOverview
+        ? summary.split(/\n\s*\n/).map(paragraph => `<p>${escapeHtml(paragraph).replace(/\n/g, "<br>")}</p>`).join("")
+        : `<p>${escapeHtml(summary)}</p>`;
+      summaryNode.innerHTML = `<section class="related-section" aria-labelledby="summary-heading"><p class="related-eyebrow"><span></span>ABOUT THIS CONVERSATION</p><h2 id="summary-heading">Episode overview</h2>${summaryMarkup}</section>`;
     }
 
     const topicNode = document.querySelector("#episode-topics");
