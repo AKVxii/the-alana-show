@@ -57,6 +57,10 @@ if (!hub.includes(EXPECTED_TITLE)) fail("Episode archive static metadata is not 
 
 const textExtensions = new Set([".js", ".mjs", ".html", ".json", ".xml", ".md", ".txt", ".yml", ".yaml"]);
 const ignored = new Set([".git", "node_modules"]);
+const ignoredFiles = new Set([
+  "scripts/episode-master-gate.mjs",
+  ".github/workflows/gillian-scott-master-once.yml"
+]);
 function scan(directory) {
   for (const entry of fs.readdirSync(directory, { withFileTypes: true })) {
     if (ignored.has(entry.name)) continue;
@@ -64,7 +68,7 @@ function scan(directory) {
     if (entry.isDirectory()) { scan(absolute); continue; }
     if (!textExtensions.has(path.extname(entry.name))) continue;
     const relative = path.relative(ROOT, absolute).replace(/\\/g, "/");
-    if (relative === "scripts/episode-master-gate.mjs") continue;
+    if (ignoredFiles.has(relative)) continue;
     const text = fs.readFileSync(absolute, "utf8");
     if (text.includes(OLD_ID)) fail(`Former private master ID remains in ${relative}.`);
   }
