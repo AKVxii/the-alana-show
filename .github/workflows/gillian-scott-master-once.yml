@@ -1,0 +1,81 @@
+name: One-time Gillian Scott final master sync
+
+on:
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    name: Replace private master with final public master
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - name: Check out correction branch
+        uses: actions/checkout@v4
+        with:
+          ref: fix-gillian-scott-final-master
+          fetch-depth: 0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Update authoritative editorial record and canonical hydration
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          catalog_path = Path("src/data/catalog.js")
+          catalog = catalog_path.read_text(encoding="utf-8")
+          old_record = '  { id: "scott-diament-gillian-lieberman", videoId: "1M6f1v1P6Pw", title: "Conversation with Scott Diament & Gillian Lieberman", guestIds: ["scott-diament", "gillian-lieberman"], detailPath: "/episodes/scott-diament-gillian-lieberman/" },'
+          description = """Gillian Lieberman and Scott Diament join Alana K. Vandeveer on The Alana Show for a featured conversation about Palm Beach business, luxury, leadership, entrepreneurship and legacy.\n\nDrawing from their work across Provident Realty, Provident Jewelry and the Palm Beach Show Group, Gillian and Scott share perspectives from the worlds of real estate, luxury, entrepreneurship, major events and business in South Florida.\n\nGillian Lieberman\nDirector of Real Estate Sales Operations\nProvident Realty of South Florida, Inc.\n\nScott Diament\nSouth Florida entrepreneur, luxury jeweler and event producer; co-founder of Provident Jewelry; CEO of the Palm Beach Show Group; and Founder & Licensed Florida Broker of Provident Realty.\n\nHosted by Alana K. Vandeveer, The Alana Show brings together real conversations and distinct voices from business, leadership, public service, culture, sports, innovation and the communities shaping South Florida and beyond.\n\nThe Alana Show\nReal Conversations. Distinct Voices."""
+          import json
+          new_record = (
+            '  { id: "scott-diament-gillian-lieberman", videoId: "NN9mSARhmIQ", '
+            'title: "Gillian Lieberman & Scott Diament: Palm Beach Business, Luxury & Leadership", '
+            'guestIds: ["gillian-lieberman", "scott-diament"], detailPath: "/episodes/scott-diament-gillian-lieberman/", '
+            'canonical: { '
+            'title: "Gillian Lieberman & Scott Diament: Palm Beach Business, Luxury & Leadership", '
+            f'description: {json.dumps(description)}, '
+            'publishedAt: "2026-08-06T15:17:25Z", durationSeconds: 1662, '
+            'thumbnail: "https://i.ytimg.com/vi/NN9mSARhmIQ/maxresdefault.jpg" } },'
+          )
+          if catalog.count(old_record) != 1:
+            raise SystemExit(f"Expected exactly one old Gillian/Scott record, found {catalog.count(old_record)}")
+          catalog = catalog.replace(old_record, new_record)
+
+          old_enrich = '''export function enrichEpisode(apiEpisode) {\n  const editorial = episodes.find(episode => episode.videoId === apiEpisode.videoId);\n  return editorial ? {\n    ...apiEpisode,\n    ...editorial,\n    title: apiEpisode.title || editorial.title,\n    guestNames: apiEpisode.guestNames?.length\n      ? apiEpisode.guestNames\n      : editorial.guestIds.map(id => guestById(id)?.name).filter(Boolean),\n    guestIds: apiEpisode.guestIds?.length ? apiEpisode.guestIds : editorial.guestIds\n  } : apiEpisode;\n}'''
+          new_enrich = '''export function enrichEpisode(apiEpisode) {\n  const editorial = episodes.find(episode => episode.videoId === apiEpisode.videoId);\n  if (!editorial) return apiEpisode;\n  const canonical = editorial.canonical || {};\n  return {\n    ...apiEpisode,\n    ...editorial,\n    ...canonical,\n    title: canonical.title || apiEpisode.title || editorial.title,\n    description: canonical.description || apiEpisode.description || "",\n    publishedAt: canonical.publishedAt || apiEpisode.publishedAt || "",\n    durationSeconds: canonical.durationSeconds || apiEpisode.durationSeconds || 0,\n    thumbnail: canonical.thumbnail || apiEpisode.thumbnail || "",\n    guestNames: apiEpisode.guestNames?.length\n      ? apiEpisode.guestNames\n      : editorial.guestIds.map(id => guestById(id)?.name).filter(Boolean),\n    guestIds: editorial.guestIds\n  };\n}'''
+          if catalog.count(old_enrich) != 1:
+            raise SystemExit(f"Expected exactly one enrichEpisode block, found {catalog.count(old_enrich)}")
+          catalog = catalog.replace(old_enrich, new_enrich)
+          catalog_path.write_text(catalog, encoding="utf-8")
+
+          detail_path = Path("src/detail-page.js")
+          detail = detail_path.read_text(encoding="utf-8")
+          old_summary = '''    const summaryNode = document.querySelector("#episode-summary");\n    if (summaryNode && enriched.description) {\n      const summary = enriched.description.length > 420 ? `${enriched.description.slice(0, 417).trim()}…` : enriched.description;\n      summaryNode.innerHTML = `<section class="related-section" aria-labelledby="summary-heading"><p class="related-eyebrow"><span></span>ABOUT THIS CONVERSATION</p><h2 id="summary-heading">Episode overview</h2><p>${escapeHtml(summary)}</p></section>`;\n    }'''
+          new_summary = '''    const summaryNode = document.querySelector("#episode-summary");\n    if (summaryNode && enriched.description) {\n      const canonicalOverview = Boolean(episode.canonical?.description);\n      const summary = canonicalOverview\n        ? enriched.description\n        : (enriched.description.length > 420 ? `${enriched.description.slice(0, 417).trim()}…` : enriched.description);\n      const summaryMarkup = canonicalOverview\n        ? summary.split(/\\n\\s*\\n/).map(paragraph => `<p>${escapeHtml(paragraph).replace(/\\n/g, "<br>")}</p>`).join("")\n        : `<p>${escapeHtml(summary)}</p>`;\n      summaryNode.innerHTML = `<section class="related-section" aria-labelledby="summary-heading"><p class="related-eyebrow"><span></span>ABOUT THIS CONVERSATION</p><h2 id="summary-heading">Episode overview</h2>${summaryMarkup}</section>`;\n    }'''
+          if detail.count(old_summary) != 1:
+            raise SystemExit(f"Expected exactly one episode summary block, found {detail.count(old_summary)}")
+          detail = detail.replace(old_summary, new_summary)
+          detail_path.write_text(detail, encoding="utf-8")
+          PY
+
+      - name: Synchronize permanent episode page and video sitemap
+        run: node scripts/sync-episode-master.mjs scott-diament-gillian-lieberman
+
+      - name: Run full repository quality gate
+        run: npm test
+
+      - name: Commit final-master correction
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add src/data/catalog.js src/detail-page.js episodes/scott-diament-gillian-lieberman/index.html episodes/index.html video-sitemap.xml
+          git commit -m "Fix Gillian and Scott final YouTube master"
+          git push origin HEAD:fix-gillian-scott-final-master
