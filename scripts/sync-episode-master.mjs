@@ -132,6 +132,8 @@ if (!linkPattern.test(hub)) throw new Error(`Could not locate ${slug} in episode
 hub = hub.replace(linkPattern, `$1${htmlEscape(title)}$2`);
 fs.writeFileSync(hubPath, hub);
 
-const sitemap = spawnSync(process.execPath, ["scripts/sync-video-sitemap.mjs"], { cwd: ROOT, stdio: "inherit" });
-if (sitemap.status !== 0) process.exit(sitemap.status || 1);
+const videoSitemap = spawnSync(process.execPath, ["scripts/sync-video-sitemap.mjs"], { cwd: ROOT, stdio: "inherit" });
+if (videoSitemap.status !== 0) process.exit(videoSitemap.status || 1);
+const standardSitemap = spawnSync(process.execPath, ["scripts/sync-sitemap-freshness.mjs"], { cwd: ROOT, stdio: "inherit" });
+if (standardSitemap.status !== 0) process.exit(standardSitemap.status || 1);
 console.log(`Episode master synchronized: ${slug} -> ${videoId}`);
