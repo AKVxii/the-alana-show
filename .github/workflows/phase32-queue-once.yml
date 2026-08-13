@@ -1,0 +1,87 @@
+name: Phase 32 queue patch once
+
+on:
+  push:
+    branches:
+      - phase-32-episode-watch-queue
+    paths:
+      - ".github/workflows/phase32-queue-once.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: phase-32-episode-watch-queue
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Patch verified episode queue into player
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          path = Path("src/detail-page.js")
+          text = path.read_text()
+
+          old_import = 'import { episodeById, guestById, organizationById, enrichEpisode } from "./data/catalog.js";'
+          new_import = 'import { episodes as editorialEpisodes, episodeById, guestById, organizationById, enrichEpisode } from "./data/catalog.js";'
+          if new_import not in text:
+              if old_import not in text:
+                  raise SystemExit("Expected catalog import not found")
+              text = text.replace(old_import, new_import, 1)
+
+          marker = 'function episodeDetail(episode) {'
+          helper = '''function episodeQueueVideoIds(episode) {
+            const currentIndex = editorialEpisodes.findIndex(candidate => candidate.id === episode.id);
+            if (currentIndex < 0 || editorialEpisodes.length < 2) return [];
+            return [...editorialEpisodes.slice(currentIndex + 1), ...editorialEpisodes.slice(0, currentIndex)]
+              .filter(candidate => candidate.videoId && candidate.videoId !== episode.videoId)
+              .map(candidate => candidate.videoId);
+          }
+
+          '''
+          if 'function episodeQueueVideoIds(episode)' not in text:
+              if marker not in text:
+                  raise SystemExit("episodeDetail marker not found")
+              text = text.replace(marker, helper + marker, 1)
+
+          old_setup = '''  const startSeconds = requestedStartSeconds();
+            const startParam = startSeconds ? `&start=${startSeconds}` : "";'''
+          new_setup = '''  const queueVideoIds = episodeQueueVideoIds(episode);
+            const queueParam = queueVideoIds.length ? `&playlist=${queueVideoIds.map(encodeURIComponent).join(",")}` : "";
+            const startSeconds = requestedStartSeconds();
+            const startParam = startSeconds ? `&start=${startSeconds}` : "";'''
+          if 'const queueParam = queueVideoIds.length' not in text:
+              if old_setup not in text:
+                  raise SystemExit("Episode player setup marker not found")
+              text = text.replace(old_setup, new_setup, 1)
+
+          old_embed = '?rel=0${startParam}'
+          new_embed = '?rel=0${queueParam}${startParam}'
+          if new_embed not in text:
+              if old_embed not in text:
+                  raise SystemExit("Episode embed query marker not found")
+              text = text.replace(old_embed, new_embed, 1)
+
+          path.write_text(text)
+          PY
+
+      - name: Commit patch
+        run: |
+          if git diff --quiet -- src/detail-page.js; then
+            echo "Queue patch already present."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add src/detail-page.js
+          git commit -m "Add verified episode watch queue"
+          git push origin HEAD:phase-32-episode-watch-queue
