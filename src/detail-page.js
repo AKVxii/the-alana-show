@@ -1,6 +1,6 @@
 import { MediaHeader, setupMediaNavigation } from "./components/MediaHeader.js";
 import { Footer } from "./components/Footer.js";
-import { episodeById, guestById, organizationById, enrichEpisode } from "./data/catalog.js";
+import { episodes as editorialEpisodes, episodeById, guestById, organizationById, enrichEpisode } from "./data/catalog.js";
 import { topicHref } from "./data/topic-pages.js";
 import { guestProfileById } from "./data/guest-profiles.js";
 import { escapeHtml } from "./lib/utils.js";
@@ -380,17 +380,27 @@ function formatDate(value = "") {
   return Number.isNaN(date.valueOf()) ? "" : new Intl.DateTimeFormat("en-US", { year: "numeric", month: "long", day: "numeric" }).format(date);
 }
 
+function episodeQueueVideoIds(episode) {
+  const currentIndex = editorialEpisodes.findIndex(candidate => candidate.id === episode.id);
+  if (currentIndex < 0 || editorialEpisodes.length < 2) return [];
+  return [...editorialEpisodes.slice(currentIndex + 1), ...editorialEpisodes.slice(0, currentIndex)]
+    .filter(candidate => candidate.videoId && candidate.videoId !== episode.videoId)
+    .map(candidate => candidate.videoId);
+}
+
 function episodeDetail(episode) {
   const relatedGuests = episode.guestIds.map(guestById).filter(Boolean);
   const relatedOrganizations = (episode.organizationIds || []).map(organizationById).filter(Boolean);
   const guestLinks = relatedGuests.map(guest => `<a href="/guests/${guest.id}">${escapeHtml(guest.name)}</a>`).join(" and ");
+  const queueVideoIds = episodeQueueVideoIds(episode);
+  const queueParam = queueVideoIds.length ? `&playlist=${queueVideoIds.map(encodeURIComponent).join(",")}` : "";
   const startSeconds = requestedStartSeconds();
   const startParam = startSeconds ? `&start=${startSeconds}` : "";
   return `<section class="detail-hero"><div class="shell detail-shell">${breadcrumbs(episode.title)}<p class="eyebrow"><span></span> Episode</p><h1 id="episode-title">${escapeHtml(episode.title)}</h1>
     ${guestLinks ? `<p class="detail-byline">A conversation with ${guestLinks}</p>` : ""}
     <p class="detail-byline" id="episode-meta" hidden></p>
     ${relatedOrganizations.length ? `<p class="detail-byline">Organization named in this conversation: ${relatedOrganizations.map(organization => escapeHtml(organization.name)).join(", ")}</p>` : ""}
-    <div class="video-frame"><iframe src="https://www.youtube-nocookie.com/embed/${encodeURIComponent(episode.videoId)}?rel=0${startParam}" title="${escapeHtml(episode.title)}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>
+    <div class="video-frame"><iframe src="https://www.youtube-nocookie.com/embed/${encodeURIComponent(episode.videoId)}?rel=0${queueParam}${startParam}" title="${escapeHtml(episode.title)}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>
     <div id="episode-summary"></div>
     <div id="episode-topics"></div>
     <div class="detail-actions"><a class="button button-gold" href="https://www.youtube.com/watch?v=${encodeURIComponent(episode.videoId)}" target="_blank" rel="noopener">Watch on YouTube</a><a class="button button-outline" href="/episodes">More conversations</a><a class="button button-outline" href="mailto:?subject=${encodeURIComponent(episode.title)}&body=${encodeURIComponent(location.href)}">Share by email</a></div>
