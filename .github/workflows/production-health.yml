@@ -1,0 +1,30 @@
+name: Production health
+
+on:
+  schedule:
+    - cron: "17 12 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: production-health
+  cancel-in-progress: true
+
+jobs:
+  audit:
+    name: Audit live production
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - name: Check out production code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Audit public website, sitemaps, canonical pages and YouTube masters
+        run: node scripts/production-health.mjs
