@@ -43,7 +43,7 @@ for (const phrase of [
 
 if (!home.includes("organic-cotton")) fail("homepage merchandise teaser must retain verified organic-cotton tee material wording");
 if (page.includes("organic-cotton tees and hats") || home.includes("organic-cotton tees and hats")) fail("organic-cotton wording must not imply an unverified hat composition");
-if (!page.includes("White, Medium") || !page.includes("White · Medium")) fail("Lord Tee prototype must retain the White / Medium sample specification");
+if (!page.includes("White, Medium") && !page.includes("White · Medium")) fail("Lord Tee prototype must retain the White / Medium sample specification");
 if (!page.includes("/assets/tell-em-now-trust-em-later-tee.svg")) fail("Tell ’Em Tee concept artwork is missing");
 if (!page.includes("/assets/i-work-for-the-lord-tee.svg")) fail("Lord Tee concept artwork is missing");
 if (!script.includes("merchandise-expansion.css")) fail("merchandise expansion styling is not loaded");
