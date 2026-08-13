@@ -1,0 +1,43 @@
+name: Production health
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    paths:
+      - "scripts/production-health.mjs"
+      - "scripts/production-health-gate.mjs"
+      - ".github/workflows/production-health.yml"
+      - "package.json"
+  schedule:
+    - cron: "17 12 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: production-health-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  audit:
+    name: Audit live production
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Allow production deployment to settle
+        if: github.event_name == 'push'
+        run: sleep 90
+
+      - name: Audit public website, sitemaps, canonical pages and YouTube masters
+        run: node scripts/production-health.mjs
