@@ -11,8 +11,11 @@ const requiredFiles = [
   "src/merchandise-page.js",
   "src/merchandise-home.js",
   "src/merchandise.css",
+  "src/merchandise-expansion.css",
   "src/components/Merchandise.js",
-  "assets/alana-show-merchandise-collection.png"
+  "assets/alana-show-merchandise-collection.png",
+  "assets/tell-em-now-trust-em-later-tee.svg",
+  "assets/i-work-for-the-lord-tee.svg"
 ];
 requiredFiles.forEach(path => { if (!fs.existsSync(path)) fail(`missing ${path}`); });
 
@@ -31,13 +34,19 @@ for (const phrase of [
   "Room Tee II — front + back quote",
   "Map Tee — All over the map",
   "Show Tee — Save it for the show",
-  "Show Hat — Save it for the show"
+  "Show Hat — Save it for the show",
+  "Tell ’Em Tee — Tell ’em now. Trust ’em later.",
+  "Lord Tee — I work for The Lord."
 ]) {
   if (!page.includes(phrase)) fail(`merchandise page is missing item: ${phrase}`);
 }
 
-if (!page.includes("organic-cotton") || !home.includes("organic-cotton")) fail("organic-cotton launch material is not stated consistently");
+if (!home.includes("organic-cotton")) fail("homepage merchandise teaser must retain verified organic-cotton tee material wording");
 if (page.includes("organic-cotton tees and hats") || home.includes("organic-cotton tees and hats")) fail("organic-cotton wording must not imply an unverified hat composition");
+if (!page.includes("White, Medium") || !page.includes("White · Medium")) fail("Lord Tee prototype must retain the White / Medium sample specification");
+if (!page.includes("/assets/tell-em-now-trust-em-later-tee.svg")) fail("Tell ’Em Tee concept artwork is missing");
+if (!page.includes("/assets/i-work-for-the-lord-tee.svg")) fail("Lord Tee concept artwork is missing");
+if (!script.includes("merchandise-expansion.css")) fail("merchandise expansion styling is not loaded");
 if (!page.includes("/assets/alana-show-merchandise-collection.png") || !home.includes("/assets/alana-show-merchandise-collection.png")) fail("approved merchandise collection artwork is not canonical");
 if (!page.includes('name="size"') || !page.includes('name="quantity"') || !page.includes('name="payment"')) fail("order inquiry fields are incomplete");
 if (!page.includes("No card information is collected here")) fail("payment/privacy boundary is missing");
@@ -56,4 +65,4 @@ if (!sitemap.includes("https://thealanashow.com/merchandise")) fail("merchandise
 if (fs.existsSync("assets/alana-show-merchandise-collection.webp.png")) fail("accidental double-extension merchandise asset still exists");
 
 console.log("Merchandise gate passed.");
-console.log("  Five-item light organic-cotton tee launch plus show hat, approved artwork, item-aware sizing, inquiry-only payment boundary, homepage/footer discovery, contact delivery, and sitemap coverage: OK");
+console.log("  Seven-piece collection including Tell ’Em Tee and White/Medium Lord Tee prototype, approved artwork, item-aware sizing, inquiry-only payment boundary, homepage/footer discovery, contact delivery, and sitemap coverage: OK");
