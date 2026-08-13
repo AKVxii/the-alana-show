@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
-  <title id="title">I work for The Lord. — The Alana Show tee concept</title>
-  <desc id="desc">Natural Raw tee concept with navy and warm-gold typography reading I work for The Lord. and The Alana Show.</desc>
+  <title id="title">I work for The Lord. — The Alana Show white tee concept</title>
+  <desc id="desc">White medium sample tee concept with navy and warm-gold typography reading I work for The Lord. and The Alana Show.</desc>
   <defs>
     <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0" stop-color="#071426"/>
@@ -20,13 +20,13 @@
   <rect x="26" y="26" width="1548" height="848" rx="18" fill="none" stroke="url(#gold)" stroke-width="2" opacity=".9"/>
   <rect x="42" y="42" width="1516" height="816" rx="14" fill="none" stroke="#d8b55f" stroke-width="1" opacity=".36"/>
 
-  <text x="96" y="118" fill="#d8b55f" font-family="Georgia, 'Times New Roman', serif" font-size="22" font-weight="700" letter-spacing="5">06 · LORD TEE</text>
-  <text x="96" y="162" fill="#f4ead7" font-family="Georgia, 'Times New Roman', serif" font-size="28">A faith-forward Alana Show statement piece.</text>
+  <text x="96" y="118" fill="#d8b55f" font-family="Georgia, 'Times New Roman', serif" font-size="22" font-weight="700" letter-spacing="5">07 · LORD TEE</text>
+  <text x="96" y="162" fill="#f4ead7" font-family="Georgia, 'Times New Roman', serif" font-size="28">Prototype sample · White · Medium</text>
 
   <g filter="url(#shadow)">
-    <path d="M591 178c49-33 95-49 137-49h144c42 0 88 16 137 49l121 88-82 126-102-54v397c0 34-19 52-56 52H710c-37 0-56-18-56-52V338l-102 54-82-126 121-88z" fill="#f3ebdc" stroke="#d7cbb8" stroke-width="3"/>
-    <path d="M728 129c10 44 39 66 72 66s62-22 72-66" fill="none" stroke="#d7cbb8" stroke-width="5"/>
-    <path d="M670 326h260" stroke="#e4d9c7" stroke-width="2" opacity=".45"/>
+    <path d="M591 178c49-33 95-49 137-49h144c42 0 88 16 137 49l121 88-82 126-102-54v397c0 34-19 52-56 52H710c-37 0-56-18-56-52V338l-102 54-82-126 121-88z" fill="#ffffff" stroke="#d9d9d9" stroke-width="3"/>
+    <path d="M728 129c10 44 39 66 72 66s62-22 72-66" fill="none" stroke="#d9d9d9" stroke-width="5"/>
+    <path d="M670 326h260" stroke="#ececec" stroke-width="2" opacity=".7"/>
   </g>
 
   <g text-anchor="middle">
