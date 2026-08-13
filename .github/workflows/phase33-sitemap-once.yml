@@ -1,0 +1,66 @@
+name: Phase 33 sitemap patch once
+
+on:
+  push:
+    branches:
+      - phase-33-sitemap-freshness
+    paths:
+      - ".github/workflows/phase33-sitemap-once.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: phase-33-sitemap-freshness
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Make master swaps refresh both sitemaps
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          path = Path("scripts/sync-episode-master.mjs")
+          text = path.read_text()
+          old = '''const sitemap = spawnSync(process.execPath, ["scripts/sync-video-sitemap.mjs"], { cwd: ROOT, stdio: "inherit" });
+          if (sitemap.status !== 0) process.exit(sitemap.status || 1);
+          console.log(`Episode master synchronized: ${slug} -> ${videoId}`);'''
+          new = '''const videoSitemap = spawnSync(process.execPath, ["scripts/sync-video-sitemap.mjs"], { cwd: ROOT, stdio: "inherit" });
+          if (videoSitemap.status !== 0) process.exit(videoSitemap.status || 1);
+          const standardSitemap = spawnSync(process.execPath, ["scripts/sync-sitemap-freshness.mjs"], { cwd: ROOT, stdio: "inherit" });
+          if (standardSitemap.status !== 0) process.exit(standardSitemap.status || 1);
+          console.log(`Episode master synchronized: ${slug} -> ${videoId}`);'''
+          if '"scripts/sync-sitemap-freshness.mjs"' not in text:
+              if old not in text:
+                  raise SystemExit("Expected master sync tail not found")
+              text = text.replace(old, new, 1)
+              path.write_text(text)
+          PY
+
+      - name: Refresh current standard sitemap dates
+        run: node scripts/sync-sitemap-freshness.mjs
+
+      - name: Commit patch and refreshed sitemap
+        run: |
+          if git diff --quiet -- scripts/sync-episode-master.mjs sitemap.xml; then
+            echo "Sitemap freshness patch already present."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add scripts/sync-episode-master.mjs sitemap.xml
+          git commit -m "Refresh standard sitemap during master swaps"
+          git push origin HEAD:phase-33-sitemap-freshness
