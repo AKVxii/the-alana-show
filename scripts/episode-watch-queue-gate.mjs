@@ -8,7 +8,8 @@ for (const required of [
   "episodes as editorialEpisodes",
   "function episodeQueueVideoIds(episode)",
   "candidate.videoId !== episode.videoId",
-  "playlist=${queueParam}",
+  "&playlist=${queueVideoIds",
+  "?rel=0${queueParam}${startParam}",
   "youtube-nocookie.com/embed/"
 ]) if (!source.includes(required)) fail(`Episode player is missing queue behavior: ${required}`);
 
