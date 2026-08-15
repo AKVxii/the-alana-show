@@ -102,9 +102,60 @@
   </head>
   <body>
     <a class="skip-link" href="#main-content">Skip to main content</a>
-    <div id="app"></div>
+    <div id="app">
+      <main id="main-content" class="static-home-fallback" data-static-home-fallback>
+        <section class="hero" id="home">
+          <div class="shell hero-grid">
+            <div class="hero-copy">
+              <p class="eyebrow"><span></span> Voice of the Gold Coast</p>
+              <h1>
+                <span class="title-small">The</span>
+                <span class="title-main">Alana</span>
+                <span class="title-show">Show</span>
+              </h1>
+              <p class="hero-line">Real conversations. <em>Distinct voices.</em> Thoughtful perspective.</p>
+              <p class="hero-intro">In-depth interviews with people shaping business, public service, culture, and community—grounded in South Florida and available wherever you watch or listen.</p>
+              <div class="hero-actions">
+                <a class="button button-gold" href="/episodes">Explore conversations</a>
+                <a class="button button-ghost" href="/about">Meet Alana</a>
+              </div>
+              <div class="hero-credentials" aria-label="Show details">
+                <span>South Florida radio</span>
+                <span>Worldwide streaming</span>
+                <span>Independent editorial voice</span>
+              </div>
+            </div>
+            <div class="portrait-stage">
+              <div class="portrait-frame">
+                <div class="portrait-inner">
+                  <picture style="display:contents">
+                    <source srcset="/assets/alana-portrait-cutout-v3.webp" type="image/webp">
+                    <img src="/assets/alana-portrait-cutout-v2.png" alt="Alana K. Vandeveer, host of The Alana Show" width="958" height="968" fetchpriority="high" decoding="async">
+                  </picture>
+                </div>
+              </div>
+              <div class="portrait-caption"><span>HOSTED BY</span><strong>Alana K. Vandeveer</strong></div>
+            </div>
+          </div>
+        </section>
+        <section class="media-section" aria-labelledby="static-home-explore-heading">
+          <div class="shell">
+            <div class="media-section-heading">
+              <div><p class="eyebrow dark"><span></span> Explore the archive</p><h2 id="static-home-explore-heading">Conversations built to last</h2></div>
+            </div>
+            <p>Discover The Alana Show through permanent episode pages, verified guest profiles, and topic collections across business, leadership, public service, culture, community, technology, wellness, and more.</p>
+            <div class="detail-actions">
+              <a class="button button-gold" href="/episodes">Episodes</a>
+              <a class="button button-outline" href="/guests">Guests</a>
+              <a class="button button-outline" href="/topics">Topics</a>
+              <a class="button button-outline" href="/south-florida">South Florida</a>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
     <noscript>
-      <div class="noscript-message">JavaScript is required for the full experience. Visit <a href="https://www.youtube.com/@alanakvandeveer/videos">The Alana Show on YouTube</a>.</div>
+      <div class="noscript-message">Explore <a href="/episodes">The Alana Show episode archive</a>, <a href="/guests">verified guests</a>, and <a href="/topics">conversation topics</a>.</div>
     </noscript>
     <script type="module" src="/src/home-entry.js"></script>
   </body>
