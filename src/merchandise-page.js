@@ -2,11 +2,6 @@ import { MediaHeader, setupMediaNavigation } from "./components/MediaHeader.js";
 import { Footer } from "./components/Footer.js";
 import { trackEvent } from "./lib/measurement.js";
 
-const expansionStyles = document.createElement("link");
-expansionStyles.rel = "stylesheet";
-expansionStyles.href = "/src/merchandise-expansion.css?v=1";
-document.head.append(expansionStyles);
-
 const header = document.querySelector("[data-merchandise-header]");
 const footer = document.querySelector("[data-merchandise-footer]");
 const form = document.querySelector("[data-merchandise-form]");
