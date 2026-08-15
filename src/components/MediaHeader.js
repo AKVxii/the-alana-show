@@ -44,7 +44,7 @@ export function MediaHeader() {
         <a href="/south-florida/">South Florida</a>
         <a href="/about/">About</a>
         <a href="/merchandise/">Merchandise</a>
-        <a href="/advertise/">Partner</a>
+        <a href="/beyond-the-show/">Beyond the Show</a>
         <a href="/#contact">Contact</a>
         <a class="mobile-listen-live" href="${site.trueOldiesLive}" target="_blank" rel="noopener">Listen Live</a>
       </nav>
