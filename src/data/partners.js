@@ -16,7 +16,14 @@ export const partners = {
     tracking: {
       url: "",
       customTrackingCode: "tas_beyond_alp_primary",
-      status: "pending-website-approval"
+      status: "pending-website-approval",
+      specificClickConsent: true,
+      directClickOnly: true
+    },
+    networkRules: {
+      nonSolicitationOutsideNetwork: true,
+      merchantTermsAdditive: true,
+      authorizedPromotionsOnly: true
     }
   }
 };
