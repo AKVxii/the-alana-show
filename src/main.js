@@ -6,6 +6,7 @@ import { EpisodeThumbnail, Episodes, isUsableThumbnailUrl, revealThumbnailFallba
 import { Impact } from "./components/Impact.js";
 import { About } from "./components/About.js";
 import { Partner } from "./components/Partner.js";
+import { Merchandise } from "./components/Merchandise.js";
 import { Contact } from "./components/Contact.js";
 import { Footer } from "./components/Footer.js";
 import { SearchDialog } from "./components/SearchDialog.js";
@@ -31,6 +32,7 @@ app.innerHTML = `
     ${Impact()}
     ${About()}
     ${Partner()}
+    ${Merchandise()}
     ${Contact()}
   </main>
   ${Footer()}
