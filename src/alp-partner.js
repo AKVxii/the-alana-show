@@ -1,5 +1,13 @@
 import { partners } from "./data/partners.js";
 
+if (!document.querySelector('link[data-alp-partner-styles]')) {
+  const stylesheet = document.createElement("link");
+  stylesheet.rel = "stylesheet";
+  stylesheet.href = "/src/alp-partner.css?v=1";
+  stylesheet.dataset.alpPartnerStyles = "true";
+  document.head.append(stylesheet);
+}
+
 const alp = partners.alp;
 const partnerCard = document.querySelector("#partners .partner-card");
 const disclosure = document.querySelector("#partners .affiliate-disclosure");
