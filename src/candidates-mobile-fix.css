@@ -1,0 +1,54 @@
+.candidate-static-fallback .candidate-hero {
+  min-height: 100vh;
+  padding-top: 96px;
+}
+
+@media (max-width: 760px) {
+  /* The candidate page must never remain blank on phones if an entrance
+     observer is delayed or interrupted by browser navigation/cache restore. */
+  .candidate-page [data-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+    transition-delay: 0s !important;
+  }
+
+  .candidate-hero {
+    padding-top: 88px;
+    padding-bottom: 56px;
+  }
+
+  .candidate-hero-grid {
+    gap: 30px;
+  }
+
+  .candidate-package-card {
+    width: 100%;
+  }
+}
+
+@media (max-width: 420px) {
+  .candidate-hero-copy h1 {
+    font-size: clamp(2.8rem, 14vw, 3.75rem);
+    line-height: .98;
+  }
+
+  .candidate-lead {
+    font-size: 1rem;
+  }
+
+  .candidate-package-card,
+  .candidate-footprint-card {
+    padding: 25px 22px;
+  }
+
+  .candidate-package-card dl div {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .candidate-package-card dd {
+    text-align: left;
+  }
+}
