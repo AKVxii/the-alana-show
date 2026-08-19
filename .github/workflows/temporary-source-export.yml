@@ -1,4 +1,4 @@
-name: Temporary Production Deployment
+name: Temporary Source Export
 
 on:
   push:
@@ -11,57 +11,39 @@ on:
 permissions:
   contents: write
 
-env:
-  VERCEL_ORG_ID: team_SzGs4SaFQ9UzaxakLfmrKucr
-  VERCEL_PROJECT_ID: prj_VxNP2rAJgWvBVrA5es9fy8khWI2A
-  VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-
 jobs:
-  deploy-production:
+  export-source:
     runs-on: ubuntu-latest
     steps:
       - name: Check out current main branch
         uses: actions/checkout@v4
 
-      - name: Check deployment credentials
-        id: credentials
-        shell: bash
-        run: |
-          if [ -n "$VERCEL_TOKEN" ]; then
-            echo "available=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "available=false" >> "$GITHUB_OUTPUT"
-          fi
+      - name: Package complete deployment source
+        id: upload
+        uses: actions/upload-artifact@v4
+        with:
+          name: the-alana-show-production-source
+          path: |
+            .
+            !.git/**
+          include-hidden-files: true
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 1
 
-      - name: Install Vercel CLI
-        if: steps.credentials.outputs.available == 'true'
-        id: install
-        continue-on-error: true
-        run: npm install --global vercel@latest
-
-      - name: Pull, build, and deploy production
-        if: steps.credentials.outputs.available == 'true' && steps.install.outcome == 'success'
-        id: deploy
-        continue-on-error: true
-        shell: bash
-        run: |
-          vercel pull --yes --environment=production --token="$VERCEL_TOKEN" --scope=tas-8
-          vercel build --prod --token="$VERCEL_TOKEN" --scope=tas-8
-          vercel deploy --prebuilt --prod --token="$VERCEL_TOKEN" --scope=tas-8
-
-      - name: Record deployment diagnostic
+      - name: Record source artifact diagnostic
         if: always()
         shell: bash
         run: |
           {
             echo "workflow_commit=${GITHUB_SHA}"
-            echo "credentials_available=${{ steps.credentials.outputs.available }}"
-            echo "install_outcome=${{ steps.install.outcome }}"
-            echo "deploy_outcome=${{ steps.deploy.outcome }}"
+            echo "artifact_id=${{ steps.upload.outputs.artifact-id }}"
+            echo "artifact_url=${{ steps.upload.outputs.artifact-url }}"
+            echo "upload_outcome=${{ steps.upload.outcome }}"
             echo "recorded_at=$(date -u +%Y-%m-%dT%H:%M:%SZ)"
           } > temporary-deployment-status.txt
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add temporary-deployment-status.txt
-          git commit -m "Record temporary deployment diagnostic" || true
+          git commit -m "Record temporary source artifact" || true
           git push
