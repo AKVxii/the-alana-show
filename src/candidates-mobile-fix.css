@@ -3,16 +3,17 @@
   padding-top: 96px;
 }
 
-@media (max-width: 760px) {
-  /* The candidate page must never remain blank on phones if an entrance
-     observer is delayed or interrupted by browser navigation/cache restore. */
-  .candidate-page [data-reveal] {
-    opacity: 1 !important;
-    transform: none !important;
-    transition: none !important;
-    transition-delay: 0s !important;
-  }
+/* Candidate scheduling is conversion-critical. Keep every section visible even
+   when Safari delays IntersectionObserver during navigation or cache restore,
+   including landscape iPhone widths above the ordinary phone breakpoint. */
+.candidate-page [data-reveal] {
+  opacity: 1 !important;
+  transform: none !important;
+  transition: none !important;
+  transition-delay: 0s !important;
+}
 
+@media (max-width: 760px) {
   .candidate-hero {
     padding-top: 88px;
     padding-bottom: 56px;
