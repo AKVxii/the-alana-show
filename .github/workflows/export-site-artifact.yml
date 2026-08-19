@@ -1,0 +1,31 @@
+name: Export site source artifact
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - ".github/workflows/export-site-artifact.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  export:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Package exact repository source
+        run: |
+          zip -r site-source.zip . \
+            -x ".git/*" \
+            -x "site-source.zip"
+
+      - name: Upload site source
+        uses: actions/upload-artifact@v4
+        with:
+          name: the-alana-show-site-source
+          path: site-source.zip
+          retention-days: 1
+          if-no-files-found: error
