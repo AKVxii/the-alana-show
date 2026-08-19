@@ -1,4 +1,4 @@
-name: Temporary Source Export
+name: Temporary Production Deployment
 
 on:
   push:
@@ -11,20 +11,33 @@ on:
 permissions:
   contents: read
 
+env:
+  VERCEL_ORG_ID: team_SzGs4SaFQ9UzaxakLfmrKucr
+  VERCEL_PROJECT_ID: prj_VxNP2rAJgWvBVrA5es9fy8khWI2A
+  VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+
 jobs:
-  export-source:
+  deploy-production:
     runs-on: ubuntu-latest
     steps:
       - name: Check out current main branch
         uses: actions/checkout@v4
 
-      - name: Package complete deployment source
-        uses: actions/upload-artifact@v4
-        with:
-          name: the-alana-show-production-source
-          path: |
-            .
-            !.git/**
-          include-hidden-files: true
-          if-no-files-found: error
-          retention-days: 1
+      - name: Verify deployment credentials
+        run: |
+          if [ -z "$VERCEL_TOKEN" ]; then
+            echo "::error::The repository does not have a VERCEL_TOKEN Actions secret."
+            exit 1
+          fi
+
+      - name: Install Vercel CLI
+        run: npm install --global vercel@latest
+
+      - name: Pull production project settings
+        run: vercel pull --yes --environment=production --token="$VERCEL_TOKEN" --scope=tas-8
+
+      - name: Build production output
+        run: vercel build --prod --token="$VERCEL_TOKEN" --scope=tas-8
+
+      - name: Deploy production output
+        run: vercel deploy --prebuilt --prod --token="$VERCEL_TOKEN" --scope=tas-8
