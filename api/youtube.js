@@ -1,4 +1,5 @@
 const HANDLE = "@alanakvandeveer";
+const FEATURED_CONVERSATION_VIDEO_ID = "iR4cdm9Ux3U";
 const { categorizeEpisode } = require("./episode-categories");
 const { identifyEpisodeGuests } = require("./guest-identities");
 
@@ -222,6 +223,11 @@ module.exports = async function handler(req, res) {
     const mostWatched =
       [...episodes].sort((a, b) => b.viewCount - a.viewCount)[0] || null;
 
+    const featured =
+      episodes.find(episode => episode.videoId === FEATURED_CONVERSATION_VIDEO_ID) ||
+      mostWatched ||
+      latest;
+
     const recent = episodes.slice(0, 6);
     const unresolvedGuestAudit = episodes
       .map(episode => episode.unresolvedGuestAudit)
@@ -240,6 +246,7 @@ module.exports = async function handler(req, res) {
       scannedVideos: allVideos.length,
       eligibleVideos: eligible.length,
       canonicalVideos: episodes.length,
+      featured,
       latest,
       mostWatched,
       recent,
