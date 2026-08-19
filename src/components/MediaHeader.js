@@ -41,6 +41,7 @@ export function MediaHeader() {
         <a href="/episodes/">Watch</a>
         <a href="/guests/">Guests</a>
         <a href="/topics/">Topics</a>
+        <a href="/candidates/">Candidates</a>
         <a href="/south-florida/">South Florida</a>
         <a href="/about/">About</a>
         <a href="/merchandise/">Merchandise</a>
