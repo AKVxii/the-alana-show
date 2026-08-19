@@ -1,5 +1,5 @@
-import "./featured-video.js";
-import "./main.js";
-import "./merchandise-home.js";
-import "./beyond-home.js";
-import "./home-nav-accessibility.js";
+import "./featured-video.js?v=20260819-candidates";
+import "./main.js?v=20260819-candidates";
+import "./merchandise-home.js?v=20260819-candidates";
+import "./beyond-home.js?v=20260819-candidates";
+import "./home-nav-accessibility.js?v=20260819-candidates";
