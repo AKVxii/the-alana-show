@@ -35,6 +35,28 @@ function normalizeDescription(description = "") {
   return description.replace(/\s+/g, " ").trim();
 }
 
+function replacementTitleKey(title = "") {
+  return String(title)
+    .toLowerCase()
+    .replace(/\s*\|\s*the alana show\s*$/i, "")
+    .replace(/&amp;/g, "and")
+    .replace(/&/g, "and")
+    .replace(/[^a-z0-9]+/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function collapseReplacementMasters(videos = []) {
+  const seenTitles = new Set();
+  return videos.filter(video => {
+    const key = replacementTitleKey(video?.title);
+    if (!key) return true;
+    if (seenTitles.has(key)) return false;
+    seenTitles.add(key);
+    return true;
+  });
+}
+
 async function getJson(url) {
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), 8000);
@@ -185,14 +207,17 @@ module.exports = async function handler(req, res) {
       eligible = allVideos.filter(video => video.videoId);
     }
 
-    const episodes = [...eligible].sort(
-      (a, b) => new Date(b.publishedAt) - new Date(a.publishedAt)
+    // Sort newest-first before collapsing duplicate replacement uploads. When
+    // a final master replaces an earlier upload with the same conversation
+    // title, the newest public master wins and older copies do not create
+    // duplicate homepage/archive cards.
+    const episodes = collapseReplacementMasters(
+      [...eligible].sort(
+        (a, b) => new Date(b.publishedAt) - new Date(a.publishedAt)
+      )
     );
 
-    const latest =
-      [...episodes].sort(
-        (a, b) => new Date(b.publishedAt) - new Date(a.publishedAt)
-      )[0] || null;
+    const latest = episodes[0] || null;
 
     const mostWatched =
       [...episodes].sort((a, b) => b.viewCount - a.viewCount)[0] || null;
@@ -214,6 +239,7 @@ module.exports = async function handler(req, res) {
       channelId: channel.id,
       scannedVideos: allVideos.length,
       eligibleVideos: eligible.length,
+      canonicalVideos: episodes.length,
       latest,
       mostWatched,
       recent,
@@ -229,4 +255,9 @@ module.exports = async function handler(req, res) {
       error: "Unable to load YouTube episodes"
     });
   }
+};
+
+module.exports._test = {
+  replacementTitleKey,
+  collapseReplacementMasters
 };
