@@ -1,4 +1,0 @@
-workflow_commit=7bc6e726b05ddbf882fa25c05faf32fff0b7633a
-apply_outcome=success
-test_outcome=success
-recorded_at=2026-08-19T23:10:51Z
