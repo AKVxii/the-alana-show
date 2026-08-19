@@ -1,5 +1,7 @@
 import fs from "node:fs";
+import { createRequire } from "node:module";
 
+const require = createRequire(import.meta.url);
 const errors = [];
 const read = file => fs.existsSync(file) ? fs.readFileSync(file, "utf8") : "";
 const assert = (condition, message) => { if (!condition) errors.push(message); };
@@ -8,6 +10,7 @@ const main = read("src/main.js");
 const catalog = read("src/data/catalog.js");
 const episodesComponent = read("src/components/Episodes.js");
 const archive = read("src/episodes-page.js");
+const youtubeApi = require("../api/youtube.js");
 
 assert(main.includes('episodes as editorialEpisodes'), "Homepage must import the verified static episode catalog for live-feed failure recovery.");
 assert(main.includes('state.episodes = uniqueEpisodes(editorialEpisodes).map(enrichEpisode);'), "Homepage live-feed catch path must restore the verified static conversation archive.");
@@ -26,6 +29,23 @@ const verifiedEpisodeCount = [...catalog.matchAll(/\{ id: "[^"]+", videoId: "[A-
 assert(verifiedEpisodeCount >= 20, `Static recovery catalog is unexpectedly small: ${verifiedEpisodeCount} verified episodes.`);
 assert(catalog.includes('detailPath: "/episodes/'), "Static recovery records must point to owned permanent episode pages.");
 
+// Replacement uploads may coexist in YouTube's uploads feed briefly. The
+// newest master with the same normalized conversation title must win so a
+// replaced/private upload cannot create a duplicate homepage card.
+const collapseReplacementMasters = youtubeApi?._test?.collapseReplacementMasters;
+assert(typeof collapseReplacementMasters === "function", "YouTube feed must expose replacement-master dedupe for regression testing.");
+if (typeof collapseReplacementMasters === "function") {
+  const replacementFixture = [
+    { videoId: "Kx7rcDzaqDk", title: "Former U.S. Senator George LeMieux | Leadership, Public Service & Florida’s Future", publishedAt: "2026-08-19T16:12:15Z" },
+    { videoId: "VYXrV-WGiHM", title: "Former U.S. Senator George LeMieux | Leadership, Public Service & Florida’s Future | The Alana Show", publishedAt: "2026-08-06T14:23:31Z" },
+    { videoId: "NN9mSARhmIQ", title: "Gillian Lieberman & Scott Diament: Palm Beach Business, Luxury & Leadership | The Alana Show", publishedAt: "2026-08-12T17:34:00Z" }
+  ];
+  const collapsed = collapseReplacementMasters(replacementFixture);
+  assert(collapsed.length === 2, `Replacement-master collapse should keep 2 canonical conversations, got ${collapsed.length}.`);
+  assert(collapsed[0]?.videoId === "Kx7rcDzaqDk", "Newest George LeMieux master must win replacement dedupe.");
+  assert(!collapsed.some(video => video.videoId === "VYXrV-WGiHM"), "Superseded George LeMieux master must not survive live-feed dedupe.");
+}
+
 // The archive and homepage should share the same resilience principle: external
 // metadata improves the experience, but the owned verified catalog keeps it useful.
 assert(archive.includes('state.episodes = editorialEpisodes;'), "Episodes archive must retain its verified static fallback.");
@@ -41,6 +61,7 @@ if (errors.length) {
 
 console.log("Homepage feed resilience gate passed.");
 console.log(`  Verified static recovery catalog: ${verifiedEpisodeCount} conversations`);
+console.log("  Replacement YouTube masters collapse to the newest conversation: OK");
 console.log("  Featured/latest/recent/search surfaces remain populated during live-feed failure: OK");
 console.log("  Branded missing-metadata behavior: OK");
 console.log("  External YouTube availability is no longer a homepage archive dependency: OK");
