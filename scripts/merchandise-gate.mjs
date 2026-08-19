@@ -46,7 +46,8 @@ if (!script.includes("syncSizeOptions") || !script.includes("Hat — adjustable 
 if (!api.includes('"Merchandise order"')) fail("contact API does not allow merchandise inquiries");
 
 const directHomeMount = index.includes('src="/src/merchandise-home.js"');
-const orderedHomeMount = index.includes('src="/src/home-entry.js"') && homeEntry.includes('import "./merchandise-home.js"');
+const versionedHomeEntry = /src="\/src\/home-entry\.js(?:\?[^"\s]*)?"/.test(index);
+const orderedHomeMount = versionedHomeEntry && homeEntry.includes('import "./merchandise-home.js"');
 if (!home.includes('href="/merchandise/"') || !homeMount.includes("Merchandise()") || !(directHomeMount || orderedHomeMount)) {
   fail("homepage merchandise discovery is missing");
 }

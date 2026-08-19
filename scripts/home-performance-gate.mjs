@@ -11,7 +11,8 @@ const entry = read("src/home-entry.js");
 const beyondHome = read("src/beyond-home.js");
 const publisher = read("scripts/publish-conversation.mjs");
 
-assert(index.includes('src="/src/home-entry.js"'), "Homepage must load the ordered home entry module.");
+const orderedEntryMount = /src="\/src\/home-entry\.js(?:\?[^"\s]*)?"/.test(index);
+assert(orderedEntryMount, "Homepage must load the ordered home entry module.");
 for (const legacy of ["/src/main.js", "/src/merchandise-home.js", "/src/home-nav-accessibility.js"]) {
   assert(!index.includes(`src="${legacy}"`), `Homepage must not duplicate direct module loading for ${legacy}.`);
 }

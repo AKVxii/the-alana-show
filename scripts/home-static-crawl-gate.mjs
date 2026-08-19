@@ -24,7 +24,7 @@ for (const href of priorityEpisodes) {
 }
 assert(html.includes('class="static-priority-conversations"'), "Homepage must retain a server-delivered priority conversation link group.");
 assert(html.includes('Alana K. Vandeveer, host of The Alana Show'), "Static homepage must preserve descriptive host image alt text.");
-assert(html.includes('src="/src/home-entry.js"'), "Homepage JavaScript enhancement entry must remain intact.");
+assert(/src="\/src\/home-entry\.js(?:\?[^"\s]*)?"/.test(html), "Homepage JavaScript enhancement entry must remain intact.");
 
 if (errors.length) {
   console.error(`Homepage static crawl gate failed with ${errors.length} issue${errors.length === 1 ? "" : "s"}:`);
