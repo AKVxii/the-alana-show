@@ -1,0 +1,129 @@
+name: Apply Featured Fraud Special Across Resilient Surfaces
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - ".github/workflows/temporary-feature-sync.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  apply-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out current main branch
+        uses: actions/checkout@v4
+
+      - name: Apply the approved featured conversation consistently
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          p = Path("src/main.js")
+          s = p.read_text()
+          s = s.replace(
+              'const app = document.querySelector("#app");\n',
+              'const FEATURED_CONVERSATION_VIDEO_ID = "iR4cdm9Ux3U";\nconst app = document.querySelector("#app");\n',
+              1,
+          )
+          s = s.replace(
+              '    updateFeatured(data.featured || data.mostWatched || data.latest);\n',
+              '    const featuredEpisode = data.featured || state.episodes.find(episode => episode.videoId === FEATURED_CONVERSATION_VIDEO_ID) || data.mostWatched || data.latest;\n    updateFeatured(featuredEpisode);\n',
+              1,
+          )
+          s = s.replace(
+              '    const fallbackLatest = state.episodes[0];\n    updateFeatured(fallbackLatest);\n',
+              '    const fallbackLatest = state.episodes[0];\n    const fallbackFeatured = state.episodes.find(episode => episode.videoId === FEATURED_CONVERSATION_VIDEO_ID) || fallbackLatest;\n    updateFeatured(fallbackFeatured);\n',
+              1,
+          )
+          p.write_text(s)
+
+          p = Path("src/episodes-page.js")
+          s = p.read_text()
+          s = s.replace(
+              'const PAGE_SIZE = 9;\n',
+              'const FEATURED_CONVERSATION_VIDEO_ID = "iR4cdm9Ux3U";\nconst PAGE_SIZE = 9;\n',
+              1,
+          )
+          s = s.replace(
+              '  const episode = state.episodes[0];\n',
+              '  const episode = state.episodes.find(item => item.videoId === FEATURED_CONVERSATION_VIDEO_ID) || state.episodes[0];\n',
+              1,
+          )
+          p.write_text(s)
+
+          p = Path("src/components/Episodes.js")
+          s = p.read_text()
+          replacements = [
+              (
+                  'data-initial-src="https://www.youtube-nocookie.com/embed/kJWFTnWOgYM?rel=0"',
+                  'data-initial-src="https://www.youtube-nocookie.com/embed/iR4cdm9Ux3U?rel=0"',
+              ),
+              (
+                  '<a href="https://www.youtube.com/watch?v=kJWFTnWOgYM" target="_blank" rel="noopener">Watch the featured conversation on YouTube</a>',
+                  '<a href="https://www.youtube.com/watch?v=iR4cdm9Ux3U" target="_blank" rel="noopener">Watch the scam and fraud special on YouTube</a>',
+              ),
+              (
+                  '<h3 data-featured-title>Chairman Michael Barnett Recaps the 2022 Midterms</h3>',
+                  '<h3 data-featured-title>Safeguarding Yourself from Cybercrime and Fraud</h3>',
+              ),
+              (
+                  '<p data-featured-description>A direct conversation about public life, civic engagement, grassroots leadership, and Palm Beach County.</p>',
+                  '<p data-featured-description>Prosecutor Stacey Ibarra and Detective Vaughn Mitchell share practical guidance for recognizing scams, protecting personal information, and responding to cybercrime and fraud.</p>',
+              ),
+          ]
+          for old, new in replacements:
+              if old not in s:
+                  raise SystemExit(f"Expected featured-content source was not found: {old[:80]}")
+              s = s.replace(old, new, 1)
+          p.write_text(s)
+
+          p = Path("index.html")
+          s = p.read_text()
+          old = '''                <li><a href="/episodes/george-lemieux">Former U.S. Senator George LeMieux — Leadership, Public Service &amp; Florida’s Future</a></li>
+                <li><a href="/episodes/scott-diament-gillian-lieberman">Gillian Lieberman &amp; Scott Diament — Palm Beach Business, Luxury &amp; Leadership</a></li>
+                <li><a href="/episodes/stacey-ibarra-vaughn-mitchell">Stacey Ibarra &amp; Vaughn Mitchell — Safeguarding Yourself from Cybercrime and Fraud</a></li>'''
+          new = '''                <li><a href="/episodes/stacey-ibarra-vaughn-mitchell">Stacey Ibarra &amp; Vaughn Mitchell — Safeguarding Yourself from Cybercrime and Fraud</a></li>
+                <li><a href="/episodes/george-lemieux">Former U.S. Senator George LeMieux — Leadership, Public Service &amp; Florida’s Future</a></li>
+                <li><a href="/episodes/scott-diament-gillian-lieberman">Gillian Lieberman &amp; Scott Diament — Palm Beach Business, Luxury &amp; Leadership</a></li>'''
+          if old not in s:
+              raise SystemExit("Expected static featured-conversation order was not found")
+          s = s.replace(old, new, 1)
+          s = s.replace(
+              '/src/home-entry.js?v=20260819-candidates-mobile',
+              '/src/home-entry.js?v=20260819-fraud-special',
+              1,
+          )
+          p.write_text(s)
+
+          p = Path("scripts/home-feed-resilience-gate.mjs")
+          s = p.read_text()
+          s = s.replace(
+              "assert(main.includes('updateFeatured(fallbackLatest);'), \"Homepage live-feed failure must keep a verified featured conversation.\");",
+              "assert(main.includes('const FEATURED_CONVERSATION_VIDEO_ID = \\\"iR4cdm9Ux3U\\\";'), \"Homepage must pin the approved scam and fraud special as its featured conversation.\");\nassert(main.includes('updateFeatured(fallbackFeatured);'), \"Homepage live-feed failure must keep the approved featured conversation.\");",
+              1,
+          )
+          s = s.replace(
+              "assert(archive.includes('state.episodes = editorialEpisodes;'), \"Episodes archive must retain its verified static fallback.\");",
+              "assert(archive.includes('state.episodes = editorialEpisodes;'), \"Episodes archive must retain its verified static fallback.\");\nassert(archive.includes('FEATURED_CONVERSATION_VIDEO_ID = \\\"iR4cdm9Ux3U\\\"'), \"Episodes archive must use the approved scam and fraud special as its featured conversation.\");\nassert(episodesComponent.includes('iR4cdm9Ux3U') && episodesComponent.includes('Safeguarding Yourself from Cybercrime and Fraud'), \"Homepage server-rendered featured content must match the approved scam and fraud special.\");",
+              1,
+          )
+          p.write_text(s)
+          PY
+
+      - name: Run complete site quality suite
+        run: npm test
+
+      - name: Commit the verified change and remove this temporary workflow
+        shell: bash
+        run: |
+          rm -f .github/workflows/temporary-feature-sync.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add src/main.js src/episodes-page.js src/components/Episodes.js index.html scripts/home-feed-resilience-gate.mjs .github/workflows/temporary-feature-sync.yml
+          git commit -m "Feature the scam and fraud special across all resilient surfaces"
+          git push
