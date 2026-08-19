@@ -10,8 +10,7 @@ const candidateArchive = "/episodes/?topic=2026%20Candidates%20Special";
 const packageItems = [
   ["Studio Interview", "A professionally recorded 30-minute in-studio video and audio conversation with Alana K. Vandeveer."],
   ["Radio Broadcast", "Tuesday evening broadcast placement across five station brands and 16 signals serving communities from Broward County through Orlando."],
-  ["Digital Distribution", "Publication through The Alana Show's digital channels so the conversation remains available beyond the original broadcast."],
-  ["Campaign Assets", "Professionally edited clips and promotional assets prepared for the campaign's own use and sharing."]
+  ["Digital Distribution", "Publication through The Alana Show's digital channels so the conversation remains available beyond the original broadcast."]
 ];
 
 const stationBrands = ["Treasure Coast Talk Radio", "Space Coast Talk Radio", "Mega 107.1", "The Surf", "True Oldies Channel"];
@@ -95,7 +94,7 @@ app.innerHTML = `${MediaHeader()}
       <ol class="candidate-process">
         <li data-reveal><span>01</span><div><h3>Reserve &amp; pay</h3><p>Select a studio recording time through Calendly and complete the $1,500 payment at booking.</p></div></li>
         <li data-reveal><span>02</span><div><h3>Prepare &amp; record</h3><p>Studio directions, arrival instructions, and interview preparation details are provided before recording. Please plan to arrive 15 minutes early.</p></div></li>
-        <li data-reveal><span>03</span><div><h3>Broadcast &amp; publish</h3><p>Your Tuesday broadcast date and air time are confirmed separately, followed by digital publication and campaign-ready promotional assets.</p></div></li>
+        <li data-reveal><span>03</span><div><h3>Broadcast &amp; publish</h3><p>Your Tuesday broadcast date and air time are confirmed separately, followed by publication through The Alana Show's digital channels.</p></div></li>
       </ol>
     </div>
   </section>
