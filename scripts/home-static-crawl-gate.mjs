@@ -11,6 +11,18 @@ assert(html.includes('In-depth interviews with people shaping business, public s
 for (const href of ["/episodes", "/guests", "/topics", "/south-florida", "/about"]) {
   assert(html.includes(`href="${href}"`), `Static homepage must expose a crawlable ${href} authority link.`);
 }
+
+const priorityEpisodes = [
+  "/episodes/george-lemieux",
+  "/episodes/scott-diament-gillian-lieberman",
+  "/episodes/stacey-ibarra-vaughn-mitchell",
+  "/episodes/ric-bradshaw",
+  "/episodes/michael-barnett-2022-midterms"
+];
+for (const href of priorityEpisodes) {
+  assert(html.includes(`href="${href}"`), `Static homepage must link directly to priority watch page ${href}.`);
+}
+assert(html.includes('class="static-priority-conversations"'), "Homepage must retain a server-delivered priority conversation link group.");
 assert(html.includes('Alana K. Vandeveer, host of The Alana Show'), "Static homepage must preserve descriptive host image alt text.");
 assert(html.includes('src="/src/home-entry.js"'), "Homepage JavaScript enhancement entry must remain intact.");
 
@@ -22,4 +34,5 @@ if (errors.length) {
 
 console.log("Homepage static crawl gate passed.");
 console.log("  Server-delivered show copy + owned-media authority links: OK");
+console.log(`  Direct priority watch-page links: ${priorityEpisodes.length}`);
 console.log("  Progressive JavaScript enhancement preserved: OK");
