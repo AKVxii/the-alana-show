@@ -1,4 +1,5 @@
 import { BeyondShow } from "./components/BeyondShow.js";
+import { setupEditorialMotion } from "./lib/motion.js";
 
 if (!document.querySelector('link[data-beyond-show-styles]')) {
   const stylesheet = document.createElement("link");
@@ -10,5 +11,9 @@ if (!document.querySelector('link[data-beyond-show-styles]')) {
 
 if (!document.querySelector("[data-beyond-home]")) {
   const contact = document.querySelector("#contact");
-  if (contact) contact.insertAdjacentHTML("beforebegin", BeyondShow());
+  if (contact) {
+    contact.insertAdjacentHTML("beforebegin", BeyondShow());
+    const beyondHome = document.querySelector("[data-beyond-home]");
+    if (beyondHome) setupEditorialMotion(beyondHome);
+  }
 }
