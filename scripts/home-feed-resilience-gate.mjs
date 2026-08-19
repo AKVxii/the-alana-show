@@ -14,7 +14,8 @@ const youtubeApi = require("../api/youtube.js");
 
 assert(main.includes('episodes as editorialEpisodes'), "Homepage must import the verified static episode catalog for live-feed failure recovery.");
 assert(main.includes('state.episodes = uniqueEpisodes(editorialEpisodes).map(enrichEpisode);'), "Homepage live-feed catch path must restore the verified static conversation archive.");
-assert(main.includes('updateFeatured(fallbackLatest);'), "Homepage live-feed failure must keep a verified featured conversation.");
+assert(main.includes('const FEATURED_CONVERSATION_VIDEO_ID = "iR4cdm9Ux3U";'), "Homepage must pin the approved scam and fraud special as its featured conversation.");
+assert(main.includes('updateFeatured(fallbackFeatured);'), "Homepage live-feed failure must keep the approved featured conversation.");
 assert(main.includes('updateLatest(fallbackLatest);'), "Homepage live-feed failure must keep the latest-conversation surface populated.");
 assert(main.includes('renderEpisodes(state.episodes);'), "Homepage live-feed failure must render verified conversation cards.");
 assert(main.includes('renderSearchResults("");'), "Homepage live-feed failure must keep archive search initialized.");
@@ -49,6 +50,8 @@ if (typeof collapseReplacementMasters === "function") {
 // The archive and homepage should share the same resilience principle: external
 // metadata improves the experience, but the owned verified catalog keeps it useful.
 assert(archive.includes('state.episodes = editorialEpisodes;'), "Episodes archive must retain its verified static fallback.");
+assert(archive.includes('FEATURED_CONVERSATION_VIDEO_ID = "iR4cdm9Ux3U"'), "Episodes archive must use the approved scam and fraud special as its featured conversation.");
+assert(episodesComponent.includes('iR4cdm9Ux3U') && episodesComponent.includes('Safeguarding Yourself from Cybercrime and Fraud'), "Homepage server-rendered featured content must match the approved scam and fraud special.");
 assert(episodesComponent.includes('BrandedEpisodeArtwork'), "Missing thumbnails must retain branded artwork rather than broken image chrome.");
 
 assert(!fs.existsSync(".github/workflows/home-feed-resilience-once.yml"), "One-time homepage edit workflow must be removed before merge.");

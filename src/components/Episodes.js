@@ -60,16 +60,16 @@ export function Episodes() {
             <div class="player-frame">
               <featured-video
                 data-featured-video
-                data-initial-src="https://www.youtube-nocookie.com/embed/kJWFTnWOgYM?rel=0"
+                data-initial-src="https://www.youtube-nocookie.com/embed/iR4cdm9Ux3U?rel=0"
                 data-title="Featured conversation from The Alana Show">
-                <a href="https://www.youtube.com/watch?v=kJWFTnWOgYM" target="_blank" rel="noopener">Watch the featured conversation on YouTube</a>
+                <a href="https://www.youtube.com/watch?v=iR4cdm9Ux3U" target="_blank" rel="noopener">Watch the scam and fraud special on YouTube</a>
               </featured-video>
             </div>
             <div class="featured-meta">
               <div>
                 <span class="content-label">Featured from the archive</span>
-                <h3 data-featured-title>Chairman Michael Barnett Recaps the 2022 Midterms</h3>
-                <p data-featured-description>A direct conversation about public life, civic engagement, grassroots leadership, and Palm Beach County.</p>
+                <h3 data-featured-title>Safeguarding Yourself from Cybercrime and Fraud</h3>
+                <p data-featured-description>Prosecutor Stacey Ibarra and Detective Vaughn Mitchell share practical guidance for recognizing scams, protecting personal information, and responding to cybercrime and fraud.</p>
               </div>
               <div class="featured-stats" data-featured-stats></div>
             </div>

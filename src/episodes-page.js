@@ -10,6 +10,7 @@ import { CANDIDATES_DISCLAIMER, resolveCollection } from "./data/collections.js"
 import { lengthBucket, trackEvent } from "./lib/measurement.js";
 import { loadYouTubeFeed } from "./lib/youtube-feed.js";
 
+const FEATURED_CONVERSATION_VIDEO_ID = "iR4cdm9Ux3U";
 const PAGE_SIZE = 9;
 const initialParams = new URLSearchParams(location.search);
 const initialGuestQuery = initialParams.get("guest") || "";
@@ -44,7 +45,7 @@ app.innerHTML = `${MediaHeader()}<main id="main-content">
 </main>${Footer({ fromSubpage: true })}`;
 
 function renderFeatured() {
-  const episode = state.episodes[0];
+  const episode = state.episodes.find(item => item.videoId === FEATURED_CONVERSATION_VIDEO_ID) || state.episodes[0];
   const node = document.querySelector("[data-featured]");
   if (!episode) {
     node.innerHTML = `<p>The featured conversation is temporarily unavailable. <a href="${site.youtube}" target="_blank" rel="noopener">Visit the YouTube channel</a>.</p>`;

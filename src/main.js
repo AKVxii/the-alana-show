@@ -20,6 +20,7 @@ import { lengthBucket, trackEvent } from "./lib/measurement.js";
 import { loadYouTubeFeed } from "./lib/youtube-feed.js";
 import { setupNewsletter } from "./newsletter.js";
 
+const FEATURED_CONVERSATION_VIDEO_ID = "iR4cdm9Ux3U";
 const app = document.querySelector("#app");
 
 app.innerHTML = `
@@ -169,7 +170,8 @@ async function loadYouTube() {
   try {
     const data = await loadYouTubeFeed();
     state.episodes = uniqueEpisodes(data.episodes?.length ? data.episodes : (data.recent || [])).map(enrichEpisode);
-    updateFeatured(data.featured || data.mostWatched || data.latest);
+    const featuredEpisode = data.featured || state.episodes.find(episode => episode.videoId === FEATURED_CONVERSATION_VIDEO_ID) || data.mostWatched || data.latest;
+    updateFeatured(featuredEpisode);
     updateLatest(data.latest);
     renderEpisodes(data.recent || state.episodes);
     renderSearchResults("");
@@ -177,7 +179,8 @@ async function loadYouTube() {
     console.info("Using the verified static conversation archive while the live YouTube feed is unavailable.");
     state.episodes = uniqueEpisodes(editorialEpisodes).map(enrichEpisode);
     const fallbackLatest = state.episodes[0];
-    updateFeatured(fallbackLatest);
+    const fallbackFeatured = state.episodes.find(episode => episode.videoId === FEATURED_CONVERSATION_VIDEO_ID) || fallbackLatest;
+    updateFeatured(fallbackFeatured);
     updateLatest(fallbackLatest);
     renderEpisodes(state.episodes);
     renderSearchResults("");
