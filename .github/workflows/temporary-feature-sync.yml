@@ -17,113 +17,137 @@ jobs:
       - name: Check out current main branch
         uses: actions/checkout@v4
 
-      - name: Apply the approved featured conversation consistently
+      - name: Apply the approved featured-conversation patch
         shell: bash
         run: |
-          python - <<'PY'
-          from pathlib import Path
-
-          p = Path("src/main.js")
-          s = p.read_text()
-          s = s.replace(
-              'const app = document.querySelector("#app");\n',
-              'const FEATURED_CONVERSATION_VIDEO_ID = "iR4cdm9Ux3U";\nconst app = document.querySelector("#app");\n',
-              1,
-          )
-          s = s.replace(
-              '    updateFeatured(data.featured || data.mostWatched || data.latest);\n',
-              '    const featuredEpisode = data.featured || state.episodes.find(episode => episode.videoId === FEATURED_CONVERSATION_VIDEO_ID) || data.mostWatched || data.latest;\n    updateFeatured(featuredEpisode);\n',
-              1,
-          )
-          s = s.replace(
-              '    const fallbackLatest = state.episodes[0];\n    updateFeatured(fallbackLatest);\n',
-              '    const fallbackLatest = state.episodes[0];\n    const fallbackFeatured = state.episodes.find(episode => episode.videoId === FEATURED_CONVERSATION_VIDEO_ID) || fallbackLatest;\n    updateFeatured(fallbackFeatured);\n',
-              1,
-          )
-          p.write_text(s)
-
-          p = Path("src/episodes-page.js")
-          s = p.read_text()
-          s = s.replace(
-              'const PAGE_SIZE = 9;\n',
-              'const FEATURED_CONVERSATION_VIDEO_ID = "iR4cdm9Ux3U";\nconst PAGE_SIZE = 9;\n',
-              1,
-          )
-          s = s.replace(
-              '  const episode = state.episodes[0];\n',
-              '  const episode = state.episodes.find(item => item.videoId === FEATURED_CONVERSATION_VIDEO_ID) || state.episodes[0];\n',
-              1,
-          )
-          p.write_text(s)
-
-          p = Path("src/components/Episodes.js")
-          s = p.read_text()
-          replacements = [
-              (
-                  'data-initial-src="https://www.youtube-nocookie.com/embed/kJWFTnWOgYM?rel=0"',
-                  'data-initial-src="https://www.youtube-nocookie.com/embed/iR4cdm9Ux3U?rel=0"',
-              ),
-              (
-                  '<a href="https://www.youtube.com/watch?v=kJWFTnWOgYM" target="_blank" rel="noopener">Watch the featured conversation on YouTube</a>',
-                  '<a href="https://www.youtube.com/watch?v=iR4cdm9Ux3U" target="_blank" rel="noopener">Watch the scam and fraud special on YouTube</a>',
-              ),
-              (
-                  '<h3 data-featured-title>Chairman Michael Barnett Recaps the 2022 Midterms</h3>',
-                  '<h3 data-featured-title>Safeguarding Yourself from Cybercrime and Fraud</h3>',
-              ),
-              (
-                  '<p data-featured-description>A direct conversation about public life, civic engagement, grassroots leadership, and Palm Beach County.</p>',
-                  '<p data-featured-description>Prosecutor Stacey Ibarra and Detective Vaughn Mitchell share practical guidance for recognizing scams, protecting personal information, and responding to cybercrime and fraud.</p>',
-              ),
-          ]
-          for old, new in replacements:
-              if old not in s:
-                  raise SystemExit(f"Expected featured-content source was not found: {old[:80]}")
-              s = s.replace(old, new, 1)
-          p.write_text(s)
-
-          p = Path("index.html")
-          s = p.read_text()
-          old = '''                <li><a href="/episodes/george-lemieux">Former U.S. Senator George LeMieux — Leadership, Public Service &amp; Florida’s Future</a></li>
-                <li><a href="/episodes/scott-diament-gillian-lieberman">Gillian Lieberman &amp; Scott Diament — Palm Beach Business, Luxury &amp; Leadership</a></li>
-                <li><a href="/episodes/stacey-ibarra-vaughn-mitchell">Stacey Ibarra &amp; Vaughn Mitchell — Safeguarding Yourself from Cybercrime and Fraud</a></li>'''
-          new = '''                <li><a href="/episodes/stacey-ibarra-vaughn-mitchell">Stacey Ibarra &amp; Vaughn Mitchell — Safeguarding Yourself from Cybercrime and Fraud</a></li>
-                <li><a href="/episodes/george-lemieux">Former U.S. Senator George LeMieux — Leadership, Public Service &amp; Florida’s Future</a></li>
-                <li><a href="/episodes/scott-diament-gillian-lieberman">Gillian Lieberman &amp; Scott Diament — Palm Beach Business, Luxury &amp; Leadership</a></li>'''
-          if old not in s:
-              raise SystemExit("Expected static featured-conversation order was not found")
-          s = s.replace(old, new, 1)
-          s = s.replace(
-              '/src/home-entry.js?v=20260819-candidates-mobile',
-              '/src/home-entry.js?v=20260819-fraud-special',
-              1,
-          )
-          p.write_text(s)
-
-          p = Path("scripts/home-feed-resilience-gate.mjs")
-          s = p.read_text()
-          s = s.replace(
-              "assert(main.includes('updateFeatured(fallbackLatest);'), \"Homepage live-feed failure must keep a verified featured conversation.\");",
-              "assert(main.includes('const FEATURED_CONVERSATION_VIDEO_ID = \\\"iR4cdm9Ux3U\\\";'), \"Homepage must pin the approved scam and fraud special as its featured conversation.\");\nassert(main.includes('updateFeatured(fallbackFeatured);'), \"Homepage live-feed failure must keep the approved featured conversation.\");",
-              1,
-          )
-          s = s.replace(
-              "assert(archive.includes('state.episodes = editorialEpisodes;'), \"Episodes archive must retain its verified static fallback.\");",
-              "assert(archive.includes('state.episodes = editorialEpisodes;'), \"Episodes archive must retain its verified static fallback.\");\nassert(archive.includes('FEATURED_CONVERSATION_VIDEO_ID = \\\"iR4cdm9Ux3U\\\"'), \"Episodes archive must use the approved scam and fraud special as its featured conversation.\");\nassert(episodesComponent.includes('iR4cdm9Ux3U') && episodesComponent.includes('Safeguarding Yourself from Cybercrime and Fraud'), \"Homepage server-rendered featured content must match the approved scam and fraud special.\");",
-              1,
-          )
-          p.write_text(s)
-          PY
+          cat > /tmp/featured-fraud-special.patch <<'PATCH'
+          --- a/src/main.js
+          +++ b/src/main.js
+          @@ -20,6 +20,7 @@
+           import { loadYouTubeFeed } from "./lib/youtube-feed.js";
+           import { setupNewsletter } from "./newsletter.js";
+           
+          +const FEATURED_CONVERSATION_VIDEO_ID = "iR4cdm9Ux3U";
+           const app = document.querySelector("#app");
+           
+           app.innerHTML = `
+          @@ -169,7 +170,8 @@
+             try {
+               const data = await loadYouTubeFeed();
+               state.episodes = uniqueEpisodes(data.episodes?.length ? data.episodes : (data.recent || [])).map(enrichEpisode);
+          -    updateFeatured(data.featured || data.mostWatched || data.latest);
+          +    const featuredEpisode = data.featured || state.episodes.find(episode => episode.videoId === FEATURED_CONVERSATION_VIDEO_ID) || data.mostWatched || data.latest;
+          +    updateFeatured(featuredEpisode);
+               updateLatest(data.latest);
+               renderEpisodes(data.recent || state.episodes);
+               renderSearchResults("");
+          @@ -177,7 +179,8 @@
+               console.info("Using the verified static conversation archive while the live YouTube feed is unavailable.");
+               state.episodes = uniqueEpisodes(editorialEpisodes).map(enrichEpisode);
+               const fallbackLatest = state.episodes[0];
+          -    updateFeatured(fallbackLatest);
+          +    const fallbackFeatured = state.episodes.find(episode => episode.videoId === FEATURED_CONVERSATION_VIDEO_ID) || fallbackLatest;
+          +    updateFeatured(fallbackFeatured);
+               updateLatest(fallbackLatest);
+               renderEpisodes(state.episodes);
+               renderSearchResults("");
+          --- a/src/episodes-page.js
+          +++ b/src/episodes-page.js
+          @@ -10,6 +10,7 @@
+           import { lengthBucket, trackEvent } from "./lib/measurement.js";
+           import { loadYouTubeFeed } from "./lib/youtube-feed.js";
+           
+          +const FEATURED_CONVERSATION_VIDEO_ID = "iR4cdm9Ux3U";
+           const PAGE_SIZE = 9;
+           const initialParams = new URLSearchParams(location.search);
+           const initialGuestQuery = initialParams.get("guest") || "";
+          @@ -44,7 +45,7 @@
+           </main>${Footer({ fromSubpage: true })}`;
+           
+           function renderFeatured() {
+          -  const episode = state.episodes[0];
+          +  const episode = state.episodes.find(item => item.videoId === FEATURED_CONVERSATION_VIDEO_ID) || state.episodes[0];
+             const node = document.querySelector("[data-featured]");
+             if (!episode) {
+               node.innerHTML = `<p>The featured conversation is temporarily unavailable. <a href="${site.youtube}" target="_blank" rel="noopener">Visit the YouTube channel</a>.</p>`;
+          --- a/src/components/Episodes.js
+          +++ b/src/components/Episodes.js
+          @@ -60,16 +60,16 @@
+                       <div class="player-frame">
+                         <featured-video
+                           data-featured-video
+          -                data-initial-src="https://www.youtube-nocookie.com/embed/kJWFTnWOgYM?rel=0"
+          +                data-initial-src="https://www.youtube-nocookie.com/embed/iR4cdm9Ux3U?rel=0"
+                           data-title="Featured conversation from The Alana Show">
+          -                <a href="https://www.youtube.com/watch?v=kJWFTnWOgYM" target="_blank" rel="noopener">Watch the featured conversation on YouTube</a>
+          +                <a href="https://www.youtube.com/watch?v=iR4cdm9Ux3U" target="_blank" rel="noopener">Watch the scam and fraud special on YouTube</a>
+                         </featured-video>
+                       </div>
+                       <div class="featured-meta">
+                         <div>
+                           <span class="content-label">Featured from the archive</span>
+          -                <h3 data-featured-title>Chairman Michael Barnett Recaps the 2022 Midterms</h3>
+          -                <p data-featured-description>A direct conversation about public life, civic engagement, grassroots leadership, and Palm Beach County.</p>
+          +                <h3 data-featured-title>Safeguarding Yourself from Cybercrime and Fraud</h3>
+          +                <p data-featured-description>Prosecutor Stacey Ibarra and Detective Vaughn Mitchell share practical guidance for recognizing scams, protecting personal information, and responding to cybercrime and fraud.</p>
+                         </div>
+                         <div class="featured-stats" data-featured-stats></div>
+                       </div>
+          --- a/index.html
+          +++ b/index.html
+          @@ -153,9 +153,9 @@
+                       <div class="static-priority-conversations" aria-labelledby="static-priority-conversations-heading">
+                         <h3 id="static-priority-conversations-heading">Featured conversations</h3>
+                         <ul>
+          +                <li><a href="/episodes/stacey-ibarra-vaughn-mitchell">Stacey Ibarra &amp; Vaughn Mitchell — Safeguarding Yourself from Cybercrime and Fraud</a></li>
+                           <li><a href="/episodes/george-lemieux">Former U.S. Senator George LeMieux — Leadership, Public Service &amp; Florida’s Future</a></li>
+                           <li><a href="/episodes/scott-diament-gillian-lieberman">Gillian Lieberman &amp; Scott Diament — Palm Beach Business, Luxury &amp; Leadership</a></li>
+          -                <li><a href="/episodes/stacey-ibarra-vaughn-mitchell">Stacey Ibarra &amp; Vaughn Mitchell — Safeguarding Yourself from Cybercrime and Fraud</a></li>
+                           <li><a href="/episodes/ric-bradshaw">Sheriff Ric Bradshaw — A Legacy of Service</a></li>
+                           <li><a href="/episodes/michael-barnett-2022-midterms">Michael Barnett — Palm Beach County GOP and the 2022 Midterms</a></li>
+                         </ul>
+          @@ -167,6 +167,6 @@
+               <noscript>
+                 <div class="noscript-message">Explore <a href="/episodes">The Alana Show episode archive</a>, <a href="/guests">verified guests</a>, and <a href="/topics">conversation topics</a>.</div>
+               </noscript>
+          -    <script type="module" src="/src/home-entry.js?v=20260819-candidates-mobile"></script>
+          +    <script type="module" src="/src/home-entry.js?v=20260819-fraud-special"></script>
+             </body>
+           </html>
+          --- a/scripts/home-feed-resilience-gate.mjs
+          +++ b/scripts/home-feed-resilience-gate.mjs
+          @@ -14,7 +14,8 @@
+           
+           assert(main.includes('episodes as editorialEpisodes'), "Homepage must import the verified static episode catalog for live-feed failure recovery.");
+           assert(main.includes('state.episodes = uniqueEpisodes(editorialEpisodes).map(enrichEpisode);'), "Homepage live-feed catch path must restore the verified static conversation archive.");
+          -assert(main.includes('updateFeatured(fallbackLatest);'), "Homepage live-feed failure must keep a verified featured conversation.");
+          +assert(main.includes('const FEATURED_CONVERSATION_VIDEO_ID = "iR4cdm9Ux3U";'), "Homepage must pin the approved scam and fraud special as its featured conversation.");
+          +assert(main.includes('updateFeatured(fallbackFeatured);'), "Homepage live-feed failure must keep the approved featured conversation.");
+           assert(main.includes('updateLatest(fallbackLatest);'), "Homepage live-feed failure must keep the latest-conversation surface populated.");
+           assert(main.includes('renderEpisodes(state.episodes);'), "Homepage live-feed failure must render verified conversation cards.");
+           assert(main.includes('renderSearchResults("");'), "Homepage live-feed failure must keep archive search initialized.");
+          @@ -49,6 +50,8 @@
+           // The archive and homepage should share the same resilience principle: external
+           // metadata improves the experience, but the owned verified catalog keeps it useful.
+           assert(archive.includes('state.episodes = editorialEpisodes;'), "Episodes archive must retain its verified static fallback.");
+          +assert(archive.includes('FEATURED_CONVERSATION_VIDEO_ID = "iR4cdm9Ux3U"'), "Episodes archive must use the approved scam and fraud special as its featured conversation.");
+          +assert(episodesComponent.includes('iR4cdm9Ux3U') && episodesComponent.includes('Safeguarding Yourself from Cybercrime and Fraud'), "Homepage server-rendered featured content must match the approved scam and fraud special.");
+           assert(episodesComponent.includes('BrandedEpisodeArtwork'), "Missing thumbnails must retain branded artwork rather than broken image chrome.");
+           
+           assert(!fs.existsSync(".github/workflows/home-feed-resilience-once.yml"), "One-time homepage edit workflow must be removed before merge.");
+          PATCH
+          sed -i 's/^          //' /tmp/featured-fraud-special.patch
+          git apply --check /tmp/featured-fraud-special.patch
+          git apply /tmp/featured-fraud-special.patch
 
       - name: Run complete site quality suite
         run: npm test
 
-      - name: Commit the verified change and remove this temporary workflow
+      - name: Commit the verified site files
         shell: bash
         run: |
-          rm -f .github/workflows/temporary-feature-sync.yml
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add src/main.js src/episodes-page.js src/components/Episodes.js index.html scripts/home-feed-resilience-gate.mjs .github/workflows/temporary-feature-sync.yml
+          git add src/main.js src/episodes-page.js src/components/Episodes.js index.html scripts/home-feed-resilience-gate.mjs
           git commit -m "Feature the scam and fraud special across all resilient surfaces"
           git push
