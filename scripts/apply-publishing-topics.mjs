@@ -4,7 +4,7 @@ import { site } from "../src/data/site.js";
 import { topicHref } from "../src/data/topic-pages.js";
 
 const ROOT = process.cwd();
-const inputArg = process.argv.find(arg => !arg.startsWith("--")) || "content/conversation.json";
+const inputArg = process.argv.slice(2).find(arg => !arg.startsWith("--")) || "content/conversation.json";
 const inputPath = path.resolve(ROOT, inputArg);
 
 function fail(message) {
