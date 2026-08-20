@@ -1,5 +1,4 @@
 import { icon } from "../lib/icons.js";
-import { site } from "../data/site.js";
 import { escapeHtml } from "../lib/utils.js";
 import { Broadcast } from "./Broadcast.js";
 import { Sponsor } from "./Sponsor.js";
@@ -60,16 +59,25 @@ export function Episodes() {
             <div class="player-frame">
               <featured-video
                 data-featured-video
-                data-initial-src="https://www.youtube-nocookie.com/embed/iR4cdm9Ux3U?rel=0"
-                data-title="Featured conversation from The Alana Show">
-                <a href="https://www.youtube.com/watch?v=iR4cdm9Ux3U" target="_blank" rel="noopener">Watch the scam and fraud special on YouTube</a>
+                data-initial-src="https://www.youtube-nocookie.com/embed/Kx7rcDzaqDk?rel=0"
+                data-title="Former U.S. Senator George LeMieux on The Alana Show">
+                <a href="/episodes/george-lemieux">Watch the George LeMieux conversation on The Alana Show</a>
               </featured-video>
             </div>
             <div class="featured-meta">
               <div>
-                <span class="content-label">Featured from the archive</span>
-                <h3 data-featured-title>Safeguarding Yourself from Cybercrime and Fraud</h3>
-                <p data-featured-description>Prosecutor Stacey Ibarra and Detective Vaughn Mitchell share practical guidance for recognizing scams, protecting personal information, and responding to cybercrime and fraud.</p>
+                <span class="content-label">New this week</span>
+                <h3 data-featured-title>Former U.S. Senator George LeMieux | Leadership, Public Service &amp; Florida’s Future</h3>
+                <p data-featured-description>George LeMieux joins Alana K. Vandeveer for a conversation about principled leadership, public service, fiscal discipline, civic dialogue, and Florida’s future.</p>
+                <div class="featured-conversation-actions">
+                  <a class="button button-gold" data-featured-link href="/episodes/george-lemieux" data-track-event="Homepage Featured Conversation" data-track-location="homepage" data-track-label="George LeMieux">Explore the full conversation ${icon("arrow")}</a>
+                  <a class="button button-ghost" href="/guests/george-lemieux" data-track-event="Homepage Featured Guest" data-track-location="homepage" data-track-label="George LeMieux">Meet the guest</a>
+                </div>
+                <nav class="featured-key-moments" aria-label="Key moments from the George LeMieux conversation">
+                  <a href="/episodes/george-lemieux?t=572" data-track-event="Homepage Key Moment" data-track-location="homepage" data-track-label="Listening Across Political Divides"><time datetime="PT572S">09:32</time><span>Listening Across Political Divides</span></a>
+                  <a href="/episodes/george-lemieux?t=1351" data-track-event="Homepage Key Moment" data-track-location="homepage" data-track-label="America’s Debt and Fiscal Discipline"><time datetime="PT1351S">22:31</time><span>America’s Debt and Fiscal Discipline</span></a>
+                  <a href="/episodes/george-lemieux?t=1669" data-track-event="Homepage Key Moment" data-track-location="homepage" data-track-label="Why Character Is Everything"><time datetime="PT1669S">27:49</time><span>Why Character Is Everything</span></a>
+                </nav>
               </div>
               <div class="featured-stats" data-featured-stats></div>
             </div>
@@ -88,8 +96,8 @@ export function Episodes() {
                 <span class="content-label">Latest conversation</span>
                 <h3 data-latest-title>The newest episode</h3>
                 <p data-latest-description>New conversations appear here automatically when they are published.</p>
-                <a class="button button-gold" data-latest-link href="${site.youtube}" target="_blank" rel="noopener">
-                  ${icon("play")} Watch latest episode
+                <a class="button button-gold" data-latest-link href="/episodes" data-track-event="Homepage Latest Conversation" data-track-location="homepage" data-track-label="latest">
+                  ${icon("play")} Explore latest episode
                 </a>
               </div>
             </article>
