@@ -72,6 +72,12 @@ const core = run(process.execPath, coreArgs);
 if (core.status !== 0) abort("Core conversation publishing failed.");
 if (dryRun) process.exit(0);
 
+const topics = run(process.execPath, ["scripts/apply-publishing-topics.mjs", inputArg]);
+if (topics.status !== 0) abort("Editorial topic synchronization failed.");
+
+const editorial = run(process.execPath, ["scripts/sync-episode-editorial.mjs"]);
+if (editorial.status !== 0) abort("Episode editorial metadata resynchronization failed.");
+
 const hubs = run(process.execPath, ["scripts/sync-hub-authority.mjs"]);
 if (hubs.status !== 0) abort("Discovery-hub authority sync failed.");
 
@@ -85,7 +91,7 @@ const npm = process.platform === "win32" ? "npm.cmd" : "npm";
 const quality = run(npm, ["run", "quality"]);
 if (quality.status !== 0) abort("Repository quality checks failed.");
 
-console.log("Conversation publishing complete: archive pages, discovery hubs, canonical sitemap freshness, video discovery, and quality gates are synchronized.");
+console.log("Conversation publishing complete: archive pages, editorial topics, discovery hubs, canonical sitemap freshness, video discovery, and quality gates are synchronized.");
 
 const distribution = run(process.execPath, ["scripts/distribution-brief.mjs", inputArg]);
 if (distribution.status !== 0) {
