@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow,noarchive,nosnippet">
+  <meta name="referrer" content="no-referrer">
+  <meta name="theme-color" content="#030914">
+  <title>The Alana Show — Private Studio Console</title>
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/src/studio-console.css?v=1">
+</head>
+<body>
+  <a class="skip-link" href="#console-main">Skip to console</a>
+  <header class="console-header">
+    <div class="console-shell console-header-inner">
+      <a class="console-brand" href="/" aria-label="The Alana Show home">
+        <span class="console-seal" aria-hidden="true">TAS</span>
+        <span><strong>The Alana Show</strong><small>Private Studio Console</small></span>
+      </a>
+      <div class="console-header-actions">
+        <span class="console-mode">READ-ONLY</span>
+        <button class="console-button console-button-quiet" type="button" data-disconnect hidden>Disconnect</button>
+      </div>
+    </div>
+  </header>
+
+  <main id="console-main" class="console-main">
+    <div class="console-shell">
+      <section class="console-hero" aria-labelledby="console-title">
+        <p class="console-eyebrow">OWNER REVIEW WORKSPACE</p>
+        <h1 id="console-title">Review every episode without surrendering control.</h1>
+        <p class="console-lead">This private workspace audits The Alana Show channel, organizes optimization priorities, and prepares individual thumbnail approvals. It cannot publish, delete, hide, or alter anything on YouTube.</p>
+        <div class="console-guardrails" aria-label="Fixed safeguards">
+          <span>No automatic publishing</span>
+          <span>No deletions</span>
+          <span>No visibility changes</span>
+          <span>Every photo approved individually</span>
+        </div>
+      </section>
+
+      <section class="console-panel" data-setup-panel aria-labelledby="setup-title">
+        <div class="console-panel-heading">
+          <div><p class="console-kicker">ONE-TIME CONNECTION</p><h2 id="setup-title">Google authorization</h2></div>
+          <span class="console-status" data-connection-status>Checking…</span>
+        </div>
+        <div data-setup-content>
+          <p>Checking whether the private Google connection is ready.</p>
+        </div>
+      </section>
+
+      <section class="console-panel" data-channel-panel hidden aria-labelledby="channel-title">
+        <div class="console-panel-heading">
+          <div><p class="console-kicker">VERIFIED CHANNEL</p><h2 id="channel-title" data-channel-title>The Alana Show</h2></div>
+          <span class="console-status console-status-good">Connected read-only</span>
+        </div>
+        <div class="channel-summary">
+          <img data-channel-image alt="" width="112" height="112">
+          <div>
+            <p data-channel-handle>@alanakvandeveer</p>
+            <p class="channel-id">Channel ID: <code data-channel-id>UC8sZK_EKbcuCBMquG_C30Sw</code></p>
+            <p class="channel-stats" data-channel-stats></p>
+          </div>
+          <button class="console-button console-button-gold" type="button" data-run-audit>Run read-only audit</button>
+        </div>
+      </section>
+
+      <section class="console-panel" data-audit-panel hidden aria-labelledby="audit-title">
+        <div class="console-panel-heading">
+          <div><p class="console-kicker">CHANNEL INVENTORY</p><h2 id="audit-title">Episode review queue</h2></div>
+          <div class="console-panel-actions">
+            <button class="console-button console-button-quiet" type="button" data-export-decisions>Export photo decisions</button>
+            <button class="console-button console-button-gold" type="button" data-refresh-audit>Refresh audit</button>
+          </div>
+        </div>
+
+        <div class="audit-summary" data-audit-summary aria-live="polite"></div>
+        <div class="audit-notice" data-audit-notice hidden></div>
+
+        <div class="audit-controls" role="search">
+          <label><span>Search episodes</span><input type="search" data-video-search placeholder="Title or video ID" autocomplete="off"></label>
+          <label><span>Visibility</span><select data-visibility-filter><option value="">All</option><option value="public">Public</option><option value="private">Private</option><option value="unlisted">Unlisted</option></select></label>
+          <label><span>Priority</span><select data-priority-filter><option value="">All</option><option value="high">High</option><option value="review">Review</option><option value="standard">Standard</option></select></label>
+        </div>
+
+        <p class="audit-status" data-audit-status role="status" aria-live="polite"></p>
+        <div class="video-review-grid" data-video-grid></div>
+      </section>
+
+      <section class="console-panel console-safety" aria-labelledby="safety-title">
+        <p class="console-kicker">PHOTO APPROVAL RULE</p>
+        <h2 id="safety-title">A thumbnail is never approved by implication.</h2>
+        <p>For every episode, you will see the current thumbnail and each proposed alternative at full size and mobile-feed size. You may keep the current image, approve one exact proposal, request changes, or skip the episode. No batch approval is enabled.</p>
+      </section>
+    </div>
+  </main>
+
+  <dialog class="thumbnail-dialog" data-thumbnail-dialog aria-labelledby="thumbnail-dialog-title">
+    <button class="dialog-close" type="button" data-dialog-close aria-label="Close thumbnail review">×</button>
+    <div data-dialog-content></div>
+  </dialog>
+
+  <footer class="console-footer">
+    <div class="console-shell"><p>The Alana Show private owner tool · No public navigation · No write permission</p></div>
+  </footer>
+
+  <script type="module" src="/src/studio-console.js?v=1"></script>
+</body>
+</html>
