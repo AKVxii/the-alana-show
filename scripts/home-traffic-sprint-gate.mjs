@@ -11,6 +11,8 @@ const read = file => {
 
 const episodes = read("src/components/Episodes.js");
 const main = read("src/main.js");
+const episodeArchive = read("src/episodes-page.js");
+const youtubeApi = read("api/youtube.js");
 const home = read("index.html");
 const styles = read("src/traffic-sprint.css");
 const guestProfile = read("src/data/guest-profiles.js");
@@ -34,6 +36,13 @@ for (const needle of [
   'link.href = enriched.detailPath || `https://www.youtube.com/watch?v=${enriched.videoId}`'
 ]) {
   if (!main.includes(needle)) errors.push(`Homepage routing logic is missing: ${needle}`);
+}
+
+if (!episodeArchive.includes('FEATURED_CONVERSATION_VIDEO_ID = "Kx7rcDzaqDk"')) {
+  errors.push("The episode archive must feature the current George LeMieux master.");
+}
+if (!youtubeApi.includes('FEATURED_CONVERSATION_VIDEO_ID = "Kx7rcDzaqDk"')) {
+  errors.push("The live YouTube feed must expose George LeMieux as the selected featured conversation.");
 }
 
 for (const needle of [
@@ -62,9 +71,13 @@ for (const needle of [
   'https://www.pba.edu/academics/schools/centers-of-excellence/lemieux/staff/'
 ]) {
   if (!guestProfile.includes(needle)) errors.push(`Verified George LeMieux profile data is missing: ${needle}`);
-  if (!guestPage.includes(needle.replace('Founder and Chair, LeMieux Center for Public Policy', 'Founder and Chair, LeMieux Center for Public Policy')) && needle.startsWith("https://")) {
-    errors.push(`Crawler-visible George LeMieux page is missing official identity link: ${needle}`);
-  }
+}
+for (const officialUrl of [
+  'https://www.gunster.com/people/george-s-lemieux',
+  'https://www.pba.edu/academics/schools/centers-of-excellence/lemieux/',
+  'https://www.pba.edu/academics/schools/centers-of-excellence/lemieux/staff/'
+]) {
+  if (!guestPage.includes(officialUrl)) errors.push(`Crawler-visible George LeMieux page is missing official identity link: ${officialUrl}`);
 }
 
 if (!guestPage.includes('href="/episodes/george-lemieux"')) {
@@ -82,4 +95,4 @@ if (errors.length) {
 }
 
 console.log("Homepage traffic sprint gate passed.");
-console.log("  Latest conversation prominence, internal routing, key moments and guest authority: OK");
+console.log("  Latest conversation prominence, internal routing, live feed, key moments and guest authority: OK");
