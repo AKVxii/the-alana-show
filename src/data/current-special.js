@@ -9,7 +9,7 @@ export const currentSpecial = Object.freeze({
   ctaLabel: "View Candidate Interview Details",
   ctaHref: "/candidates/",
   ctaExternal: false,
-  disclaimer: "Paid candidate interview package offered to legally qualified candidates on the same published terms. Participation does not constitute an endorsement. No payment is collected through Calendly. After a time is requested, the campaign receives The Alana Show's W-9 and written payment instructions; payment confirmation is required by the stated deadline or the hold is released.",
+  disclaimer: "Paid candidate interview package offered to legally qualified candidates on the same published terms. Participation does not constitute an endorsement. No payment is collected through Calendly. After a time is requested, the campaign receives Alana K. Vandeveer's W-9 and written payment instructions; payment confirmation is required by the stated deadline or the hold is released.",
   startDate: null,
   endDate: "2026-11-03",
   theme: "gold"

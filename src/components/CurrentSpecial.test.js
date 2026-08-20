@@ -21,7 +21,7 @@ test("current special renders the verified broad broadcast line and candidate-de
   assert.match(markup, /current-special-broadcast/);
   assert.match(markup, /Tuesdays on True Oldies across South Florida, with worldwide streaming and video\./);
   assert.match(markup, /No payment is collected through Calendly\./);
-  assert.match(markup, /The Alana Show&#039;s W-9 and written payment instructions/);
+  assert.match(markup, /Alana K\. Vandeveer&#039;s W-9 and written payment instructions/);
   assert.doesNotMatch(markup, /over 4 million people|South and Central Florida|Miami-Dade|Broward|Orlando/i);
 });
 
