@@ -88,7 +88,7 @@ jobs:
           grep -q '<loc>https://thealanashow.com/episodes/publishing-helper-ci-smoke-test</loc>' video-sitemap.xml
           grep -q '<video:thumbnail_loc>https://i.ytimg.com/vi/A1b2C3d4E5F/hqdefault.jpg</video:thumbnail_loc>' video-sitemap.xml
           grep -q '<video:title>Publishing Helper CI Smoke Test</video:title>' video-sitemap.xml
-          grep -q '<video:description>Disposable CI-only record used to verify The Alana Show publishing workflow, static video metadata, canonical routing, and discovery synchronization.</video:description>' video-sitemap.xml
+          grep -q '<video:description>Publishing Helper Test Guest explains how a complete editorial intake protects canonical routing, searchable video metadata, and reliable archive discovery.</video:description>' video-sitemap.xml
           grep -q '<video:player_loc allow_embed="yes">https://www.youtube-nocookie.com/embed/A1b2C3d4E5F</video:player_loc>' video-sitemap.xml
           grep -q 'Sitemap: https://thealanashow.com/video-sitemap.xml' robots.txt
 
