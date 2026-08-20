@@ -13,7 +13,8 @@ function ensureMediaEditorialStyles() {
     { selector: 'link[data-media-editorial]', href: "/src/media-editorial.css?v=1", dataset: "mediaEditorial" },
     { selector: 'link[data-visual-qa]', href: "/src/visual-qa-refinement.css?v=1", dataset: "visualQa" },
     { selector: 'link[data-mobile-qa-final]', href: "/src/mobile-qa-final.css?v=1", dataset: "mobileQaFinal" },
-    { selector: 'link[data-archive-character]', href: "/src/archive-character.css?v=1", dataset: "archiveCharacter" }
+    { selector: 'link[data-archive-character]', href: "/src/archive-character.css?v=1", dataset: "archiveCharacter" },
+    { selector: 'link[data-newsletter-styles]', href: "/src/newsletter.css?v=2", dataset: "newsletterStyles" }
   ];
 
   stylesheets.forEach(({ selector, href, dataset }) => {
