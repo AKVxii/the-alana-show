@@ -10,16 +10,30 @@ const {
 } = require("./guest-identities");
 
 test("the complete archive mapping covers all verified guest conversations", () => {
-  assert.equal(Object.keys(guestIdentityByVideoId).length, 25);
+  assert.equal(Object.keys(guestIdentityByVideoId).length, 26);
   const distinctGuests = new Set(Object.values(guestIdentityByVideoId).flat());
   assert.equal(distinctGuests.size, 30);
   assert.deepEqual(guestIdentityByVideoId["NN9mSARhmIQ"], ["Gillian Lieberman", "Scott Diament"]);
+  assert.deepEqual(guestIdentityByVideoId["Kx7rcDzaqDk"], ["George LeMieux"]);
+  assert.deepEqual(guestIdentityByVideoId["VYXrV-WGiHM"], ["George LeMieux"]);
   assert.deepEqual(guestIdentityByVideoId["7hGs2kuAKMk"], [
     "Noel J. Guillama-Alvarez",
     "Michael Castellano",
     "Mark Khachaturian"
   ]);
   assert.deepEqual(guestIdentityByVideoId["y5dQET3O1-c"], ["Jason Mandle", "Michael Barnett"]);
+});
+
+test("the current George LeMieux master resolves to the canonical guest profile", () => {
+  const result = identifyEpisodeGuests({
+    videoId: "Kx7rcDzaqDk",
+    title: "Former U.S. Senator George LeMieux | Leadership, Public Service & Florida’s Future",
+    description: ""
+  });
+  assert.deepEqual(result.guestNames, ["George LeMieux"]);
+  assert.deepEqual(result.guestIds, ["george-lemieux"]);
+  assert.equal(result.guestIdentitySource, "editorial");
+  assert.equal(result.unresolvedGuestAudit, null);
 });
 
 test("exact mappings override metadata and support multiple guests", () => {
