@@ -10,7 +10,7 @@ import { CANDIDATES_DISCLAIMER, resolveCollection } from "./data/collections.js"
 import { lengthBucket, trackEvent } from "./lib/measurement.js";
 import { loadYouTubeFeed } from "./lib/youtube-feed.js";
 
-const FEATURED_CONVERSATION_VIDEO_ID = "iR4cdm9Ux3U";
+const FEATURED_CONVERSATION_VIDEO_ID = "Kx7rcDzaqDk";
 const PAGE_SIZE = 9;
 const initialParams = new URLSearchParams(location.search);
 const initialGuestQuery = initialParams.get("guest") || "";
@@ -51,9 +51,10 @@ function renderFeatured() {
     node.innerHTML = `<p>The featured conversation is temporarily unavailable. <a href="${site.youtube}" target="_blank" rel="noopener">Visit the YouTube channel</a>.</p>`;
     return;
   }
-  const url = `https://www.youtube.com/watch?v=${episode.videoId}`;
+  const url = episode.detailPath || `https://www.youtube.com/watch?v=${episode.videoId}`;
+  const external = !episode.detailPath;
   node.className = "featured-conversation";
-  node.innerHTML = `<div class="featured-conversation-media">${episodeCard({ ...episode, thumbnail: episodeThumbnailUrl(episode) })}</div><div class="featured-conversation-copy"><p class="content-label">From the archive</p><h3>${escapeHtml(episode.title)}</h3><a class="button button-gold" href="${url}" target="_blank" rel="noopener">Watch on YouTube</a></div>`;
+  node.innerHTML = `<div class="featured-conversation-media">${episodeCard({ ...episode, thumbnail: episodeThumbnailUrl(episode) })}</div><div class="featured-conversation-copy"><p class="content-label">New this week</p><h3>${escapeHtml(episode.title)}</h3><a class="button button-gold" href="${url}"${external ? ' target="_blank" rel="noopener"' : ""} data-track-event="Archive Featured Conversation" data-track-location="episodes-archive" data-track-label="${escapeHtml(episode.title)}">Explore the conversation</a></div>`;
   bindThumbnailFallbacks(node);
 }
 
