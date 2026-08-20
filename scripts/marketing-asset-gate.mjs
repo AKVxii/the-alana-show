@@ -42,9 +42,28 @@ for (const asset of assets) {
 }
 
 const broadcast = read("src/components/BroadcastReach.js");
-assert(broadcast.includes('srcset="/assets/broadcast-reach-south-florida-v2.webp"'), "Broadcast component must prefer the verified lossless WebP.");
-assert(broadcast.includes('src="/assets/broadcast-reach-south-florida.png"'), "Broadcast component must retain the approved PNG fallback.");
-assert(broadcast.includes('type="image/webp"'), "Broadcast preferred source must declare image/webp.");
+const siteData = read("src/data/site.js");
+const currentSpecial = read("src/data/current-special.js");
+const candidates = read("src/candidates-page.js");
+const candidateFallback = read("candidates/index.html");
+const press = read("press/index.html");
+
+assert(!broadcast.includes("broadcast-reach-south-florida"), "Broadcast component must not render the retired artwork with stale schedule and geographic claims.");
+assert(broadcast.includes("site.broadcast.summary"), "Broadcast component must use the centralized verified broadcast summary.");
+assert(broadcast.includes("site.broadcast.dialPositions"), "Broadcast component must use the centralized, unpaired dial-position list.");
+assert(siteData.includes('Tuesdays · 8:00 PM – 8:30 PM ET'), "Central broadcast schedule must match the current official True Oldies show page.");
+assert(siteData.includes('Tuesdays on True Oldies across South Florida, with worldwide streaming and video.'), "Central broadcast summary must retain the verified public wording.");
+
+const verifiedClaimSurfaces = [broadcast, siteData, currentSpecial, candidates, candidateFallback, press].join("\n");
+assert(!/8:00 PM\s*(?:–|-|to)\s*9:00 PM/i.test(verifiedClaimSurfaces), "Public broadcast surfaces must not retain the obsolete one-hour schedule.");
+assert(!/\b(?:five[- ]brand|5[- ]brand|16[- ]signal|South (?:and|&) Central Florida|Broward|Orlando|Miami-Dade|Martin|St\. Lucie)\b/i.test(verifiedClaimSurfaces), "Public broadcast surfaces must not publish unsupported network-size or county/region claims.");
+assert(candidates.includes("No payment is collected through Calendly."), "Candidate scheduling must state that Calendly does not collect payment.");
+assert(candidates.includes("the campaign receives Alana K. Vandeveer's W-9 and written payment instructions"), "Candidate scheduling must identify the post-request W-9 and written-payment flow.");
+assert(candidateFallback.includes("No payment is collected through Calendly."), "Candidate static fallback must preserve the no-Calendly-payment disclosure.");
+assert(candidateFallback.includes("the campaign receives Alana K. Vandeveer's W-9 and written payment instructions"), "Candidate static fallback must preserve the post-request W-9 and written-payment flow.");
+assert(candidates.includes('data-candidate-archive-status="pending"'), "Candidate archive pathway must stay pending until a verified 2026 candidate interview publishes.");
+assert(!/View Candidate Conversations|View the Candidate Series/.test(candidates + candidateFallback), "Candidate pages must not imply a published series before the first verified interview.");
+assert(candidateFallback.includes('/src/candidates-page.js?v=20260819-confirmation'), "Candidate entry script must carry the current confirmation-copy cache key.");
 
 const merchHome = read("src/components/Merchandise.js");
 const merchPage = read("merchandise/index.html");
@@ -60,6 +79,10 @@ for (const asset of assets) {
 }
 const immutableMatches = vercel.match(/public, max-age=31556952, immutable/g) || [];
 assert(immutableMatches.length >= 3, "Versioned optimized portrait + marketing assets must retain immutable caching.");
+assert(
+  vercel.includes('"source": "/src/(.*)"') && vercel.includes('"value": "public, max-age=0, must-revalidate"'),
+  "Stable source-module URLs must revalidate so editorial and thumbnail fixes reach returning visitors."
+);
 assert(!fs.existsSync(".github/workflows/marketing-assets-optimize-once.yml"), "One-time encoding workflow must not remain after verified assets are committed.");
 
 if (errors.length) {
@@ -73,3 +96,4 @@ console.log("  Broadcast: 1,915,682 -> 1,414,460 bytes (26.2% smaller, exact dec
 console.log("  Merchandise: 1,596,428 -> 1,138,264 bytes (28.7% smaller, exact decoded RGBA)");
 console.log("  PNG fallbacks + lossless WebP preference + immutable caching: OK");
 console.log("  Verified binaries pinned against silent visual changes: OK");
+console.log("  Broadcast UI uses centralized schedule, broad South Florida language and unpaired dial positions: OK");

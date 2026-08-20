@@ -23,12 +23,23 @@ export function isUsableThumbnailUrl(value = "") {
   }
 }
 
+function youtubeThumbnailUrl(videoId = "", quality = "hqdefault") {
+  const normalizedId = String(videoId).trim();
+  return /^[A-Za-z0-9_-]{11}$/.test(normalizedId)
+    ? `https://i.ytimg.com/vi/${encodeURIComponent(normalizedId)}/${quality}.jpg`
+    : "";
+}
+
 export function EpisodeThumbnail(episode = {}, { latest = false } = {}) {
-  const validThumbnail = isUsableThumbnailUrl(episode.thumbnail);
+  const derivedThumbnail = youtubeThumbnailUrl(episode.videoId);
+  const thumbnail = isUsableThumbnailUrl(episode.thumbnail) ? episode.thumbnail : derivedThumbnail;
+  const validThumbnail = isUsableThumbnailUrl(thumbnail);
+  const retryThumbnail = derivedThumbnail && derivedThumbnail !== thumbnail ? derivedThumbnail : "";
   const title = episode.title || "The Alana Show conversation";
   return `
     <span class="thumbnail-media${validThumbnail ? "" : " fallback-visible"}" data-thumbnail-frame>
-      ${validThumbnail ? `<img${latest ? " data-latest-image" : ""} src="${escapeHtml(episode.thumbnail)}" alt="Thumbnail for ${escapeHtml(title)}" loading="lazy">` : ""}
+      ${validThumbnail ? `<img${latest ? " data-latest-image" : ""} src="${escapeHtml(thumbnail)}"${retryThumbnail ? ` data-thumbnail-retry-src="${escapeHtml(retryThumbnail)}"` : ""} alt="Thumbnail for ${escapeHtml(title)}" loading="lazy" decoding="async" referrerpolicy="no-referrer">` : ""}
+      ${validThumbnail ? '<span class="thumbnail-brand" aria-hidden="true"><span>The Alana Show</span></span>' : ""}
       ${BrandedEpisodeArtwork({ compact: !latest })}
     </span>
   `;
@@ -36,6 +47,12 @@ export function EpisodeThumbnail(episode = {}, { latest = false } = {}) {
 
 export function revealThumbnailFallback(frame, image) {
   if (!frame) return;
+  const retryThumbnail = image?.dataset.thumbnailRetrySrc;
+  if (image && retryThumbnail && image.dataset.thumbnailRetryAttempted !== "true") {
+    image.dataset.thumbnailRetryAttempted = "true";
+    image.src = retryThumbnail;
+    return;
+  }
   if (image) {
     image.hidden = true;
     image.removeAttribute("src");
@@ -60,7 +77,7 @@ export function Episodes() {
               <featured-video
                 data-featured-video
                 data-initial-src="https://www.youtube-nocookie.com/embed/Kx7rcDzaqDk?rel=0"
-                data-title="Former U.S. Senator George LeMieux on The Alana Show">
+                data-title="Former U.S. Senator George LeMieux | Leadership, Public Service &amp; Florida’s Future">
                 <a href="/episodes/george-lemieux">Watch the George LeMieux conversation on The Alana Show</a>
               </featured-video>
             </div>

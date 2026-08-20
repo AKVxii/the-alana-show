@@ -23,7 +23,7 @@ for (const needle of [
   '<link rel="canonical" href="https://thealanashow.com/press">',
   '<meta name="robots" content="index,follow,max-image-preview:large">',
   'Official press and media resources for The Alana Show',
-  'Tuesdays · 8:00 PM – 9:00 PM ET',
+  'Tuesdays · 8:00 PM – 8:30 PM ET',
   'True Oldies · South Florida',
   'href="/about/">Official Host Profile</a>',
   'href="/assets/alana-show-logo.svg" download',

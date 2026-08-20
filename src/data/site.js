@@ -1,9 +1,9 @@
-export const broadcastSchedule = "Tuesdays · 8:00 PM – 9:00 PM ET";
+export const broadcastSchedule = "Tuesdays · 8:00 PM – 8:30 PM ET";
 
 export const site = {
   name: "The Alana Show",
   host: "Alana K. Vandeveer",
-  tagline: "Real Conversations. Meaningful Impact.",
+  tagline: "Real conversations. Distinct voices. Thoughtful perspective.",
   description:
     "Bold, thoughtful conversations with leaders, entrepreneurs, public servants, artists, entertainers, advocates, experts, public figures, and extraordinary people whose stories deserve to be heard.",
   email: "Alana@AlanaKVandeveer.com",
@@ -12,6 +12,14 @@ export const site = {
   trueOldies: "https://trueoldiesfla.com/on-air/the-alana-show",
   trueOldiesLive: "https://trueoldiesfla.com/",
   broadcastSchedule,
+  broadcast: {
+    station: "True Oldies",
+    market: "South Florida",
+    schedule: broadcastSchedule,
+    summary: "Tuesdays on True Oldies across South Florida, with worldwide streaming and video.",
+    dialPositions: ["95.3 FM", "95.9 FM", "96.9 FM", "106.9 FM", "104.7 HD3", "104.3 HD3"],
+    availabilityNote: "Station availability and signal reception vary by location."
+  },
   social: {
     instagram: "https://www.instagram.com/alanakvandeveer",
     x: "https://x.com/alanakvandeveer",

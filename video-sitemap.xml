@@ -1,36 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">
   <url>
-    <loc>https://thealanashow.com/episodes/scott-diament-gillian-lieberman</loc>
-    <lastmod>2026-08-12</lastmod>
-    <video:video>
-      <video:thumbnail_loc>https://i.ytimg.com/vi/NN9mSARhmIQ/maxresdefault.jpg</video:thumbnail_loc>
-      <video:title>Gillian Lieberman &amp; Scott Diament: Palm Beach Business, Luxury &amp; Leadership</video:title>
-      <video:description>Gillian Lieberman and Scott Diament join Alana K. Vandeveer on The Alana Show for a featured conversation about Palm Beach business, luxury, leadership, entrepreneurship and legacy.</video:description>
-      <video:player_loc allow_embed="yes">https://www.youtube-nocookie.com/embed/NN9mSARhmIQ</video:player_loc>
-      <video:duration>1662</video:duration>
-      <video:publication_date>2026-08-06T15:17:25Z</video:publication_date>
-    </video:video>
-  </url>
-  <url>
     <loc>https://thealanashow.com/episodes/george-lemieux</loc>
-    <lastmod>2026-08-19</lastmod>
+    <lastmod>2026-08-20</lastmod>
     <video:video>
       <video:thumbnail_loc>https://i.ytimg.com/vi/Kx7rcDzaqDk/maxresdefault.jpg</video:thumbnail_loc>
       <video:title>Former U.S. Senator George LeMieux | Leadership, Public Service &amp; Florida’s Future</video:title>
-      <video:description>Former U.S. Senator George LeMieux joins Alana K. Vandeveer for a thoughtful conversation on leadership, public service, Florida, civic responsibility, and the challenges facing our communities. From serving in the Un…</video:description>
+      <video:description>Former U.S. Senator George LeMieux joins Alana K. Vandeveer for a thoughtful conversation about principled leadership, public service, civic responsibility and Florida’s future.</video:description>
       <video:player_loc allow_embed="yes">https://www.youtube-nocookie.com/embed/Kx7rcDzaqDk</video:player_loc>
       <video:duration>1881</video:duration>
       <video:publication_date>2026-08-19T16:12:15Z</video:publication_date>
     </video:video>
   </url>
   <url>
+    <loc>https://thealanashow.com/episodes/scott-diament-gillian-lieberman</loc>
+    <lastmod>2026-08-20</lastmod>
+    <video:video>
+      <video:thumbnail_loc>https://i.ytimg.com/vi/NN9mSARhmIQ/maxresdefault.jpg</video:thumbnail_loc>
+      <video:title>Gillian Lieberman &amp; Scott Diament: Palm Beach Business, Luxury &amp; Leadership</video:title>
+      <video:description>Gillian Lieberman and Scott Diament share perspectives from Palm Beach real estate, luxury, entrepreneurship, major events and the work of building a lasting business legacy.</video:description>
+      <video:player_loc allow_embed="yes">https://www.youtube-nocookie.com/embed/NN9mSARhmIQ</video:player_loc>
+      <video:duration>1662</video:duration>
+      <video:publication_date>2026-08-06T15:17:25Z</video:publication_date>
+    </video:video>
+  </url>
+  <url>
     <loc>https://thealanashow.com/episodes/stacey-ibarra-vaughn-mitchell</loc>
-    <lastmod>2026-08-10</lastmod>
+    <lastmod>2026-08-20</lastmod>
     <video:video>
       <video:thumbnail_loc>https://i.ytimg.com/vi/iR4cdm9Ux3U/sddefault.jpg</video:thumbnail_loc>
-      <video:title>Safeguarding Yourself from Cybercrime and Fraud</video:title>
-      <video:description>Watch Stacey Ibarra and Vaughn Mitchell discuss cybercrime and fraud prevention on The Alana Show.</video:description>
+      <video:title>Scam &amp; Fraud Special: Cybercrime, Crypto Scams &amp; Protection</video:title>
+      <video:description>Deputy Chief Assistant State Attorney Stacey Ibarra and PBSO financial-crimes investigator Detective Vaughn Mitchell explain how modern scams use emotion, AI and cryptocurrency—and what victims and families can do.</video:description>
       <video:player_loc allow_embed="yes">https://www.youtube-nocookie.com/embed/iR4cdm9Ux3U</video:player_loc>
       <video:duration>2267</video:duration>
       <video:publication_date>2026-03-07T14:50:50Z</video:publication_date>
@@ -38,11 +38,11 @@
   </url>
   <url>
     <loc>https://thealanashow.com/episodes/nick-cannon</loc>
-    <lastmod>2026-08-10</lastmod>
+    <lastmod>2026-08-20</lastmod>
     <video:video>
       <video:thumbnail_loc>https://i.ytimg.com/vi/h_A5sgFQOhs/sddefault.jpg</video:thumbnail_loc>
-      <video:title>Service Beyond the Uniform with Nick Cannon</video:title>
-      <video:description>Watch Service Beyond the Uniform with Nick Cannon on The Alana Show.</video:description>
+      <video:title>Service Beyond the Uniform: Veteran Advocacy with Nick Cannon</video:title>
+      <video:description>U.S. Air Force veteran and Wounded Veterans Relief Fund operations director Nick Cannon discusses veteran advocacy, overlooked dental-care needs and how service can continue long after the uniform.</video:description>
       <video:player_loc allow_embed="yes">https://www.youtube-nocookie.com/embed/h_A5sgFQOhs</video:player_loc>
       <video:duration>1871</video:duration>
       <video:publication_date>2026-03-07T14:49:52Z</video:publication_date>
@@ -50,11 +50,11 @@
   </url>
   <url>
     <loc>https://thealanashow.com/episodes/ashley-vertuno</loc>
-    <lastmod>2026-08-10</lastmod>
+    <lastmod>2026-08-20</lastmod>
     <video:video>
       <video:thumbnail_loc>https://i.ytimg.com/vi/FfxuRlf03HY/maxresdefault.jpg</video:thumbnail_loc>
-      <video:title>Purpose-Driven Leadership with Ashley Vertuno, FACHE</video:title>
-      <video:description>Watch Purpose-Driven Leadership with Ashley Vertuno, FACHE, on The Alana Show.</video:description>
+      <video:title>Purpose-Driven Healthcare Leadership with Ashley Vertuno, FACHE</video:title>
+      <video:description>HCA Florida JFK North Hospital CEO Ashley Vertuno shares how values, culture, mentorship and disciplined decision-making shape effective healthcare leadership.</video:description>
       <video:player_loc allow_embed="yes">https://www.youtube-nocookie.com/embed/FfxuRlf03HY</video:player_loc>
       <video:duration>1815</video:duration>
       <video:publication_date>2026-03-04T18:37:13Z</video:publication_date>
@@ -62,11 +62,11 @@
   </url>
   <url>
     <loc>https://thealanashow.com/episodes/thais-glysson</loc>
-    <lastmod>2026-08-10</lastmod>
+    <lastmod>2026-08-20</lastmod>
     <video:video>
       <video:thumbnail_loc>https://i.ytimg.com/vi/fv8WM35qH2A/sddefault.jpg</video:thumbnail_loc>
-      <video:title>Fit, Fierce, and Unstoppable with Thais Glysson</video:title>
-      <video:description>Watch Fit, Fierce, and Unstoppable with Thais Glysson on The Alana Show.</video:description>
+      <video:title>Fitness After 40: Strength, Confidence &amp; Hormone-Conscious Training</video:title>
+      <video:description>Holistic fitness coach Thais Glysson shares her 40-pound transformation and a practical approach to strength, mindset and hormone-conscious training for women over 40.</video:description>
       <video:player_loc allow_embed="yes">https://www.youtube-nocookie.com/embed/fv8WM35qH2A</video:player_loc>
       <video:duration>2030</video:duration>
       <video:publication_date>2026-03-04T18:30:30Z</video:publication_date>
@@ -74,11 +74,11 @@
   </url>
   <url>
     <loc>https://thealanashow.com/episodes/celeste-ellich-bob-sutton</loc>
-    <lastmod>2026-08-10</lastmod>
+    <lastmod>2026-08-20</lastmod>
     <video:video>
       <video:thumbnail_loc>https://i.ytimg.com/vi/snHnh_fDJqk/maxresdefault.jpg</video:thumbnail_loc>
-      <video:title>Equipping the Next Generation of Leaders</video:title>
-      <video:description>Watch Celeste Ellich and Bob Sutton discuss equipping the next generation of leaders on The Alana Show.</video:description>
+      <video:title>The Candidate’s Playbook: Civic Leadership &amp; Running for Office</video:title>
+      <video:description>Navy veteran Celeste Ellich and business strategist Bob Sutton discuss civic responsibility, public-service accountability and the tools first-time candidates need to step into the arena.</video:description>
       <video:player_loc allow_embed="yes">https://www.youtube-nocookie.com/embed/snHnh_fDJqk</video:player_loc>
       <video:duration>2026</video:duration>
       <video:publication_date>2026-03-04T18:27:53Z</video:publication_date>
@@ -86,11 +86,11 @@
   </url>
   <url>
     <loc>https://thealanashow.com/episodes/johana-villafuerte-sabrina-maschue</loc>
-    <lastmod>2026-08-10</lastmod>
+    <lastmod>2026-08-20</lastmod>
     <video:video>
       <video:thumbnail_loc>https://i.ytimg.com/vi/Mi_cy88kM40/maxresdefault.jpg</video:thumbnail_loc>
-      <video:title>Reclaiming Your Power through Martial Arts</video:title>
-      <video:description>Watch Johana Villafuerte and Sabrina Maschue discuss reclaiming your power through martial arts on The Alana Show.</video:description>
+      <video:title>Reclaiming Strength Through Martial Arts</video:title>
+      <video:description>Johana Villafuerte and Sabrina Maschue of Senjutsu Martial Arts Academy explore how Muay Thai, Jiu-Jitsu and MMA can build grounding, confidence and strength after trauma.</video:description>
       <video:player_loc allow_embed="yes">https://www.youtube-nocookie.com/embed/Mi_cy88kM40</video:player_loc>
       <video:duration>2359</video:duration>
       <video:publication_date>2026-03-04T14:40:31Z</video:publication_date>
@@ -98,11 +98,11 @@
   </url>
   <url>
     <loc>https://thealanashow.com/episodes/noel-guillama-michael-castellano-mark-khachaturian</loc>
-    <lastmod>2026-08-10</lastmod>
+    <lastmod>2026-08-20</lastmod>
     <video:video>
       <video:thumbnail_loc>https://i.ytimg.com/vi/7hGs2kuAKMk/maxresdefault.jpg</video:thumbnail_loc>
-      <video:title>Reimagining Healthcare — Technology, Innovation, and the Future of Wellness</video:title>
-      <video:description>Watch Noel J. Guillama-Alvarez, Michael Castellano and Mark Khachaturian discuss technology, innovation and the future of wellness.</video:description>
+      <video:title>Reimagining Healthcare: AI, Remote Monitoring &amp; Accessible Wellness</video:title>
+      <video:description>Noel J. Guillama-Alvarez, Michael Castellano and Mark Khachaturian examine how AI, interactive video, medical devices and remote monitoring could make healthcare more connected and accessible.</video:description>
       <video:player_loc allow_embed="yes">https://www.youtube-nocookie.com/embed/7hGs2kuAKMk</video:player_loc>
       <video:duration>1904</video:duration>
       <video:publication_date>2026-03-04T14:29:13Z</video:publication_date>
@@ -110,11 +110,11 @@
   </url>
   <url>
     <loc>https://thealanashow.com/episodes/ric-bradshaw</loc>
-    <lastmod>2026-08-10</lastmod>
+    <lastmod>2026-08-20</lastmod>
     <video:video>
       <video:thumbnail_loc>https://i.ytimg.com/vi/c3Nly17ax8k/maxresdefault.jpg</video:thumbnail_loc>
-      <video:title>A Legacy of Service with Sheriff Ric Bradshaw</video:title>
-      <video:description>Watch A Legacy of Service with Sheriff Ric Bradshaw on The Alana Show.</video:description>
+      <video:title>A Legacy of Service: Sheriff Ric Bradshaw on Community-First Policing</video:title>
+      <video:description>Palm Beach County Sheriff Ric Bradshaw reflects on nearly 50 years in law enforcement, community-first policing, multi-agency collaboration and mentoring the next generation.</video:description>
       <video:player_loc allow_embed="yes">https://www.youtube-nocookie.com/embed/c3Nly17ax8k</video:player_loc>
       <video:duration>1969</video:duration>
       <video:publication_date>2026-03-04T14:08:14Z</video:publication_date>
@@ -122,11 +122,11 @@
   </url>
   <url>
     <loc>https://thealanashow.com/episodes/caden-veltkamp-steve-cisneros</loc>
-    <lastmod>2026-08-10</lastmod>
+    <lastmod>2026-08-20</lastmod>
     <video:video>
       <video:thumbnail_loc>https://i.ytimg.com/vi/gKUMivhvcao/maxresdefault.jpg</video:thumbnail_loc>
-      <video:title>Caden Veltkamp: Faith, Perseverance, and Conference USA QB of the Year</video:title>
-      <video:description>Watch Caden Veltkamp discuss faith, perseverance and earning Conference USA QB of the Year on The Alana Show.</video:description>
+      <video:title>Caden Veltkamp: Faith, Perseverance &amp; a Conference USA Breakthrough</video:title>
+      <video:description>FAU quarterback and 2024 Conference USA Offensive Player of the Year Caden Veltkamp discusses faith, mental strength and NFL goals, with perspective from veteran coach Steve Cisneros.</video:description>
       <video:player_loc allow_embed="yes">https://www.youtube-nocookie.com/embed/gKUMivhvcao</video:player_loc>
       <video:duration>1751</video:duration>
       <video:publication_date>2025-12-16T19:57:47Z</video:publication_date>
@@ -134,11 +134,11 @@
   </url>
   <url>
     <loc>https://thealanashow.com/episodes/al-cacace-michael-castellano</loc>
-    <lastmod>2026-08-10</lastmod>
+    <lastmod>2026-08-20</lastmod>
     <video:video>
       <video:thumbnail_loc>https://i.ytimg.com/vi/9JCPza2y360/maxresdefault.jpg</video:thumbnail_loc>
-      <video:title>Defending the Digital Frontier with Al Cacace and Michael Castellano</video:title>
-      <video:description>Watch Al Cacace and Michael Castellano discuss defending the digital frontier on The Alana Show.</video:description>
+      <video:title>Defending the Digital Frontier: Cybercrime, Identity Theft &amp; AI</video:title>
+      <video:description>Army veteran and cryptography specialist Al Cacace joins digital-forensics and AI strategist Michael Castellano to examine identity theft, cyber fraud and AI’s growing role in security.</video:description>
       <video:player_loc allow_embed="yes">https://www.youtube-nocookie.com/embed/9JCPza2y360</video:player_loc>
       <video:duration>1851</video:duration>
       <video:publication_date>2025-12-02T20:21:02Z</video:publication_date>
@@ -146,11 +146,11 @@
   </url>
   <url>
     <loc>https://thealanashow.com/episodes/jesse-rack</loc>
-    <lastmod>2026-08-10</lastmod>
+    <lastmod>2026-08-20</lastmod>
     <video:video>
       <video:thumbnail_loc>https://i.ytimg.com/vi/9gMEaaiFp0g/maxresdefault.jpg</video:thumbnail_loc>
-      <video:title>Crucial Advice for Every Floridian with Jesse Rack</video:title>
-      <video:description>Watch Jesse Rack share crucial advice for Florida homeowners on The Alana Show.</video:description>
+      <video:title>Protecting Your Florida Home: Generators, AC &amp; Contractor Red Flags</video:title>
+      <video:description>Rack Electric CEO Jesse Rack offers Florida homeowners practical guidance on standby generators, AC maintenance and spotting bad business practices before they become costly.</video:description>
       <video:player_loc allow_embed="yes">https://www.youtube-nocookie.com/embed/9gMEaaiFp0g</video:player_loc>
       <video:duration>1724</video:duration>
       <video:publication_date>2025-11-30T03:03:17Z</video:publication_date>
@@ -158,11 +158,11 @@
   </url>
   <url>
     <loc>https://thealanashow.com/episodes/restoration-bridge-civic-battle-against-hunger</loc>
-    <lastmod>2026-08-10</lastmod>
+    <lastmod>2026-08-20</lastmod>
     <video:video>
       <video:thumbnail_loc>https://i.ytimg.com/vi/y5dQET3O1-c/maxresdefault.jpg</video:thumbnail_loc>
-      <video:title>Restoration Bridge International — The Civic Battle Against Hunger</video:title>
-      <video:description>Watch Restoration Bridge International’s civic battle against hunger with Jason Mandle and Michael Barnett on The Alana Show.</video:description>
+      <video:title>The Civic Battle Against Hunger in Palm Beach County</video:title>
+      <video:description>RBI’s Jason Mandle and former Palm Beach County Commissioner Michael Barnett explain the logistics, partnerships and faith-driven purpose behind fighting food insecurity across the county.</video:description>
       <video:player_loc allow_embed="yes">https://www.youtube-nocookie.com/embed/y5dQET3O1-c</video:player_loc>
       <video:duration>1728</video:duration>
       <video:publication_date>2025-11-14T20:43:03Z</video:publication_date>
@@ -170,11 +170,11 @@
   </url>
   <url>
     <loc>https://thealanashow.com/episodes/michael-saldana-marvens-beauge</loc>
-    <lastmod>2026-08-10</lastmod>
+    <lastmod>2026-08-20</lastmod>
     <video:video>
       <video:thumbnail_loc>https://i.ytimg.com/vi/gde_JMgSeWY/maxresdefault.jpg</video:thumbnail_loc>
-      <video:title>From Beginner to Black Belt &amp; Pro Debut: The Brotherhood of Senjutsu MMA</video:title>
-      <video:description>Watch Michael Saldana and Marvens Beauge discuss the brotherhood of Senjutsu MMA on The Alana Show.</video:description>
+      <video:title>From Beginner to Black Belt &amp; Pro Debut: Inside Senjutsu MMA</video:title>
+      <video:description>Michael Saldana and rising pro fighter Marvens Beauge take listeners inside Senjutsu’s blend of MMA disciplines, mentorship, mental strength and community.</video:description>
       <video:player_loc allow_embed="yes">https://www.youtube-nocookie.com/embed/gde_JMgSeWY</video:player_loc>
       <video:duration>1992</video:duration>
       <video:publication_date>2025-11-03T16:33:20Z</video:publication_date>
@@ -182,11 +182,11 @@
   </url>
   <url>
     <loc>https://thealanashow.com/episodes/diana-davis</loc>
-    <lastmod>2026-08-10</lastmod>
+    <lastmod>2026-08-20</lastmod>
     <video:video>
       <video:thumbnail_loc>https://i.ytimg.com/vi/ldnVxmeLNRI/maxresdefault.jpg</video:thumbnail_loc>
-      <video:title>Activating Change: Diana Davis Fights Trafficking Through Storytelling</video:title>
-      <video:description>Watch Diana Davis discuss Movies Making A Difference and fighting trafficking through storytelling on The Alana Show.</video:description>
+      <video:title>Art as Activism: Fighting Human Trafficking Through Film</video:title>
+      <video:description>Movies Making a Difference founder Diana Davis explains how socially conscious filmmaking can expose human trafficking, rally communities and support survivors beyond the screen.</video:description>
       <video:player_loc allow_embed="yes">https://www.youtube-nocookie.com/embed/ldnVxmeLNRI</video:player_loc>
       <video:duration>1616</video:duration>
       <video:publication_date>2025-10-27T16:31:20Z</video:publication_date>
@@ -194,11 +194,11 @@
   </url>
   <url>
     <loc>https://thealanashow.com/episodes/rick-morris</loc>
-    <lastmod>2026-08-10</lastmod>
+    <lastmod>2026-08-20</lastmod>
     <video:video>
       <video:thumbnail_loc>https://i.ytimg.com/vi/sN2tg9PNvxY/maxresdefault.jpg</video:thumbnail_loc>
-      <video:title>Former WPB Deputy Chief Rick Morris on Public Safety &amp; Justice</video:title>
-      <video:description>Watch former West Palm Beach Deputy Chief Rick Morris discuss public safety and justice on The Alana Show.</video:description>
+      <video:title>Public Safety, Threat Assessment &amp; Justice with Rick Morris</video:title>
+      <video:description>Former West Palm Beach Deputy Police Chief Rick Morris draws on four decades in law enforcement to discuss investigations, threat assessment, private security and the justice system.</video:description>
       <video:player_loc allow_embed="yes">https://www.youtube-nocookie.com/embed/sN2tg9PNvxY</video:player_loc>
       <video:duration>1799</video:duration>
       <video:publication_date>2025-10-27T16:12:04Z</video:publication_date>
@@ -206,11 +206,11 @@
   </url>
   <url>
     <loc>https://thealanashow.com/episodes/josh-smith</loc>
-    <lastmod>2026-08-10</lastmod>
+    <lastmod>2026-08-20</lastmod>
     <video:video>
       <video:thumbnail_loc>https://i.ytimg.com/vi/xxIwy_H8GyA/maxresdefault.jpg</video:thumbnail_loc>
-      <video:title>Josh Smith on the Divine Path to Little Foodies</video:title>
-      <video:description>Watch Josh Smith discuss faith, purpose, Little Foodies and Made You Hungry on The Alana Show.</video:description>
+      <video:title>Faith, Food &amp; Entrepreneurship: Josh Smith’s Divine Path</video:title>
+      <video:description>Palm Beach entrepreneur Josh Smith shares how a message from God clarified his path to Made Little Foodies Florida, Made You Hungry and purpose-driven work.</video:description>
       <video:player_loc allow_embed="yes">https://www.youtube-nocookie.com/embed/xxIwy_H8GyA</video:player_loc>
       <video:duration>1645</video:duration>
       <video:publication_date>2025-10-16T12:47:30Z</video:publication_date>
@@ -218,11 +218,11 @@
   </url>
   <url>
     <loc>https://thealanashow.com/episodes/michael-castellano</loc>
-    <lastmod>2026-08-10</lastmod>
+    <lastmod>2026-08-20</lastmod>
     <video:video>
       <video:thumbnail_loc>https://i.ytimg.com/vi/LH0ARaZl1dY/maxresdefault.jpg</video:thumbnail_loc>
-      <video:title>AI, Engagement, and Entrepreneurship: The Michael Castellano Story</video:title>
-      <video:description>Watch Michael Castellano discuss AI, engagement and entrepreneurship on The Alana Show.</video:description>
+      <video:title>Human-Centered AI &amp; the Future of Customer Engagement</video:title>
+      <video:description>Engajer founder Michael Castellano explains how conversational AI, interactive video and the avatar James are reshaping sales, marketing and customer communication.</video:description>
       <video:player_loc allow_embed="yes">https://www.youtube-nocookie.com/embed/LH0ARaZl1dY</video:player_loc>
       <video:duration>1621</video:duration>
       <video:publication_date>2025-10-15T20:28:36Z</video:publication_date>
@@ -230,11 +230,11 @@
   </url>
   <url>
     <loc>https://thealanashow.com/episodes/matthew-yeandle</loc>
-    <lastmod>2026-08-10</lastmod>
+    <lastmod>2026-08-20</lastmod>
     <video:video>
       <video:thumbnail_loc>https://i.ytimg.com/vi/Ef9qLLyZY0o/maxresdefault.jpg</video:thumbnail_loc>
-      <video:title>Beauty &amp; The Lens: The Artistry of Matthew Yeandle</video:title>
-      <video:description>Watch Beauty &amp; The Lens with artist and photographer Matthew Yeandle on The Alana Show.</video:description>
+      <video:title>Beauty &amp; the Lens: Photography, Art &amp; Creative Direction</video:title>
+      <video:description>Creative director, photographer and Emmy Award-winning hair artist Matthew Yeandle discusses classic beauty, visual storytelling and building a polished creative vision across mediums.</video:description>
       <video:player_loc allow_embed="yes">https://www.youtube-nocookie.com/embed/Ef9qLLyZY0o</video:player_loc>
       <video:duration>1807</video:duration>
       <video:publication_date>2025-10-08T21:27:37Z</video:publication_date>
@@ -242,11 +242,11 @@
   </url>
   <url>
     <loc>https://thealanashow.com/episodes/john-rourke</loc>
-    <lastmod>2026-08-10</lastmod>
+    <lastmod>2026-08-20</lastmod>
     <video:video>
       <video:thumbnail_loc>https://i.ytimg.com/vi/QyFKU1ubZQE/maxresdefault.jpg</video:thumbnail_loc>
-      <video:title>John Rourke: Service Before Self | MACA &amp; We Fund the Blue</video:title>
-      <video:description>Watch John Rourke discuss service before self, MACA and We Fund the Blue on The Alana Show.</video:description>
+      <video:title>Service Before Self: Make America Clean Again &amp; We Fund the Blue</video:title>
+      <video:description>Army veteran and founder John Rourke discusses community cleanups, support for law enforcement and the military, and the service-first missions behind MACA and We Fund the Blue.</video:description>
       <video:player_loc allow_embed="yes">https://www.youtube-nocookie.com/embed/QyFKU1ubZQE</video:player_loc>
       <video:duration>2237</video:duration>
       <video:publication_date>2025-10-06T17:34:43Z</video:publication_date>
@@ -254,11 +254,11 @@
   </url>
   <url>
     <loc>https://thealanashow.com/episodes/matthew-yeandle-2</loc>
-    <lastmod>2026-08-10</lastmod>
+    <lastmod>2026-08-20</lastmod>
     <video:video>
       <video:thumbnail_loc>https://i.ytimg.com/vi/UINLMza4HPQ/maxresdefault.jpg</video:thumbnail_loc>
-      <video:title>Emmy Award-Winning Hair Stylist &amp; Published Photographer Matthew Yeandle</video:title>
-      <video:description>Watch Emmy Award-winning hair stylist and published photographer Matthew Yeandle on The Alana Show.</video:description>
+      <video:title>The Art of Transformation: Hair, Makeup &amp; Photography with Matthew Yeandle</video:title>
+      <video:description>Matthew Yeandle traces how Emmy-winning hair artistry, makeup, wig design and published photography come together across print, television, music, film and celebrity work.</video:description>
       <video:player_loc allow_embed="yes">https://www.youtube-nocookie.com/embed/UINLMza4HPQ</video:player_loc>
       <video:duration>3592</video:duration>
       <video:publication_date>2022-12-01T15:02:59Z</video:publication_date>
@@ -266,11 +266,11 @@
   </url>
   <url>
     <loc>https://thealanashow.com/episodes/michael-barnett-2022-midterms</loc>
-    <lastmod>2026-08-10</lastmod>
+    <lastmod>2026-08-20</lastmod>
     <video:video>
       <video:thumbnail_loc>https://i.ytimg.com/vi/kJWFTnWOgYM/maxresdefault.jpg</video:thumbnail_loc>
       <video:title>Chairman Michael Barnett Recaps the 2022 Midterms</video:title>
-      <video:description>Watch Michael Barnett recap the 2022 midterm elections on The Alana Show.</video:description>
+      <video:description>Palm Beach County Republican Party Chairman Michael Barnett reflects on the 2022 midterm results, grassroots organizing and the county’s changing political landscape.</video:description>
       <video:player_loc allow_embed="yes">https://www.youtube-nocookie.com/embed/kJWFTnWOgYM</video:player_loc>
       <video:duration>4742</video:duration>
       <video:publication_date>2022-11-22T15:51:11Z</video:publication_date>
@@ -278,11 +278,11 @@
   </url>
   <url>
     <loc>https://thealanashow.com/episodes/john-rourke-2</loc>
-    <lastmod>2026-08-10</lastmod>
+    <lastmod>2026-08-20</lastmod>
     <video:video>
       <video:thumbnail_loc>https://i.ytimg.com/vi/KCIFHIGvEWM/maxresdefault.jpg</video:thumbnail_loc>
-      <video:title>John Rourke | Eagle Pass, TX Border Post Clean Up</video:title>
-      <video:description>Watch John Rourke discuss Eagle Pass, border cleanup and community service on The Alana Show.</video:description>
+      <video:title>At the Border in Eagle Pass: Cleanup, Community &amp; Service</video:title>
+      <video:description>In this 2022 conversation, Army veteran and Blue Line Moving owner John Rourke shares a firsthand account from Eagle Pass and his wider work in community cleanup.</video:description>
       <video:player_loc allow_embed="yes">https://www.youtube-nocookie.com/embed/KCIFHIGvEWM</video:player_loc>
       <video:duration>7270</video:duration>
       <video:publication_date>2022-10-11T14:32:32Z</video:publication_date>
@@ -290,11 +290,11 @@
   </url>
   <url>
     <loc>https://thealanashow.com/episodes/elijah-knight</loc>
-    <lastmod>2026-08-10</lastmod>
+    <lastmod>2026-08-20</lastmod>
     <video:video>
       <video:thumbnail_loc>https://i.ytimg.com/vi/HCAlWzWTig4/maxresdefault.jpg</video:thumbnail_loc>
-      <video:title>An Active Marine Shares His Story | Elijah Knight</video:title>
-      <video:description>Watch active Marine Elijah Knight share his story on The Alana Show.</video:description>
+      <video:title>A Marine Sergeant’s Story of Service, Leadership &amp; What Comes Next</video:title>
+      <video:description>In this 2022 conversation, Marine Sergeant Elijah Knight reflects on his military experience, awards, advice and plans for the future.</video:description>
       <video:player_loc allow_embed="yes">https://www.youtube-nocookie.com/embed/HCAlWzWTig4</video:player_loc>
       <video:duration>3505</video:duration>
       <video:publication_date>2022-09-24T02:38:44Z</video:publication_date>

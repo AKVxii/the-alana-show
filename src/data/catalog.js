@@ -1,9 +1,10 @@
 import { site } from "./site.js";
+import { editorialForEpisode } from "./episode-editorial.js";
 
-// Editorial records live here only when an identity or relationship is manually
-// verified. Exact YouTube video IDs and audited guest relationships are the
-// static fallback; live YouTube metadata supplies titles, dates, descriptions,
-// thumbnails, duration, views, and topic classification whenever available.
+// Exact YouTube masters and audited identity relationships remain hand-verified
+// here. Synced editorial metadata is owned by the permanent episode pages, so
+// live YouTube data enriches the experience without becoming a single point of
+// failure for titles, summaries, dates, thumbnails, duration, or topics.
 export const topics = site.topics;
 
 const verifiedOrganizationIds = {
@@ -48,7 +49,7 @@ export const guests = [
   { id: "vaughn-mitchell", name: "Vaughn Mitchell", episodeIds: ["stacey-ibarra-vaughn-mitchell"], conversationCount: 1 }
 ];
 
-export const episodes = [
+const episodeRecords = [
   { id: "scott-diament-gillian-lieberman", videoId: "NN9mSARhmIQ", title: "Gillian Lieberman & Scott Diament: Palm Beach Business, Luxury & Leadership", guestIds: ["gillian-lieberman", "scott-diament"], detailPath: "/episodes/scott-diament-gillian-lieberman/", canonical: { title: "Gillian Lieberman & Scott Diament: Palm Beach Business, Luxury & Leadership", description: "Gillian Lieberman and Scott Diament join Alana K. Vandeveer on The Alana Show for a featured conversation about Palm Beach business, luxury, leadership, entrepreneurship and legacy.\n\nDrawing from their work across Provident Realty, Provident Jewelry and the Palm Beach Show Group, Gillian and Scott share perspectives from the worlds of real estate, luxury, entrepreneurship, major events and business in South Florida.\n\nGillian Lieberman\nDirector of Real Estate Sales Operations\nProvident Realty of South Florida, Inc.\n\nScott Diament\nSouth Florida entrepreneur, luxury jeweler and event producer; co-founder of Provident Jewelry; CEO of the Palm Beach Show Group; and Founder & Licensed Florida Broker of Provident Realty.\n\nHosted by Alana K. Vandeveer, The Alana Show brings together real conversations and distinct voices from business, leadership, public service, culture, sports, innovation and the communities shaping South Florida and beyond.\n\nThe Alana Show\nReal Conversations. Distinct Voices.", publishedAt: "2026-08-06T15:17:25Z", durationSeconds: 1662, thumbnail: "https://i.ytimg.com/vi/NN9mSARhmIQ/maxresdefault.jpg" } },
   { id: "george-lemieux", videoId: "Kx7rcDzaqDk", title: "Former U.S. Senator George LeMieux | Leadership, Public Service & Florida’s Future", guestIds: ["george-lemieux"], detailPath: "/episodes/george-lemieux/", canonical: { title: "Former U.S. Senator George LeMieux | Leadership, Public Service & Florida’s Future", description: "Former U.S. Senator George LeMieux joins Alana K. Vandeveer for a thoughtful conversation on leadership, public service, Florida, civic responsibility, and the challenges facing our communities. From serving in the United States Senate to advising leaders across the public and private sectors, Senator LeMieux shares lessons on principled leadership, decision-making, and serving with integrity. Topics include: • Leadership • Public service • Florida government • Civic engagement • Community • Policy and public affairs The Alana Show features thoughtful conversations with leaders, public servants, business professionals, innovators, and community advocates making a meaningful impact. Subscribe for future conversations and visit our website for more episodes.", publishedAt: "2026-08-19T16:12:15Z", durationSeconds: 1881, thumbnail: "https://i.ytimg.com/vi/Kx7rcDzaqDk/maxresdefault.jpg" } },
   { id: "stacey-ibarra-vaughn-mitchell", videoId: "iR4cdm9Ux3U", title: "Conversation with Stacey Ibarra & Vaughn Mitchell", guestIds: ["stacey-ibarra", "vaughn-mitchell"], detailPath: "/episodes/stacey-ibarra-vaughn-mitchell/" },
@@ -75,6 +76,21 @@ export const episodes = [
   { id: "john-rourke-2", videoId: "KCIFHIGvEWM", title: "Conversation with John Rourke", guestIds: ["john-rourke"], detailPath: "/episodes/john-rourke-2/" },
   { id: "elijah-knight", videoId: "HCAlWzWTig4", title: "Conversation with Elijah Knight", guestIds: ["elijah-knight"], detailPath: "/episodes/elijah-knight/" }
 ];
+
+export const episodes = episodeRecords
+  .map(record => {
+    const synced = editorialForEpisode(record.id) || {};
+    const canonical = { ...synced, ...(record.canonical || {}) };
+    const guestNames = record.guestIds.map(id => guestById(id)?.name).filter(Boolean);
+    return {
+      ...record,
+      ...canonical,
+      title: canonical.title || record.title,
+      guestNames,
+      canonical
+    };
+  })
+  .sort((a, b) => new Date(b.canonical?.publishedAt || 0) - new Date(a.canonical?.publishedAt || 0));
 
 export function guestById(id) {
   return guests.find(guest => guest.id === id);

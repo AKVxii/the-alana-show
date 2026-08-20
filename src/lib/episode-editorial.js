@@ -218,7 +218,7 @@ function relatedMarkup(related = []) {
   }).filter(Boolean);
 
   if (!cards.length) return "";
-  return `<section class="related-section episode-related" data-episode-related aria-labelledby="episode-related-heading"><p class="related-eyebrow"><span></span>CONTINUE WATCHING</p><h2 id="episode-related-heading">More conversations on leadership and service</h2><p class="episode-related-intro">Continue through the verified archive with conversations connected by public service, accountability, leadership, and community impact.</p><div class="related-conversation-list">${cards.join("")}</div></section>`;
+  return `<section class="related-section episode-related" data-episode-related data-episode-editorial-related aria-labelledby="episode-related-heading"><p class="related-eyebrow"><span></span>CONTINUE WATCHING</p><h2 id="episode-related-heading">More conversations on leadership and service</h2><p class="episode-related-intro">Continue through the verified archive with conversations connected by public service, accountability, leadership, and community impact.</p><div class="related-conversation-list">${cards.join("")}</div></section>`;
 }
 
 function newsletterMarkup() {
@@ -289,8 +289,11 @@ function applyContent(episode, enhancement) {
   }
 
   const guide = document.querySelector("[data-episode-guide]");
-  if (guide && enhancement.related?.length && !document.querySelector("[data-episode-related]")) {
-    guide.insertAdjacentHTML("afterend", relatedMarkup(enhancement.related));
+  if (guide && enhancement.related?.length && !document.querySelector("[data-episode-editorial-related]")) {
+    const curatedRelated = relatedMarkup(enhancement.related);
+    const existingRelated = document.querySelector("[data-episode-related]");
+    if (existingRelated) existingRelated.outerHTML = curatedRelated;
+    else guide.insertAdjacentHTML("afterend", curatedRelated);
   }
 
   const related = document.querySelector("[data-episode-related]");

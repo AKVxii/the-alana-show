@@ -12,11 +12,14 @@ export function escapeHtml(value = "") {
 
 export function formatDate(value) {
   if (!value) return "";
+  const date = new Date(value);
+  if (Number.isNaN(date.valueOf())) return "";
   return new Intl.DateTimeFormat("en-US", {
     month: "short",
     day: "numeric",
-    year: "numeric"
-  }).format(new Date(value));
+    year: "numeric",
+    timeZone: "UTC"
+  }).format(date);
 }
 
 export function formatDuration(totalSeconds = 0) {
@@ -80,8 +83,9 @@ export function nextBroadcastLabel() {
   const value = type => easternParts.find(part => part.type === type)?.value;
   const weekday = value("weekday");
   const hour = Number(value("hour"));
+  const minute = Number(value("minute"));
 
-  if (weekday === "Tue" && hour === 20) {
+  if (weekday === "Tue" && hour === 20 && minute < 30) {
     return { label: "On Air Now", live: true };
   }
 

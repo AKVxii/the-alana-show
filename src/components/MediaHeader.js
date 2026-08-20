@@ -14,6 +14,7 @@ function ensureMediaEditorialStyles() {
     { selector: 'link[data-visual-qa]', href: "/src/visual-qa-refinement.css?v=1", dataset: "visualQa" },
     { selector: 'link[data-mobile-qa-final]', href: "/src/mobile-qa-final.css?v=1", dataset: "mobileQaFinal" },
     { selector: 'link[data-archive-character]', href: "/src/archive-character.css?v=1", dataset: "archiveCharacter" },
+    { selector: 'link[data-flagship-polish]', href: "/src/flagship-polish.css?v=1", dataset: "flagshipPolish" },
     { selector: 'link[data-newsletter-styles]', href: "/src/newsletter.css?v=2", dataset: "newsletterStyles" }
   ];
 

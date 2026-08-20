@@ -5,15 +5,14 @@ import { setupEditorialMotion } from "./lib/motion.js";
 
 const app = document.querySelector("#app");
 const bookingUrl = "https://calendly.com/alana-alanakvandeveer/2026-candidate-interview";
-const candidateArchive = "/episodes/?topic=2026%20Candidates%20Special";
 
 const packageItems = [
   ["Studio Interview", "A professionally recorded 30-minute in-studio video and audio conversation with Alana K. Vandeveer."],
-  ["Radio Broadcast", "Tuesday evening broadcast placement across five station brands and 16 signals serving communities from Broward County through Orlando."],
-  ["Digital Distribution", "Publication through The Alana Show's digital channels so the conversation remains available beyond the original broadcast."]
+  ["Radio Broadcast", "Broadcast placement and airtime are confirmed separately. The Alana Show currently airs Tuesdays on True Oldies across South Florida."],
+  ["Digital Distribution", "After production, the conversation is prepared for The Alana Show's video, podcast, and web channels."]
 ];
 
-const stationBrands = ["Treasure Coast Talk Radio", "Space Coast Talk Radio", "Mega 107.1", "The Surf", "True Oldies Channel"];
+const distributionLabels = ["True Oldies", "South Florida", "Worldwide streaming", "Full video"];
 
 app.innerHTML = `${MediaHeader()}
 <main id="main-content" class="candidate-page">
@@ -25,10 +24,10 @@ app.innerHTML = `${MediaHeader()}
         <h1>Your background. Your priorities. In your own words.</h1>
         <p class="candidate-lead">The Alana Show warmly welcomes legally qualified candidates to a thoughtful, professionally produced 30-minute conversation about the communities they seek to serve.</p>
         <div class="candidate-hero-actions">
-          <a class="button button-gold" href="${bookingUrl}" target="_blank" rel="noopener">Reserve Your Interview — $1,500</a>
-          <a class="button button-ghost" href="${candidateArchive}">View Candidate Conversations</a>
+          <a class="button button-gold" href="${bookingUrl}" target="_blank" rel="noopener">Request an Interview Time — $1,500</a>
+          <a class="button button-ghost" href="#candidate-process">How Confirmation Works</a>
         </div>
-        <p class="candidate-small-note">The time selected through Calendly is the studio recording appointment. Broadcast date and air time are confirmed separately.</p>
+        <p class="candidate-small-note">A Calendly selection is a tentative studio hold. No payment is collected through Calendly. After requesting a time, the campaign receives Alana K. Vandeveer's W-9 and written payment instructions. The required payment confirmation must be completed by the stated deadline or the hold is released. Broadcast placement and airtime are confirmed separately.</p>
       </div>
 
       <aside class="candidate-package-card" data-reveal>
@@ -37,21 +36,21 @@ app.innerHTML = `${MediaHeader()}
         <p>One professionally produced interview package, offered on the same published terms to legally qualified candidates.</p>
         <dl>
           <div><dt>Recording</dt><dd>30 minutes · in studio</dd></div>
-          <div><dt>Broadcast</dt><dd>Tuesday evening · 8:00 or 8:30 PM</dd></div>
+          <div><dt>Broadcast</dt><dd>Placement confirmed separately</dd></div>
           <div><dt>Distribution</dt><dd>Radio · video · podcast · digital</dd></div>
-          <div><dt>Payment</dt><dd>Collected securely at booking</dd></div>
+          <div><dt>Confirmation</dt><dd>Written payment confirmation required</dd></div>
         </dl>
         <a class="candidate-text-link" href="${bookingUrl}" target="_blank" rel="noopener">View available recording times <span aria-hidden="true">→</span></a>
       </aside>
     </div>
   </section>
 
-  <section class="candidate-stat-band" aria-label="Candidate interview reach">
+  <section class="candidate-stat-band" aria-label="Candidate interview package">
     <div class="shell candidate-stat-grid">
       <div><strong>30</strong><span>Minute interview</span></div>
-      <div><strong>5</strong><span>Station brands</span></div>
-      <div><strong>16</strong><span>Signals on the dial</span></div>
-      <div><strong>Broward → Orlando</strong><span>South &amp; Central Florida reach</span></div>
+      <div><strong>Studio</strong><span>Video + audio</span></div>
+      <div><strong>Radio</strong><span>Placement confirmed separately</span></div>
+      <div><strong>Digital</strong><span>Video · podcast · web</span></div>
     </div>
   </section>
 
@@ -71,30 +70,30 @@ app.innerHTML = `${MediaHeader()}
   <section class="candidate-section candidate-footprint-section">
     <div class="shell candidate-footprint-grid">
       <div data-reveal>
-        <p class="eyebrow"><span></span> Broadcast footprint</p>
-        <h2>One conversation. A wider Florida audience.</h2>
-        <p>The 2026 candidate package is distributed across a five-brand, 16-signal radio footprint extending from Broward County north through Orlando, alongside The Alana Show's digital distribution.</p>
-        <div class="candidate-stations" aria-label="Station brands">${stationBrands.map(name => `<span>${name}</span>`).join("")}</div>
+        <p class="eyebrow"><span></span> Broadcast &amp; digital</p>
+        <h2>One conversation, prepared for radio and digital.</h2>
+        <p>${site.broadcast.summary} Candidate interview broadcast placement and airtime are confirmed separately.</p>
+        <div class="candidate-stations" aria-label="Distribution channels">${distributionLabels.map(name => `<span>${name}</span>`).join("")}</div>
       </div>
       <aside class="candidate-footprint-card" data-reveal>
-        <span class="candidate-card-kicker">On air</span>
-        <strong>Tuesday evenings</strong>
-        <p>Candidate interviews are scheduled for an 8:00 or 8:30 p.m. broadcast slot. Same-race candidates are offered comparable placement where practicable.</p>
+        <span class="candidate-card-kicker">Current show schedule</span>
+        <strong>Tuesdays</strong>
+        <p>${site.broadcastSchedule} on True Oldies. ${site.broadcast.availabilityNote} Candidate interview dates and times are confirmed separately.</p>
         <a class="candidate-text-link candidate-text-link-light" href="${site.trueOldies}" target="_blank" rel="noopener">The Alana Show on True Oldies <span aria-hidden="true">→</span></a>
       </aside>
     </div>
   </section>
 
-  <section class="candidate-section candidate-process-section">
+  <section class="candidate-section candidate-process-section" id="candidate-process">
     <div class="shell">
       <div class="candidate-section-heading" data-reveal>
         <p class="eyebrow dark"><span></span> What to expect</p>
-        <h2>Simple from booking to broadcast.</h2>
+        <h2>Clear from request to confirmation.</h2>
       </div>
       <ol class="candidate-process">
-        <li data-reveal><span>01</span><div><h3>Reserve &amp; pay</h3><p>Select a studio recording time through Calendly and complete the $1,500 payment at booking.</p></div></li>
-        <li data-reveal><span>02</span><div><h3>Prepare &amp; record</h3><p>Studio directions, arrival instructions, and interview preparation details are provided before recording. Please plan to arrive 15 minutes early.</p></div></li>
-        <li data-reveal><span>03</span><div><h3>Broadcast &amp; publish</h3><p>Your Tuesday broadcast date and air time are confirmed separately, followed by publication through The Alana Show's digital channels.</p></div></li>
+        <li data-reveal><span>01</span><div><h3>Request a studio time</h3><p>Select an available time through Calendly. The selection is a tentative hold, not a confirmed appointment. No payment is collected through Calendly.</p></div></li>
+        <li data-reveal><span>02</span><div><h3>Complete confirmation</h3><p>After requesting a time, the campaign receives Alana K. Vandeveer's W-9 and written payment instructions. Complete the required payment confirmation by the stated deadline or the tentative hold is released.</p></div></li>
+        <li data-reveal><span>03</span><div><h3>Prepare, record &amp; publish</h3><p>After confirmation, studio directions and preparation details are provided. Broadcast placement and airtime are confirmed separately, followed by planned publication through The Alana Show's digital channels.</p></div></li>
       </ol>
     </div>
   </section>
@@ -107,7 +106,7 @@ app.innerHTML = `${MediaHeader()}
       </div>
       <div class="candidate-standards-copy" data-reveal>
         <p>Participation is available to legally qualified candidates on the same published package price and core terms. An appearance does not constitute an endorsement by The Alana Show, Alana K. Vandeveer, or participating broadcast outlets.</p>
-        <p>Campaigns remain responsible for their own reporting and compliance obligations. A W-9 is available to the campaign treasurer for recordkeeping. Availability is based on studio scheduling and remaining broadcast inventory.</p>
+        <p>Campaigns remain responsible for their own reporting and compliance obligations. After a time is requested, the campaign receives Alana K. Vandeveer's W-9 and written payment instructions. The required payment confirmation must be completed by the stated deadline or the hold is released. Scheduling and placement remain subject to studio availability, participating-station policies, and applicable legal requirements.</p>
         <a class="candidate-text-link" href="/standards/">Read The Alana Show editorial standards <span aria-hidden="true">→</span></a>
       </div>
     </div>
@@ -116,11 +115,11 @@ app.innerHTML = `${MediaHeader()}
   <section class="candidate-section candidate-archive-section">
     <div class="shell candidate-archive-panel" data-reveal>
       <div>
-        <p class="eyebrow"><span></span> Published conversations</p>
-        <h2>Follow the 2026 Candidate Interview Series.</h2>
-        <p>As candidate conversations publish, they are collected together in The Alana Show archive for viewers, listeners, campaigns, and voters to revisit and share.</p>
+        <p class="eyebrow"><span></span> Candidate conversations</p>
+        <h2>Published interviews will be collected here.</h2>
+        <p>Candidate conversations will appear in The Alana Show archive after the first verified interview is released. Until then, this page provides package terms and scheduling information only.</p>
       </div>
-      <a class="button button-light" href="${candidateArchive}">View the Candidate Series</a>
+      <span class="candidate-small-note" data-candidate-archive-status="pending">No verified 2026 candidate interview has been published yet.</span>
     </div>
   </section>
 
@@ -129,10 +128,10 @@ app.innerHTML = `${MediaHeader()}
       <div>
         <p class="eyebrow"><span></span> Candidate scheduling</p>
         <h2>Ready to join the conversation?</h2>
-        <p>Choose an available studio time and complete your reservation in one step.</p>
+        <p>Request an available studio time. The campaign then receives Alana K. Vandeveer's W-9 and written payment instructions; required payment confirmation is due by the stated deadline.</p>
       </div>
       <div class="candidate-final-actions">
-        <a class="button button-gold" href="${bookingUrl}" target="_blank" rel="noopener">Book Your Candidate Interview</a>
+        <a class="button button-gold" href="${bookingUrl}" target="_blank" rel="noopener">Request Your Candidate Interview</a>
         <a class="candidate-contact-link" href="tel:+15614447700">Questions? 561-444-7700</a>
       </div>
     </div>

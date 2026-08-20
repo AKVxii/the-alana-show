@@ -1,6 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { spawnSync } from "node:child_process";
+import { unverifiedEditorialCopyIssue } from "../src/lib/publish-conversation-validation.js";
 
 const ROOT = process.cwd();
 const ORIGIN = "https://thealanashow.com";
@@ -89,16 +90,26 @@ if (new Set(guests.map(guest => guest.slug)).size !== guests.length) fail("Guest
 
 const verifiedVideo = await fetchVerifiedVideoMetadata(videoId);
 const guestNames = guests.map(guest => guest.name);
-const title = String(input.title || verifiedVideo?.title || `Conversation with ${guestNames.join(" & ")}`).trim();
-const description = String(input.description || verifiedVideo?.description || `Watch The Alana Show conversation with ${guestNames.join(" and ")}.`).replace(/\s+/g, " ").trim();
+const title = String(input.title || verifiedVideo?.title || "").trim();
+const explicitDescription = String(input.description || "").replace(/\s+/g, " ").trim();
+const explicitDeck = String(input.deck || "").replace(/\s+/g, " ").trim();
+if (!verifiedVideo) {
+  const copyIssue = unverifiedEditorialCopyIssue({ description: explicitDescription, deck: explicitDeck });
+  if (copyIssue) fail(`When verified YouTube metadata is unavailable, ${copyIssue}.`);
+}
+const description = String(explicitDescription || verifiedVideo?.description || `Watch The Alana Show conversation with ${guestNames.join(" and ")}.`).replace(/\s+/g, " ").trim();
+const defaultDeck = description.length > 220 ? `${description.slice(0, 217).trim()}…` : description;
+const deck = String(explicitDeck || verifiedVideo?.deck || defaultDeck).replace(/\s+/g, " ").trim();
 const publishedAt = String(input.publishedAt || verifiedVideo?.publishedAt || "").trim();
 const durationSeconds = Number(input.durationSeconds || verifiedVideo?.durationSeconds || 0);
 const thumbnail = String(input.thumbnail || verifiedVideo?.thumbnail || `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`).trim();
 const viewCount = Number(verifiedVideo?.viewCount ?? -1);
-if (!title) fail("title cannot be empty.");
+if (!title) fail("Provide an explicit editorial title when the verified YouTube feed is unavailable; generic conversation titles are not generated.");
+if (/^Conversation with\b/i.test(title)) fail("Use a specific, searchable editorial title rather than a generic ‘Conversation with…’ title.");
 if (!description) fail("description cannot be empty.");
-if (publishedAt && Number.isNaN(Date.parse(publishedAt))) fail("publishedAt must be a valid ISO-8601 date or datetime when provided.");
-if (durationSeconds && (!Number.isFinite(durationSeconds) || durationSeconds <= 0)) fail("durationSeconds must be a positive number when provided.");
+if (!deck) fail("deck cannot be empty.");
+if (!publishedAt || Number.isNaN(Date.parse(publishedAt))) fail("publishedAt is required and must be a valid ISO-8601 date or datetime; provide it when the verified YouTube feed is unavailable.");
+if (!Number.isFinite(durationSeconds) || durationSeconds <= 0) fail("durationSeconds is required and must be a positive number; provide it when the verified YouTube feed is unavailable.");
 if (!/^https:\/\//i.test(thumbnail)) fail("thumbnail must be an absolute HTTPS URL when provided.");
 
 const catalogPath = "src/data/catalog.js";
@@ -110,23 +121,24 @@ let episodeHub = read(episodeHubPath);
 let guestHub = read(guestHubPath);
 let sitemap = read(sitemapPath);
 
-function arrayBounds(source, exportName) {
-  const marker = `export const ${exportName} = [`;
-  const start = source.indexOf(marker);
-  if (start < 0) fail(`Could not find ${exportName} array in catalog.js.`);
+function arrayBounds(source, arrayName) {
+  const markers = [`export const ${arrayName} = [`, `const ${arrayName} = [`];
+  const marker = markers.find(candidate => source.includes(candidate));
+  const start = marker ? source.indexOf(marker) : -1;
+  if (start < 0) fail(`Could not find ${arrayName} array in catalog.js.`);
   const bodyStart = start + marker.length;
   const end = source.indexOf("\n];", bodyStart);
-  if (end < 0) fail(`Could not find end of ${exportName} array in catalog.js.`);
+  if (end < 0) fail(`Could not find end of ${arrayName} array in catalog.js.`);
   return { bodyStart, end, body: source.slice(bodyStart, end) };
 }
 
-function appendArrayRecord(source, exportName, record) {
-  const { end, body } = arrayBounds(source, exportName);
+function appendArrayRecord(source, arrayName, record) {
+  const { end, body } = arrayBounds(source, arrayName);
   const needsComma = Boolean(body.trim()) && !body.trimEnd().endsWith(",");
   return `${source.slice(0, end)}${needsComma ? "," : ""}\n${record}${source.slice(end)}`;
 }
 
-const episodeSection = arrayBounds(catalog, "episodes").body;
+const episodeSection = arrayBounds(catalog, "episodeRecords").body;
 if (new RegExp(`\\bid:\\s*${regexEscape(jsString(slug))}`).test(episodeSection)) fail(`Episode slug already exists: ${slug}`);
 if (new RegExp(`\\bvideoId:\\s*${regexEscape(jsString(videoId))}`).test(episodeSection)) fail(`YouTube video ID is already in the verified catalog: ${videoId}`);
 
@@ -157,8 +169,9 @@ for (const guest of guests) {
   }
 }
 
-const episodeRecord = `  { id: ${jsString(slug)}, videoId: ${jsString(videoId)}, title: ${jsString(title)}, guestIds: [${guests.map(guest => jsString(guest.slug)).join(", ")}], detailPath: ${jsString(`/episodes/${slug}/`)} },`;
-catalog = appendArrayRecord(catalog, "episodes", episodeRecord);
+const canonicalRecord = { title, deck, description, publishedAt, durationSeconds, thumbnail };
+const episodeRecord = `  { id: ${jsString(slug)}, videoId: ${jsString(videoId)}, title: ${jsString(title)}, guestIds: [${guests.map(guest => jsString(guest.slug)).join(", ")}], detailPath: ${jsString(`/episodes/${slug}/`)}, canonical: ${JSON.stringify(canonicalRecord)} },`;
+catalog = appendArrayRecord(catalog, "episodeRecords", episodeRecord);
 
 function insertCrawlLink(html, href, label) {
   if (html.includes(`href="${href}"`)) return html;
@@ -188,7 +201,7 @@ for (const guest of newGuestPages) sitemap = insertSitemapUrl(sitemap, `${ORIGIN
 const episodeCanonical = `${ORIGIN}/episodes/${slug}`;
 const episodeImage = thumbnail;
 const episodeTitle = `${title} | The Alana Show`;
-const metaDescription = description.length > 220 ? `${description.slice(0, 217).trim()}…` : description;
+const metaDescription = deck.length > 220 ? `${deck.slice(0, 217).trim()}…` : deck;
 const episodeGraph = [
   {
     "@type": "WebSite",
@@ -301,6 +314,7 @@ if (dryRun) {
 
 const snapshots = new Map([
   [catalogPath, read(catalogPath)],
+  ["src/data/episode-editorial.js", read("src/data/episode-editorial.js")],
   [episodeHubPath, read(episodeHubPath)],
   [guestHubPath, read(guestHubPath)],
   [sitemapPath, read(sitemapPath)]
@@ -343,6 +357,12 @@ try {
   if (crawlResult.status !== 0) {
     rollback();
     fail("Static crawl backfill failed. Publishing changes were rolled back.");
+  }
+
+  const editorialResult = spawnSync(process.execPath, ["scripts/sync-episode-editorial.mjs"], { cwd: ROOT, stdio: "inherit" });
+  if (editorialResult.status !== 0) {
+    rollback();
+    fail("Episode editorial sync failed. Publishing changes were rolled back.");
   }
 
   if (!skipChecks) {

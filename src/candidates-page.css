@@ -157,7 +157,7 @@
 
 .candidate-stat-grid span {
   margin-top: 9px;
-  color: var(--muted);
+  color: var(--muted-strong);
   font-size: .75rem;
   font-weight: 800;
   letter-spacing: .08em;
@@ -203,7 +203,7 @@
 }
 
 .candidate-info-card > span {
-  color: var(--gold-600);
+  color: var(--gold-700);
   font-size: .74rem;
   font-weight: 900;
   letter-spacing: .12em;
@@ -281,7 +281,7 @@
 }
 
 .candidate-process li > span {
-  color: var(--gold-600);
+  color: var(--gold-700);
   font-size: .74rem;
   font-weight: 900;
   letter-spacing: .12em;
@@ -293,7 +293,7 @@
 
 .candidate-process p {
   max-width: 850px;
-  color: var(--muted);
+  color: var(--muted-strong);
 }
 
 .candidate-standards-section {
