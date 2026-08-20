@@ -2,6 +2,7 @@ import { icon } from "../lib/icons.js";
 import { site } from "../data/site.js";
 import { setupMeasurement } from "../lib/measurement.js";
 import { setupEpisodeEngagement } from "../lib/episode-engagement.js";
+import { setupEpisodeEditorial } from "../lib/episode-editorial.js";
 import { setupConversationShare } from "../lib/share.js";
 
 function ensureMediaEditorialStyles() {
@@ -95,4 +96,5 @@ export function setupMediaNavigation() {
   document.querySelectorAll("[data-year]").forEach(node => { node.textContent = new Date().getFullYear(); });
   setupConversationShare();
   setupEpisodeEngagement();
+  setupEpisodeEditorial();
 }

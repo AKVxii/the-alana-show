@@ -38,7 +38,11 @@ for (const episode of episodes) {
   if (!html.includes('"@type":"VideoObject"')) {
     errors.push(`${file} must ship a static VideoObject from verified YouTube metadata.`);
   }
-  if (!html.includes('"@type":"SeekToAction"')) {
+  const hasSeekKeyMoments = html.includes('"@type":"SeekToAction"');
+  const hasCuratedKeyMoments = html.includes('"@type":"Clip"')
+    && html.includes('"startOffset"')
+    && html.includes('"url"');
+  if (!hasSeekKeyMoments && !hasCuratedKeyMoments) {
     errors.push(`${file} must retain static video key-moment seeking markup.`);
   }
   if (!html.includes('property="og:image:alt"') || !html.includes('name="twitter:image:alt"')) {
