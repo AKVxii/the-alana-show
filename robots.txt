@@ -1,5 +1,7 @@
 User-agent: *
 Allow: /
+Disallow: /studio-console
+Disallow: /api/youtube-studio
 
 Sitemap: https://thealanashow.com/sitemap.xml
 Sitemap: https://thealanashow.com/video-sitemap.xml
