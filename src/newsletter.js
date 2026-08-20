@@ -1,38 +1,40 @@
 import { trackEvent } from "./lib/measurement.js";
 
-export function Newsletter() {
-  return `
-    <section class="newsletter-section" id="updates" aria-labelledby="newsletter-title">
-      <div class="shell">
-        <div class="newsletter-panel">
-          <div class="newsletter-copy reveal">
-            <p class="eyebrow"><span></span> Stay in the conversation</p>
-            <h2 id="newsletter-title">New conversations, directly to your inbox.</h2>
-            <p>Occasional updates from The Alana Show with new episodes, notable guests, specials, and South Florida broadcasts.</p>
-          </div>
-
-          <form class="newsletter-form reveal reveal-delay" data-newsletter-form novalidate>
-            <div class="newsletter-fields">
-              <label class="newsletter-field">
-                <span>First name</span>
-                <input name="first_name" autocomplete="given-name" maxlength="80" placeholder="First name">
-              </label>
-              <label class="newsletter-field">
-                <span>Email *</span>
-                <input name="email" type="email" autocomplete="email" inputmode="email" required placeholder="you@example.com">
-              </label>
-            </div>
-
-            <label class="newsletter-honeypot" aria-hidden="true">Leave blank
-              <input name="company_website" tabindex="-1" autocomplete="off">
-            </label>
-
-            <button class="button button-gold newsletter-submit" type="submit">Join the list →</button>
-            <p class="newsletter-note">By subscribing, you agree to receive email updates from The Alana Show. Check your inbox to confirm your subscription. Unsubscribe anytime. Your information is never sold.</p>
-            <div class="newsletter-status" data-newsletter-status role="status" aria-live="polite"></div>
-          </form>
-        </div>
+export function Newsletter({ compact = false } = {}) {
+  const panel = `
+    <div class="newsletter-panel">
+      <div class="newsletter-copy reveal">
+        <p class="eyebrow"><span></span> Stay in the conversation</p>
+        <h2 id="newsletter-title">New conversations, directly to your inbox.</h2>
+        <p>Occasional updates from The Alana Show with new episodes, notable guests, specials, and South Florida broadcasts.</p>
       </div>
+
+      <form class="newsletter-form reveal reveal-delay" data-newsletter-form novalidate>
+        <div class="newsletter-fields">
+          <label class="newsletter-field">
+            <span>First name</span>
+            <input name="first_name" autocomplete="given-name" maxlength="80" placeholder="First name">
+          </label>
+          <label class="newsletter-field">
+            <span>Email *</span>
+            <input name="email" type="email" autocomplete="email" inputmode="email" required placeholder="you@example.com">
+          </label>
+        </div>
+
+        <label class="newsletter-honeypot" aria-hidden="true">Leave blank
+          <input name="company_website" tabindex="-1" autocomplete="off">
+        </label>
+
+        <button class="button button-gold newsletter-submit" type="submit">Join the list →</button>
+        <p class="newsletter-note">By subscribing, you agree to receive email updates from The Alana Show. Check your inbox to confirm your subscription. Unsubscribe anytime. Your information is never sold.</p>
+        <div class="newsletter-status" data-newsletter-status role="status" aria-live="polite"></div>
+      </form>
+    </div>
+  `;
+
+  return `
+    <section class="newsletter-section${compact ? " newsletter-section-compact" : ""}" id="updates" aria-labelledby="newsletter-title">
+      ${compact ? panel : `<div class="shell">${panel}</div>`}
     </section>
   `;
 }
