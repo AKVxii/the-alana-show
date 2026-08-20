@@ -1,4 +1,9 @@
+import { EpisodeThumbnail } from "../components/Episodes.js";
 import { episodeEnhancementById } from "../data/episode-enhancements.js";
+import { episodeById } from "../data/catalog.js";
+import { Newsletter, setupNewsletter } from "../newsletter.js";
+import { icon } from "./icons.js";
+import { bindThumbnailFallbacks, episodeThumbnailUrl } from "./media-page.js";
 import { escapeHtml } from "./utils.js";
 
 const EDITORIAL_GUARD = "__tasEpisodeEditorialBound";
@@ -92,9 +97,83 @@ function ensureStyles() {
       font-size: 1.02rem;
       line-height: 1.25;
     }
+    .episode-guide-intro,
+    .episode-related-intro {
+      max-width: 78ch;
+      margin: -7px 0 22px;
+      color: rgba(225, 232, 241, .8);
+      line-height: 1.72;
+    }
+    .episode-guide-list {
+      display: grid;
+      gap: 14px;
+    }
+    .episode-guide-item {
+      padding: 20px;
+      display: grid;
+      grid-template-columns: 46px minmax(0, 1fr);
+      align-items: start;
+      gap: 18px;
+      border: 1px solid rgba(216, 184, 102, .2);
+      border-radius: 14px;
+      background: linear-gradient(145deg, rgba(10, 31, 55, .8), rgba(3, 12, 25, .58));
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, .025);
+    }
+    .episode-guide-index {
+      width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      color: var(--navy-1000);
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--gold-300), var(--gold-500));
+      font-size: .72rem;
+      font-weight: 900;
+      letter-spacing: .06em;
+    }
+    .episode-guide-copy h3 {
+      margin: 0 0 8px;
+      color: var(--ivory-50);
+      font-size: clamp(1.28rem, 2vw, 1.62rem);
+      line-height: 1.18;
+    }
+    .episode-guide-copy p {
+      max-width: 82ch;
+      margin: 0;
+      color: rgba(235, 240, 247, .84);
+      line-height: 1.72;
+    }
+    .episode-guide-jump {
+      width: fit-content;
+      margin-top: 12px;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      color: var(--gold-300);
+      text-decoration: none;
+      font-size: .74rem;
+      font-weight: 800;
+      letter-spacing: .025em;
+    }
+    .episode-guide-jump:hover,
+    .episode-guide-jump:focus-visible { text-decoration: underline; text-underline-offset: 4px; }
+    .episode-guide-jump time { font-variant-numeric: tabular-nums; }
+    .episode-related .related-conversation-list { margin-top: 22px; }
+    .episode-related-card .related-conversation-copy { gap: 10px; }
+    .episode-related-description {
+      max-width: 660px;
+      color: var(--navy-700);
+      font-size: .86rem;
+      line-height: 1.58;
+    }
+    .episode-newsletter-wrap { margin-top: 10px; }
     @media (max-width: 720px) {
       .episode-chapter-list { grid-template-columns: 1fr; }
       .episode-chapter-link { min-height: 62px; }
+    }
+    @media (max-width: 560px) {
+      .episode-guide-item { grid-template-columns: 1fr; padding: 18px; }
+      .episode-guide-index { width: 36px; height: 36px; }
     }
     @media (prefers-reduced-motion: reduce) {
       .episode-chapter-link { transition: none; }
@@ -119,6 +198,31 @@ function chaptersMarkup(episode, chapters = []) {
     const href = `/episodes/${encodeURIComponent(episode)}?t=${chapter.startSeconds}`;
     return `<li><a class="episode-chapter-link" href="${href}" data-track-event="Episode Chapter" data-track-location="episode-page" data-track-label="${escapeHtml(`${timestamp} ${chapter.title}`)}" data-track-exclusive="true"><time datetime="PT${chapter.startSeconds}S">${timestamp}</time><span>${escapeHtml(chapter.title)}</span></a></li>`;
   }).join("")}</ol></section>`;
+}
+
+function guideMarkup(episode, guide = []) {
+  return `<section class="related-section episode-guide" data-episode-guide aria-labelledby="episode-guide-heading"><p class="related-eyebrow"><span></span>EPISODE GUIDE</p><h2 id="episode-guide-heading">A closer look at the conversation</h2><p class="episode-guide-intro">These concise editorial notes are grounded in the interview and link directly to the relevant moments in the full conversation.</p><div class="episode-guide-list">${guide.map((item, index) => {
+    const timestamp = formatTimestamp(item.startSeconds);
+    const href = `/episodes/${encodeURIComponent(episode)}?t=${item.startSeconds}`;
+    return `<article class="episode-guide-item"><span class="episode-guide-index" aria-hidden="true">${String(index + 1).padStart(2, "0")}</span><div class="episode-guide-copy"><h3>${escapeHtml(item.question)}</h3><p>${escapeHtml(item.answer)}</p><a class="episode-guide-jump" href="${href}" data-track-event="Episode Guide" data-track-location="episode-page" data-track-label="${escapeHtml(item.question)}" data-track-exclusive="true">Watch this part <time datetime="PT${item.startSeconds}S">${timestamp}</time> →</a></div></article>`;
+  }).join("")}</div></section>`;
+}
+
+function relatedMarkup(related = []) {
+  const cards = related.map((item, index) => {
+    const episode = episodeById(item.id);
+    if (!episode?.detailPath || !episode.videoId) return "";
+    const title = item.title || episode.title;
+    const thumbnail = episodeThumbnailUrl(episode);
+    return `<article class="related-conversation" data-reveal data-reveal-stagger="true"><a class="related-conversation-card episode-related-card" href="${episode.detailPath}" aria-label="View ${escapeHtml(title)}" data-track-event="Related Conversation" data-track-location="episode-page" data-track-label="${escapeHtml(title)}" data-track-exclusive="true"><span class="related-conversation-thumb">${EpisodeThumbnail({ ...episode, title, thumbnail })}<span class="episode-play">${icon("play")}</span></span><span class="related-conversation-copy"><span class="related-conversation-sequence">CONTINUE ${String(index + 1).padStart(2, "0")}</span><span class="related-conversation-title">${escapeHtml(title)}</span>${item.description ? `<span class="episode-related-description">${escapeHtml(item.description)}</span>` : ""}<span class="related-conversation-action">View conversation →</span></span></a></article>`;
+  }).filter(Boolean);
+
+  if (!cards.length) return "";
+  return `<section class="related-section episode-related" data-episode-related aria-labelledby="episode-related-heading"><p class="related-eyebrow"><span></span>CONTINUE WATCHING</p><h2 id="episode-related-heading">More conversations on leadership and service</h2><p class="episode-related-intro">Continue through the verified archive with conversations connected by public service, accountability, leadership, and community impact.</p><div class="related-conversation-list">${cards.join("")}</div></section>`;
+}
+
+function newsletterMarkup() {
+  return `<div class="episode-newsletter-wrap" data-episode-newsletter>${Newsletter({ compact: true })}</div>`;
 }
 
 function upsertMeta(attribute, key, content) {
@@ -178,6 +282,27 @@ function applyContent(episode, enhancement) {
   if (topics && enhancement.chapters?.length && !document.querySelector("[data-episode-chapters]")) {
     topics.insertAdjacentHTML("afterend", chaptersMarkup(episode, enhancement.chapters));
   }
+
+  const chapters = document.querySelector("[data-episode-chapters]");
+  if (chapters && enhancement.guide?.length && !document.querySelector("[data-episode-guide]")) {
+    chapters.insertAdjacentHTML("afterend", guideMarkup(episode, enhancement.guide));
+  }
+
+  const guide = document.querySelector("[data-episode-guide]");
+  if (guide && enhancement.related?.length && !document.querySelector("[data-episode-related]")) {
+    guide.insertAdjacentHTML("afterend", relatedMarkup(enhancement.related));
+  }
+
+  const related = document.querySelector("[data-episode-related]");
+  const newsletterAnchor = related || guide || chapters;
+  if (newsletterAnchor && !document.querySelector("[data-episode-newsletter]")) {
+    newsletterAnchor.insertAdjacentHTML("afterend", newsletterMarkup());
+  }
+
+  const relatedNode = document.querySelector("[data-episode-related]");
+  if (relatedNode) bindThumbnailFallbacks(relatedNode);
+  const newsletterNode = document.querySelector("[data-episode-newsletter]");
+  if (newsletterNode) setupNewsletter(newsletterNode);
 }
 
 export function setupEpisodeEditorial() {
