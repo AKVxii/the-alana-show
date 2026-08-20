@@ -44,6 +44,7 @@ jobs:
             "videoId": "A1b2C3d4E5F",
             "slug": "publishing-helper-ci-smoke-test",
             "title": "Publishing Helper CI Smoke Test",
+            "deck": "Publishing Helper Test Guest explains how a complete editorial intake protects canonical routing, searchable video metadata, and reliable archive discovery.",
             "description": "Disposable CI-only record used to verify The Alana Show publishing workflow, static video metadata, canonical routing, and discovery synchronization.",
             "publishedAt": "2026-08-10T12:00:00Z",
             "durationSeconds": 1800,
