@@ -5,6 +5,7 @@ on:
     paths:
       - "scripts/publish-conversation.mjs"
       - "scripts/publish-conversation-safe.mjs"
+      - "scripts/apply-publishing-topics.mjs"
       - "scripts/distribution-brief.mjs"
       - "scripts/sync-hub-authority.mjs"
       - "scripts/sync-sitemap-freshness.mjs"
@@ -46,6 +47,7 @@ jobs:
             "title": "Publishing Helper CI Smoke Test",
             "deck": "Publishing Helper Test Guest explains how a complete editorial intake protects canonical routing, searchable video metadata, and reliable archive discovery.",
             "description": "Disposable CI-only record used to verify The Alana Show publishing workflow, static video metadata, canonical routing, and discovery synchronization.",
+            "categories": ["Leadership"],
             "publishedAt": "2026-08-10T12:00:00Z",
             "durationSeconds": 1800,
             "thumbnail": "https://i.ytimg.com/vi/A1b2C3d4E5F/hqdefault.jpg",
@@ -68,6 +70,8 @@ jobs:
           grep -q '"uploadDate":"2026-08-10T12:00:00Z"' episodes/publishing-helper-ci-smoke-test/index.html
           grep -q '"duration":"PT30M"' episodes/publishing-helper-ci-smoke-test/index.html
           grep -q 'publishing-helper-ci-smoke-test?t={seek_to_second_number}' episodes/publishing-helper-ci-smoke-test/index.html
+          grep -q 'data-static-episode-topics' episodes/publishing-helper-ci-smoke-test/index.html
+          grep -q '>Leadership</a>' episodes/publishing-helper-ci-smoke-test/index.html
 
       - name: Verify discovery hubs and canonical sitemap stayed synchronized
         run: |
