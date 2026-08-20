@@ -85,7 +85,7 @@ for (const needle of [
   'photoApprovalRequired: true',
   'privacyStatus',
   'Potential duplicate group',
-  'Studio-only drafts',
+  'YouTube Studio drafts',
   'Thumbnail impressions and impressions click-through rate are not exposed'
 ]) {
   if (!audit.includes(needle)) errors.push(`Read-only audit safeguard is missing: ${needle}`);
