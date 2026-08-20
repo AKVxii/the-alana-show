@@ -20,7 +20,8 @@ import { lengthBucket, trackEvent } from "./lib/measurement.js";
 import { loadYouTubeFeed } from "./lib/youtube-feed.js";
 import { setupNewsletter } from "./newsletter.js";
 
-const FEATURED_CONVERSATION_VIDEO_ID = "iR4cdm9Ux3U";
+const FEATURED_CONVERSATION_VIDEO_ID = "Kx7rcDzaqDk";
+const FEATURED_CONVERSATION_PATH = "/episodes/george-lemieux";
 const app = document.querySelector("#app");
 
 app.innerHTML = `
@@ -144,33 +145,57 @@ function setupThumbnailFallbacks(root = document) {
 function updateFeatured(episode) {
   if (!episode?.videoId) return;
   const video = document.querySelector("[data-featured-video]");
-  video.src = `https://www.youtube-nocookie.com/embed/${episode.videoId}?rel=0`;
-  document.querySelector("[data-featured-title]").textContent = episode.title;
-  document.querySelector("[data-featured-description]").textContent = excerpt(episode.description, 250) || "A featured conversation from The Alana Show.";
+  if (video) video.src = `https://www.youtube-nocookie.com/embed/${episode.videoId}?rel=0`;
+  const title = document.querySelector("[data-featured-title]");
+  const description = document.querySelector("[data-featured-description]");
+  const statsNode = document.querySelector("[data-featured-stats]");
+  const link = document.querySelector("[data-featured-link]");
+  const detailPath = episode.detailPath || FEATURED_CONVERSATION_PATH;
+  if (title) title.textContent = episode.title;
+  if (description) description.textContent = excerpt(episode.description, 250) || "A featured conversation from The Alana Show.";
+  if (link) {
+    link.href = detailPath;
+    link.dataset.trackLabel = episode.title || "George LeMieux";
+  }
   const stats = [formatDate(episode.publishedAt), episode.viewCount ? `${compactNumber(episode.viewCount)} views` : ""].filter(Boolean);
-  document.querySelector("[data-featured-stats]").textContent = stats.join(" · ");
+  if (statsNode) statsNode.textContent = stats.join(" · ");
 }
 
 function updateLatest(episode) {
   if (!episode?.videoId) return;
+  const enriched = enrichEpisode(episode);
   const media = document.querySelector("[data-latest-media]");
   if (media) {
     media.innerHTML = EpisodeThumbnail({
-      ...episode,
-      thumbnail: isUsableThumbnailUrl(episode.thumbnail) ? episode.thumbnail : ""
+      ...enriched,
+      thumbnail: isUsableThumbnailUrl(enriched.thumbnail) ? enriched.thumbnail : ""
     }, { latest: true });
     setupThumbnailFallbacks(media);
   }
-  document.querySelector("[data-latest-title]").textContent = episode.title;
-  document.querySelector("[data-latest-description]").textContent = excerpt(episode.description, 145) || "A verified conversation from The Alana Show archive.";
-  document.querySelector("[data-latest-link]").href = `https://www.youtube.com/watch?v=${episode.videoId}`;
+  const title = document.querySelector("[data-latest-title]");
+  const description = document.querySelector("[data-latest-description]");
+  const link = document.querySelector("[data-latest-link]");
+  if (title) title.textContent = enriched.title;
+  if (description) description.textContent = excerpt(enriched.description, 145) || "A verified conversation from The Alana Show archive.";
+  if (link) {
+    const internal = Boolean(enriched.detailPath);
+    link.href = enriched.detailPath || `https://www.youtube.com/watch?v=${enriched.videoId}`;
+    link.dataset.trackLabel = enriched.title || "latest";
+    if (internal) {
+      link.removeAttribute("target");
+      link.removeAttribute("rel");
+    } else {
+      link.target = "_blank";
+      link.rel = "noopener";
+    }
+  }
 }
 
 async function loadYouTube() {
   try {
     const data = await loadYouTubeFeed();
     state.episodes = uniqueEpisodes(data.episodes?.length ? data.episodes : (data.recent || [])).map(enrichEpisode);
-    const featuredEpisode = data.featured || state.episodes.find(episode => episode.videoId === FEATURED_CONVERSATION_VIDEO_ID) || data.mostWatched || data.latest;
+    const featuredEpisode = state.episodes.find(episode => episode.videoId === FEATURED_CONVERSATION_VIDEO_ID) || data.featured || data.mostWatched || data.latest;
     updateFeatured(featuredEpisode);
     updateLatest(data.latest);
     renderEpisodes(data.recent || state.episodes);
