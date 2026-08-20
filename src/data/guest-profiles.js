@@ -1,13 +1,17 @@
 export const guestProfiles = {
   "george-lemieux": {
-    role: "Former U.S. Senator · Chairman of the Board of Directors, Gunster",
+    role: "Former U.S. Senator · Chairman of Gunster’s Board of Directors · Founder and Chair, LeMieux Center for Public Policy",
     organization: {
       name: "Gunster",
       url: "https://www.gunster.com/people/george-s-lemieux"
     },
-    summary: "George S. LeMieux served as Florida’s 34th United States Senator and is Chairman of Gunster’s Board of Directors; he also founded the LeMieux Center for Public Policy at Palm Beach Atlantic University.",
+    summary: "George S. LeMieux served as Florida’s 34th United States Senator in the 111th Congress and chairs Gunster’s Board of Directors. He founded and chairs the LeMieux Center for Public Policy at Palm Beach Atlantic University, which brings students and the wider community together for reasoned dialogue on public policy, leadership and civic life.",
     officialUrl: "https://www.gunster.com/people/george-s-lemieux",
-    sameAs: ["https://www.gunster.com/people/george-s-lemieux"]
+    sameAs: [
+      "https://www.gunster.com/people/george-s-lemieux",
+      "https://www.pba.edu/academics/schools/centers-of-excellence/lemieux/",
+      "https://www.pba.edu/academics/schools/centers-of-excellence/lemieux/staff/"
+    ]
   },
   "ric-bradshaw": {
     role: "Sheriff of Palm Beach County · U.S. Marine Corps veteran",
