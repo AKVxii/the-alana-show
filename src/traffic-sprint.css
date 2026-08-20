@@ -1,0 +1,118 @@
+/* Temporary editorial promotion layer for the newest conversation.
+   Kept separate so it can be removed or repurposed without disturbing the core design system. */
+.featured-conversation-actions {
+  margin-top: 15px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 9px;
+}
+
+.featured-conversation-actions .button {
+  min-height: 42px;
+  padding: 10px 17px;
+  font-size: .7rem;
+}
+
+.featured-key-moments {
+  margin: 16px 0 0;
+  padding: 14px 0 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 9px;
+  border-top: 1px solid rgba(216, 184, 102, .15);
+}
+
+.featured-key-moments a {
+  min-height: 62px;
+  padding: 11px 12px;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 10px;
+  color: #eef2f7;
+  border: 1px solid rgba(216, 184, 102, .16);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, .025);
+  text-decoration: none;
+  transition: transform .18s ease, border-color .18s ease, background .18s ease;
+}
+
+.featured-key-moments a:hover,
+.featured-key-moments a:focus-visible {
+  transform: translateY(-1px);
+  border-color: rgba(216, 184, 102, .48);
+  background: rgba(216, 184, 102, .065);
+}
+
+.featured-key-moments time {
+  color: var(--gold-300);
+  font-size: .66rem;
+  font-weight: 900;
+  letter-spacing: .04em;
+}
+
+.featured-key-moments span {
+  font-family: var(--serif);
+  font-size: .86rem;
+  line-height: 1.18;
+}
+
+.static-current-conversation {
+  padding: 23px;
+  margin: 30px 0 8px;
+  color: var(--white);
+  border: 1px solid rgba(216, 184, 102, .3);
+  border-radius: 16px;
+  background: linear-gradient(135deg, rgba(11, 29, 56, .98), rgba(3, 9, 20, .98));
+}
+
+.static-current-conversation h2 {
+  margin: 7px 0 11px;
+  font-size: clamp(1.9rem, 3.2vw, 3rem);
+}
+
+.static-current-conversation p {
+  max-width: 820px;
+  color: #c8d2df;
+}
+
+.static-current-conversation .detail-actions {
+  margin-top: 18px;
+}
+
+@media (max-width: 820px) {
+  .featured-meta {
+    align-items: start;
+    flex-direction: column;
+  }
+
+  .featured-stats {
+    white-space: normal;
+  }
+
+  .featured-key-moments {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .featured-conversation-actions .button {
+    width: 100%;
+  }
+
+  .featured-key-moments a {
+    min-height: 58px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .featured-key-moments a {
+    transition: none;
+  }
+
+  .featured-key-moments a:hover,
+  .featured-key-moments a:focus-visible {
+    transform: none;
+  }
+}
