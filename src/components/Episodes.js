@@ -24,12 +24,23 @@ export function isUsableThumbnailUrl(value = "") {
   }
 }
 
+function youtubeThumbnailUrl(videoId = "", quality = "hqdefault") {
+  const normalizedId = String(videoId).trim();
+  return /^[A-Za-z0-9_-]{11}$/.test(normalizedId)
+    ? `https://i.ytimg.com/vi/${encodeURIComponent(normalizedId)}/${quality}.jpg`
+    : "";
+}
+
 export function EpisodeThumbnail(episode = {}, { latest = false } = {}) {
-  const validThumbnail = isUsableThumbnailUrl(episode.thumbnail);
+  const derivedThumbnail = youtubeThumbnailUrl(episode.videoId);
+  const thumbnail = isUsableThumbnailUrl(episode.thumbnail) ? episode.thumbnail : derivedThumbnail;
+  const validThumbnail = isUsableThumbnailUrl(thumbnail);
+  const retryThumbnail = derivedThumbnail && derivedThumbnail !== thumbnail ? derivedThumbnail : "";
   const title = episode.title || "The Alana Show conversation";
   return `
     <span class="thumbnail-media${validThumbnail ? "" : " fallback-visible"}" data-thumbnail-frame>
-      ${validThumbnail ? `<img${latest ? " data-latest-image" : ""} src="${escapeHtml(episode.thumbnail)}" alt="Thumbnail for ${escapeHtml(title)}" loading="lazy">` : ""}
+      ${validThumbnail ? `<img${latest ? " data-latest-image" : ""} src="${escapeHtml(thumbnail)}"${retryThumbnail ? ` data-thumbnail-retry-src="${escapeHtml(retryThumbnail)}"` : ""} alt="Thumbnail for ${escapeHtml(title)}" loading="lazy" decoding="async" referrerpolicy="no-referrer">` : ""}
+      ${validThumbnail ? '<span class="thumbnail-brand" aria-hidden="true"><span>The Alana Show</span></span>' : ""}
       ${BrandedEpisodeArtwork({ compact: !latest })}
     </span>
   `;
@@ -37,6 +48,12 @@ export function EpisodeThumbnail(episode = {}, { latest = false } = {}) {
 
 export function revealThumbnailFallback(frame, image) {
   if (!frame) return;
+  const retryThumbnail = image?.dataset.thumbnailRetrySrc;
+  if (image && retryThumbnail && image.dataset.thumbnailRetryAttempted !== "true") {
+    image.dataset.thumbnailRetryAttempted = "true";
+    image.src = retryThumbnail;
+    return;
+  }
   if (image) {
     image.hidden = true;
     image.removeAttribute("src");
@@ -60,16 +77,16 @@ export function Episodes() {
             <div class="player-frame">
               <featured-video
                 data-featured-video
-                data-initial-src="https://www.youtube-nocookie.com/embed/iR4cdm9Ux3U?rel=0"
-                data-title="Featured conversation from The Alana Show">
-                <a href="https://www.youtube.com/watch?v=iR4cdm9Ux3U" target="_blank" rel="noopener">Watch the scam and fraud special on YouTube</a>
+                data-initial-src="https://www.youtube-nocookie.com/embed/Kx7rcDzaqDk?rel=0"
+                data-title="Former U.S. Senator George LeMieux | Leadership, Public Service &amp; Florida’s Future">
+                <a href="https://www.youtube.com/watch?v=Kx7rcDzaqDk" target="_blank" rel="noopener">Watch the George LeMieux conversation on YouTube</a>
               </featured-video>
             </div>
             <div class="featured-meta">
               <div>
-                <span class="content-label">Featured from the archive</span>
-                <h3 data-featured-title>Safeguarding Yourself from Cybercrime and Fraud</h3>
-                <p data-featured-description>Prosecutor Stacey Ibarra and Detective Vaughn Mitchell share practical guidance for recognizing scams, protecting personal information, and responding to cybercrime and fraud.</p>
+                <span class="content-label">Featured conversation</span>
+                <h3 data-featured-title>Former U.S. Senator George LeMieux | Leadership, Public Service &amp; Florida’s Future</h3>
+                <p data-featured-description>Former U.S. Senator George LeMieux joins Alana K. Vandeveer for a thoughtful conversation on leadership, public service, civic responsibility, and Florida’s future.</p>
               </div>
               <div class="featured-stats" data-featured-stats></div>
             </div>
@@ -85,11 +102,11 @@ export function Episodes() {
                 ${EpisodeThumbnail({}, { latest: true })}
               </div>
               <div class="latest-copy">
-                <span class="content-label">Latest conversation</span>
-                <h3 data-latest-title>The newest episode</h3>
-                <p data-latest-description>New conversations appear here automatically when they are published.</p>
+                <span class="content-label">Recent conversation</span>
+                <h3 data-latest-title>More from the archive</h3>
+                <p data-latest-description>A recent conversation selected from The Alana Show archive.</p>
                 <a class="button button-gold" data-latest-link href="${site.youtube}" target="_blank" rel="noopener">
-                  ${icon("play")} Watch latest episode
+                  ${icon("play")} Watch conversation
                 </a>
               </div>
             </article>

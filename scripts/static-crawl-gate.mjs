@@ -7,6 +7,14 @@ const catalogUrl = pathToFileURL(path.join(ROOT, "src/data/catalog.js")).href;
 const { episodes, guests } = await import(catalogUrl);
 const errors = [];
 
+const escapeHtml = value => String(value ?? "").replace(/[&<>"']/g, char => ({
+  "&": "&amp;",
+  "<": "&lt;",
+  ">": "&gt;",
+  '"': "&quot;",
+  "'": "&#039;"
+})[char]);
+
 function read(relative) {
   const absolute = path.join(ROOT, relative);
   if (!fs.existsSync(absolute)) {
@@ -76,6 +84,10 @@ for (const guest of guests) {
   for (const episodeId of guest.episodeIds || []) {
     if (!html.includes(`href="/episodes/${episodeId}"`)) {
       errors.push(`${file} must expose a direct crawlable link to episode ${episodeId}.`);
+    }
+    const episode = episodes.find(item => item.id === episodeId);
+    if (episode && !html.includes(`<a href="/episodes/${episodeId}">${escapeHtml(episode.title)}</a>`)) {
+      errors.push(`${file} must use the canonical editorial title for episode ${episodeId}.`);
     }
   }
 }

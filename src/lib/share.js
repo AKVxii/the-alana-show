@@ -44,7 +44,7 @@ function temporaryLabel(button, label) {
 export function setupConversationShare() {
   if (document.body.dataset.detailType !== "episode" || window[SHARE_GUARD]) return;
 
-  const actions = document.querySelector(".detail-actions");
+  const actions = document.querySelector("[data-episode-primary-actions]");
   const heading = document.querySelector("#episode-title");
   if (!actions || !heading) return;
 

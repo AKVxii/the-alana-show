@@ -7,7 +7,7 @@ import { setupEditorialMotion } from "./lib/motion.js";
 import { loadYouTubeFeed } from "./lib/youtube-feed.js";
 
 const topicDescriptions = {
-  "2026 Candidates Special": "Verified candidate conversations and election-focused interviews from the current special series.",
+  "2026 Candidates Special": "Scheduling information for the 2026 Candidate Interview Series. Published candidate conversations will appear here after the first verified interview is released.",
   "Leadership": "Conversations about responsibility, decision-making, service, and the people who lead through action.",
   "Community": "Local voices, organizations, and people working to strengthen the communities around them.",
   "Business": "Entrepreneurship, growth, innovation, ownership, and the lessons behind building something that lasts.",

@@ -49,17 +49,21 @@ export function relatedConversationRow(episode, index = 0) {
   </article>`;
 }
 
-export function episodeCard(episode) {
+export function episodeCard(episode, { savable = false } = {}) {
   const url = episode.detailPath || `https://www.youtube.com/watch?v=${encodeURIComponent(episode.videoId)}`;
   const external = !episode.detailPath;
-  return `<article class="media-card" data-reveal data-reveal-stagger="true">
-    <a class="media-card-image" href="${url}"${external ? ' target="_blank" rel="noopener"' : ""} aria-label="View ${escapeHtml(episode.title)}">
-      ${EpisodeThumbnail(episode)}<span class="episode-play">${icon("play")}</span>
-    </a>
+  const episodeId = episode.detailPath || episode.videoId || episode.title;
+  const destinationAttrs = `href="${url}"${external ? ' target="_blank" rel="noopener"' : ""}`;
+  const media = savable
+    ? `<div class="media-card-image">${EpisodeThumbnail(episode)}<span class="episode-play" aria-hidden="true">${icon("play")}</span></div>`
+    : `<a class="media-card-image" ${destinationAttrs} aria-label="View ${escapeHtml(episode.title)}">${EpisodeThumbnail(episode)}<span class="episode-play">${icon("play")}</span></a>`;
+  return `<article class="media-card" data-reveal data-reveal-stagger="true" data-episode-card="${escapeHtml(episodeId)}">
+    ${media}
     <div class="media-card-body">
       <p class="media-card-meta">${escapeHtml(formatDate(episode.publishedAt))}${episode.durationSeconds ? ` · ${escapeHtml(formatDuration(episode.durationSeconds))}` : ""}</p>
-      <h2><a href="${url}"${external ? ' target="_blank" rel="noopener"' : ""}>${escapeHtml(episode.title)}</a></h2>
+      <h2><a ${destinationAttrs}${savable ? ' data-episode-primary-link' : ""}>${escapeHtml(episode.title)}</a></h2>
       ${(episode.categories || []).length ? `<ul class="tag-list" aria-label="Topics">${episode.categories.map(item => `<li><a href="${topicHref(item)}">${escapeHtml(item)}</a></li>`).join("")}</ul>` : ""}
+      ${savable ? `<div class="media-card-actions"><button type="button" class="save-conversation" data-save-episode="${escapeHtml(episodeId)}" data-save-title="${escapeHtml(episode.title)}" aria-pressed="false"><span aria-hidden="true">♡</span> Save</button></div>` : ""}
     </div>
   </article>`;
 }

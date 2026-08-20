@@ -1,12 +1,13 @@
 import { MediaHeader, setupMediaNavigation } from "./components/MediaHeader.js";
 import { Footer } from "./components/Footer.js";
-import { episodeById, guestById, organizationById, enrichEpisode } from "./data/catalog.js";
+import { episodes, episodeById, guestById, organizationById, enrichEpisode } from "./data/catalog.js";
 import { topicHref } from "./data/topic-pages.js";
 import { guestProfileById } from "./data/guest-profiles.js";
-import { escapeHtml } from "./lib/utils.js";
+import { escapeHtml, formatDate } from "./lib/utils.js";
 import { bindThumbnailFallbacks, relatedConversationRow } from "./lib/media-page.js";
 import { setupEditorialMotion } from "./lib/motion.js";
 import { loadYouTubeFeed } from "./lib/youtube-feed.js";
+import "./featured-video.js";
 
 const SITE_ORIGIN = "https://thealanashow.com";
 const WEBSITE_ID = `${SITE_ORIGIN}/#website`;
@@ -160,6 +161,141 @@ function episodeGuestNames(episode) {
   return episodeGuests(episode).map(guest => guest.name);
 }
 
+function episodeDisplayData(episode) {
+  const canonical = episode?.canonical || {};
+  return {
+    ...episode,
+    ...canonical,
+    title: canonical.title || episode?.title || "The Alana Show conversation",
+    description: canonical.description || "",
+    deck: canonical.deck || canonical.metaDescription || "",
+    categories: Array.isArray(canonical.categories) ? canonical.categories.filter(Boolean) : [],
+    chapters: Array.isArray(canonical.chapters) ? canonical.chapters : []
+  };
+}
+
+function verifiedChapters(episode) {
+  const display = episodeDisplayData(episode);
+  const duration = Number(display.durationSeconds || 0);
+  const seen = new Set();
+  return display.chapters
+    .map(chapter => ({
+      startSeconds: Number(chapter?.startSeconds),
+      label: String(chapter?.label || "").trim()
+    }))
+    .filter(chapter => {
+      if (!Number.isSafeInteger(chapter.startSeconds) || chapter.startSeconds < 0 || !chapter.label) return false;
+      if (duration > 0 && chapter.startSeconds >= duration) return false;
+      if (seen.has(chapter.startSeconds)) return false;
+      seen.add(chapter.startSeconds);
+      return true;
+    })
+    .sort((a, b) => a.startSeconds - b.startSeconds);
+}
+
+function verifiedGuestReference(guest) {
+  const profile = guestProfileById(guest.id);
+  const person = {
+    "@type": "Person",
+    "@id": `${detailUrl("guest", guest.id)}#person`,
+    name: guest.name,
+    url: detailUrl("guest", guest.id)
+  };
+  if (profile?.role) person.jobTitle = profile.role;
+  if (profile?.organization) {
+    person.worksFor = {
+      "@type": "Organization",
+      name: profile.organization.name,
+      url: profile.organization.url
+    };
+  }
+  return person;
+}
+
+function episodeClipSchemas(episode, canonical) {
+  const display = episodeDisplayData(episode);
+  const chapters = verifiedChapters(display);
+  const duration = Number(display.durationSeconds || 0);
+  return chapters.map((chapter, index) => {
+    const nextStart = chapters[index + 1]?.startSeconds;
+    const endOffset = Number.isSafeInteger(nextStart) ? nextStart : duration;
+    return {
+      "@type": "Clip",
+      name: chapter.label,
+      startOffset: chapter.startSeconds,
+      ...(endOffset > chapter.startSeconds ? { endOffset } : {}),
+      url: chapter.startSeconds ? `${canonical}?t=${chapter.startSeconds}` : canonical
+    };
+  });
+}
+
+function episodeVideoObject(episode, data) {
+  const display = { ...episodeDisplayData(episode), ...data };
+  const canonical = detailUrl("episode", episode.id);
+  const uploadDate = display.publishedAt || "";
+  if (!uploadDate) return null;
+  const thumbnailUrl = display.thumbnail || display.thumbnailUrl || `https://i.ytimg.com/vi/${episode.videoId}/maxresdefault.jpg`;
+  const duration = isoDuration(display.durationSeconds);
+  const relatedGuests = episodeGuests(episode);
+  const relatedOrganizations = (episode.organizationIds || []).map(organizationById).filter(Boolean);
+  const videoObject = {
+    "@type": "VideoObject",
+    "@id": `${canonical}#video`,
+    name: display.title,
+    description: (display.description || display.deck || `Watch ${display.title} on The Alana Show.`).replace(/\s+/g, " ").trim(),
+    thumbnailUrl: [thumbnailUrl],
+    uploadDate,
+    embedUrl: `https://www.youtube-nocookie.com/embed/${episode.videoId}`,
+    url: canonical,
+    mainEntityOfPage: { "@id": `${canonical}#webpage` },
+    isPartOf: { "@id": SHOW_ID },
+    potentialAction: {
+      "@type": "SeekToAction",
+      target: `${canonical}?t={seek_to_second_number}`,
+      "startOffset-input": "required name=seek_to_second_number"
+    },
+    about: relatedGuests.map(verifiedGuestReference)
+  };
+  const clips = episodeClipSchemas(display, canonical);
+  if (clips.length) videoObject.hasPart = clips;
+  if (relatedOrganizations.length) {
+    videoObject.mentions = relatedOrganizations.map(organization => ({
+      "@type": "Organization",
+      name: organization.name
+    }));
+  }
+  if (duration) videoObject.duration = duration;
+  if (Number.isFinite(Number(display.viewCount)) && Number(display.viewCount) >= 0) {
+    videoObject.interactionStatistic = {
+      "@type": "InteractionCounter",
+      interactionType: { "@type": "WatchAction" },
+      userInteractionCount: Number(display.viewCount)
+    };
+  }
+  return videoObject;
+}
+
+function relatedEpisodesFor(episode) {
+  const display = episodeDisplayData(episode);
+  const guestIds = new Set(episode.guestIds || []);
+  const organizationIds = new Set(episode.organizationIds || []);
+  const categories = new Set(display.categories || []);
+  return episodes
+    .filter(candidate => candidate.id !== episode.id)
+    .map(candidate => {
+      const candidateDisplay = episodeDisplayData(candidate);
+      const sharedGuests = (candidate.guestIds || []).filter(guestId => guestIds.has(guestId)).length;
+      const sharedOrganizations = (candidate.organizationIds || []).filter(organizationId => organizationIds.has(organizationId)).length;
+      const sharedCategories = (candidateDisplay.categories || []).filter(category => categories.has(category)).length;
+      const score = sharedGuests * 12 + sharedOrganizations * 8 + sharedCategories * 2;
+      return { episode: candidateDisplay, score, publishedAt: Date.parse(candidateDisplay.publishedAt || "") || 0 };
+    })
+    .filter(candidate => candidate.score > 0)
+    .sort((a, b) => b.score - a.score || b.publishedAt - a.publishedAt || a.episode.title.localeCompare(b.episode.title))
+    .slice(0, 3)
+    .map(candidate => candidate.episode);
+}
+
 function websiteSchema() {
   return {
     "@type": "WebSite",
@@ -196,21 +332,26 @@ function breadcrumbSchema(detailType, currentName, canonical) {
 function applyStaticMetadata(detailType, detailItem) {
   const canonical = detailUrl(detailType, detailItem.id);
   const isEpisode = detailType === "episode";
+  const episodeDisplay = isEpisode ? episodeDisplayData(detailItem) : null;
   const guestProfile = !isEpisode ? guestProfileById(detailItem.id) : null;
   const guestNames = isEpisode ? episodeGuestNames(detailItem) : [];
   const generatedPageTitle = isEpisode
-    ? `${detailItem.title} | The Alana Show`
+    ? `${episodeDisplay.title} | The Alana Show`
     : `${detailItem.name} | Guest | The Alana Show`;
   const generatedDescription = isEpisode
-    ? `Watch The Alana Show conversation${guestNames.length ? ` with ${guestNames.join(" & ")}` : ""}.`
+    ? episodeDisplay.deck || episodeDisplay.metaDescription || `Watch The Alana Show conversation${guestNames.length ? ` with ${guestNames.join(" & ")}` : ""}.`
     : `Explore verified conversations featuring ${detailItem.name} on The Alana Show.`;
-  const generatedImage = isEpisode ? `https://i.ytimg.com/vi/${detailItem.videoId}/maxresdefault.jpg` : DEFAULT_SOCIAL_IMAGE;
-  const pageTitle = document.title.trim() || generatedPageTitle;
-  const description = guestProfile?.summary || document.head.querySelector('meta[name="description"]')?.content?.trim() || generatedDescription;
-  const image = document.head.querySelector('meta[property="og:image"]')?.content?.trim()
+  const generatedImage = isEpisode
+    ? episodeDisplay.thumbnail || `https://i.ytimg.com/vi/${detailItem.videoId}/maxresdefault.jpg`
+    : DEFAULT_SOCIAL_IMAGE;
+  const pageTitle = isEpisode ? generatedPageTitle : (document.title.trim() || generatedPageTitle);
+  const description = isEpisode
+    ? generatedDescription
+    : guestProfile?.summary || document.head.querySelector('meta[name="description"]')?.content?.trim() || generatedDescription;
+  const image = (isEpisode ? generatedImage : "") || document.head.querySelector('meta[property="og:image"]')?.content?.trim()
     || document.head.querySelector('meta[name="twitter:image"]')?.content?.trim()
     || generatedImage;
-  const currentName = isEpisode ? detailItem.title : detailItem.name;
+  const currentName = isEpisode ? episodeDisplay.title : detailItem.name;
 
   document.title = pageTitle;
   upsertCanonical(canonical);
@@ -222,10 +363,12 @@ function applyStaticMetadata(detailType, detailItem) {
   upsertMeta("property", "og:type", isEpisode ? "video.other" : "profile");
   upsertMeta("property", "og:url", canonical);
   upsertMeta("property", "og:image", image);
+  upsertMeta("property", "og:image:alt", isEpisode ? episodeDisplay.title : `${detailItem.name} on The Alana Show`);
   upsertMeta("name", "twitter:card", "summary_large_image");
   upsertMeta("name", "twitter:title", pageTitle);
   upsertMeta("name", "twitter:description", description);
   upsertMeta("name", "twitter:image", image);
+  upsertMeta("name", "twitter:image:alt", isEpisode ? episodeDisplay.title : `${detailItem.name} on The Alana Show`);
 
   const graph = [
     websiteSchema(),
@@ -241,6 +384,16 @@ function applyStaticMetadata(detailType, detailItem) {
     },
     breadcrumbSchema(detailType, currentName, canonical)
   ];
+
+  if (isEpisode) {
+    graph[2].primaryImageOfPage = { "@type": "ImageObject", url: image };
+    if (episodeDisplay.publishedAt) graph[2].datePublished = episodeDisplay.publishedAt;
+    const videoObject = episodeVideoObject(detailItem, episodeDisplay);
+    if (videoObject) {
+      graph.push(videoObject);
+      graph[2].mainEntity = { "@id": `${canonical}#video` };
+    }
+  }
 
   if (!isEpisode) {
     graph[2].mainEntity = { "@id": `${canonical}#person` };
@@ -275,25 +428,25 @@ function applyStaticMetadata(detailType, detailItem) {
 }
 
 function applyLiveEpisodeMetadata(episode, enriched) {
+  const display = { ...episodeDisplayData(episode), ...enriched };
   const canonical = detailUrl("episode", episode.id);
-  const title = enriched.title || episode.title;
+  const title = display.title;
   const pageTitle = `${title} | The Alana Show`;
-  const description = (enriched.description || `Watch ${title} on The Alana Show.`).replace(/\s+/g, " ").trim();
-  const conciseDescription = description.length > 220 ? `${description.slice(0, 217).trim()}…` : description;
-  const thumbnailUrl = enriched.thumbnail || enriched.thumbnailUrl || `https://i.ytimg.com/vi/${episode.videoId}/maxresdefault.jpg`;
-  const uploadDate = enriched.publishedAt || "";
-  const duration = isoDuration(enriched.durationSeconds);
-  const relatedGuests = episodeGuests(episode);
-  const relatedOrganizations = (episode.organizationIds || []).map(organizationById).filter(Boolean);
+  const description = (display.description || display.deck || `Watch ${title} on The Alana Show.`).replace(/\s+/g, " ").trim();
+  const conciseDescription = display.deck || display.metaDescription || (description.length > 220 ? `${description.slice(0, 217).trim()}…` : description);
+  const thumbnailUrl = display.thumbnail || display.thumbnailUrl || `https://i.ytimg.com/vi/${episode.videoId}/maxresdefault.jpg`;
+  const uploadDate = display.publishedAt || "";
 
   document.title = pageTitle;
   upsertMeta("name", "description", conciseDescription);
   upsertMeta("property", "og:title", pageTitle);
   upsertMeta("property", "og:description", conciseDescription);
   upsertMeta("property", "og:image", thumbnailUrl);
+  upsertMeta("property", "og:image:alt", title);
   upsertMeta("name", "twitter:title", pageTitle);
   upsertMeta("name", "twitter:description", conciseDescription);
   upsertMeta("name", "twitter:image", thumbnailUrl);
+  upsertMeta("name", "twitter:image:alt", title);
 
   const graph = [
     websiteSchema(),
@@ -311,45 +464,9 @@ function applyLiveEpisodeMetadata(episode, enriched) {
     breadcrumbSchema("episode", title, canonical)
   ];
 
-  if (uploadDate) {
+  const videoObject = episodeVideoObject(episode, display);
+  if (videoObject) {
     graph[2].datePublished = uploadDate;
-    const videoObject = {
-      "@type": "VideoObject",
-      "@id": `${canonical}#video`,
-      name: title,
-      description,
-      thumbnailUrl: [thumbnailUrl],
-      uploadDate,
-      embedUrl: `https://www.youtube-nocookie.com/embed/${episode.videoId}`,
-      url: canonical,
-      mainEntityOfPage: { "@id": `${canonical}#webpage` },
-      isPartOf: { "@id": SHOW_ID },
-      potentialAction: {
-        "@type": "SeekToAction",
-        target: `${canonical}?t={seek_to_second_number}`,
-        "startOffset-input": "required name=seek_to_second_number"
-      },
-      about: relatedGuests.map(guest => ({
-        "@type": "Person",
-        "@id": `${detailUrl("guest", guest.id)}#person`,
-        name: guest.name,
-        url: detailUrl("guest", guest.id)
-      }))
-    };
-    if (relatedOrganizations.length) {
-      videoObject.mentions = relatedOrganizations.map(organization => ({
-        "@type": "Organization",
-        name: organization.name
-      }));
-    }
-    if (duration) videoObject.duration = duration;
-    if (Number.isFinite(Number(enriched.viewCount)) && Number(enriched.viewCount) >= 0) {
-      videoObject.interactionStatistic = {
-        "@type": "InteractionCounter",
-        interactionType: { "@type": "WatchAction" },
-        userInteractionCount: Number(enriched.viewCount)
-      };
-    }
     graph.push(videoObject);
     graph[2].mainEntity = { "@id": `${canonical}#video` };
   }
@@ -374,26 +491,83 @@ function formatDuration(seconds = 0) {
   return hours ? `${hours}:${String(minutes).padStart(2, "0")}:${String(secs).padStart(2, "0")}` : `${minutes}:${String(secs).padStart(2, "0")}`;
 }
 
-function formatDate(value = "") {
-  if (!value) return "";
-  const date = new Date(value);
-  return Number.isNaN(date.valueOf()) ? "" : new Intl.DateTimeFormat("en-US", { year: "numeric", month: "long", day: "numeric" }).format(date);
+function formatTimecode(seconds = 0) {
+  const total = Math.max(0, Number(seconds) || 0);
+  const hours = Math.floor(total / 3600);
+  const minutes = Math.floor((total % 3600) / 60);
+  const secs = Math.floor(total % 60);
+  return hours
+    ? `${hours}:${String(minutes).padStart(2, "0")}:${String(secs).padStart(2, "0")}`
+    : `${minutes}:${String(secs).padStart(2, "0")}`;
+}
+
+function episodeOverviewMarkup(episode) {
+  const display = episodeDisplayData(episode);
+  const overview = display.deck || display.metaDescription || display.description;
+  if (!overview) return "";
+  return `<section class="related-section episode-overview" aria-labelledby="summary-heading" data-episode-overview><p class="related-eyebrow"><span></span>ABOUT THIS CONVERSATION</p><h2 id="summary-heading">Episode overview</h2><p>${escapeHtml(overview)}</p></section>`;
+}
+
+function episodeTopicsMarkup(episode) {
+  const categories = episodeDisplayData(episode).categories;
+  if (!categories.length) return "";
+  return `<section class="related-section episode-topics" aria-labelledby="topics-heading" data-episode-topics><p class="related-eyebrow"><span></span>EXPLORE MORE</p><h2 id="topics-heading">Topics</h2><div class="episode-topic-links">${categories.map(category => `<a href="${topicHref(category)}">${escapeHtml(category)}</a>`).join("")}</div></section>`;
+}
+
+function episodeGuestCredentialsMarkup(episode) {
+  const guestProfiles = episodeGuests(episode).map(guest => ({ guest, profile: guestProfileById(guest.id) }));
+  if (!guestProfiles.length) return "";
+  const heading = guestProfiles.length === 1 ? "About the guest" : "About the guests";
+  return `<section class="related-section episode-guests" aria-labelledby="episode-guests-heading" data-episode-guests><p class="related-eyebrow"><span></span>GUEST${guestProfiles.length === 1 ? "" : "S"} IN THIS CONVERSATION</p><h2 id="episode-guests-heading">${heading}</h2><div class="episode-guest-grid">${guestProfiles.map(({ guest, profile }) => {
+    const initials = guest.name.split(/\s+/).map(part => part[0]).slice(0, 2).join("");
+    const hasVerifiedProfile = Boolean(profile?.role && profile?.summary);
+    const officialLink = hasVerifiedProfile && profile.officialUrl
+      ? `<a class="episode-guest-source" href="${escapeHtml(profile.officialUrl)}" target="_blank" rel="noopener">Verified official profile →</a>`
+      : "";
+    const verifiedDetails = hasVerifiedProfile
+      ? `<p class="episode-guest-role">${escapeHtml(profile.role)}</p><p>${escapeHtml(profile.summary)}</p>${officialLink}`
+      : "";
+    return `<article class="episode-guest-profile${hasVerifiedProfile ? "" : " episode-guest-profile-name-only"}"><div class="guest-monogram" aria-hidden="true">${escapeHtml(initials)}</div><div><h3><a href="/guests/${guest.id}">${escapeHtml(guest.name)}</a></h3>${verifiedDetails}</div></article>`;
+  }).join("")}</div></section>`;
+}
+
+function episodeChaptersMarkup(episode) {
+  const chapters = verifiedChapters(episode);
+  if (!chapters.length) return "";
+  const canonicalPath = `/episodes/${episode.id}/`;
+  return `<section class="related-section episode-chapters" aria-labelledby="chapters-heading" data-episode-chapters><p class="related-eyebrow"><span></span>KEY MOMENTS</p><h2 id="chapters-heading">Chapters</h2><ol class="episode-chapter-list">${chapters.map(chapter => {
+    const href = chapter.startSeconds ? `${canonicalPath}?t=${chapter.startSeconds}` : canonicalPath;
+    return `<li><a href="${href}"><time datetime="PT${chapter.startSeconds}S">${formatTimecode(chapter.startSeconds)}</time><span>${escapeHtml(chapter.label)}</span></a></li>`;
+  }).join("")}</ol></section>`;
+}
+
+function episodeRelatedMarkup(episode) {
+  const related = relatedEpisodesFor(episode);
+  if (!related.length) return "";
+  return `<section class="related-section episode-related" aria-labelledby="episode-related-heading" data-episode-related><p class="related-eyebrow"><span></span>CONTINUE WATCHING</p><h2 id="episode-related-heading">Related conversations</h2><div class="related-conversation-list">${related.map(relatedConversationRow).join("")}</div></section>`;
 }
 
 function episodeDetail(episode) {
+  const display = episodeDisplayData(episode);
   const relatedGuests = episode.guestIds.map(guestById).filter(Boolean);
   const relatedOrganizations = (episode.organizationIds || []).map(organizationById).filter(Boolean);
   const guestLinks = relatedGuests.map(guest => `<a href="/guests/${guest.id}">${escapeHtml(guest.name)}</a>`).join(" and ");
+  const date = formatDate(display.publishedAt);
+  const duration = formatDuration(display.durationSeconds);
+  const metaParts = [date, duration].filter(Boolean);
   const startSeconds = requestedStartSeconds();
   const startParam = startSeconds ? `&start=${startSeconds}` : "";
-  return `<section class="detail-hero"><div class="shell detail-shell">${breadcrumbs(episode.title)}<p class="eyebrow"><span></span> Episode</p><h1 id="episode-title">${escapeHtml(episode.title)}</h1>
+  const canonicalShareUrl = `${detailUrl("episode", episode.id)}${startSeconds ? `?t=${startSeconds}` : ""}`;
+  return `<section class="detail-hero"><div class="shell detail-shell">${breadcrumbs(display.title)}<p class="eyebrow"><span></span> Episode</p><h1 id="episode-title">${escapeHtml(display.title)}</h1>
     ${guestLinks ? `<p class="detail-byline">A conversation with ${guestLinks}</p>` : ""}
-    <p class="detail-byline" id="episode-meta" hidden></p>
-    ${relatedOrganizations.length ? `<p class="detail-byline">Organization named in this conversation: ${relatedOrganizations.map(organization => escapeHtml(organization.name)).join(", ")}</p>` : ""}
-    <div class="video-frame"><iframe src="https://www.youtube-nocookie.com/embed/${encodeURIComponent(episode.videoId)}?rel=0${startParam}" title="${escapeHtml(episode.title)}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>
-    <div id="episode-summary"></div>
-    <div id="episode-topics"></div>
-    <div class="detail-actions"><a class="button button-gold" href="https://www.youtube.com/watch?v=${encodeURIComponent(episode.videoId)}" target="_blank" rel="noopener">Watch on YouTube</a><a class="button button-outline" href="/episodes">More conversations</a><a class="button button-outline" href="mailto:?subject=${encodeURIComponent(episode.title)}&body=${encodeURIComponent(location.href)}">Share by email</a></div>
+    <p class="detail-byline episode-meta" id="episode-meta"${metaParts.length ? "" : " hidden"}>${escapeHtml(metaParts.join(" · "))}</p>
+    ${relatedOrganizations.length ? `<p class="detail-byline episode-organization">Featured organization: ${relatedOrganizations.map(organization => escapeHtml(organization.name)).join(", ")}</p>` : ""}
+    <div class="video-frame"><featured-video data-context="episode" data-initial-src="https://www.youtube-nocookie.com/embed/${encodeURIComponent(episode.videoId)}?rel=0${startParam}" data-title="${escapeHtml(display.title)}"><a href="https://www.youtube.com/watch?v=${encodeURIComponent(episode.videoId)}" target="_blank" rel="noopener">Watch ${escapeHtml(display.title)} on YouTube</a></featured-video></div>
+    <div class="detail-actions episode-primary-actions" data-episode-primary-actions><a class="button button-gold" href="https://www.youtube.com/watch?v=${encodeURIComponent(episode.videoId)}" target="_blank" rel="noopener">Watch on YouTube</a><a class="button button-outline" href="mailto:?subject=${encodeURIComponent(display.title)}&body=${encodeURIComponent(canonicalShareUrl)}">Share by email</a><a class="button button-outline" href="/episodes">All conversations</a></div>
+    <div class="episode-content-grid"><div id="episode-summary">${episodeOverviewMarkup(episode)}</div><div id="episode-topics">${episodeTopicsMarkup(episode)}</div></div>
+    ${episodeGuestCredentialsMarkup(episode)}
+    ${episodeChaptersMarkup(episode)}
+    ${episodeRelatedMarkup(episode)}
   </div></section>`;
 }
 
@@ -430,25 +604,8 @@ async function hydrateEpisode(episode) {
       metaNode.textContent = metaParts.join(" · ");
       metaNode.hidden = false;
     }
-
-    const summaryNode = document.querySelector("#episode-summary");
-    if (summaryNode && enriched.description) {
-      const canonicalOverview = Boolean(episode.canonical?.description);
-      const summary = canonicalOverview
-        ? enriched.description
-        : (enriched.description.length > 420 ? `${enriched.description.slice(0, 417).trim()}…` : enriched.description);
-      const summaryMarkup = canonicalOverview
-        ? summary.split(/\n\s*\n/).map(paragraph => `<p>${escapeHtml(paragraph).replace(/\n/g, "<br>")}</p>`).join("")
-        : `<p>${escapeHtml(summary)}</p>`;
-      summaryNode.innerHTML = `<section class="related-section" aria-labelledby="summary-heading"><p class="related-eyebrow"><span></span>ABOUT THIS CONVERSATION</p><h2 id="summary-heading">Episode overview</h2>${summaryMarkup}</section>`;
-    }
-
-    const topicNode = document.querySelector("#episode-topics");
-    if (topicNode && enriched.categories?.length) {
-      topicNode.innerHTML = `<section class="related-section" aria-labelledby="topics-heading"><p class="related-eyebrow"><span></span>EXPLORE MORE</p><h2 id="topics-heading">Topics</h2><div class="detail-actions">${enriched.categories.map(category => `<a class="button button-outline" href="${topicHref(category)}">${escapeHtml(category)}</a>`).join("")}</div></section>`;
-    }
   } catch {
-    // Static verified episode data keeps the page useful if the live feed is unavailable.
+    // Canonical editorial data keeps the page complete if the live feed is unavailable.
   }
 }
 

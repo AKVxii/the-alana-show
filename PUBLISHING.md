@@ -29,10 +29,11 @@ Fill in:
 - `videoId` — required 11-character YouTube video ID.
 - `slug` — permanent lowercase episode URL slug, such as `jane-doe-community-leadership`.
 - `guests` — one or more verified guest names. Reuse the existing guest slug when the guest has appeared before.
-- `title` — optional editorial override. When omitted, the helper attempts to use the current title from The Alana Show's verified YouTube feed.
-- `description` — optional editorial override. When omitted, the helper attempts to use the current YouTube description.
-- `publishedAt` — optional ISO-8601 publication date/datetime fallback. Normally the helper receives this from the verified YouTube feed.
-- `durationSeconds` — optional positive-number fallback. Normally the helper receives this from the verified YouTube feed.
+- `title` — a specific, searchable editorial title. The verified YouTube title may supply it, but the publisher rejects generic “Conversation with…” fallbacks.
+- `deck` — a concise, specific editorial summary. It may be omitted only when verified YouTube metadata is available; otherwise provide an explicit substantive deck of at least 60 characters.
+- `description` — a factual episode overview. It may be omitted only when verified YouTube metadata is available; otherwise provide an explicit substantive description of at least 80 characters. Generic “watch this conversation” boilerplate is rejected.
+- `publishedAt` — required from either the verified feed or an ISO-8601 intake fallback.
+- `durationSeconds` — required from either the verified feed or a positive-number intake fallback.
 - `thumbnail` — optional absolute HTTPS thumbnail fallback. Normally the helper receives this from the verified YouTube feed.
 
 For multiple guests, add another object to the `guests` array.
@@ -52,9 +53,9 @@ That endpoint is the site's existing verified-channel feed. When the supplied vi
 - duration;
 - current view count.
 
-User-supplied intake values remain editorial overrides. If the network/feed is temporarily unavailable, the helper still works with the supplied intake values and its existing safe fallbacks.
+User-supplied intake values remain editorial overrides. If the network/feed is temporarily unavailable, the helper requires intake values for the editorial title, substantive deck and description, publication timestamp, and duration so a thin or generic permanent record cannot be published.
 
-When a publication timestamp is available, the generated permanent episode HTML includes static `VideoObject` structured data with the required title, thumbnail and upload date plus duration when available. It also includes `SeekToAction`, allowing Google-compatible timestamp URLs such as:
+Every generated permanent episode HTML page includes static `VideoObject` structured data with the required title, thumbnail, upload date, and duration. It also includes `SeekToAction`, allowing Google-compatible timestamp URLs such as:
 
 `/episodes/example?t=120`
 

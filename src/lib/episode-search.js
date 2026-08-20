@@ -34,6 +34,10 @@ export function uniqueEpisodes(episodes = []) {
   });
 }
 
+export function mergeEpisodeSources(...sources) {
+  return uniqueEpisodes(sources.flatMap(source => Array.isArray(source) ? source : []));
+}
+
 export function searchEpisodes(episodes = [], query = "", category = "") {
   const queryCollection = resolveCollection(query);
   const categoryCollection = resolveCollection(category);

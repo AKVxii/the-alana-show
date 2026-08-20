@@ -17,7 +17,7 @@ document.querySelectorAll("[data-inquiry]").forEach(link => link.addEventListene
   if ([...select.options].some(o => o.value === link.dataset.inquiry)) select.value = link.dataset.inquiry;
 }));
 
-const formatDate = value => value ? new Intl.DateTimeFormat("en-US", {month:"short",day:"numeric",year:"numeric"}).format(new Date(value)) : "";
+const formatDate = value => value ? new Intl.DateTimeFormat("en-US", {month:"short",day:"numeric",year:"numeric",timeZone:"UTC"}).format(new Date(value)) : "";
 const formatViews = value => Number.isFinite(Number(value)) ? `${new Intl.NumberFormat("en-US", {notation:"compact",maximumFractionDigits:1}).format(Number(value))} views` : "";
 const escapeHtml = (value="") => String(value).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"})[c]);
 

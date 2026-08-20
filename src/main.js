@@ -1,7 +1,7 @@
 import { Header } from "./components/Header.js";
 import { Hero } from "./components/Hero.js";
+import { Conversions } from "./components/Conversions.js";
 import { Platforms } from "./components/Platforms.js";
-import { CurrentSpecial } from "./components/CurrentSpecial.js";
 import { EpisodeThumbnail, Episodes, isUsableThumbnailUrl, revealThumbnailFallback } from "./components/Episodes.js";
 import { Impact } from "./components/Impact.js";
 import { About } from "./components/About.js";
@@ -14,22 +14,22 @@ import { icon } from "./lib/icons.js";
 import { site } from "./data/site.js";
 import { enrichEpisode, episodes as editorialEpisodes } from "./data/catalog.js";
 import { compactNumber, escapeHtml, excerpt, formatDate, formatDuration, isValidWebsiteOrSocial, nextBroadcastLabel, normalizeWebsiteOrSocial } from "./lib/utils.js";
-import { searchEpisodes, uniqueEpisodes } from "./lib/episode-search.js";
+import { mergeEpisodeSources, searchEpisodes } from "./lib/episode-search.js";
 import { setupEditorialMotion } from "./lib/motion.js";
 import { lengthBucket, trackEvent } from "./lib/measurement.js";
 import { loadYouTubeFeed } from "./lib/youtube-feed.js";
 import { setupNewsletter } from "./newsletter.js";
 
-const FEATURED_CONVERSATION_VIDEO_ID = "iR4cdm9Ux3U";
+const FEATURED_CONVERSATION_VIDEO_ID = "Kx7rcDzaqDk";
 const app = document.querySelector("#app");
 
 app.innerHTML = `
   ${Header()}
   <main id="main-content">
     ${Hero()}
+    ${Conversions()}
     ${Episodes()}
     ${Platforms()}
-    ${CurrentSpecial()}
     ${Impact()}
     ${About()}
     ${Partner()}
@@ -105,7 +105,7 @@ function episodeCard(episode) {
   const external = !enriched.detailPath;
   const linkAttrs = external ? ' target="_blank" rel="noopener"' : "";
   const dateLabel = formatDate(enriched.publishedAt) || "Verified conversation";
-  const summary = excerpt(enriched.description, 120) || "A verified conversation from The Alana Show archive.";
+  const summary = excerpt(enriched.deck || enriched.description, 120) || "A verified conversation from The Alana Show archive.";
   return `
     <article class="episode-card">
       <a class="episode-thumb" href="${cardUrl}"${linkAttrs} aria-label="Watch ${escapeHtml(enriched.title)}">
@@ -144,9 +144,10 @@ function setupThumbnailFallbacks(root = document) {
 function updateFeatured(episode) {
   if (!episode?.videoId) return;
   const video = document.querySelector("[data-featured-video]");
+  video.setAttribute("data-title", episode.title);
   video.src = `https://www.youtube-nocookie.com/embed/${episode.videoId}?rel=0`;
   document.querySelector("[data-featured-title]").textContent = episode.title;
-  document.querySelector("[data-featured-description]").textContent = excerpt(episode.description, 250) || "A featured conversation from The Alana Show.";
+  document.querySelector("[data-featured-description]").textContent = excerpt(episode.deck || episode.description, 250) || "A featured conversation from The Alana Show.";
   const stats = [formatDate(episode.publishedAt), episode.viewCount ? `${compactNumber(episode.viewCount)} views` : ""].filter(Boolean);
   document.querySelector("[data-featured-stats]").textContent = stats.join(" · ");
 }
@@ -162,24 +163,30 @@ function updateLatest(episode) {
     setupThumbnailFallbacks(media);
   }
   document.querySelector("[data-latest-title]").textContent = episode.title;
-  document.querySelector("[data-latest-description]").textContent = excerpt(episode.description, 145) || "A verified conversation from The Alana Show archive.";
+  document.querySelector("[data-latest-description]").textContent = excerpt(episode.deck || episode.description, 145) || "A verified conversation from The Alana Show archive.";
   document.querySelector("[data-latest-link]").href = `https://www.youtube.com/watch?v=${episode.videoId}`;
 }
 
 async function loadYouTube() {
   try {
     const data = await loadYouTubeFeed();
-    state.episodes = uniqueEpisodes(data.episodes?.length ? data.episodes : (data.recent || [])).map(enrichEpisode);
-    const featuredEpisode = data.featured || state.episodes.find(episode => episode.videoId === FEATURED_CONVERSATION_VIDEO_ID) || data.mostWatched || data.latest;
+    const liveEpisodes = data.episodes?.length ? data.episodes : (data.recent || []);
+    state.episodes = mergeEpisodeSources(liveEpisodes, editorialEpisodes).map(enrichEpisode);
+    const featuredEpisode = state.episodes.find(episode => episode.videoId === FEATURED_CONVERSATION_VIDEO_ID)
+      || editorialEpisodes.find(episode => episode.videoId === FEATURED_CONVERSATION_VIDEO_ID)
+      || data.featured
+      || data.mostWatched
+      || data.latest;
     updateFeatured(featuredEpisode);
-    updateLatest(data.latest);
-    renderEpisodes(data.recent || state.episodes);
+    const supportingEpisode = state.episodes.find(episode => episode.videoId !== featuredEpisode?.videoId) || data.latest;
+    updateLatest(supportingEpisode);
+    renderEpisodes(state.episodes);
     renderSearchResults("");
   } catch (error) {
     console.info("Using the verified static conversation archive while the live YouTube feed is unavailable.");
-    state.episodes = uniqueEpisodes(editorialEpisodes).map(enrichEpisode);
-    const fallbackLatest = state.episodes[0];
-    const fallbackFeatured = state.episodes.find(episode => episode.videoId === FEATURED_CONVERSATION_VIDEO_ID) || fallbackLatest;
+    state.episodes = mergeEpisodeSources(editorialEpisodes).map(enrichEpisode);
+    const fallbackFeatured = state.episodes.find(episode => episode.videoId === FEATURED_CONVERSATION_VIDEO_ID) || state.episodes[0];
+    const fallbackLatest = state.episodes.find(episode => episode.videoId !== fallbackFeatured?.videoId) || fallbackFeatured;
     updateFeatured(fallbackFeatured);
     updateLatest(fallbackLatest);
     renderEpisodes(state.episodes);
@@ -193,7 +200,7 @@ function searchResult(episode) {
   const external = !episode.detailPath;
   const categories = (episode.categories || []).slice(0, 3);
   const dateLabel = formatDate(episode.publishedAt) || "Verified conversation";
-  const summary = excerpt(episode.description, 110) || "A verified conversation from The Alana Show archive.";
+  const summary = excerpt(episode.deck || episode.description, 110) || "A verified conversation from The Alana Show archive.";
   return `<a class="search-result" href="${resultUrl}"${external ? ' target="_blank" rel="noopener"' : ""}>
     <span class="search-result-media">${EpisodeThumbnail(episode, { latest: false })}</span>
     <span><small>${escapeHtml(dateLabel)}</small><strong>${escapeHtml(episode.title)}</strong><p>${escapeHtml(summary)}</p>${categories.length ? `<span class="search-categories">${categories.map(category => `<span>${escapeHtml(category)}</span>`).join("")}</span>` : ""}</span>
