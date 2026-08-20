@@ -142,8 +142,9 @@ for (const url of guestUrls) {
 }
 
 for (const [file, html] of [['episodes/index.html', episodesHub], ['guests/index.html', guestsHub]]) {
-  assert(/document\.documentElement\.classList\.add\(["']js-enabled["']\)/.test(html), `${file}: missing pre-paint js-enabled marker.`);
-  assert(/\.js-enabled\s+\.static-crawl-fallback\s*\{\s*display\s*:\s*none\s*;?\s*\}/.test(html), `${file}: missing pre-paint crawl-fallback suppression.`);
+  assert(!/document\.documentElement\.classList\.add\(["']js-enabled["']\)/.test(html), `${file}: must not hide content before its module loads.`);
+  assert(!/\.js-enabled\s+\.static-crawl-fallback\s*\{[^}]*display\s*:\s*none/i.test(html), `${file}: crawl fallback must remain visible until enhanced rendering replaces it.`);
+  assert(/<div id="app">\s*<main id="main-content" class="static-crawl-fallback"/i.test(html), `${file}: missing visible first-paint content inside #app.`);
 }
 
 assert(/User-agent:\s*\*/i.test(robots), 'robots.txt is missing the wildcard user-agent block.');

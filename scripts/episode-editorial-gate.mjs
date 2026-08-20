@@ -120,11 +120,14 @@ for (const needle of [
   if (!editorial.includes(needle)) errors.push(`Episode editorial runtime is missing: ${needle}`);
 }
 
-if (!mediaHeader.includes('import { setupEpisodeEditorial } from "../lib/episode-editorial.js";')) {
-  errors.push("Media pages must import episode editorial enhancements.");
+if (!mediaHeader.includes('import("../lib/episode-editorial.js")')) {
+  errors.push("Episode detail pages must lazy-load editorial enhancements.");
 }
 if (!mediaHeader.includes("setupEpisodeEditorial();")) {
   errors.push("Media navigation setup must activate episode editorial enhancements.");
+}
+if (!mediaHeader.includes('document.body.dataset.detailType !== "episode"')) {
+  errors.push("Ordinary media pages must not load episode-only editorial enhancements.");
 }
 if (!mediaHeader.includes('/src/newsletter.css?v=2')) {
   errors.push("Media pages must load the reusable newsletter stylesheet.");

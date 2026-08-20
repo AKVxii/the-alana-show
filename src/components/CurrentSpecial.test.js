@@ -22,6 +22,7 @@ test("current special renders the verified broad broadcast line and candidate-de
   assert.match(markup, /Tuesdays on True Oldies across South Florida, with worldwide streaming and video\./);
   assert.match(markup, /No payment is collected through Calendly\./);
   assert.match(markup, /Alana K\. Vandeveer&#039;s W-9 and written payment instructions/);
+  assert.match(markup, /Payment is due at booking!/);
   assert.doesNotMatch(markup, /over 4 million people|South and Central Florida|Miami-Dade|Broward|Orlando/i);
 });
 

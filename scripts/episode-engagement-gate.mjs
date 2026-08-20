@@ -24,11 +24,14 @@ for (const needle of [
   if (!engagement.includes(needle)) errors.push(`Episode engagement measurement is missing: ${needle}`);
 }
 
-if (!mediaHeader.includes('import { setupEpisodeEngagement } from "../lib/episode-engagement.js";')) {
-  errors.push("Media pages must import episode engagement measurement.");
+if (!mediaHeader.includes('import("../lib/episode-engagement.js")')) {
+  errors.push("Episode detail pages must lazy-load engagement measurement.");
 }
 if (!mediaHeader.includes("setupEpisodeEngagement();")) {
   errors.push("Media navigation setup must activate episode engagement measurement.");
+}
+if (!mediaHeader.includes('document.body.dataset.detailType !== "episode"')) {
+  errors.push("Ordinary media pages must not load episode-only engagement code.");
 }
 if (!packageJson.includes("episode-engagement-gate.mjs")) {
   errors.push("Episode engagement regression gate must run in npm run quality.");

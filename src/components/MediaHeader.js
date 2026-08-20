@@ -1,9 +1,31 @@
 import { icon } from "../lib/icons.js";
 import { site } from "../data/site.js";
 import { setupMeasurement } from "../lib/measurement.js";
-import { setupEpisodeEngagement } from "../lib/episode-engagement.js";
-import { setupEpisodeEditorial } from "../lib/episode-editorial.js";
-import { setupConversationShare } from "../lib/share.js";
+
+function setupEpisodeEnhancements() {
+  if (document.body.dataset.detailType !== "episode") return;
+
+  const load = async () => {
+    try {
+      const [{ setupConversationShare }, { setupEpisodeEngagement }, { setupEpisodeEditorial }] = await Promise.all([
+        import("../lib/share.js"),
+        import("../lib/episode-engagement.js"),
+        import("../lib/episode-editorial.js")
+      ]);
+      setupConversationShare();
+      setupEpisodeEngagement();
+      setupEpisodeEditorial();
+    } catch {
+      // The complete server-delivered episode remains usable if an enhancement fails to load.
+    }
+  };
+
+  if ("requestAnimationFrame" in window) {
+    window.requestAnimationFrame(() => window.setTimeout(load, 0));
+    return;
+  }
+  window.setTimeout(load, 0);
+}
 
 function ensureMediaEditorialStyles() {
   document.documentElement.style.backgroundColor = "#030914";
@@ -96,7 +118,5 @@ export function setupMediaNavigation() {
     }
   });
   document.querySelectorAll("[data-year]").forEach(node => { node.textContent = new Date().getFullYear(); });
-  setupConversationShare();
-  setupEpisodeEngagement();
-  setupEpisodeEditorial();
+  setupEpisodeEnhancements();
 }

@@ -91,11 +91,23 @@ function injectStructuredData(html, graph) {
   return updated.replace("</head>", `${tag}</head>`);
 }
 
-function ensureJsFallbackStyle(html) {
-  if (html.includes("js-enabled .static-crawl-fallback")) return html;
-  const marker = '<link rel="stylesheet" href="/src/styles.css">';
-  if (!html.includes(marker)) throw new Error("Topics hub is missing the main stylesheet marker.");
-  return html.replace(marker, `<script>document.documentElement.classList.add("js-enabled")</script><style>.js-enabled .static-crawl-fallback{display:none}</style>${marker}`);
+function removePrematureFallbackSuppression(html) {
+  return html
+    .replace(/<script>\s*document\.documentElement\.classList\.add\(["']js-enabled["']\)\s*<\/script>/gi, "")
+    .replace(/<style>\s*\.js-enabled\s+\.static-crawl-fallback\s*\{\s*display\s*:\s*none\s*;?\s*\}\s*<\/style>/gi, "");
+}
+
+function ensureTopicFirstPaintFallback(html, topic) {
+  if (html.includes(`data-static-topic-fallback="${topic.id}"`)) return html;
+
+  const navMatch = html.match(/<nav class="static-crawl-fallback"[\s\S]*?<\/nav>/i);
+  if (!navMatch) throw new Error(`Topic page ${topic.id} is missing its static discovery navigation.`);
+  if (!html.includes('<div id="app"></div>')) throw new Error(`Topic page ${topic.id} is missing its app shell.`);
+
+  const fallback = `<main id="main-content" class="static-crawl-fallback static-topic-fallback" data-static-topic-fallback="${escapeHtml(topic.id)}"><section class="media-hero topics-hero"><div class="shell media-hero-inner"><p class="eyebrow"><span></span> Topic archive</p><h1>${escapeHtml(topic.title)}</h1><p>${escapeHtml(topic.intro)}</p></div></section><section class="media-section"><div class="shell">${navMatch[0]}</div></section></main>`;
+  return html
+    .replace(navMatch[0], "")
+    .replace('<div id="app"></div>', `<div id="app">${fallback}</div>`);
 }
 
 const episodeItems = episodes.map(episode => ({
@@ -116,7 +128,7 @@ const topicItems = topicPages.map(topic => ({
   href: `/topics/${topic.id}/`
 }));
 
-let episodesHtml = read("episodes/index.html");
+let episodesHtml = removePrematureFallbackSuppression(read("episodes/index.html"));
 const episodeList = episodeItems.map(item => `<li><a href="${escapeHtml(item.href)}">${escapeHtml(item.name)}</a></li>`).join("\n");
 episodesHtml = episodesHtml.replace(/(<h2>Conversation archive<\/h2><ul>)[\s\S]*?(<\/ul>)/i, `$1\n${episodeList}\n$2`);
 episodesHtml = injectStructuredData(episodesHtml, hubGraph({
@@ -127,7 +139,7 @@ episodesHtml = injectStructuredData(episodesHtml, hubGraph({
 }));
 write("episodes/index.html", episodesHtml);
 
-let guestsHtml = read("guests/index.html");
+let guestsHtml = removePrematureFallbackSuppression(read("guests/index.html"));
 const guestList = guestItems.map(item => `<li><a href="${escapeHtml(item.href)}">${escapeHtml(item.name)}</a></li>`).join("\n");
 guestsHtml = guestsHtml.replace(/(<h2>Verified guest directory<\/h2><ul>)[\s\S]*?(<\/ul>)/i, `$1\n${guestList}\n$2`);
 guestsHtml = injectStructuredData(guestsHtml, hubGraph({
@@ -138,7 +150,7 @@ guestsHtml = injectStructuredData(guestsHtml, hubGraph({
 }));
 write("guests/index.html", guestsHtml);
 
-let topicsHtml = ensureJsFallbackStyle(read("topics/index.html"));
+let topicsHtml = removePrematureFallbackSuppression(read("topics/index.html"));
 const topicList = topicItems.map(item => `<li><a href="${escapeHtml(item.href)}"><strong>${escapeHtml(item.label)}</strong><span>${escapeHtml(item.description)}</span></a></li>`).join("\n");
 const topicFallback = `<main id="main-content" class="static-crawl-fallback"><section class="media-hero topics-hero"><div class="shell media-hero-inner"><p class="eyebrow"><span></span> Discover the archive</p><h1>Topics</h1><p>Follow the ideas, issues, and areas of expertise that connect conversations across The Alana Show.</p></div></section><section class="media-section"><div class="shell"><h2>Explore conversations by topic</h2><ul>${topicList}</ul></div></section></main>`;
 const fallbackPattern = /<div id="app">[\s\S]*?<\/div>(?=<noscript>|<script type="module")/i;
@@ -152,5 +164,11 @@ topicsHtml = injectStructuredData(topicsHtml, hubGraph({
   items: topicItems
 }));
 write("topics/index.html", topicsHtml);
+
+for (const topic of topicPages) {
+  const relative = `topics/${topic.id}/index.html`;
+  const html = ensureTopicFirstPaintFallback(removePrematureFallbackSuppression(read(relative)), topic);
+  write(relative, html);
+}
 
 console.log(`Hub authority synced: ${episodeItems.length} episodes, ${guestItems.length} guests, ${topicItems.length} topics.`);

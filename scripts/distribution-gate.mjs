@@ -61,11 +61,14 @@ for (const needle of [
   if (!share.includes(needle)) fail(`Native share implementation is missing: ${needle}`);
 }
 
-if (!mediaHeader.includes('import { setupConversationShare } from "../lib/share.js";')) {
-  fail("Media shell must import the conversation share enhancement.");
+if (!mediaHeader.includes('import("../lib/share.js")')) {
+  fail("Episode detail pages must lazy-load the conversation share enhancement.");
 }
 if (!mediaHeader.includes("setupConversationShare();")) {
   fail("Media navigation setup must activate conversation sharing after detail content renders.");
+}
+if (!mediaHeader.includes('document.body.dataset.detailType !== "episode"')) {
+  fail("Ordinary media pages must not load episode-only sharing code.");
 }
 
 if (!footer.includes('href="/press/">Press &amp; Media</a>')) {

@@ -27,7 +27,7 @@ app.innerHTML = `${MediaHeader()}
           <a class="button button-gold" href="${bookingUrl}" target="_blank" rel="noopener">Request an Interview Time — $1,500</a>
           <a class="button button-ghost" href="#candidate-process">How Confirmation Works</a>
         </div>
-        <p class="candidate-small-note">A Calendly selection is a tentative studio hold. No payment is collected through Calendly. After requesting a time, the campaign receives Alana K. Vandeveer's W-9 and written payment instructions. The required payment confirmation must be completed by the stated deadline or the hold is released. Broadcast placement and airtime are confirmed separately.</p>
+        <p class="candidate-small-note">A Calendly selection is a tentative studio hold. No payment is collected through Calendly. After requesting a time, the campaign receives Alana K. Vandeveer's W-9 and written payment instructions. Payment is due at booking! Broadcast placement and airtime are confirmed separately.</p>
       </div>
 
       <aside class="candidate-package-card" data-reveal>
@@ -92,7 +92,7 @@ app.innerHTML = `${MediaHeader()}
       </div>
       <ol class="candidate-process">
         <li data-reveal><span>01</span><div><h3>Request a studio time</h3><p>Select an available time through Calendly. The selection is a tentative hold, not a confirmed appointment. No payment is collected through Calendly.</p></div></li>
-        <li data-reveal><span>02</span><div><h3>Complete confirmation</h3><p>After requesting a time, the campaign receives Alana K. Vandeveer's W-9 and written payment instructions. Complete the required payment confirmation by the stated deadline or the tentative hold is released.</p></div></li>
+        <li data-reveal><span>02</span><div><h3>Complete confirmation</h3><p>After requesting a time, the campaign receives Alana K. Vandeveer's W-9 and written payment instructions. Payment is due at booking!</p></div></li>
         <li data-reveal><span>03</span><div><h3>Prepare, record &amp; publish</h3><p>After confirmation, studio directions and preparation details are provided. Broadcast placement and airtime are confirmed separately, followed by planned publication through The Alana Show's digital channels.</p></div></li>
       </ol>
     </div>
@@ -106,7 +106,7 @@ app.innerHTML = `${MediaHeader()}
       </div>
       <div class="candidate-standards-copy" data-reveal>
         <p>Participation is available to legally qualified candidates on the same published package price and core terms. An appearance does not constitute an endorsement by The Alana Show, Alana K. Vandeveer, or participating broadcast outlets.</p>
-        <p>Campaigns remain responsible for their own reporting and compliance obligations. After a time is requested, the campaign receives Alana K. Vandeveer's W-9 and written payment instructions. The required payment confirmation must be completed by the stated deadline or the hold is released. Scheduling and placement remain subject to studio availability, participating-station policies, and applicable legal requirements.</p>
+        <p>Campaigns remain responsible for their own reporting and compliance obligations. After a time is requested, the campaign receives Alana K. Vandeveer's W-9 and written payment instructions. Payment is due at booking! Scheduling and placement remain subject to studio availability, participating-station policies, and applicable legal requirements.</p>
         <a class="candidate-text-link" href="/standards/">Read The Alana Show editorial standards <span aria-hidden="true">→</span></a>
       </div>
     </div>
@@ -128,7 +128,7 @@ app.innerHTML = `${MediaHeader()}
       <div>
         <p class="eyebrow"><span></span> Candidate scheduling</p>
         <h2>Ready to join the conversation?</h2>
-        <p>Request an available studio time. The campaign then receives Alana K. Vandeveer's W-9 and written payment instructions; required payment confirmation is due by the stated deadline.</p>
+        <p>Request an available studio time. The campaign then receives Alana K. Vandeveer's W-9 and written payment instructions. Payment is due at booking!</p>
       </div>
       <div class="candidate-final-actions">
         <a class="button button-gold" href="${bookingUrl}" target="_blank" rel="noopener">Request Your Candidate Interview</a>

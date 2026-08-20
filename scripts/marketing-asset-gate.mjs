@@ -59,11 +59,14 @@ assert(!/8:00 PM\s*(?:–|-|to)\s*9:00 PM/i.test(verifiedClaimSurfaces), "Public
 assert(!/\b(?:five[- ]brand|5[- ]brand|16[- ]signal|South (?:and|&) Central Florida|Broward|Orlando|Miami-Dade|Martin|St\. Lucie)\b/i.test(verifiedClaimSurfaces), "Public broadcast surfaces must not publish unsupported network-size or county/region claims.");
 assert(candidates.includes("No payment is collected through Calendly."), "Candidate scheduling must state that Calendly does not collect payment.");
 assert(candidates.includes("the campaign receives Alana K. Vandeveer's W-9 and written payment instructions"), "Candidate scheduling must identify the post-request W-9 and written-payment flow.");
+assert(candidates.includes("Payment is due at booking!"), "Candidate scheduling must state the approved payment timing.");
+assert(!/payment confirmation (?:is required|must be completed) by the stated deadline|hold is released/i.test(candidates + candidateFallback + currentSpecial), "Candidate scheduling must not retain the superseded deadline-or-hold language.");
 assert(candidateFallback.includes("No payment is collected through Calendly."), "Candidate static fallback must preserve the no-Calendly-payment disclosure.");
 assert(candidateFallback.includes("the campaign receives Alana K. Vandeveer's W-9 and written payment instructions"), "Candidate static fallback must preserve the post-request W-9 and written-payment flow.");
+assert(candidateFallback.includes("Payment is due at booking!"), "Candidate static fallback must preserve the approved payment timing.");
 assert(candidates.includes('data-candidate-archive-status="pending"'), "Candidate archive pathway must stay pending until a verified 2026 candidate interview publishes.");
 assert(!/View Candidate Conversations|View the Candidate Series/.test(candidates + candidateFallback), "Candidate pages must not imply a published series before the first verified interview.");
-assert(candidateFallback.includes('/src/candidates-page.js?v=20260819-confirmation'), "Candidate entry script must carry the current confirmation-copy cache key.");
+assert(candidateFallback.includes('/src/candidates-page.js?v=20260820-payment-booking'), "Candidate entry script must carry the current approved payment-copy cache key.");
 
 const merchHome = read("src/components/Merchandise.js");
 const merchPage = read("merchandise/index.html");
