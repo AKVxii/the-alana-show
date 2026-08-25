@@ -106,9 +106,14 @@ for (const needle of [
   'privacyStatus',
   'Potential duplicate group',
   'YouTube Studio drafts',
-  'Thumbnail impressions and impressions click-through rate are not exposed'
+  'Thumbnail impressions and impressions click-through rate are not exposed',
+  'const ANALYTICS_MAX_RESULTS = "200"',
+  'maxResults: ANALYTICS_MAX_RESULTS'
 ]) {
   if (!audit.includes(needle)) errors.push(`Read-only audit safeguard is missing: ${needle}`);
+}
+if (audit.includes('maxResults: "500"')) {
+  errors.push("YouTube Analytics top-video queries must not exceed the supported 200-row limit.");
 }
 
 for (const needle of [
@@ -149,4 +154,4 @@ if (errors.length) {
 }
 
 console.log("YouTube Studio console gate passed.");
-console.log("  Read-only OAuth, explicit account selection, fixed channel identity, encrypted session, individual photo approval, clear Google-data privacy and no-write boundary: OK");
+console.log("  Read-only OAuth, explicit account selection, supported analytics query, fixed channel identity, encrypted session, individual photo approval, clear Google-data privacy and no-write boundary: OK");
