@@ -13,6 +13,7 @@ const page = read("studio-console/index.html");
 const oauthPrivacy = read("studio-console/privacy/index.html");
 const client = read("src/studio-console.js");
 const styles = read("src/studio-console.css");
+const photoStyles = read("src/studio-console-photo-review.css");
 const lib = read("api/youtube-studio-lib.js");
 const auth = read("api/youtube-studio-auth.js");
 const callback = read("api/youtube-studio-callback.js");
@@ -32,7 +33,8 @@ for (const needle of [
   "No deletions",
   "No visibility changes",
   "data-thumbnail-dialog",
-  'href="/studio-console/privacy"'
+  'href="/studio-console/privacy"',
+  '/src/studio-console-photo-review.css?v=1'
 ]) {
   if (!page.includes(needle)) errors.push(`Private Studio page is missing: ${needle}`);
 }
@@ -136,6 +138,19 @@ for (const needle of [
   if (!styles.includes(needle)) errors.push(`Studio console styling is missing: ${needle}`);
 }
 
+for (const needle of [
+  '.video-thumb img',
+  '.thumbnail-full img',
+  '.thumbnail-mobile-preview img',
+  'object-fit: contain',
+  'aspect-ratio: 16 / 9'
+]) {
+  if (!photoStyles.includes(needle)) errors.push(`Full-frame photo review safeguard is missing: ${needle}`);
+}
+if (photoStyles.includes('object-fit: cover')) {
+  errors.push("Owner photo-review overrides must not crop thumbnail compositions.");
+}
+
 if (!proposals.includes('"videos": {}')) errors.push("Thumbnail proposal registry must begin empty and owner-controlled.");
 if (!robots.includes("Disallow: /studio-console") || !robots.includes("Disallow: /api/youtube-studio")) {
   errors.push("Robots rules must exclude the private Studio console and endpoints.");
@@ -154,4 +169,4 @@ if (errors.length) {
 }
 
 console.log("YouTube Studio console gate passed.");
-console.log("  Read-only OAuth, explicit account selection, supported analytics query, fixed channel identity, encrypted session, individual photo approval, clear Google-data privacy and no-write boundary: OK");
+console.log("  Read-only OAuth, explicit account selection, supported analytics query, full-frame photo review, fixed channel identity, encrypted session, individual photo approval, clear Google-data privacy and no-write boundary: OK");
