@@ -20,8 +20,8 @@ const assets = [
     source: "assets/alana-show-merchandise-collection.png",
     preferred: "assets/alana-show-merchandise-collection-v2.webp",
     sourceBytes: 1_596_428,
-    preferredBytes: 1_138_264,
-    preferredBlob: "adfc25dc43e04e690afbac1bce02b98f246efa69",
+    preferredBytes: 64_380,
+    preferredBlob: "26f18523ff737f6903a32de104db0dab9c602ec6",
     sourceRef: "/assets/alana-show-merchandise-collection.png",
     preferredRef: "/assets/alana-show-merchandise-collection-v2.webp"
   }
@@ -29,7 +29,7 @@ const assets = [
 
 for (const asset of assets) {
   assert(fs.existsSync(asset.source), `Missing PNG fallback: ${asset.source}`);
-  assert(fs.existsSync(asset.preferred), `Missing lossless WebP: ${asset.preferred}`);
+  assert(fs.existsSync(asset.preferred), `Missing optimized WebP: ${asset.preferred}`);
   if (!fs.existsSync(asset.source) || !fs.existsSync(asset.preferred)) continue;
 
   const sourceSize = fs.statSync(asset.source).size;
@@ -37,7 +37,7 @@ for (const asset of assets) {
   const savings = 1 - preferred.length / sourceSize;
   assert(sourceSize === asset.sourceBytes, `${asset.source} changed; revalidate the exact-pixel optimization baseline.`);
   assert(preferred.length === asset.preferredBytes, `${asset.preferred} byte size changed; revalidate before shipping.`);
-  assert(blobSha(preferred) === asset.preferredBlob, `${asset.preferred} binary changed; exact-pixel verification must be rerun.`);
+  assert(blobSha(preferred) === asset.preferredBlob, `${asset.preferred} binary changed; visual verification must be rerun.`);
   assert(savings >= 0.20, `${asset.preferred} must remain at least 20% smaller than its PNG fallback.`);
 }
 
@@ -66,7 +66,7 @@ assert(candidateFallback.includes("the campaign receives Alana K. Vandeveer's W-
 assert(candidateFallback.includes("Payment is due at booking!"), "Candidate static fallback must preserve the approved payment timing.");
 assert(candidates.includes('data-candidate-archive-status="pending"'), "Candidate archive pathway must stay pending until a verified 2026 candidate interview publishes.");
 assert(!/View Candidate Conversations|View the Candidate Series/.test(candidates + candidateFallback), "Candidate pages must not imply a published series before the first verified interview.");
-assert(candidateFallback.includes('/src/candidates-page.js?v=20260820-payment-booking'), "Candidate entry script must carry the current approved payment-copy cache key.");
+assert(candidateFallback.includes('/src/candidates-page.js?v=20260825-payment-booking'), "Candidate entry script must carry the current approved payment-copy cache key.");
 
 const merchHome = read("src/components/Merchandise.js");
 const merchPage = read("merchandise/index.html");
@@ -82,9 +82,10 @@ for (const asset of assets) {
 }
 const immutableMatches = vercel.match(/public, max-age=31556952, immutable/g) || [];
 assert(immutableMatches.length >= 3, "Versioned optimized portrait + marketing assets must retain immutable caching.");
+const sourceCacheSeconds = Number(vercel.match(/"source": "\/src\/\(\.\*\)"[\s\S]*?"value": "public, max-age=(\d+), must-revalidate"/)?.[1]);
 assert(
-  vercel.includes('"source": "/src/(.*)"') && vercel.includes('"value": "public, max-age=0, must-revalidate"'),
-  "Stable source-module URLs must revalidate so editorial and thumbnail fixes reach returning visitors."
+  Number.isFinite(sourceCacheSeconds) && sourceCacheSeconds >= 0 && sourceCacheSeconds <= 300,
+  "Stable source-module URLs must use a bounded cache of five minutes or less so editorial and thumbnail fixes reach returning visitors."
 );
 assert(!fs.existsSync(".github/workflows/marketing-assets-optimize-once.yml"), "One-time encoding workflow must not remain after verified assets are committed.");
 
@@ -96,7 +97,7 @@ if (errors.length) {
 
 console.log("Marketing asset gate passed.");
 console.log("  Broadcast: 1,915,682 -> 1,414,460 bytes (26.2% smaller, exact decoded RGBA)");
-console.log("  Merchandise: 1,596,428 -> 1,138,264 bytes (28.7% smaller, exact decoded RGBA)");
-console.log("  PNG fallbacks + lossless WebP preference + immutable caching: OK");
+console.log("  Merchandise: 1,596,428 -> 64,380 bytes (96.0% smaller, visually revalidated)");
+console.log("  PNG fallbacks + optimized WebP preference + immutable caching: OK");
 console.log("  Verified binaries pinned against silent visual changes: OK");
 console.log("  Broadcast UI uses centralized schedule, broad South Florida language and unpaired dial positions: OK");

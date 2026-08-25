@@ -87,6 +87,7 @@
 
 .host-profile-portrait {
   position: relative;
+  isolation: isolate;
   align-self: end;
   justify-self: end;
   width: min(100%, 520px);
@@ -98,6 +99,19 @@
   inset: 13% -7% 8% 13%;
   border: 1px solid rgba(216, 184, 102, .26);
   pointer-events: none;
+}
+
+.host-profile-portrait::after {
+  content: "";
+  position: absolute;
+  inset: 4% -12% -3% 1%;
+  z-index: -1;
+  pointer-events: none;
+  opacity: .7;
+  background:
+    radial-gradient(ellipse at 52% 42%, rgba(43, 91, 137, .38), transparent 58%),
+    radial-gradient(ellipse at 68% 76%, rgba(216, 184, 102, .09), transparent 46%);
+  animation: host-portrait-ambient 15s ease-in-out infinite alternate;
 }
 
 .host-profile-portrait img {
@@ -121,6 +135,29 @@
   font-size: .66rem;
   letter-spacing: .12em;
   text-transform: uppercase;
+}
+
+.host-profile-caption::after {
+  content: "";
+  position: absolute;
+  top: -1px;
+  left: 0;
+  width: 38%;
+  height: 1px;
+  pointer-events: none;
+  background: linear-gradient(90deg, var(--gold-300), rgba(234, 215, 158, .18));
+  transform-origin: left;
+  animation: host-caption-line .85s cubic-bezier(.22, .61, .36, 1) both;
+}
+
+@keyframes host-portrait-ambient {
+  from { opacity: .56; transform: translate3d(-3px, 2px, 0) scale(.99); }
+  to { opacity: .78; transform: translate3d(4px, -3px, 0) scale(1.015); }
+}
+
+@keyframes host-caption-line {
+  from { opacity: 0; transform: scaleX(0); }
+  to { opacity: 1; transform: scaleX(1); }
 }
 
 .host-profile-body {
@@ -303,5 +340,21 @@
 
   .host-principle-large {
     padding-left: 18px;
+  }
+}
+
+@media (max-width: 680px), (pointer: coarse) {
+  .host-profile-portrait::after {
+    inset: 8% -4% 1%;
+    opacity: .58;
+    animation: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .host-profile-portrait::after,
+  .host-profile-caption::after {
+    animation: none;
+    transform: none;
   }
 }

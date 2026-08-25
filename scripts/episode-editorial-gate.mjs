@@ -77,6 +77,7 @@ const editorial = read("src/lib/episode-editorial.js");
 const mediaHeader = read("src/components/MediaHeader.js");
 const newsletter = read("src/newsletter.js");
 const newsletterStyles = read("src/newsletter.css");
+const mediaPolish = read("src/media-polish.css");
 const georgePage = read("episodes/george-lemieux/index.html");
 const packageJson = read("package.json");
 
@@ -129,7 +130,7 @@ if (!mediaHeader.includes("setupEpisodeEditorial();")) {
 if (!mediaHeader.includes('document.body.dataset.detailType !== "episode"')) {
   errors.push("Ordinary media pages must not load episode-only editorial enhancements.");
 }
-if (!mediaHeader.includes('/src/newsletter.css?v=2')) {
+if (!mediaHeader.includes('/src/media-polish.css?v=20260825-smooth') || !mediaPolish.includes('/* src/newsletter.css */')) {
   errors.push("Media pages must load the reusable newsletter stylesheet.");
 }
 

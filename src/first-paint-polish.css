@@ -1,0 +1,147 @@
+/* The server-delivered archive remains useful without JavaScript and should
+   look intentional while the interactive controls finish loading. */
+.static-directory-fallback {
+  color: var(--ink);
+  background: var(--ivory-100);
+}
+
+.static-directory-fallback .static-directory-section {
+  padding-block: 64px 82px;
+  background: var(--ivory-100);
+}
+
+.static-directory-fallback .static-directory-heading {
+  margin-bottom: 28px;
+}
+
+.static-directory-fallback .static-directory-heading h2 {
+  font-size: clamp(2.35rem, 4vw, 4rem);
+}
+
+.static-directory-fallback .static-directory-list {
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1px;
+  list-style: none;
+  border: 1px solid rgba(20, 35, 58, .12);
+  background: rgba(20, 35, 58, .12);
+}
+
+.static-directory-fallback .static-directory-list li {
+  min-width: 0;
+  background: #fffdf8;
+}
+
+.static-directory-fallback .static-directory-list a {
+  min-height: 118px;
+  padding: 22px;
+  display: flex;
+  align-items: flex-end;
+  color: var(--navy-900);
+  font-family: var(--serif);
+  font-size: clamp(1.22rem, 1.7vw, 1.55rem);
+  line-height: 1.16;
+  text-decoration: none;
+  transition: color .18s ease, background .18s ease;
+}
+
+.static-directory-fallback .static-directory-list a:hover,
+.static-directory-fallback .static-directory-list a:focus-visible {
+  color: #72521a;
+  background: #fff;
+}
+
+.static-topics-fallback .static-directory-list a {
+  min-height: 164px;
+  display: grid;
+  align-content: end;
+  gap: 9px;
+}
+
+.static-topics-fallback .static-directory-list strong {
+  font-size: 1.35em;
+  font-weight: 500;
+}
+
+.static-topics-fallback .static-directory-list span {
+  color: var(--muted);
+  font-family: var(--sans);
+  font-size: .72rem;
+  line-height: 1.55;
+}
+
+.static-featured-loading {
+  min-height: 300px;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(20, 35, 58, .12);
+  background: linear-gradient(120deg, #fffdf8, #f6efe2 52%, #fffdf8);
+}
+
+.static-featured-loading::before,
+.static-featured-loading::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.static-featured-loading::before {
+  width: 58%;
+  background: linear-gradient(135deg, #0c2745, #04101f);
+}
+
+.static-featured-loading::after {
+  left: 64%;
+  top: 22%;
+  width: 25%;
+  height: 12px;
+  border-radius: 999px;
+  background: rgba(20, 35, 58, .12);
+  box-shadow: 0 27px 0 rgba(20, 35, 58, .08), 0 54px 0 rgba(20, 35, 58, .06);
+}
+
+@media (max-width: 880px) {
+  .static-directory-fallback .static-directory-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 620px) {
+  .static-directory-fallback .static-directory-section {
+    padding-block: 44px 62px;
+  }
+
+  .static-directory-fallback .static-directory-list {
+    grid-template-columns: 1fr;
+  }
+
+  .static-directory-fallback .static-directory-list a {
+    min-height: 0;
+    padding: 18px 17px;
+    font-size: 1.32rem;
+  }
+
+  .static-featured-loading {
+    min-height: 270px;
+  }
+
+  .static-featured-loading::before {
+    width: 100%;
+    height: 58%;
+  }
+
+  .static-featured-loading::after {
+    left: 9%;
+    top: 71%;
+    width: 58%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .static-directory-fallback .static-directory-list a {
+    transition: none;
+  }
+}

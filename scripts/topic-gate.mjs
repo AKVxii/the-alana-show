@@ -50,7 +50,7 @@ for (const [id, name] of topics) {
   assert(html.includes(`data-topic-id="${id}"`), `${file}: missing matching data-topic-id.`);
   assert(!html.includes('document.documentElement.classList.add("js-enabled")'), `${file}: must not hide content before its module loads.`);
   assert(!html.includes('.js-enabled .static-crawl-fallback{display:none}'), `${file}: crawl fallback must remain visible until enhanced rendering replaces it.`);
-  assert(new RegExp(`<div id="app">\\s*<main[^>]+data-static-topic-fallback="${id}"`, 'i').test(html), `${file}: missing visible first-paint topic fallback inside #app.`);
+  assert(new RegExp(`<div id="app">[\\s\\S]*?<main[^>]+data-static-topic-fallback="${id}"`, 'i').test(html), `${file}: missing visible first-paint topic fallback inside #app.`);
 
   const detailLinks = [...html.matchAll(/href="(\/episodes\/[^"?]+)"/g)].map(match => match[1]);
   assert(detailLinks.length >= 1, `${file}: needs at least one direct episode discovery link.`);

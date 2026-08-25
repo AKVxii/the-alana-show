@@ -2,6 +2,31 @@
   isolation: isolate;
 }
 
+.portrait-stage::before {
+  content: "";
+  position: absolute;
+  inset: -8% -10% -6%;
+  z-index: -2;
+  pointer-events: none;
+  opacity: .66;
+  background:
+    radial-gradient(ellipse at 52% 42%, rgba(43, 91, 137, .42), transparent 54%),
+    radial-gradient(ellipse at 68% 62%, rgba(216, 184, 102, .09), transparent 45%);
+  animation: portrait-ambient-light 14s ease-in-out infinite alternate;
+}
+
+.portrait-stage::after {
+  content: "";
+  position: absolute;
+  inset: -10px -12px 13% 31%;
+  z-index: 3;
+  pointer-events: none;
+  border-top: 1px solid rgba(234, 215, 158, .5);
+  border-right: 1px solid rgba(234, 215, 158, .28);
+  transform-origin: top right;
+  animation: portrait-editorial-line .8s cubic-bezier(.22, .61, .36, 1) both;
+}
+
 /* Keep the hero portrait editorial and architectural: one restrained frame,
    no nested ornamental borders, no decorative orbit, and no metallic glow. */
 .portrait-orbit {
@@ -65,6 +90,16 @@
   filter: drop-shadow(0 16px 22px rgba(1, 6, 18, .28));
 }
 
+@keyframes portrait-ambient-light {
+  from { opacity: .52; transform: translate3d(-3px, 2px, 0) scale(.985); }
+  to { opacity: .76; transform: translate3d(4px, -3px, 0) scale(1.015); }
+}
+
+@keyframes portrait-editorial-line {
+  from { opacity: 0; transform: scale(.82); }
+  to { opacity: 1; transform: scale(1); }
+}
+
 /* About photography should feel like a magazine portrait rather than a framed
    graphic. Use the same restrained geometry with a warm editorial field. */
 .about-photo-frame {
@@ -90,6 +125,16 @@
 }
 
 @media (max-width: 720px) {
+  .portrait-stage::before {
+    inset: -3% -4% 0;
+    opacity: .58;
+    animation: none;
+  }
+
+  .portrait-stage::after {
+    inset: -7px -8px 18% 38%;
+  }
+
   .portrait-frame {
     aspect-ratio: 10 / 11;
     border-radius: 3px;
@@ -101,5 +146,13 @@
     height: auto;
     object-fit: contain;
     object-position: center bottom;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .portrait-stage::before,
+  .portrait-stage::after {
+    animation: none;
+    transform: none;
   }
 }
