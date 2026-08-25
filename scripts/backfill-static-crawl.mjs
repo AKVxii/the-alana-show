@@ -37,6 +37,17 @@ const decodeHtml = value => String(value ?? "")
 
 const safeJsonLd = value => JSON.stringify(value).replace(/</g, "\\u003c");
 
+function normalizeThumbnailUrl(value = "") {
+  try {
+    const url = new URL(value);
+    if (url.protocol !== "https:") return "";
+    if (url.hostname === "i.ytimg.com") url.hostname = "img.youtube.com";
+    return url.href;
+  } catch {
+    return "";
+  }
+}
+
 function read(relative) {
   return fs.readFileSync(path.join(ROOT, relative), "utf8");
 }
@@ -61,7 +72,7 @@ function pageDescription(html) {
 
 function pageImage(html) {
   const match = html.match(/<meta\s+property="og:image"\s+content="([^"]*)"/i);
-  return decodeHtml(match?.[1] || "").trim();
+  return normalizeThumbnailUrl(decodeHtml(match?.[1] || "").trim());
 }
 
 function replaceMetaContent(html, attribute, key, content) {
@@ -79,7 +90,7 @@ function updateEpisodePageMetadata(html, episode) {
   const canonical = `${ORIGIN}/episodes/${episode.id}`;
   const pageTitleValue = `${display.title} | The Alana Show`;
   const description = display.deck || display.metaDescription || `Watch ${display.title} on The Alana Show.`;
-  const image = display.thumbnail || `https://i.ytimg.com/vi/${episode.videoId}/hqdefault.jpg`;
+  const image = display.thumbnail || `https://img.youtube.com/vi/${episode.videoId}/hqdefault.jpg`;
   let updated = replaceTitleTag(html, pageTitleValue);
   for (const [attribute, key, value] of [
     ["name", "description", description],
@@ -144,7 +155,7 @@ function episodeDisplayData(episode) {
     metaDescription: canonical.metaDescription || "",
     publishedAt: canonical.publishedAt || live.publishedAt || "",
     durationSeconds: Number(canonical.durationSeconds || live.durationSeconds || 0),
-    thumbnail: canonical.thumbnail || live.thumbnail || "",
+    thumbnail: normalizeThumbnailUrl(canonical.thumbnail || live.thumbnail),
     categories: Array.isArray(canonical.categories) ? canonical.categories.filter(Boolean) : [],
     chapters: Array.isArray(canonical.chapters) ? canonical.chapters : [],
     viewCount: Number(live.viewCount)
@@ -325,7 +336,7 @@ function episodeGraph(episode, html) {
   const fullPageTitle = `${title} | The Alana Show`;
   const conciseDescription = display.deck || display.metaDescription || pageDescription(html) || `Watch ${title} on The Alana Show.`;
   const description = display.description || conciseDescription;
-  const image = display.thumbnail || pageImage(html) || `https://i.ytimg.com/vi/${episode.videoId}/hqdefault.jpg`;
+  const image = display.thumbnail || pageImage(html) || `https://img.youtube.com/vi/${episode.videoId}/hqdefault.jpg`;
   const relatedGuests = (episode.guestIds || []).map(guestById).filter(Boolean);
   const graph = [
     websiteSchema(),

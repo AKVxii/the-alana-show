@@ -36,6 +36,17 @@ function normalizeDescription(description = "") {
   return description.replace(/\s+/g, " ").trim();
 }
 
+function normalizeThumbnailUrl(value = "") {
+  try {
+    const url = new URL(value);
+    if (url.protocol !== "https:" && url.protocol !== "http:") return "";
+    if (url.hostname === "i.ytimg.com") url.hostname = "img.youtube.com";
+    return url.href;
+  } catch {
+    return "";
+  }
+}
+
 function replacementTitleKey(title = "") {
   return String(title)
     .toLowerCase()
@@ -78,12 +89,13 @@ function normalizeVideo(video) {
     title: video.snippet?.title || "",
     description: normalizeDescription(video.snippet?.description || ""),
     publishedAt: video.snippet?.publishedAt || "",
-    thumbnail:
+    thumbnail: normalizeThumbnailUrl(
       video.snippet?.thumbnails?.maxres?.url ||
       video.snippet?.thumbnails?.standard?.url ||
       video.snippet?.thumbnails?.high?.url ||
       video.snippet?.thumbnails?.medium?.url ||
-      "",
+      ""
+    ),
     viewCount: Number(video.statistics?.viewCount || 0),
     durationSeconds: parseDuration(video.contentDetails?.duration || ""),
     tags
@@ -265,6 +277,7 @@ module.exports = async function handler(req, res) {
 };
 
 module.exports._test = {
+  normalizeThumbnailUrl,
   replacementTitleKey,
   collapseReplacementMasters
 };

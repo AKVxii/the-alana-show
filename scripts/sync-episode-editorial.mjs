@@ -6,6 +6,17 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const EPISODES_DIR = path.join(ROOT, "episodes");
 const OUTPUT = path.join(ROOT, "src", "data", "episode-editorial.js");
 
+function normalizeThumbnailUrl(value = "") {
+  try {
+    const url = new URL(value);
+    if (url.protocol !== "https:") return "";
+    if (url.hostname === "i.ytimg.com") url.hostname = "img.youtube.com";
+    return url.href;
+  } catch {
+    return "";
+  }
+}
+
 // Editorial titles and decks are based only on the verified descriptions and
 // guest relationships already published with each canonical video master.
 const EDITORIAL_OVERRIDES = {
@@ -182,7 +193,8 @@ for (const id of directories) {
   const title = matchContent(source, /<title>([\s\S]*?)<\/title>/).replace(/\s*\|\s*The Alana Show\s*$/i, "");
   const metaDescription = matchContent(source, /<meta name="description" content="([^"]*)"/);
   const description = String(video.description || "").replace(/\s+/g, " ").trim();
-  const thumbnail = Array.isArray(video.thumbnailUrl) ? video.thumbnailUrl.find(Boolean) : video.thumbnailUrl;
+  const rawThumbnail = Array.isArray(video.thumbnailUrl) ? video.thumbnailUrl.find(Boolean) : video.thumbnailUrl;
+  const thumbnail = normalizeThumbnailUrl(rawThumbnail);
   const categories = staticTopics(source);
   const chapters = chapterRows(String(video.description || ""));
   const override = EDITORIAL_OVERRIDES[id] || {};

@@ -1,5 +1,5 @@
 import { escapeHtml, formatDate, formatDuration } from "./utils.js";
-import { EpisodeThumbnail, revealThumbnailFallback } from "../components/Episodes.js";
+import { EpisodeThumbnail, normalizeThumbnailUrl, revealThumbnailFallback } from "../components/Episodes.js";
 import { topicHref } from "../data/topic-pages.js";
 import { icon } from "./icons.js";
 
@@ -14,15 +14,9 @@ if (typeof document !== "undefined" && !document.querySelector("#topic-authority
 }
 
 export function episodeThumbnailUrl(episode = {}) {
-  if (episode.thumbnail) {
-    try {
-      const url = new URL(episode.thumbnail);
-      if (url.protocol === "https:" || url.protocol === "http:") return episode.thumbnail;
-    } catch {
-      // Fall back to the verified YouTube video ID below.
-    }
-  }
-  return episode.videoId ? `https://i.ytimg.com/vi/${encodeURIComponent(episode.videoId)}/hqdefault.jpg` : "";
+  const thumbnail = normalizeThumbnailUrl(episode.thumbnail);
+  if (thumbnail) return thumbnail;
+  return episode.videoId ? `https://img.youtube.com/vi/${encodeURIComponent(episode.videoId)}/hqdefault.jpg` : "";
 }
 
 export function bindThumbnailFallbacks(root = document) {

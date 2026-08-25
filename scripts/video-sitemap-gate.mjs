@@ -60,6 +60,11 @@ for (const episode of episodes) {
   const lastmod = entry.match(/<lastmod>([^<]+)<\/lastmod>/)?.[1] || "";
 
   if (!/^https:\/\//i.test(thumbnail)) fail(`${canonical} is missing an absolute HTTPS video thumbnail.`);
+  try {
+    if (new URL(thumbnail).hostname !== "img.youtube.com") fail(`${canonical} thumbnail must use the working official YouTube image host.`);
+  } catch {
+    fail(`${canonical} has an invalid video thumbnail URL.`);
+  }
   if (!title.trim()) fail(`${canonical} is missing video:title.`);
   if (title.replace(/&(?:amp|quot|apos|lt|gt);/g, "x").length > 100) fail(`${canonical} video:title exceeds 100 characters.`);
   if (!description.trim()) fail(`${canonical} is missing video:description.`);

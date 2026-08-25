@@ -50,7 +50,7 @@ jobs:
             "categories": ["Leadership"],
             "publishedAt": "2026-08-10T12:00:00Z",
             "durationSeconds": 1800,
-            "thumbnail": "https://i.ytimg.com/vi/A1b2C3d4E5F/hqdefault.jpg",
+            "thumbnail": "https://img.youtube.com/vi/A1b2C3d4E5F/hqdefault.jpg",
             "guests": [
               {
                 "name": "Publishing Helper Test Guest",
@@ -86,7 +86,7 @@ jobs:
       - name: Verify specialized video sitemap stayed synchronized
         run: |
           grep -q '<loc>https://thealanashow.com/episodes/publishing-helper-ci-smoke-test</loc>' video-sitemap.xml
-          grep -q '<video:thumbnail_loc>https://i.ytimg.com/vi/A1b2C3d4E5F/hqdefault.jpg</video:thumbnail_loc>' video-sitemap.xml
+          grep -q '<video:thumbnail_loc>https://img.youtube.com/vi/A1b2C3d4E5F/hqdefault.jpg</video:thumbnail_loc>' video-sitemap.xml
           grep -q '<video:title>Publishing Helper CI Smoke Test</video:title>' video-sitemap.xml
           grep -q '<video:description>Publishing Helper Test Guest explains how a complete editorial intake protects canonical routing, searchable video metadata, and reliable archive discovery.</video:description>' video-sitemap.xml
           grep -q '<video:player_loc allow_embed="yes">https://www.youtube-nocookie.com/embed/A1b2C3d4E5F</video:player_loc>' video-sitemap.xml

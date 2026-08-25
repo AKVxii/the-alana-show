@@ -18,6 +18,17 @@ function chunks(values, size = 50) {
   return output;
 }
 
+function normalizeThumbnailUrl(value = "") {
+  try {
+    const url = new URL(value);
+    if (url.protocol !== "https:" && url.protocol !== "http:") return "";
+    if (url.hostname === "i.ytimg.com") url.hostname = "img.youtube.com";
+    return url.href;
+  } catch {
+    return "";
+  }
+}
+
 async function uploadIds(channel, accessToken) {
   const playlistId = channel.contentDetails?.relatedPlaylists?.uploads;
   if (!playlistId) return [];
@@ -99,7 +110,7 @@ async function analyticsByVideo(accessToken, endDate) {
 
 function thumbnailOf(video) {
   const thumbnails = video.snippet?.thumbnails || {};
-  return thumbnails.maxres?.url || thumbnails.standard?.url || thumbnails.high?.url || thumbnails.medium?.url || thumbnails.default?.url || "";
+  return normalizeThumbnailUrl(thumbnails.maxres?.url || thumbnails.standard?.url || thumbnails.high?.url || thumbnails.medium?.url || thumbnails.default?.url);
 }
 
 function daysSince(value) {
@@ -240,7 +251,7 @@ module.exports = async function handler(req, res) {
         id: channel.id,
         title: channel.snippet?.title || "The Alana Show",
         customUrl: channel.snippet?.customUrl || "@alanakvandeveer",
-        thumbnail: channel.snippet?.thumbnails?.high?.url || channel.snippet?.thumbnails?.default?.url || ""
+        thumbnail: normalizeThumbnailUrl(channel.snippet?.thumbnails?.high?.url || channel.snippet?.thumbnails?.default?.url)
       },
       analyticsThrough,
       analyticsMetrics: analyticsResult.metrics,

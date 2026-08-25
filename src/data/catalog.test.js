@@ -62,8 +62,8 @@ test("guest detail related conversations render compact thumbnail rows", () => {
   assert.equal(jasonRows.length, 1);
   assert.ok(michaelRows.every(row => row.includes("related-conversation-thumb")));
   assert.ok(jasonRows.every(row => row.includes("related-conversation-thumb")));
-  assert.equal(episodeThumbnailUrl(episodeById("michael-barnett-2022-midterms")), "https://i.ytimg.com/vi/kJWFTnWOgYM/maxresdefault.jpg");
-  assert.equal(episodeThumbnailUrl(episodeById("restoration-bridge-civic-battle-against-hunger")), "https://i.ytimg.com/vi/y5dQET3O1-c/maxresdefault.jpg");
+  assert.equal(episodeThumbnailUrl(episodeById("michael-barnett-2022-midterms")), "https://img.youtube.com/vi/kJWFTnWOgYM/maxresdefault.jpg");
+  assert.equal(episodeThumbnailUrl(episodeById("restoration-bridge-civic-battle-against-hunger")), "https://img.youtube.com/vi/y5dQET3O1-c/maxresdefault.jpg");
 });
 
 test("savable archive cards use one conversation destination and a separate save control", () => {

@@ -41,6 +41,11 @@ for (const episode of episodes) {
   if (!episode.canonical?.publishedAt || Number.isNaN(Date.parse(episode.canonical.publishedAt))) fail(`${episode.id}: verified publication timestamp is missing or invalid.`);
   if (!Number.isFinite(episode.canonical?.durationSeconds) || episode.canonical.durationSeconds <= 0) fail(`${episode.id}: verified duration is missing or invalid.`);
   if (!String(episode.canonical?.thumbnail || "").includes(`/vi/${episode.videoId}/`)) fail(`${episode.id}: thumbnail does not belong to its exact YouTube master.`);
+  try {
+    if (new URL(episode.canonical.thumbnail).hostname !== "img.youtube.com") fail(`${episode.id}: thumbnail must use the working official YouTube image host.`);
+  } catch {
+    fail(`${episode.id}: thumbnail URL is invalid.`);
+  }
   if (!Array.isArray(episode.canonical?.categories) || !episode.canonical.categories.length) fail(`${episode.id}: at least one verified editorial topic is required.`);
   if (episode.guestNames?.length !== episode.guestIds?.length) fail(`${episode.id}: verified guest names and guest IDs are out of sync.`);
 }
