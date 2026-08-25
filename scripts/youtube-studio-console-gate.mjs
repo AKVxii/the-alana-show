@@ -10,6 +10,7 @@ const read = file => {
 };
 
 const page = read("studio-console/index.html");
+const oauthPrivacy = read("studio-console/privacy/index.html");
 const client = read("src/studio-console.js");
 const styles = read("src/studio-console.css");
 const lib = read("api/youtube-studio-lib.js");
@@ -30,9 +31,27 @@ for (const needle of [
   "No automatic publishing",
   "No deletions",
   "No visibility changes",
-  "data-thumbnail-dialog"
+  "data-thumbnail-dialog",
+  'href="/studio-console/privacy"'
 ]) {
   if (!page.includes(needle)) errors.push(`Private Studio page is missing: ${needle}`);
+}
+
+for (const needle of [
+  "Google & YouTube Data Privacy",
+  "youtube.readonly",
+  "yt-analytics.readonly",
+  "cannot publish, delete, hide, upload, or alter anything on YouTube",
+  "No advertising use",
+  "No sale of data",
+  "encrypted, Secure, HttpOnly, SameSite cookie",
+  "up to 30 days",
+  "Disconnect control",
+  "Google API Services User Data Policy",
+  "Limited Use requirements",
+  'href="/privacy"'
+]) {
+  if (!oauthPrivacy.includes(needle)) errors.push(`Google data privacy notice is missing: ${needle}`);
 }
 
 for (const needle of [
@@ -115,8 +134,8 @@ if (!proposals.includes('"videos": {}')) errors.push("Thumbnail proposal registr
 if (!robots.includes("Disallow: /studio-console") || !robots.includes("Disallow: /api/youtube-studio")) {
   errors.push("Robots rules must exclude the private Studio console and endpoints.");
 }
-if (!vercel.includes('"source": "/studio-console"') || !vercel.includes('"noindex, nofollow, noarchive, nosnippet"')) {
-  errors.push("Vercel headers must prevent indexing and caching of the private console.");
+if (!vercel.includes('"source": "/studio-console"') || !vercel.includes('"source": "/studio-console/(.*)"') || !vercel.includes('"noindex, nofollow, noarchive, nosnippet"')) {
+  errors.push("Vercel headers must prevent indexing and caching of the private console and its privacy notice.");
 }
 if (!packageJson.includes("youtube-studio-console-gate.mjs")) {
   errors.push("YouTube Studio console regression gate must run in npm run quality.");
@@ -129,4 +148,4 @@ if (errors.length) {
 }
 
 console.log("YouTube Studio console gate passed.");
-console.log("  Read-only OAuth, fixed channel identity, encrypted session, individual photo approval and no-write boundary: OK");
+console.log("  Read-only OAuth, fixed channel identity, encrypted session, individual photo approval, clear Google-data privacy and no-write boundary: OK");
