@@ -83,6 +83,7 @@ for (const forbidden of [
 for (const needle of [
   'access_type: "offline"',
   'include_granted_scopes: "true"',
+  'prompt: "select_account consent"',
   'code_challenge_method: "S256"',
   'writeState(res, oauth)'
 ]) {
@@ -148,4 +149,4 @@ if (errors.length) {
 }
 
 console.log("YouTube Studio console gate passed.");
-console.log("  Read-only OAuth, fixed channel identity, encrypted session, individual photo approval, clear Google-data privacy and no-write boundary: OK");
+console.log("  Read-only OAuth, explicit account selection, fixed channel identity, encrypted session, individual photo approval, clear Google-data privacy and no-write boundary: OK");

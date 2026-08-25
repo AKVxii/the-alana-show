@@ -30,7 +30,11 @@ module.exports = async function handler(req, res) {
     scope: READ_ONLY_SCOPES.join(" "),
     access_type: "offline",
     include_granted_scopes: "true",
-    prompt: "consent",
+    // Always reopen Google's identity chooser. The owner may manage a personal
+    // YouTube identity and one or more Brand Account channels under the same
+    // Google login; silently reusing the last identity can authorize the wrong
+    // channel even though the email address itself is correct.
+    prompt: "select_account consent",
     state: oauth.state,
     code_challenge: oauth.challenge,
     code_challenge_method: "S256"
