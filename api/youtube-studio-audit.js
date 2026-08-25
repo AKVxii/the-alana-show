@@ -10,6 +10,8 @@ const {
   yesterday
 } = require("./youtube-studio-lib");
 
+const ANALYTICS_MAX_RESULTS = "200";
+
 function chunks(values, size = 50) {
   const output = [];
   for (let index = 0; index < values.length; index += size) output.push(values.slice(index, index + size));
@@ -63,7 +65,10 @@ async function analyticsByVideo(accessToken, endDate) {
     endDate,
     dimensions: "video",
     sort: "-views",
-    maxResults: "500"
+    // YouTube's targeted Top Videos report accepts at most 200 rows.
+    // The channel currently contains far fewer videos, so this still covers the
+    // complete owner inventory without requesting an unsupported result count.
+    maxResults: ANALYTICS_MAX_RESULTS
   };
   const metricSets = [
     "views,estimatedMinutesWatched,averageViewDuration,averageViewPercentage,likes,comments,shares,subscribersGained",
