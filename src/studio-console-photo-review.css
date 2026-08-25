@@ -1,0 +1,43 @@
+/* Photo-review previews must show the entire YouTube thumbnail.
+   Cropped previews could cause the owner to approve a composition she has not
+   actually seen, so every review surface preserves the full 16:9 frame. */
+.video-thumb {
+  min-height: 0;
+  aspect-ratio: 16 / 9;
+  align-self: start;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  background: #000;
+}
+
+.video-thumb img {
+  width: 100%;
+  height: auto;
+  min-height: 0;
+  aspect-ratio: 16 / 9;
+  display: block;
+  object-fit: contain;
+  object-position: center;
+  background: #000;
+}
+
+.thumbnail-full,
+.thumbnail-mobile-preview {
+  overflow: hidden;
+}
+
+.thumbnail-full img,
+.thumbnail-mobile-preview img {
+  object-fit: contain;
+  object-position: center;
+  background: #000;
+}
+
+@media (max-width: 720px) {
+  .video-thumb,
+  .video-thumb img {
+    min-height: 0;
+    aspect-ratio: 16 / 9;
+  }
+}
