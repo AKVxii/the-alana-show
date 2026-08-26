@@ -24,7 +24,7 @@ function videoIdFromEmbed(value = "") {
 
 function posterUrl(videoId, fallback = false) {
   if (!videoId) return "";
-  return `https://i.ytimg.com/vi/${videoId}/${fallback ? "hqdefault" : "maxresdefault"}.jpg`;
+  return `https://img.youtube.com/vi/${videoId}/${fallback ? "hqdefault" : "maxresdefault"}.jpg`;
 }
 
 class FeaturedVideo extends HTMLElement {

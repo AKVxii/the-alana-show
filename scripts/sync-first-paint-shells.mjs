@@ -1,7 +1,12 @@
 import fs from "node:fs";
 import path from "node:path";
+import { pathToFileURL } from "node:url";
 
 const ROOT = process.cwd();
+const mediaHeaderUrl = pathToFileURL(path.join(ROOT, "src/components/MediaHeader.js")).href;
+const footerUrl = pathToFileURL(path.join(ROOT, "src/components/Footer.js")).href;
+const { MediaHeader } = await import(mediaHeaderUrl);
+const { Footer } = await import(footerUrl);
 const read = relative => fs.readFileSync(path.join(ROOT, relative), "utf8");
 const write = (relative, content) => fs.writeFileSync(path.join(ROOT, relative), content);
 const escapeHtml = value => String(value ?? "").replace(/[&<>"']/g, character => ({
@@ -33,6 +38,13 @@ function ensureHeadAssets(html, entryModule) {
   if (!additions.length) return html;
   if (!html.includes("</head>")) throw new Error("Page is missing </head>.");
   return html.replace("</head>", `${additions.join("")}</head>`);
+}
+
+function replaceAppShell(html, shell, label) {
+  const pattern = /<div id="app">[\s\S]*?<\/div>(?=<noscript>|<script type="module")/i;
+  if (pattern.test(html)) return html.replace(pattern, `<div id="app">${shell}</div>`);
+  if (html.includes('<div id="app"></div>')) return html.replace('<div id="app"></div>', `<div id="app">${shell}</div>`);
+  throw new Error(`${label} app shell was not found.`);
 }
 
 const growthPages = {
@@ -70,12 +82,8 @@ const growthPages = {
 
 for (const [relative, page] of Object.entries(growthPages)) {
   let html = read(relative);
-  const fallback = `<main id="main-content" class="growth-page growth-page-${page.page} static-first-paint-fallback" data-static-first-paint="${page.page}"><section class="media-hero growth-hero"><div class="shell media-hero-inner"><p class="eyebrow"><span></span> ${escapeHtml(page.eyebrow)}</p><h1>${escapeHtml(page.title)}</h1><p>${escapeHtml(page.intro)}</p></div></section></main>`;
-  if (html.includes('<div id="app"></div>')) {
-    html = html.replace('<div id="app"></div>', `<div id="app">${fallback}</div>`);
-  } else if (!html.includes(`data-static-first-paint="${page.page}"`)) {
-    throw new Error(`${relative} is missing an empty or recognized first-paint app shell.`);
-  }
+  const fallback = `${MediaHeader()}<main id="main-content" class="growth-page growth-page-${page.page} static-first-paint-fallback" data-static-first-paint="${page.page}"><section class="media-hero growth-hero"><div class="shell media-hero-inner"><nav class="breadcrumbs" aria-label="Breadcrumb"><ol><li><a href="/">Home</a></li><li aria-current="page">${escapeHtml(page.title)}</li></ol></nav><p class="eyebrow"><span></span> ${escapeHtml(page.eyebrow)}</p><h1>${escapeHtml(page.title)}</h1><p>${escapeHtml(page.intro)}</p></div></section></main>${Footer({ fromSubpage: true })}`;
+  html = replaceAppShell(html, fallback, relative);
   write(relative, ensureHeadAssets(html, "/src/growth-page.js"));
 }
 

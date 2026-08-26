@@ -22,6 +22,17 @@ const xmlEscape = value => String(value ?? "")
   .replace(/"/g, "&quot;")
   .replace(/'/g, "&apos;");
 
+function normalizeThumbnailUrl(value = "") {
+  try {
+    const url = new URL(value);
+    if (url.protocol !== "https:") return "";
+    if (url.hostname === "i.ytimg.com") url.hostname = "img.youtube.com";
+    return url.href;
+  } catch {
+    return "";
+  }
+}
+
 function attribute(html, tagPattern, attributeName) {
   const tag = html.match(tagPattern)?.[0] || "";
   const match = tag.match(new RegExp(`${attributeName}=["']([^"']+)["']`, "i"));
@@ -84,7 +95,7 @@ for (const episode of episodes) {
   const canonical = attribute(html, /<link\s+[^>]*rel=["']canonical["'][^>]*>/i, "href") || `${ORIGIN}/episodes/${episode.id}`;
   const title = titleFromPage(html);
   const description = attribute(html, /<meta\s+[^>]*name=["']description["'][^>]*>/i, "content").replace(/\s+/g, " ").slice(0, 2048);
-  const thumbnail = attribute(html, /<meta\s+[^>]*property=["']og:image["'][^>]*>/i, "content");
+  const thumbnail = normalizeThumbnailUrl(attribute(html, /<meta\s+[^>]*property=["']og:image["'][^>]*>/i, "content"));
   const player = `https://www.youtube-nocookie.com/embed/${episode.videoId}`;
   const lastmod = lastmods.get(canonical);
   const structuredVideo = structuredVideoFromPage(html);

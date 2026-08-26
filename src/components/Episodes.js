@@ -15,24 +15,30 @@ export function BrandedEpisodeArtwork({ compact = false } = {}) {
 }
 
 export function isUsableThumbnailUrl(value = "") {
+  return Boolean(normalizeThumbnailUrl(value));
+}
+
+export function normalizeThumbnailUrl(value = "") {
   try {
     const url = new URL(value);
-    return url.protocol === "https:" || url.protocol === "http:";
+    if (url.protocol !== "https:" && url.protocol !== "http:") return "";
+    if (url.hostname === "i.ytimg.com") url.hostname = "img.youtube.com";
+    return url.href;
   } catch {
-    return false;
+    return "";
   }
 }
 
 function youtubeThumbnailUrl(videoId = "", quality = "hqdefault") {
   const normalizedId = String(videoId).trim();
   return /^[A-Za-z0-9_-]{11}$/.test(normalizedId)
-    ? `https://i.ytimg.com/vi/${encodeURIComponent(normalizedId)}/${quality}.jpg`
+    ? `https://img.youtube.com/vi/${encodeURIComponent(normalizedId)}/${quality}.jpg`
     : "";
 }
 
 export function EpisodeThumbnail(episode = {}, { latest = false } = {}) {
   const derivedThumbnail = youtubeThumbnailUrl(episode.videoId);
-  const thumbnail = isUsableThumbnailUrl(episode.thumbnail) ? episode.thumbnail : derivedThumbnail;
+  const thumbnail = normalizeThumbnailUrl(episode.thumbnail) || derivedThumbnail;
   const validThumbnail = isUsableThumbnailUrl(thumbnail);
   const retryThumbnail = derivedThumbnail && derivedThumbnail !== thumbnail ? derivedThumbnail : "";
   const title = episode.title || "The Alana Show conversation";

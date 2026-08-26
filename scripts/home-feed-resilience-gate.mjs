@@ -41,6 +41,14 @@ assert(verifiedEpisodes.every(episode => episode.canonical?.deck), "Static recov
 // newest master with the same normalized conversation title must win so a
 // replaced/private upload cannot create a duplicate homepage card.
 const collapseReplacementMasters = youtubeApi?._test?.collapseReplacementMasters;
+const normalizeLiveThumbnailUrl = youtubeApi?._test?.normalizeThumbnailUrl;
+assert(typeof normalizeLiveThumbnailUrl === "function", "YouTube feed must expose thumbnail host normalization for regression testing.");
+if (typeof normalizeLiveThumbnailUrl === "function") {
+  assert(
+    normalizeLiveThumbnailUrl("https://i.ytimg.com/vi/Kx7rcDzaqDk/maxresdefault.jpg") === "https://img.youtube.com/vi/Kx7rcDzaqDk/maxresdefault.jpg",
+    "Live YouTube thumbnails must use the working official image host."
+  );
+}
 assert(typeof collapseReplacementMasters === "function", "YouTube feed must expose replacement-master dedupe for regression testing.");
 if (typeof collapseReplacementMasters === "function") {
   const replacementFixture = [
@@ -63,6 +71,7 @@ assert(archive.includes('episode.detailPath || `https://www.youtube.com/watch?v=
 assert(youtubeApiSource.includes('FEATURED_CONVERSATION_VIDEO_ID = "Kx7rcDzaqDk"'), "Live YouTube data must use the approved George LeMieux episode as its featured conversation.");
 assert(episodesComponent.includes('Kx7rcDzaqDk') && episodesComponent.includes('Former U.S. Senator George LeMieux'), "Homepage server-rendered featured content must match the approved George LeMieux episode.");
 assert(episodesComponent.includes('data-thumbnail-retry-src') && episodesComponent.includes('hqdefault'), "Episode thumbnails must remain available when the live feed or maximum-resolution artwork is unavailable.");
+assert(episodesComponent.includes('url.hostname === "i.ytimg.com"') && episodesComponent.includes('url.hostname = "img.youtube.com"'), "Episode cards must normalize legacy YouTube thumbnail hosts.");
 assert(episodesComponent.includes('BrandedEpisodeArtwork'), "Missing thumbnails must retain branded artwork rather than broken image chrome.");
 assert(episodesComponent.includes('thumbnail-brand'), "Exact YouTube thumbnails must retain the subtle Alana Show brand mark.");
 

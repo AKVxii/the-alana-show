@@ -38,7 +38,7 @@ app.innerHTML = `${MediaHeader()}
           <div><dt>Recording</dt><dd>30 minutes · in studio</dd></div>
           <div><dt>Broadcast</dt><dd>Placement confirmed separately</dd></div>
           <div><dt>Distribution</dt><dd>Radio · video · podcast · digital</dd></div>
-          <div><dt>Confirmation</dt><dd>Written payment confirmation required</dd></div>
+          <div><dt>Confirmation</dt><dd>Payment is due at booking!</dd></div>
         </dl>
         <a class="candidate-text-link" href="${bookingUrl}" target="_blank" rel="noopener">View available recording times <span aria-hidden="true">→</span></a>
       </aside>

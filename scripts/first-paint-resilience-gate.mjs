@@ -176,7 +176,9 @@ function verifyHubSync() {
       "on-location",
       "south-florida",
       "specials",
+      "src/components",
       "src/data",
+      "src/lib",
       "scripts/sync-hub-authority.mjs",
       "scripts/sync-first-paint-shells.mjs"
     ]) {

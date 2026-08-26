@@ -16,7 +16,8 @@ import { enrichEpisode, episodes as editorialEpisodes } from "./data/catalog.js"
 import { compactNumber, escapeHtml, excerpt, formatDate, formatDuration, isValidWebsiteOrSocial, nextBroadcastLabel, normalizeWebsiteOrSocial } from "./lib/utils.js";
 import { mergeEpisodeSources, searchEpisodes } from "./lib/episode-search.js";
 import { setupEditorialMotion } from "./lib/motion.js";
-import { lengthBucket, trackEvent } from "./lib/measurement.js";
+import { lengthBucket, setupMeasurement, trackEvent } from "./lib/measurement.js";
+import { setupNavigationWarmup } from "./lib/navigation-prefetch.js";
 import { loadYouTubeFeed } from "./lib/youtube-feed.js";
 import { setupNewsletter } from "./newsletter.js";
 
@@ -44,6 +45,8 @@ app.innerHTML = `
 const state = { episodes: [], selectedCategory: "" };
 
 function setupNavigation() {
+  setupMeasurement();
+  setupNavigationWarmup();
   const menuButton = document.querySelector("[data-menu-button]");
   const nav = document.querySelector("[data-nav]");
   const menuLabel = menuButton?.querySelector(".sr-only");

@@ -1,5 +1,6 @@
 import { MediaHeader, setupMediaNavigation } from "./components/MediaHeader.js";
 import { Footer } from "./components/Footer.js";
+import { normalizeThumbnailUrl } from "./components/Episodes.js";
 import { episodes, episodeById, guestById, organizationById, enrichEpisode } from "./data/catalog.js";
 import { topicHref } from "./data/topic-pages.js";
 import { guestProfileById } from "./data/guest-profiles.js";
@@ -234,7 +235,8 @@ function episodeVideoObject(episode, data) {
   const canonical = detailUrl("episode", episode.id);
   const uploadDate = display.publishedAt || "";
   if (!uploadDate) return null;
-  const thumbnailUrl = display.thumbnail || display.thumbnailUrl || `https://i.ytimg.com/vi/${episode.videoId}/maxresdefault.jpg`;
+  const thumbnailUrl = normalizeThumbnailUrl(display.thumbnail || display.thumbnailUrl)
+    || `https://img.youtube.com/vi/${episode.videoId}/maxresdefault.jpg`;
   const duration = isoDuration(display.durationSeconds);
   const relatedGuests = episodeGuests(episode);
   const relatedOrganizations = (episode.organizationIds || []).map(organizationById).filter(Boolean);
@@ -342,7 +344,7 @@ function applyStaticMetadata(detailType, detailItem) {
     ? episodeDisplay.deck || episodeDisplay.metaDescription || `Watch The Alana Show conversation${guestNames.length ? ` with ${guestNames.join(" & ")}` : ""}.`
     : `Explore verified conversations featuring ${detailItem.name} on The Alana Show.`;
   const generatedImage = isEpisode
-    ? episodeDisplay.thumbnail || `https://i.ytimg.com/vi/${detailItem.videoId}/maxresdefault.jpg`
+    ? normalizeThumbnailUrl(episodeDisplay.thumbnail) || `https://img.youtube.com/vi/${detailItem.videoId}/maxresdefault.jpg`
     : DEFAULT_SOCIAL_IMAGE;
   const pageTitle = isEpisode ? generatedPageTitle : (document.title.trim() || generatedPageTitle);
   const description = isEpisode
@@ -434,7 +436,8 @@ function applyLiveEpisodeMetadata(episode, enriched) {
   const pageTitle = `${title} | The Alana Show`;
   const description = (display.description || display.deck || `Watch ${title} on The Alana Show.`).replace(/\s+/g, " ").trim();
   const conciseDescription = display.deck || display.metaDescription || (description.length > 220 ? `${description.slice(0, 217).trim()}…` : description);
-  const thumbnailUrl = display.thumbnail || display.thumbnailUrl || `https://i.ytimg.com/vi/${episode.videoId}/maxresdefault.jpg`;
+  const thumbnailUrl = normalizeThumbnailUrl(display.thumbnail || display.thumbnailUrl)
+    || `https://img.youtube.com/vi/${episode.videoId}/maxresdefault.jpg`;
   const uploadDate = display.publishedAt || "";
 
   document.title = pageTitle;

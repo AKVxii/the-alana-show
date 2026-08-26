@@ -37,6 +37,17 @@ const slugify = value => String(value)
   .replace(/-{2,}/g, "-");
 const safeJsonLd = value => JSON.stringify(value).replace(/</g, "\\u003c");
 
+function normalizeThumbnailUrl(value = "") {
+  try {
+    const url = new URL(value);
+    if (url.protocol !== "https:") return "";
+    if (url.hostname === "i.ytimg.com") url.hostname = "img.youtube.com";
+    return url.href;
+  } catch {
+    return "";
+  }
+}
+
 function isoDuration(seconds = 0) {
   const total = Number(seconds || 0);
   if (!Number.isFinite(total) || total <= 0) return "";
@@ -102,7 +113,8 @@ const defaultDeck = description.length > 220 ? `${description.slice(0, 217).trim
 const deck = String(explicitDeck || verifiedVideo?.deck || defaultDeck).replace(/\s+/g, " ").trim();
 const publishedAt = String(input.publishedAt || verifiedVideo?.publishedAt || "").trim();
 const durationSeconds = Number(input.durationSeconds || verifiedVideo?.durationSeconds || 0);
-const thumbnail = String(input.thumbnail || verifiedVideo?.thumbnail || `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`).trim();
+const thumbnail = normalizeThumbnailUrl(input.thumbnail || verifiedVideo?.thumbnail)
+  || `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
 const viewCount = Number(verifiedVideo?.viewCount ?? -1);
 if (!title) fail("Provide an explicit editorial title when the verified YouTube feed is unavailable; generic conversation titles are not generated.");
 if (/^Conversation with\b/i.test(title)) fail("Use a specific, searchable editorial title rather than a generic ‘Conversation with…’ title.");

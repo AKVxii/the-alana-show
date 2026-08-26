@@ -72,7 +72,7 @@ assert(!main.includes('trackEvent("Search Query", { query:'), 'Homepage search m
 assert(!episodesPage.includes('trackEvent("Archive Search", { query:'), 'Archive search must not transmit raw search text.');
 assert(!newsletter.includes('trackEvent("Newsletter Success", { email:'), 'Newsletter measurement must not transmit email addresses.');
 
-assert(header.includes('setupMeasurement();'), 'Homepage header must initialize measurement.');
+assert(main.includes('setupMeasurement();'), 'Homepage setup must initialize measurement after server-delivered header rendering.');
 assert(mediaHeader.includes('setupMeasurement();'), 'Subpage header must initialize measurement.');
 assert(main.includes('setupNewsletter();'), 'Homepage must bind the already-rendered newsletter deterministically.');
 assert(newsletter.includes('export function setupNewsletter'), 'Newsletter module must expose deterministic setup.');

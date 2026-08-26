@@ -1,6 +1,7 @@
 import { icon } from "../lib/icons.js";
 import { site } from "../data/site.js";
 import { setupMeasurement } from "../lib/measurement.js";
+import { setupNavigationWarmup } from "../lib/navigation-prefetch.js";
 
 function setupEpisodeEnhancements() {
   if (document.body.dataset.detailType !== "episode") return;
@@ -27,32 +28,16 @@ function setupEpisodeEnhancements() {
   window.setTimeout(load, 0);
 }
 
-function ensureMediaEditorialStyles() {
-  document.documentElement.style.backgroundColor = "#030914";
-  document.body.style.backgroundColor = "#030914";
-
-  const stylesheets = [
-    { selector: 'link[data-media-editorial]', href: "/src/media-editorial.css?v=1", dataset: "mediaEditorial" },
-    { selector: 'link[data-visual-qa]', href: "/src/visual-qa-refinement.css?v=1", dataset: "visualQa" },
-    { selector: 'link[data-mobile-qa-final]', href: "/src/mobile-qa-final.css?v=1", dataset: "mobileQaFinal" },
-    { selector: 'link[data-archive-character]', href: "/src/archive-character.css?v=1", dataset: "archiveCharacter" },
-    { selector: 'link[data-flagship-polish]', href: "/src/flagship-polish.css?v=1", dataset: "flagshipPolish" },
-    { selector: 'link[data-newsletter-styles]', href: "/src/newsletter.css?v=2", dataset: "newsletterStyles" }
-  ];
-
-  stylesheets.forEach(({ selector, href, dataset }) => {
-    if (document.querySelector(selector)) return;
-    const stylesheet = document.createElement("link");
-    stylesheet.rel = "stylesheet";
-    stylesheet.href = href;
-    stylesheet.dataset[dataset] = "true";
-    document.head.append(stylesheet);
-  });
+function ensureMediaPolishStyles() {
+  if (document.querySelector('link[data-media-polish], link[href^="/src/media-polish.css"]')) return;
+  const stylesheet = document.createElement("link");
+  stylesheet.rel = "stylesheet";
+  stylesheet.href = "/src/media-polish.css?v=20260825-smooth";
+  stylesheet.dataset.mediaPolish = "true";
+  document.head.append(stylesheet);
 }
 
 export function MediaHeader() {
-  ensureMediaEditorialStyles();
-  setupMeasurement();
   return `<header class="site-header media-site-header" data-header>
     <div class="shell header-inner">
       <a class="brand" href="/" aria-label="The Alana Show home">
@@ -80,6 +65,9 @@ export function MediaHeader() {
 }
 
 export function setupMediaNavigation() {
+  ensureMediaPolishStyles();
+  setupMeasurement();
+  setupNavigationWarmup();
   const button = document.querySelector("[data-menu-button]");
   const nav = document.querySelector("[data-nav]");
   const label = button?.querySelector(".sr-only");
@@ -111,7 +99,13 @@ export function setupMediaNavigation() {
     const opening = !nav?.classList.contains("open");
     setOpen(opening, { focusFirst: opening });
   });
-  links.forEach(link => link.addEventListener("click", () => setOpen(false)));
+  links.forEach(link => link.addEventListener("click", event => {
+    if (link.getAttribute("aria-current") === "page") {
+      event.preventDefault();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+    setOpen(false);
+  }));
   document.addEventListener("keydown", event => {
     if (event.key === "Escape" && nav?.classList.contains("open")) {
       setOpen(false, { restoreFocus: true });
