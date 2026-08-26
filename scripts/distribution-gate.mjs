@@ -25,12 +25,12 @@ for (const needle of [
   'Official press and media resources for The Alana Show',
   'Tuesdays · 8:00 PM – 8:30 PM ET',
   'True Oldies · South Florida',
-  'href="/about/">Official Host Profile</a>',
+  'href="/about">Official Host Profile</a>',
   'href="/assets/alana-show-logo.svg" download',
   'href="/assets/alana-show-social-card-2026-imessage-v2.png" download',
   'href="/assets/alana-portrait-cutout-v2.png" download',
   'Audience or reach figures are intentionally not listed here unless they can be supported by current source data.',
-  'href="/standards/"',
+  'href="/standards"',
   'inquiry=Media%20inquiry',
   'data-press-header',
   'data-press-footer',
@@ -71,7 +71,7 @@ if (!mediaHeader.includes('document.body.dataset.detailType !== "episode"')) {
   fail("Ordinary media pages must not load episode-only sharing code.");
 }
 
-if (!footer.includes('href="/press/">Press &amp; Media</a>')) {
+if (!footer.includes('href="/press">Press &amp; Media</a>')) {
   fail("Shared footer must expose Press & Media resources.");
 }
 if (!sitemap.includes('<loc>https://thealanashow.com/press</loc>')) {

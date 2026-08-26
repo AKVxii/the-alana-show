@@ -363,7 +363,7 @@ body {
 @media (max-width: 680px) {
   /* Shorter mobile chrome gives content more room while preserving tap size. */
   .header-inner {
-    height: 56px;
+    height: var(--header-height);
   }
 
   .brand-seal {
@@ -377,11 +377,11 @@ body {
   }
 
   .primary-nav {
-    inset-block-start: 56px;
+    inset-block-start: var(--header-height);
   }
 
   html {
-    scroll-padding-top: 72px;
+    scroll-padding-top: calc(var(--header-height) + 12px);
   }
 
   /* topics.css previously reduced this to 42px, which put the first content

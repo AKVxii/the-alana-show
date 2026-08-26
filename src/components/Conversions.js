@@ -13,7 +13,7 @@ const cards = [
     number: "02",
     title: "2026 Candidate Interviews",
     copy: "Review the paid 30-minute media package and request a tentative studio time. Candidate conversations will be added after the first verified episode publishes.",
-    href: "/candidates/",
+    href: "/candidates",
     className: "conversion-card-candidates",
     label: "View candidate interview details and scheduling"
   },
@@ -21,7 +21,7 @@ const cards = [
     number: "03",
     title: "Advertise & Partner",
     copy: "Explore clearly identified opportunities across radio, video, podcast, and web, with editorial independence preserved.",
-    href: "/advertise/",
+    href: "/advertise",
     className: "conversion-card-partner",
     label: "Explore advertising and partnership opportunities"
   }

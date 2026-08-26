@@ -37,8 +37,8 @@ for (const needle of [
   'Entrepreneur · Commercial real estate professional · Community advocate · Media host',
   'Raised in a civically engaged Minnesota family and now based in South Florida',
   'If someone isn’t in the room, don’t talk about them.',
-  'href="/standards/"',
-  'href="/press/">Press &amp; Media Resources</a>',
+  'href="/standards"',
+  'href="/press">Press &amp; Media Resources</a>',
   'inquiry=Media%20inquiry',
   'src="/assets/alana-portrait-cutout-v2.png"',
   'width="958" height="968"',
@@ -60,18 +60,18 @@ for (const needle of [
   if (!homepage.includes(needle)) fail(`Homepage host entity continuity is missing: ${needle}`);
 }
 
-if (!homepageAbout.includes('href="/about/">Full host profile')) {
+if (!homepageAbout.includes('href="/about">Full host profile')) {
   fail("Homepage host introduction must link to the permanent full profile.");
 }
 
-if (!mediaHeader.includes('<a href="/about/">About</a>')) {
+if (!mediaHeader.includes('<a href="/about">About</a>')) {
   fail("Subpage primary navigation must route About to the permanent host profile.");
 }
 if (mediaHeader.includes('<a href="/#about">About</a>')) {
   fail("Subpage primary navigation must not route About back to the homepage anchor.");
 }
 
-if (!footer.includes('href="/about/">About Alana</a>')) {
+if (!footer.includes('href="/about">About Alana</a>')) {
   fail("Shared footer must link About Alana to the permanent host profile.");
 }
 

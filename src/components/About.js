@@ -1,6 +1,7 @@
 import { icon } from "../lib/icons.js";
 
-const ALANA_PORTRAIT_WEBP = "/assets/alana-portrait-cutout-v3.webp";
+const ALANA_PORTRAIT_SRCSET = "/assets/alana-portrait-cutout-480.webp 480w, /assets/alana-portrait-cutout-640.webp 640w, /assets/alana-portrait-cutout-v3.webp 958w";
+const ALANA_PORTRAIT_SIZES = "(max-width: 680px) 94vw, (max-width: 960px) 560px, 46vw";
 const ALANA_PORTRAIT_PNG = "/assets/alana-portrait-cutout-v2.png";
 const ALANA_PORTRAIT_WIDTH = 958;
 const ALANA_PORTRAIT_HEIGHT = 968;
@@ -11,7 +12,7 @@ export function About() {
       <div class="shell about-grid">
         <div class="about-portrait reveal">
           <div class="about-photo-frame">
-            <picture style="display:contents"><source srcset="${ALANA_PORTRAIT_WEBP}" type="image/webp"><img src="${ALANA_PORTRAIT_PNG}" alt="Alana K. Vandeveer in the studio" width="${ALANA_PORTRAIT_WIDTH}" height="${ALANA_PORTRAIT_HEIGHT}" loading="lazy" decoding="async"></picture>
+            <picture style="display:contents"><source srcset="${ALANA_PORTRAIT_SRCSET}" sizes="${ALANA_PORTRAIT_SIZES}" type="image/webp"><img src="${ALANA_PORTRAIT_PNG}" alt="Alana K. Vandeveer in the studio" width="${ALANA_PORTRAIT_WIDTH}" height="${ALANA_PORTRAIT_HEIGHT}" loading="lazy" decoding="async"></picture>
           </div>
           <div class="about-monogram" aria-hidden="true">AKV</div>
         </div>
@@ -33,7 +34,7 @@ export function About() {
           </blockquote>
 
           <div class="host-signature">Alana K. Vandeveer</div>
-          <div class="hero-actions"><a class="button button-outline" href="/about/">Full host profile ${icon("arrow")}</a></div>
+          <div class="hero-actions"><a class="button button-outline" href="/about">Full host profile ${icon("arrow")}</a></div>
         </div>
       </div>
     </section>

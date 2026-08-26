@@ -42,6 +42,18 @@
       ]
     },
     {
+      "source": "/assets/alana-portrait-cutout-480.webp",
+      "headers": [
+        {"key": "Cache-Control", "value": "public, max-age=31556952, immutable"}
+      ]
+    },
+    {
+      "source": "/assets/alana-portrait-cutout-640.webp",
+      "headers": [
+        {"key": "Cache-Control", "value": "public, max-age=31556952, immutable"}
+      ]
+    },
+    {
       "source": "/assets/broadcast-reach-south-florida-v2.webp",
       "headers": [
         {"key": "Cache-Control", "value": "public, max-age=31556952, immutable"}

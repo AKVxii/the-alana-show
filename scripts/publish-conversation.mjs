@@ -182,7 +182,7 @@ for (const guest of guests) {
 }
 
 const canonicalRecord = { title, deck, description, publishedAt, durationSeconds, thumbnail };
-const episodeRecord = `  { id: ${jsString(slug)}, videoId: ${jsString(videoId)}, title: ${jsString(title)}, guestIds: [${guests.map(guest => jsString(guest.slug)).join(", ")}], detailPath: ${jsString(`/episodes/${slug}/`)}, canonical: ${JSON.stringify(canonicalRecord)} },`;
+const episodeRecord = `  { id: ${jsString(slug)}, videoId: ${jsString(videoId)}, title: ${jsString(title)}, guestIds: [${guests.map(guest => jsString(guest.slug)).join(", ")}], detailPath: ${jsString(`/episodes/${slug}`)}, canonical: ${JSON.stringify(canonicalRecord)} },`;
 catalog = appendArrayRecord(catalog, "episodeRecords", episodeRecord);
 
 function insertCrawlLink(html, href, label) {

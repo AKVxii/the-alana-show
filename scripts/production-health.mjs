@@ -131,7 +131,7 @@ await mapLimit(sitemapUrls, MAX_CONCURRENCY, async url => {
 });
 
 await mapLimit(editorialEpisodes, MAX_CONCURRENCY, async episode => {
-  const pathname = episode.detailPath || `/episodes/${episode.id}/`;
+  const pathname = episode.detailPath || `/episodes/${episode.id}`;
   const url = `${ORIGIN}${pathname.startsWith("/") ? pathname : `/${pathname}`}`.replace(/\/$/, "");
   const page = await getText(url);
   if (!page.response?.ok) return;

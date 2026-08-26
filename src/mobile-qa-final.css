@@ -14,12 +14,12 @@
   display: none;
 }
 
-@media (max-width: 960px) {
+@media (max-width: 1120px) {
   /* Make mobile navigation a true navigation layer instead of a short dropdown
      that can expose footer/content navigation beneath it. */
   .primary-nav {
-    inset: 64px 0 0;
-    min-height: calc(100dvh - 64px);
+    inset: var(--header-height) 0 0;
+    min-height: calc(100dvh - var(--header-height));
     padding: 18px 22px 30px;
     align-content: start;
     overflow-y: auto;
@@ -54,8 +54,8 @@
 
 @media (max-width: 680px) {
   .primary-nav {
-    inset: 56px 0 0;
-    min-height: calc(100dvh - 56px);
+    inset: var(--header-height) 0 0;
+    min-height: calc(100dvh - var(--header-height));
   }
 
   /* Restore the restrained detail-page mobile scale. The visual-QA layer is

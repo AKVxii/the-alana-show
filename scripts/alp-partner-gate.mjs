@@ -38,14 +38,17 @@ if (!registry.includes("nonSolicitationOutsideNetwork: true")) fail("AvantLink m
 if (!registry.includes("authorizedPromotionsOnly: true")) fail("authorized-promotion guardrail is missing");
 
 if (!module.includes('rel="sponsored noopener"')) fail("future live affiliate link must use sponsored/noopener relationship attributes");
-if (!module.includes("Affiliate disclosure:")) fail("FTC-style affiliate disclosure is missing near the partner placement");
-if (!module.includes("MERCHANT-APPROVED AVANTLINK OFFER")) fail("merchant-authorized offer provenance is not surfaced");
-if (!module.includes("Partner standard:")) fail("commercial/editorial relationship boundary is missing");
+if (!page.includes("Affiliate disclosure:")) fail("FTC-style affiliate disclosure is missing near the partner placement");
+if (!page.includes("MERCHANT-APPROVED AVANTLINK OFFER")) fail("merchant-authorized offer provenance is not surfaced");
+if (!page.includes("Partner standard:")) fail("commercial/editorial relationship boundary is missing");
 if (!module.includes("alp.offer.code") || !module.includes("const live = Boolean(alp.tracking.url)")) fail("offer code must only surface through the live-link branch");
 if (!module.includes("data-affiliate-consent-open") || !module.includes("data-affiliate-consent-continue")) fail("affiliate tracking consent flow is missing");
 if (!module.includes("No affiliate tracking click is sent unless you choose to continue")) fail("consent explanation must state that no tracking click is sent before consent");
 if (!pageScript.includes('import "./alp-partner.js?v=20260826-alp-placeholder-removal"')) fail("ALP partner module is not mounted on Beyond the Show with the current cache version");
 if (!page.includes('id="partners"')) fail("Beyond the Show partner section is missing");
+if (!page.includes('data-alp-partner-styles')) fail("ALP partner styles must load in the document head");
+if (!page.includes('class="ecosystem-card partner-card alp-partner-card"')) fail("final ALP card must be server-rendered before JavaScript");
+if (module.includes("partnerCard.innerHTML") || module.includes("disclosure.innerHTML")) fail("ALP enhancement must not replace approved server-rendered copy");
 for (const placeholder of [
   "Partner access being finalized through AvantLink.",
   "The offer code is displayed when the website-specific partner link is activated.",

@@ -68,7 +68,7 @@ test("guest detail related conversations render compact thumbnail rows", () => {
 
 test("savable archive cards use one conversation destination and a separate save control", () => {
   const card = episodeCard(episodeById("george-lemieux"), { savable: true });
-  const destination = 'href="/episodes/george-lemieux/"';
+  const destination = 'href="/episodes/george-lemieux"';
 
   assert.equal(card.split(destination).length - 1, 1);
   assert.match(card, /data-episode-primary-link/);

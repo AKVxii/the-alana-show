@@ -27,7 +27,7 @@ function readSavedEpisodes() {
   }
 }
 
-const state = { episodes: [], query: initialGuestQuery, guestContext: initialGuestQuery, category: initialTopicQuery, sort: initialSort, savedOnly: false, saved: readSavedEpisodes(), shown: PAGE_SIZE, usingFallback: false, loading: true };
+const state = { episodes: editorialEpisodes.map(enrichEpisode), query: initialGuestQuery, guestContext: initialGuestQuery, category: initialTopicQuery, sort: initialSort, savedOnly: false, saved: readSavedEpisodes(), shown: PAGE_SIZE, usingFallback: false, loading: false };
 const app = document.querySelector("#app");
 
 app.innerHTML = `${MediaHeader()}<main id="main-content">
@@ -328,7 +328,15 @@ document.querySelector("[data-more]").addEventListener("click", () => {
   render();
   trackEvent("Archive Load More", { shown: Math.min(state.shown, total), total });
 });
-setupMediaNavigation(); setupEditorialMotion(app); renderGuestResults(); load();
+setupMediaNavigation();
+setupEditorialMotion(app);
+setCategoryFilterAvailability(true);
+document.querySelector("[data-library-total]").textContent = String(state.episodes.length);
+updateGuestContext();
+renderGuestResults();
+renderFeatured();
+render();
+load();
 
 window.addEventListener("popstate", () => {
   const params = new URLSearchParams(location.search);

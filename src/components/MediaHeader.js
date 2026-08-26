@@ -56,14 +56,14 @@ export function MediaHeader() {
         <span class="sr-only">Open navigation</span>${icon("menu")}
       </button>
       <nav id="primary-nav" class="primary-nav" aria-label="Primary navigation" data-nav>
-        <a href="/episodes/">Watch</a>
-        <a href="/guests/">Guests</a>
-        <a href="/topics/">Topics</a>
-        <a href="/candidates/">Candidates</a>
-        <a href="/south-florida/">South Florida</a>
-        <a href="/about/">About</a>
-        <a href="/merchandise/">Merchandise</a>
-        <a href="/beyond-the-show/">Beyond the Show</a>
+        <a href="/episodes">Watch</a>
+        <a href="/guests">Guests</a>
+        <a href="/topics">Topics</a>
+        <a href="/candidates">Candidates</a>
+        <a href="/south-florida">South Florida</a>
+        <a href="/about">About</a>
+        <a href="/merchandise">Merchandise</a>
+        <a href="/beyond-the-show">Beyond the Show</a>
         <a href="/#contact">Contact</a>
         <a class="mobile-listen-live" href="${site.trueOldiesLive}" target="_blank" rel="noopener">Listen Live</a>
       </nav>

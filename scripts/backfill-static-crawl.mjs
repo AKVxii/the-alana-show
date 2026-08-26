@@ -246,6 +246,21 @@ function replaceStaticFallback(html, type, fallback) {
   return pattern.test(html) ? html.replace(pattern, fallback) : replaceApp(html, fallback);
 }
 
+function ensureSkipLink(html) {
+  if (html.includes('class="skip-link"')) return html;
+  return html.replace(/<body([^>]*)>/i, '<body$1><a class="skip-link" href="#main-content">Skip to main content</a>');
+}
+
+function reserveEpisodeVideoFrame(html, episode) {
+  if (html.includes("<featured-video")) {
+    return html.replace(/(<featured-video\b[^>]*>\s*<a\b[^>]*>)[\s\S]*?(<\/a>\s*<\/featured-video>)/i, "$1Watch on YouTube$2");
+  }
+  const display = episodeDisplayData(episode);
+  const title = display.title || episode.title;
+  const fallback = `<featured-video data-context="episode" data-initial-src="https://www.youtube-nocookie.com/embed/${encodeURIComponent(episode.videoId)}?rel=0" data-title="${escapeHtml(title)}"><a href="https://www.youtube.com/watch?v=${encodeURIComponent(episode.videoId)}" target="_blank" rel="noopener">Watch on YouTube</a></featured-video>`;
+  return html.replace(/(<div class="video-frame">)<iframe\b[^>]*>[\s\S]*?<\/iframe>(<\/div>)/i, `$1${fallback}$2`);
+}
+
 function breadcrumbs(parent, current) {
   return `<nav class="breadcrumbs" aria-label="Breadcrumb"><ol><li><a href="/">Home</a></li><li><a href="/${parent.toLowerCase()}">${escapeHtml(parent)}</a></li><li aria-current="page">${escapeHtml(current)}</li></ol></nav>`;
 }
@@ -263,8 +278,9 @@ function episodeFallback(episode, html) {
   const overviewSection = overview ? `<section class="related-section episode-overview" data-static-episode-overview aria-labelledby="static-overview-heading"><p class="related-eyebrow"><span></span>ABOUT THIS CONVERSATION</p><h2 id="static-overview-heading">Episode overview</h2><p>${escapeHtml(overview)}</p></section>` : "";
   const topicsSection = topicLinks ? `<section class="related-section episode-topics" data-static-episode-topics aria-labelledby="static-topics-heading"><p class="related-eyebrow"><span></span>EXPLORE MORE</p><h2 id="static-topics-heading">Topics</h2><div class="episode-topic-links">${topicLinks}</div></section>` : "";
   const canonical = `${ORIGIN}/episodes/${episode.id}`;
+  const videoFrame = `<div class="video-frame"><featured-video data-context="episode" data-initial-src="https://www.youtube-nocookie.com/embed/${encodeURIComponent(episode.videoId)}?rel=0" data-title="${escapeHtml(title)}"><a href="https://www.youtube.com/watch?v=${encodeURIComponent(episode.videoId)}" target="_blank" rel="noopener">Watch on YouTube</a></featured-video></div>`;
   const primaryActions = `<div class="detail-actions episode-primary-actions" data-episode-primary-actions><a class="button button-gold" href="https://www.youtube.com/watch?v=${encodeURIComponent(episode.videoId)}" target="_blank" rel="noopener">Watch on YouTube</a><a class="button button-outline" href="mailto:?subject=${encodeURIComponent(title)}&body=${encodeURIComponent(canonical)}">Share by email</a><a class="button button-outline" href="/episodes">All conversations</a></div>`;
-  return `<main id="main-content" class="static-detail-fallback" data-static-crawl-fallback="episode"><section class="detail-hero"><div class="shell detail-shell">${breadcrumbs("Episodes", title)}<p class="eyebrow"><span></span> Episode</p><h1>${escapeHtml(title)}</h1>${guestLinks ? `<p class="detail-byline">A conversation with ${guestLinks}</p>` : ""}${meta ? `<p class="detail-byline episode-meta">${escapeHtml(meta)}</p>` : ""}${primaryActions}<div class="episode-content-grid"><div>${overviewSection}</div><div>${topicsSection}</div></div>${episodeGuestCredentials(episode)}${episodeChapterSection(episode)}${episodeRelatedSection(episode)}</div></section></main>`;
+  return `<main id="main-content" class="static-detail-fallback" data-static-crawl-fallback="episode"><section class="detail-hero"><div class="shell detail-shell">${breadcrumbs("Episodes", title)}<p class="eyebrow"><span></span> Episode</p><h1>${escapeHtml(title)}</h1>${guestLinks ? `<p class="detail-byline">A conversation with ${guestLinks}</p>` : ""}${meta ? `<p class="detail-byline episode-meta">${escapeHtml(meta)}</p>` : ""}${videoFrame}${primaryActions}<div class="episode-content-grid"><div>${overviewSection}</div><div>${topicsSection}</div></div>${episodeGuestCredentials(episode)}${episodeChapterSection(episode)}${episodeRelatedSection(episode)}</div></section></main>`;
 }
 
 function guestFallback(guest, html) {
@@ -462,10 +478,18 @@ let changedGuests = 0;
 for (const episode of targetEpisodes) {
   const relative = `episodes/${episode.id}/index.html`;
   const original = read(relative);
-  let updated = updateEpisodePageMetadata(original, episode);
-  updated = replaceStaticFallback(updated, "episode", episodeFallback(episode, updated));
+  const hasCuratedStaticEditorial = original.includes("data-static-episode-highlights")
+    && original.includes("data-static-episode-guide");
+  let updated = hasCuratedStaticEditorial
+    ? original
+    : updateEpisodePageMetadata(original, episode);
+  if (!hasCuratedStaticEditorial) {
+    updated = replaceStaticFallback(updated, "episode", episodeFallback(episode, updated));
+    updated = replaceStructuredData(updated, episodeGraph(episode, updated));
+  }
+  updated = reserveEpisodeVideoFrame(updated, episode);
+  updated = ensureSkipLink(updated);
   updated = ensureImageAltMeta(updated, episodeDisplayData(episode).title);
-  updated = replaceStructuredData(updated, episodeGraph(episode, updated));
   if (updated !== original) {
     write(relative, updated);
     changedEpisodes += 1;
@@ -476,14 +500,21 @@ for (const guest of targetGuests) {
   const relative = `guests/${guest.id}/index.html`;
   const original = read(relative);
   const profile = guestProfileById(guest.id);
-  let updated = replaceStaticFallback(original, "guest", guestFallback(guest, original));
-  if (profile?.summary) {
+  const hasCuratedStaticProfile = guest.id === "george-lemieux"
+    && original.includes(">LeMieux Center</a>");
+  let updated = hasCuratedStaticProfile
+    ? original
+    : replaceStaticFallback(original, "guest", guestFallback(guest, original));
+  updated = ensureSkipLink(updated);
+  if (!hasCuratedStaticProfile && profile?.summary) {
     updated = replaceMetaContent(updated, "name", "description", profile.summary);
     updated = replaceMetaContent(updated, "property", "og:description", profile.summary);
     updated = replaceMetaContent(updated, "name", "twitter:description", profile.summary);
   }
   updated = ensureImageAltMeta(updated, `${guest.name} on The Alana Show`);
-  updated = replaceStructuredData(updated, guestGraph(guest, updated));
+  if (!hasCuratedStaticProfile) {
+    updated = replaceStructuredData(updated, guestGraph(guest, updated));
+  }
   if (updated !== original) {
     write(relative, updated);
     changedGuests += 1;

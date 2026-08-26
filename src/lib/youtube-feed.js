@@ -1,6 +1,7 @@
 const STORAGE_KEY = "tas:youtube-feed:v1";
 const FRESH_FOR_MS = 10 * 60 * 1000;
 const MAX_STORED_BYTES = 1_250_000;
+const REQUEST_TIMEOUT_MS = 5_000;
 let inFlight = null;
 
 function readCachedFeed() {
@@ -30,7 +31,10 @@ export async function loadYouTubeFeed() {
   if (cached && Date.now() - cached.savedAt < FRESH_FOR_MS) return cached.data;
   if (inFlight) return inFlight;
 
-  inFlight = fetch("/api/youtube", { headers: { Accept: "application/json" } })
+  const controller = new AbortController();
+  const timeout = window.setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
+
+  inFlight = fetch("/api/youtube", { headers: { Accept: "application/json" }, signal: controller.signal })
     .then(async response => {
       if (!response.ok) throw new Error("YouTube feed unavailable");
       const data = await response.json();
@@ -42,6 +46,7 @@ export async function loadYouTubeFeed() {
       throw error;
     })
     .finally(() => {
+      window.clearTimeout(timeout);
       inFlight = null;
     });
 

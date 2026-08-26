@@ -48,11 +48,11 @@ if (!api.includes('"Merchandise order"')) fail("contact API does not allow merch
 const directHomeMount = index.includes('src="/src/merchandise-home.js"');
 const versionedHomeEntry = /src="\/src\/home-entry\.js(?:\?[^"\s]*)?"/.test(index);
 const orderedHomeMount = versionedHomeEntry && homeEntry.includes('import "./merchandise-home.js"');
-if (!home.includes('href="/merchandise/"') || !homeMount.includes("Merchandise()") || !(directHomeMount || orderedHomeMount)) {
+if (!home.includes('href="/merchandise"') || !homeMount.includes("Merchandise()") || !(directHomeMount || orderedHomeMount)) {
   fail("homepage merchandise discovery is missing");
 }
 
-if (!footer.includes('href="/merchandise/"')) fail("footer merchandise discovery is missing");
+if (!footer.includes('href="/merchandise"')) fail("footer merchandise discovery is missing");
 if (!sitemap.includes("https://thealanashow.com/merchandise")) fail("merchandise page is missing from sitemap");
 if (fs.existsSync("assets/alana-show-merchandise-collection.webp.png")) fail("accidental double-extension merchandise asset still exists");
 

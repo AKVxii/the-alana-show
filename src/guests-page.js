@@ -15,7 +15,7 @@ app.innerHTML = `${MediaHeader()}<main id="main-content">
     <p>Browse the verified guests who have joined The Alana Show—from civic leaders and entrepreneurs to artists, entertainers, experts, community builders, and public figures.</p>
   </div></section>
   <section class="media-section archive-section" aria-labelledby="directory-heading" data-reveal><div class="shell">
-    <div class="media-section-heading"><div><p class="eyebrow dark"><span></span> Guest directory</p><h2 id="directory-heading">Browse alphabetically</h2></div><p class="guest-directory-discovery">Looking for the idea instead of the name? <a href="/topics/">Browse conversations by topic →</a></p></div>
+    <div class="media-section-heading"><div><p class="eyebrow dark"><span></span> Guest directory</p><h2 id="directory-heading">Browse alphabetically</h2></div><p class="guest-directory-discovery">Looking for the idea instead of the name? <a href="/topics">Browse conversations by topic →</a></p></div>
     <form class="guest-search" role="search"><label><span>Search by guest name</span><input type="search" data-guest-query placeholder="Guest name" autocomplete="off"></label></form>
     <nav class="alphabet-nav" aria-label="Filter guests by first letter" data-alphabet></nav>
     <p class="archive-status" data-guest-status role="status" aria-live="polite"></p>

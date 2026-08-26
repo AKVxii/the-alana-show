@@ -81,7 +81,7 @@ function showConsentPrompt(onGrant) {
   aside.innerHTML = `
     <div>
       <strong>Help improve The Alana Show?</strong>
-      <p>Allow optional Google Analytics measurement. We do not send names, email addresses, phone numbers, messages, or raw search text. <a href="/privacy/">Privacy</a></p>
+      <p>Allow optional Google Analytics measurement. We do not send names, email addresses, phone numbers, messages, or raw search text. <a href="/privacy">Privacy</a></p>
     </div>
     <div class="analytics-consent-actions">
       <button type="button" class="button button-gold button-small" data-analytics-allow>Allow analytics</button>

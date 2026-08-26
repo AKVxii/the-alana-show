@@ -47,7 +47,7 @@ app.innerHTML = `${MediaHeader()}<main id="main-content">
     <div class="media-section-heading topics-heading" data-reveal><div><p class="eyebrow dark"><span></span> Explore by subject</p><h2 id="topics-heading">Find the conversations that matter to you</h2></div><p>Choose a topic to open a permanent editorial collection of related conversations.</p></div>
     <div class="topics-grid" data-topics-grid>${site.topics.map(topicCard).join("")}</div>
   </div></section>
-  <section class="topics-cta"><div class="shell topics-cta-inner" data-reveal><div><p class="eyebrow"><span></span> Looking for someone specific?</p><h2>Browse the people behind the conversations.</h2></div><div class="topics-cta-actions"><a class="button button-gold" href="/guests/">Guest Directory</a><a class="button button-ghost" href="/episodes/">All Episodes</a></div></div></section>
+  <section class="topics-cta"><div class="shell topics-cta-inner" data-reveal><div><p class="eyebrow"><span></span> Looking for someone specific?</p><h2>Browse the people behind the conversations.</h2></div><div class="topics-cta-actions"><a class="button button-gold" href="/guests">Guest Directory</a><a class="button button-ghost" href="/episodes">All Episodes</a></div></div></section>
 </main>${Footer({ fromSubpage: true })}`;
 
 setupMediaNavigation();

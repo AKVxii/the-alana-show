@@ -1,6 +1,7 @@
 import { icon } from "../lib/icons.js";
 
-const ALANA_PORTRAIT_WEBP = "/assets/alana-portrait-cutout-v3.webp";
+const ALANA_PORTRAIT_SRCSET = "/assets/alana-portrait-cutout-480.webp 480w, /assets/alana-portrait-cutout-640.webp 640w, /assets/alana-portrait-cutout-v3.webp 958w";
+const ALANA_PORTRAIT_SIZES = "(max-width: 480px) 88vw, (max-width: 960px) 420px, 500px";
 const ALANA_PORTRAIT_PNG = "/assets/alana-portrait-cutout-v2.png";
 const ALANA_PORTRAIT_WIDTH = 958;
 const ALANA_PORTRAIT_HEIGHT = 968;
@@ -37,7 +38,7 @@ export function Hero() {
           <div class="portrait-frame">
             <div class="portrait-inner">
               <picture style="display:contents">
-                <source srcset="${ALANA_PORTRAIT_WEBP}" type="image/webp">
+                <source srcset="${ALANA_PORTRAIT_SRCSET}" sizes="${ALANA_PORTRAIT_SIZES}" type="image/webp">
                 <img src="${ALANA_PORTRAIT_PNG}" alt="Alana K. Vandeveer, host of The Alana Show" width="${ALANA_PORTRAIT_WIDTH}" height="${ALANA_PORTRAIT_HEIGHT}" fetchpriority="high" decoding="async">
               </picture>
             </div>

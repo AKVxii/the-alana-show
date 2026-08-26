@@ -22,8 +22,10 @@ export function episodeThumbnailUrl(episode = {}) {
 export function bindThumbnailFallbacks(root = document) {
   root.querySelectorAll("[data-thumbnail-frame]").forEach(frame => {
     const image = frame.querySelector("img");
-    if (!image) return;
+    if (!image || image.dataset.fallbackBound === "true") return;
+    image.dataset.fallbackBound = "true";
     image.addEventListener("error", () => revealThumbnailFallback(frame, image));
+    if (image.complete && image.naturalWidth === 0) revealThumbnailFallback(frame, image);
   });
 }
 

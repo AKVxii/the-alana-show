@@ -15,7 +15,7 @@ export function BroadcastReach({ compact = false } = {}) {
             <p class="eyebrow"><span></span> Regional broadcast</p>
             <h2 id="broadcast-reach-compact-title">South Florida on air.</h2>
             <p>${site.broadcast.summary}</p>
-            <a class="broadcast-reach-text-link" href="/south-florida/#broadcast-reach">View verified broadcast details <span aria-hidden="true">→</span></a>
+            <a class="broadcast-reach-text-link" href="/south-florida#broadcast-reach">View verified broadcast details <span aria-hidden="true">→</span></a>
           </div>
           <div class="broadcast-compact-proof" aria-label="Current True Oldies broadcast information">
             <div>
@@ -59,7 +59,7 @@ export function BroadcastReach({ compact = false } = {}) {
             <h3>Six listed signals. One South Florida show.</h3>
             ${dialPositionList()}
             <p class="broadcast-availability-note">${site.broadcast.availabilityNote}</p>
-            <a class="broadcast-reach-text-link broadcast-reach-text-link-light" href="/episodes/" data-track-event="Broadcast Episodes" data-track-location="broadcast-reach">Browse full conversations <span aria-hidden="true">→</span></a>
+            <a class="broadcast-reach-text-link broadcast-reach-text-link-light" href="/episodes" data-track-event="Broadcast Episodes" data-track-location="broadcast-reach">Browse full conversations <span aria-hidden="true">→</span></a>
           </div>
         </div>
       </div>

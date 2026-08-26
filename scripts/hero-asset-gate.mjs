@@ -8,8 +8,12 @@ const ROOT = process.cwd();
 const SOURCE = "assets/alana-portrait-cutout.png";
 const PNG = "assets/alana-portrait-cutout-v2.png";
 const WEBP = "assets/alana-portrait-cutout-v3.webp";
+const WEBP_480 = "assets/alana-portrait-cutout-480.webp";
+const WEBP_640 = "assets/alana-portrait-cutout-640.webp";
 const PNG_URL = "/assets/alana-portrait-cutout-v2.png";
 const WEBP_URL = "/assets/alana-portrait-cutout-v3.webp";
+const WEBP_480_URL = "/assets/alana-portrait-cutout-480.webp";
+const WEBP_640_URL = "/assets/alana-portrait-cutout-640.webp";
 const EXPECTED_SOURCE_BYTES = 1_003_924;
 const EXPECTED_PNG_BYTES = 551_207;
 const EXPECTED_WEBP_BYTES = 320_326;
@@ -50,6 +54,17 @@ for (const relative of [SOURCE, PNG, WEBP]) {
   if (!fs.existsSync(path.join(ROOT, relative))) fail(`Missing hero asset: ${relative}`);
 }
 
+for (const [relative, width, height] of [[WEBP_480, 480, 485], [WEBP_640, 640, 647]]) {
+  if (!fs.existsSync(path.join(ROOT, relative))) {
+    fail(`Missing responsive hero asset: ${relative}`);
+    continue;
+  }
+  const dimensions = webpDimensions(fs.readFileSync(path.join(ROOT, relative)));
+  if (!dimensions || dimensions.width !== width || dimensions.height !== height) {
+    fail(`${relative} dimensions must remain ${width}x${height}.`);
+  }
+}
+
 if (!errors.length) {
   const sourceBytes = fs.statSync(path.join(ROOT, SOURCE)).size;
   const pngBuffer = fs.readFileSync(path.join(ROOT, PNG));
@@ -82,12 +97,12 @@ const hero = read("src/components/Hero.js");
 const index = read("index.html");
 const vercel = read("vercel.json");
 
-if (!hero.includes(`const ALANA_PORTRAIT_WEBP = "${WEBP_URL}"`)) fail("Hero component is not using the preferred lossless WebP portrait.");
+if (![WEBP_480_URL, WEBP_640_URL, WEBP_URL].every(url => hero.includes(url))) fail("Hero component is missing a responsive lossless WebP portrait source.");
 if (!hero.includes(`const ALANA_PORTRAIT_PNG = "${PNG_URL}"`)) fail("Hero component is missing the verified PNG fallback.");
-if (!hero.includes(`<source srcset="${'${ALANA_PORTRAIT_WEBP}'}" type="image/webp">`)) fail("Hero picture source must prefer lossless WebP.");
-if (!index.includes(`rel="preload" as="image" href="${WEBP_URL}" type="image/webp"`)) fail("Homepage is not preloading the preferred hero WebP.");
+if (!hero.includes('<source srcset="${ALANA_PORTRAIT_SRCSET}" sizes="${ALANA_PORTRAIT_SIZES}" type="image/webp">')) fail("Hero picture source must provide responsive lossless WebP candidates.");
+if (!index.includes(`rel="preload" as="image" href="${WEBP_URL}"`) || !index.includes("imagesrcset=")) fail("Homepage is not preloading the responsive hero WebP source set.");
 if (!index.includes(`"image": "https://thealanashow.com${PNG_URL}"`)) fail("Homepage Person schema must keep the broadly compatible verified PNG portrait.");
-for (const url of [PNG_URL, WEBP_URL]) {
+for (const url of [PNG_URL, WEBP_480_URL, WEBP_640_URL, WEBP_URL]) {
   if (!vercel.includes(`"source": "${url}"`)) fail(`Versioned hero asset is missing its dedicated cache rule: ${url}.`);
 }
 if (!vercel.includes('"value": "public, max-age=31556952, immutable"')) fail("Versioned hero assets must retain long-lived immutable browser caching.");

@@ -129,6 +129,21 @@ function validateHtmlSet(base, htmlFiles, requiredRoutes, label) {
       errors.push(`${label}${relative}: ${issue}.`);
     }
 
+    if (/^episodes\/[^/]+\/index\.html$/.test(relative)) {
+      if (!html.includes('class="skip-link"') || !html.includes('href="#main-content"')) {
+        errors.push(`${label}${relative}: episode detail must deliver its skip link before JavaScript.`);
+      }
+      if (!/<div class="video-frame"><featured-video\b/i.test(html)) {
+        errors.push(`${label}${relative}: episode detail must reserve the lightweight video frame before JavaScript.`);
+      }
+      if (!/<featured-video\b[^>]*>\s*<a\b[^>]*>Watch on YouTube<\/a>\s*<\/featured-video>/i.test(html)) {
+        errors.push(`${label}${relative}: episode fallback must reuse the approved “Watch on YouTube” label.`);
+      }
+      if (/<iframe\b[^>]*youtube(?:-nocookie)?\.com/i.test(html)) {
+        errors.push(`${label}${relative}: episode detail must not eagerly load a YouTube iframe.`);
+      }
+    }
+
     if (requiredRoutes.includes(relative)) {
       for (const marker of deferredStyleMarkers) {
         if (new RegExp(`<link\\b[^>]*\\b${marker}\\b`, "i").test(html)) {

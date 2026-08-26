@@ -17,14 +17,99 @@
 }
 
 .detail-hero {
+  padding: 84px 0 42px;
   background:
     radial-gradient(circle at 82% 18%, rgba(36, 75, 115, .28), transparent 34%),
     linear-gradient(120deg, #030914, #081a30 72%, #0b223d);
 }
 
+.detail-hero .breadcrumbs {
+  margin-bottom: 20px;
+}
+
 .detail-hero h1 {
+  max-width: 860px;
+  margin-bottom: 12px;
+  font-size: clamp(2rem, 3.2vw, 3.15rem);
+  line-height: 1.03;
+  letter-spacing: -.028em;
+  text-wrap: balance;
   text-shadow: none;
 }
+
+.detail-byline {
+  margin-bottom: 20px;
+  font-size: .98rem;
+}
+
+.guest-detail-intro {
+  padding: 18px 0;
+  gap: 18px;
+}
+
+.guest-monogram-large {
+  width: 82px;
+  height: 82px;
+  flex: 0 0 82px;
+  font-size: 1.6rem;
+}
+
+.related-section {
+  padding-top: 18px;
+  margin-top: 14px;
+}
+
+body[data-topic-id] .topics-hero {
+  padding-top: 82px;
+  padding-bottom: 0;
+}
+
+body[data-detail-id="scott-diament-gillian-lieberman"] #episode-summary .related-section > p:not(.related-eyebrow) {
+  max-width: 78ch;
+  margin: 0 0 18px;
+  line-height: 1.72;
+}
+
+body[data-detail-id="scott-diament-gillian-lieberman"] #episode-summary .related-section > p:nth-of-type(4),
+body[data-detail-id="scott-diament-gillian-lieberman"] #episode-summary .related-section > p:nth-of-type(5) {
+  display: inline-block;
+  width: calc(50% - 10px);
+  max-width: none;
+  vertical-align: top;
+  padding: 18px 20px;
+  margin-top: 4px;
+  margin-bottom: 22px;
+  border: 1px solid rgba(213, 174, 83, .26);
+  border-radius: 10px;
+  background: linear-gradient(145deg, rgba(8, 25, 46, .78), rgba(3, 12, 25, .58));
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.025);
+}
+
+body[data-detail-id="scott-diament-gillian-lieberman"] #episode-summary .related-section > p:nth-of-type(4) {
+  margin-right: 16px;
+}
+
+body[data-detail-id="scott-diament-gillian-lieberman"] #episode-summary .related-section > p:nth-of-type(4)::first-line,
+body[data-detail-id="scott-diament-gillian-lieberman"] #episode-summary .related-section > p:nth-of-type(5)::first-line {
+  color: #e2bd62;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.16rem;
+  font-weight: 700;
+  line-height: 1.7;
+}
+
+body[data-detail-id="scott-diament-gillian-lieberman"] #episode-summary .related-section > p:nth-of-type(6) {
+  clear: both;
+  margin-top: 2px;
+  color: rgba(245, 247, 250, .88);
+}
+
+body[data-detail-id="scott-diament-gillian-lieberman"] #episode-summary .related-section > p:nth-of-type(7) {
+  color: #e2bd62;
+  font-size: .96rem;
+  letter-spacing: .025em;
+}
+
 
 .video-frame {
   border-color: rgba(216, 184, 102, .22);
@@ -77,12 +162,49 @@
 }
 
 @media (max-width: 640px) {
+  .detail-hero {
+    padding: 90px 0 36px;
+  }
+
+  .detail-hero .breadcrumbs {
+    margin-bottom: 18px;
+  }
+
+  .detail-hero h1 {
+    font-size: clamp(1.9rem, 9vw, 2.55rem);
+    line-height: 1.04;
+  }
+
+  .guest-detail-intro {
+    padding: 16px 0;
+  }
+
+  body[data-topic-id] .topics-hero {
+    padding-top: 76px;
+    padding-bottom: 0;
+  }
+
+  body[data-detail-id="scott-diament-gillian-lieberman"] #episode-summary .related-section > p:nth-of-type(4),
+  body[data-detail-id="scott-diament-gillian-lieberman"] #episode-summary .related-section > p:nth-of-type(5) {
+    display: block;
+    width: 100%;
+    margin-right: 0;
+    padding: 16px;
+  }
+
   .related-conversation-card {
     border-radius: 4px;
   }
 
   .video-frame {
     box-shadow: 0 12px 30px rgba(3, 12, 28, .18);
+  }
+}
+
+@media (min-width: 641px) and (max-width: 980px) {
+  body[data-topic-id] .topics-hero {
+    padding-top: 78px;
+    padding-bottom: 0;
   }
 }
 
@@ -459,7 +581,7 @@ body {
 @media (max-width: 680px) {
   /* Shorter mobile chrome gives content more room while preserving tap size. */
   .header-inner {
-    height: 56px;
+    height: var(--header-height);
   }
 
   .brand-seal {
@@ -473,11 +595,11 @@ body {
   }
 
   .primary-nav {
-    inset-block-start: 56px;
+    inset-block-start: var(--header-height);
   }
 
   html {
-    scroll-padding-top: 72px;
+    scroll-padding-top: calc(var(--header-height) + 12px);
   }
 
   /* topics.css previously reduced this to 42px, which put the first content
@@ -642,12 +764,12 @@ body {
   display: none;
 }
 
-@media (max-width: 960px) {
+@media (max-width: 1120px) {
   /* Make mobile navigation a true navigation layer instead of a short dropdown
      that can expose footer/content navigation beneath it. */
   .primary-nav {
-    inset: 64px 0 0;
-    min-height: calc(100dvh - 64px);
+    inset: var(--header-height) 0 0;
+    min-height: calc(100dvh - var(--header-height));
     padding: 18px 22px 30px;
     align-content: start;
     overflow-y: auto;
@@ -682,8 +804,8 @@ body {
 
 @media (max-width: 680px) {
   .primary-nav {
-    inset: 56px 0 0;
-    min-height: calc(100dvh - 56px);
+    inset: var(--header-height) 0 0;
+    min-height: calc(100dvh - var(--header-height));
   }
 
   /* Restore the restrained detail-page mobile scale. The visual-QA layer is
@@ -794,7 +916,7 @@ body {
 /* src/flagship-polish.css */
 /* Premium visual rhythm for the existing brand and its integrated library. */
 .site-header::after{content:"";height:1px;position:absolute;inset:auto 0 -1px;pointer-events:none;background:linear-gradient(90deg,transparent 3%,rgba(216,184,102,.12) 20%,rgba(216,184,102,.48) 50%,rgba(216,184,102,.12) 80%,transparent 97%)}
-.header-inner{height:72px}.brand-copy strong{letter-spacing:.005em}.brand-copy span{color:var(--gold-300);letter-spacing:.16em}.primary-nav{gap:clamp(8px,1vw,16px)}.primary-nav a{letter-spacing:.045em}
+.header-inner{height:var(--header-height)}.brand-copy strong{letter-spacing:.005em}.brand-copy span{color:var(--gold-300);letter-spacing:.16em}.primary-nav{gap:clamp(8px,1vw,16px)}.primary-nav a{letter-spacing:.045em}
 
 /* Homepage: preserve its words and imagery while increasing presence. */
 body:has(.hero#home) .hero{min-height:min(900px,calc(100svh - 2px))}
@@ -831,7 +953,7 @@ body:has(.hero#home) .hero-credentials{padding-top:17px;border-top:1px solid rgb
 .media-card-actions{position:relative;z-index:2;margin-top:auto;padding-top:21px;display:flex;align-items:center;justify-content:flex-end;gap:14px;border-top:1px solid rgba(20,35,58,.1)}.save-conversation{padding:5px 0;display:inline-flex;align-items:center;gap:6px;color:#4f5b6e;border:0;background:transparent;font-size:.65rem;font-weight:850;letter-spacing:.06em;text-transform:uppercase;cursor:pointer}.save-conversation span{color:#72521a;font-size:1.05rem;line-height:1}.save-conversation:hover,.save-conversation[aria-pressed="true"]{color:var(--navy-950)}.flagship-library-grid .media-card h2 a::after{content:"";position:absolute;z-index:1;inset:0}.flagship-library-grid .tag-list{position:relative;z-index:2}.flagship-archive-controls :focus-visible,.topic-ribbon button:focus-visible,.flagship-library-grid a:focus-visible,.flagship-library-grid button:focus-visible,.flagship-empty button:focus-visible{outline:3px solid var(--ivory-50);outline-offset:2px;box-shadow:0 0 0 6px var(--navy-950)}.flagship-empty{padding-block:80px}.flagship-empty>span{display:block;margin-bottom:12px;color:var(--gold-500);font-size:2rem}.flagship-empty .button{margin-top:22px}
 
 @media(max-width:1120px){.flagship-archive-controls{grid-template-columns:1.35fr 1fr 1fr}.archive-control-actions{grid-column:1/-1}body:has(.hero#home) .hero-grid{min-height:auto}}
-@media(max-width:760px){.header-inner{height:66px}body:has(.hero#home) .hero{min-height:auto}body:has(.hero#home) .hero-grid{min-height:auto;padding-top:98px;padding-bottom:52px}body:has(.hero#home) .title-main{font-size:clamp(4.2rem,20vw,6rem)}body:has(.hero#home) .portrait-stage{width:min(100%,420px)}.flagship-archive-hero.media-hero{min-height:470px;padding:110px 0 48px}.flagship-archive-hero .breadcrumbs{margin-bottom:32px}.flagship-archive-hero h1{font-size:clamp(4.3rem,21vw,6.6rem)}.flagship-archive-hero p:last-of-type{font-size:1rem}.archive-credentials{margin-top:27px;gap:10px 18px}.flagship-archive-controls{padding:17px;grid-template-columns:1fr}.archive-control-actions{grid-column:auto;align-items:stretch}.archive-control-actions>*{flex:1}.archive-section{padding-block:60px 72px}}
+@media(max-width:760px){.header-inner{height:var(--header-height)}body:has(.hero#home) .hero{min-height:auto}body:has(.hero#home) .hero-grid{min-height:auto;padding-top:98px;padding-bottom:52px}body:has(.hero#home) .title-main{font-size:clamp(4.2rem,20vw,6rem)}body:has(.hero#home) .portrait-stage{width:min(100%,420px)}.flagship-archive-hero.media-hero{min-height:470px;padding:110px 0 48px}.flagship-archive-hero .breadcrumbs{margin-bottom:32px}.flagship-archive-hero h1{font-size:clamp(4.3rem,21vw,6.6rem)}.flagship-archive-hero p:last-of-type{font-size:1rem}.archive-credentials{margin-top:27px;gap:10px 18px}.flagship-archive-controls{padding:17px;grid-template-columns:1fr}.archive-control-actions{grid-column:auto;align-items:stretch}.archive-control-actions>*{flex:1}.archive-section{padding-block:60px 72px}}
 @media(max-width:480px){.archive-credentials{display:grid;grid-template-columns:1fr}.archive-control-actions{display:grid;grid-template-columns:1fr 1fr}.flagship-library-grid .media-card-body{padding:21px 19px 18px}.media-card-actions{align-items:flex-start;flex-direction:column}}
 @media(prefers-reduced-motion:reduce){.flagship-library-grid .media-card{transition:none}.flagship-library-grid .media-card:hover,.flagship-library-grid .media-card:focus-within{transform:none}}
 

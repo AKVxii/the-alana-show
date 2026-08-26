@@ -37,7 +37,7 @@ test("directory sorting and alphabet navigation use canonical surnames", () => {
 });
 test("links preserve static profiles and filter the archive for new guests", () => {
   assert.equal(guestConversationPath({ name: "Jane Doe", detailPath: "" }), "/episodes/?guest=Jane%20Doe");
-  assert.equal(guestConversationPath({ name: "Michael Barnett", detailPath: "/guests/michael-barnett/" }), "/guests/michael-barnett/");
+  assert.equal(guestConversationPath({ name: "Michael Barnett", detailPath: "/guests/michael-barnett" }), "/guests/michael-barnett");
 });
 test("episode search returns repeat and multi-guest conversations", () => {
   assert.deepEqual(searchEpisodes(archive, "Jane Doe").map(item => item.videoId), ["one", "two"]);

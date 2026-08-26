@@ -22,7 +22,7 @@ assert(/<meta\s+name=["']robots["']\s+content=["']noindex,follow["']/i.test(notF
 assert(/<title>Page Not Found \| The Alana Show<\/title>/i.test(notFound), '404.html is missing its branded title.');
 assert(!/<link\b[^>]*rel=["']canonical["']/i.test(notFound), '404.html must not declare a canonical URL.');
 assert(/class=["']skip-link["'][^>]*href=["']#main-content["']/i.test(notFound), '404.html is missing a skip link.');
-for (const href of ['/', '/episodes/', '/guests/']) {
+for (const href of ['/', '/episodes', '/guests']) {
   assert(notFound.includes(`href="${href}"`), `404.html is missing recovery link ${href}.`);
 }
 assert(!sitemap.includes('/404'), '404 page must not be listed in sitemap.xml.');

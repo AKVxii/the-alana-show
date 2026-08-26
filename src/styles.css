@@ -28,12 +28,13 @@
   --radius-md: 17px;
   --radius-lg: 24px;
   --shell: 1320px;
+  --header-height: 72px;
   --serif: "Iowan Old Style", "Palatino Linotype", Palatino, Baskerville, Georgia, serif;
   --sans: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
 * { box-sizing: border-box; }
-html { scroll-behavior: smooth; scroll-padding-top: 88px; }
+html { scroll-behavior: auto; scroll-padding-top: calc(var(--header-height) + 16px); }
 body {
   margin: 0;
   color: var(--ink);
@@ -148,7 +149,7 @@ p { margin-bottom: 0; }
   border-bottom: 1px solid rgba(216,184,102,.18);
   backdrop-filter: blur(18px);
 }
-.header-inner { height: 66px; display: flex; align-items: center; gap: 16px; }
+.header-inner { height: var(--header-height); display: flex; align-items: center; gap: 16px; }
 .brand { display: inline-flex; align-items: center; gap: 12px; text-decoration: none; color: var(--white); }
 .brand-seal {
   width: 46px; height: 46px; display: grid; place-items: center;
@@ -164,6 +165,8 @@ p { margin-bottom: 0; }
 .primary-nav a::after { content: ""; position: absolute; inset: auto 0 15px; height: 2px; background: var(--gold-400); transform: scaleX(0); transition: transform .2s ease; }
 .primary-nav a:hover, .primary-nav a:focus-visible { color: var(--gold-300); }
 .primary-nav a:hover::after, .primary-nav a:focus-visible::after { transform: scaleX(1); }
+.primary-nav a[aria-current="page"] { color: var(--gold-300); }
+.primary-nav a[aria-current="page"]::after { transform: scaleX(1); }
 .header-actions { display: flex; align-items: center; gap: 10px; }
 .search-trigger {
   min-height: 40px; padding: 8px 12px; display: inline-flex; align-items: center; gap: 8px;
@@ -600,20 +603,27 @@ p { margin-bottom: 0; }
   .editorial-pair { grid-template-columns: minmax(0, 1.86fr) minmax(280px, 1fr); }
 }
 
-@media (max-width: 960px) {
-  html { scroll-padding-top: 76px; }
-  .section { padding: 56px 0; }
-  .header-inner { height: 64px; }
+@media (max-width: 1120px) {
+  :root { --header-height: 64px; }
+  html { scroll-padding-top: calc(var(--header-height) + 12px); }
+  .header-inner { height: var(--header-height); }
   .menu-button { margin-left: auto; display: grid; }
   .primary-nav {
-    position: fixed; inset: 64px 0 auto; margin: 0; padding: 22px;
-    display: grid; gap: 0; opacity: 0; pointer-events: none; transform: translateY(-120%);
+    position: fixed; inset: var(--header-height) 0 0; margin: 0; padding: 22px;
+    min-height: calc(100dvh - var(--header-height));
+    display: grid; align-content: start; gap: 0; overflow-y: auto;
+    visibility: hidden; opacity: 0; pointer-events: none; transform: translateY(-24px);
     background: rgba(3,9,20,.985); border-bottom: 1px solid rgba(216,184,102,.2);
-    transition: opacity .25s ease, transform .25s ease;
+    transition: opacity .2s ease, transform .2s ease;
+    overscroll-behavior: contain;
   }
-  .primary-nav.open { opacity: 1; pointer-events: auto; transform: translateY(0); }
+  .primary-nav.open { visibility: visible; opacity: 1; pointer-events: auto; transform: translateY(0); }
   .primary-nav a { padding: 13px 4px; border-bottom: 1px solid rgba(255,255,255,.07); font-size: .78rem; }
   .header-actions .button { display: none; }
+}
+
+@media (max-width: 960px) {
+  .section { padding: 56px 0; }
   .hero-grid { grid-template-columns: 1fr; padding-top: 96px; }
   .hero-copy { max-width: 820px; }
   .portrait-stage { justify-self: center; width: min(100%, 430px); }
@@ -629,16 +639,17 @@ p { margin-bottom: 0; }
 }
 
 @media (max-width: 680px) {
+  :root { --header-height: 56px; }
   .shell { width: min(calc(100% - 28px), var(--shell)); }
   .section { padding: 48px 0; }
   .section-heading { align-items: start; flex-direction: column; gap: 13px; }
   .brand-copy span { display: none; }
   .header-actions { display: none; }
-  .header-inner { height: 60px; }
+  .header-inner { height: var(--header-height); }
   .brand-seal { width: 40px; height: 40px; }
   .brand-copy strong { font-size: 1.15rem; }
   .menu-button { width: 40px; height: 40px; }
-  .primary-nav { inset-block-start: 60px; }
+  .primary-nav { inset-block-start: var(--header-height); min-height: calc(100dvh - var(--header-height)); }
   .hero-grid { padding: 72px 0 24px; gap: 20px; }
   .hero .eyebrow { margin-bottom: 8px; font-size: .66rem; }
   .title-small { font-size: .92rem; }

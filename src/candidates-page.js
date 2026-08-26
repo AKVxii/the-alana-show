@@ -107,7 +107,7 @@ app.innerHTML = `${MediaHeader()}
       <div class="candidate-standards-copy" data-reveal>
         <p>Participation is available to legally qualified candidates on the same published package price and core terms. An appearance does not constitute an endorsement by The Alana Show, Alana K. Vandeveer, or participating broadcast outlets.</p>
         <p>Campaigns remain responsible for their own reporting and compliance obligations. After a time is requested, the campaign receives Alana K. Vandeveer's W-9 and written payment instructions. Payment is due at booking! Scheduling and placement remain subject to studio availability, participating-station policies, and applicable legal requirements.</p>
-        <a class="candidate-text-link" href="/standards/">Read The Alana Show editorial standards <span aria-hidden="true">→</span></a>
+        <a class="candidate-text-link" href="/standards">Read The Alana Show editorial standards <span aria-hidden="true">→</span></a>
       </div>
     </div>
   </section>

@@ -22,7 +22,7 @@ expect(growth.includes('On-location interview or event'), "On-location CTA does 
 expect(growth.includes('Political and public-affairs appearances do not imply endorsement.'), "On-location public-affairs neutrality note is missing.");
 
 const partner = read("src/components/Partner.js");
-expect(partner.includes('href="/on-location/"'), "Homepage partnership section does not surface the on-location page.");
+expect(partner.includes('href="/on-location"'), "Homepage partnership section does not surface the on-location page.");
 
 const contact = read("src/components/Contact.js");
 expect(contact.includes('<option>On-location interview or event</option>'), "Contact form is missing the on-location inquiry option.");
@@ -32,7 +32,7 @@ const api = read("api/contact.js");
 expect(api.includes('"On-location interview or event"'), "Contact API does not allow the on-location inquiry type.");
 
 const footer = read("src/components/Footer.js");
-expect(footer.includes('href="/on-location/"'), "Footer does not link to the on-location page.");
+expect(footer.includes('href="/on-location"'), "Footer does not link to the on-location page.");
 
 const sitemap = read("sitemap.xml");
 expect(sitemap.includes('<loc>https://thealanashow.com/on-location</loc>'), "Sitemap is missing the on-location page.");

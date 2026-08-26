@@ -64,7 +64,7 @@ export function buildGuestDirectory(episodeRecords = [], curatedGuests = []) {
       : guest.episodeIds.length
         ? new Set(guest.episodeIds).size
         : guest.conversationCount || 0,
-    detailPath: STATIC_GUEST_IDS.has(guest.id) ? `/guests/${guest.id}/` : ""
+    detailPath: STATIC_GUEST_IDS.has(guest.id) ? `/guests/${guest.id}` : ""
   })).sort((a, b) => a.sortName.localeCompare(b.sortName, "en", { sensitivity: "base" }));
 }
 

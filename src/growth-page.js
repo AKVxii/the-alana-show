@@ -37,13 +37,13 @@ const specialsPage = candidateSpecialActive
       exploreTitle: "Follow a focused series.",
       cardAction: "Explore",
       cards: [
-        ["2026 Candidates Special", "Review the published package and request a candidate interview time.", "/candidates/"],
+        ["2026 Candidates Special", "Review the published package and request a candidate interview time.", "/candidates"],
         ["Stepping Up", "Meet people who saw a need, took responsibility, and chose to make a difference.", topicHref("Stepping Up")],
-        ["Community & Public Service", "Explore conversations centered on civic life, service, organizations, and local leadership.", "/topics/"]
+        ["Community & Public Service", "Explore conversations centered on civic life, service, organizations, and local leadership.", "/topics"]
       ],
       ctaEyebrow: "Explore more",
       ctaTitle: "Move from a special series into the full conversation archive.",
-      ctas: `${internal("/topics/", "Browse Topics")}${internal("/episodes/", "All Conversations", "button button-ghost")}`
+      ctas: `${internal("/topics", "Browse Topics")}${internal("/episodes", "All Conversations", "button button-ghost")}`
     }
   : {
       eyebrow: "Focused series · enduring conversations",
@@ -52,18 +52,18 @@ const specialsPage = candidateSpecialActive
       featureEyebrow: "Editorial collections",
       featureTitle: "Focused conversations, organized with purpose.",
       featureCopy: "The Alana Show groups selected interviews around meaningful themes, communities, and recurring series without turning the archive into a maze.",
-      panel: `<span class="growth-panel-kicker">Explore the archive</span><strong>Stories worth returning to.</strong><p>Special collections connect individual conversations to the larger subjects and communities around them.</p>${internal("/episodes/", "Browse Conversations", "button button-light")}`,
+      panel: `<span class="growth-panel-kicker">Explore the archive</span><strong>Stories worth returning to.</strong><p>Special collections connect individual conversations to the larger subjects and communities around them.</p>${internal("/episodes", "Browse Conversations", "button button-light")}`,
       exploreEyebrow: "Collections",
       exploreTitle: "Explore a collection.",
       cardAction: "View collection",
       cards: [
         ["Stepping Up", "Meet people who saw a need, took responsibility, and chose to make a difference.", topicHref("Stepping Up")],
-        ["South Florida", "Explore conversations rooted in the people, organizations, and issues shaping the region.", "/south-florida/"],
-        ["Topics", "Browse the archive through recurring subjects and ideas.", "/topics/"]
+        ["South Florida", "Explore conversations rooted in the people, organizations, and issues shaping the region.", "/south-florida"],
+        ["Topics", "Browse the archive through recurring subjects and ideas.", "/topics"]
       ],
       ctaEyebrow: "Keep exploring",
       ctaTitle: "Find the next conversation by guest, topic, or idea.",
-      ctas: `${internal("/episodes/", "Conversation Archive")}${internal("/guests/", "Browse Guests", "button button-ghost")}`
+      ctas: `${internal("/episodes", "Conversation Archive")}${internal("/guests", "Browse Guests", "button button-ghost")}`
     };
 
 const pages = {
@@ -85,7 +85,7 @@ const pages = {
     ],
     ctaEyebrow: "Have a South Florida story?",
     ctaTitle: "Bring a meaningful local conversation to the table.",
-    ctas: `${internal("/book/", "Be a Guest")}${internal(southFloridaContact, "Recommend a Story", "button button-ghost")}`
+    ctas: `${internal("/book", "Be a Guest")}${internal(southFloridaContact, "Recommend a Story", "button button-ghost")}`
   },
   specials: specialsPage,
   advertise: {
@@ -126,7 +126,7 @@ const pages = {
     ],
     ctaEyebrow: "Have the show out",
     ctaTitle: "If the best place for the conversation is your place, tell us about it.",
-    ctas: `${internal(onLocationContact, "Request an On-Location Conversation")}${internal("/standards/", "Editorial Standards", "button button-ghost")}`
+    ctas: `${internal(onLocationContact, "Request an On-Location Conversation")}${internal("/standards", "Editorial Standards", "button button-ghost")}`
   },
   book: {
     eyebrow: "Guest inquiries · story ideas · interviews",
@@ -146,7 +146,7 @@ const pages = {
     ],
     ctaEyebrow: "Ready to reach out?",
     ctaTitle: "Tell us the story you think The Alana Show should hear.",
-    ctas: `${internal(guestContact, "Submit a Guest Inquiry")}${internal("/guests/", "Browse Past Guests", "button button-ghost")}`
+    ctas: `${internal(guestContact, "Submit a Guest Inquiry")}${internal("/guests", "Browse Past Guests", "button button-ghost")}`
   }
 };
 

@@ -79,7 +79,7 @@ for (const page of pages) {
   }
 
   if (!sitemap.includes(`<loc>${canonical}</loc>`)) fail(`${canonical} is missing from sitemap.xml.`);
-  if (!footer.includes(`href="/${page.id}/"`)) fail(`${page.title} is missing from the shared footer.`);
+  if (!footer.includes(`href="/${page.id}"`)) fail(`${page.title} is missing from the shared footer.`);
 }
 
 const trustScript = read("src/trust-page.js");

@@ -115,7 +115,7 @@ function ensureTopicFirstPaintFallback(html, topic) {
   const navMatch = html.match(/<nav class="static-crawl-fallback"[\s\S]*?<\/nav>/i);
   if (!navMatch) throw new Error(`Topic page ${topic.id} is missing its static discovery navigation.`);
 
-  const fallback = archiveChrome(`<main id="main-content" class="static-crawl-fallback static-topic-fallback" data-static-topic-fallback="${escapeHtml(topic.id)}"><section class="media-hero topics-hero"><div class="shell media-hero-inner"><nav class="breadcrumbs" aria-label="Breadcrumb"><ol><li><a href="/">Home</a></li><li><a href="/topics/">Topics</a></li><li aria-current="page">${escapeHtml(topic.title)}</li></ol></nav><p class="eyebrow"><span></span> Topic archive</p><h1>${escapeHtml(topic.title)}</h1><p>${escapeHtml(topic.intro)}</p></div></section><section class="media-section"><div class="shell">${navMatch[0]}</div></section></main>`);
+  const fallback = archiveChrome(`<main id="main-content" class="static-crawl-fallback static-topic-fallback" data-static-topic-fallback="${escapeHtml(topic.id)}"><section class="media-hero topics-hero"><div class="shell media-hero-inner"><nav class="breadcrumbs" aria-label="Breadcrumb"><ol><li><a href="/">Home</a></li><li><a href="/topics">Topics</a></li><li aria-current="page">${escapeHtml(topic.title)}</li></ol></nav><p class="eyebrow"><span></span> Topic archive</p><h1>${escapeHtml(topic.title)}</h1><p>${escapeHtml(topic.intro)}</p></div></section><section class="media-section"><div class="shell">${navMatch[0]}</div></section></main>`);
   return replaceAppShell(html, fallback, `Topic page ${topic.id}`);
 }
 
@@ -134,7 +134,7 @@ const topicItems = topicPages.map(topic => ({
   label: topic.name,
   description: topic.description,
   url: `${ORIGIN}/topics/${topic.id}`,
-  href: `/topics/${topic.id}/`
+  href: `/topics/${topic.id}`
 }));
 
 let episodesHtml = removePrematureFallbackSuppression(read("episodes/index.html"));

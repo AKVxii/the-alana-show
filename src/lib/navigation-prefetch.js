@@ -24,6 +24,11 @@ function connectionAllowsWarmup() {
   return !["slow-2g", "2g"].includes(connection?.effectiveType);
 }
 
+function connectionAllowsBroadWarmup() {
+  const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+  return connectionAllowsWarmup() && (!connection?.effectiveType || connection.effectiveType === "4g");
+}
+
 function internalDocumentUrl(anchor) {
   if (!(anchor instanceof HTMLAnchorElement)) return null;
   if (anchor.target && anchor.target !== "_self") return null;
@@ -85,7 +90,7 @@ export function setupNavigationWarmup(root = document) {
   root.addEventListener("touchstart", warmFromEvent, { passive: true, capture: true });
 
   const warmPrimaryRoutes = () => {
-    if (!connectionAllowsWarmup() || document.visibilityState !== "visible") return;
+    if (!connectionAllowsBroadWarmup() || document.visibilityState !== "visible") return;
     const anchors = [...root.querySelectorAll("[data-nav] a[href]")]
       .map(internalDocumentUrl)
       .filter(Boolean)
@@ -95,9 +100,14 @@ export function setupNavigationWarmup(root = document) {
     });
   };
 
-  if ("requestIdleCallback" in window) {
-    window.requestIdleCallback(warmPrimaryRoutes, { timeout: 2200 });
-  } else {
-    window.setTimeout(warmPrimaryRoutes, 1400);
-  }
+  const schedulePrimaryWarmup = () => {
+    if ("requestIdleCallback" in window) {
+      window.requestIdleCallback(warmPrimaryRoutes, { timeout: 2200 });
+    } else {
+      window.setTimeout(warmPrimaryRoutes, 1400);
+    }
+  };
+
+  if (document.readyState === "complete") schedulePrimaryWarmup();
+  else window.addEventListener("load", schedulePrimaryWarmup, { once: true });
 }

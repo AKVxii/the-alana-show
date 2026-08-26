@@ -33,7 +33,7 @@ for (const episode of episodes) {
   videoIds.add(episode.videoId);
 
   if (!/^[A-Za-z0-9_-]{11}$/.test(episode.videoId || "")) fail(`${episode.id}: invalid YouTube master ID.`);
-  if (episode.detailPath !== `/episodes/${episode.id}/`) fail(`${episode.id}: permanent detail path is not canonical.`);
+  if (episode.detailPath !== `/episodes/${episode.id}`) fail(`${episode.id}: permanent detail path is not canonical.`);
   if (/^Conversation with\b/i.test(episode.title || "")) fail(`${episode.id}: generic fallback title escaped into the editorial catalog.`);
   if (episode.title !== episode.canonical?.title) fail(`${episode.id}: exported title does not match the canonical editorial title.`);
   if (!String(episode.canonical?.deck || "").trim()) fail(`${episode.id}: canonical one-sentence deck is missing.`);

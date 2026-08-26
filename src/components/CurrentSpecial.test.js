@@ -14,7 +14,7 @@ test("current special renders the verified broad broadcast line and candidate-de
     currentSpecial.broadcastText, currentSpecial.reachText,
     currentSpecial.urgencyText, currentSpecial.ctaLabel
   ]) assert.ok(markup.includes(value));
-  assert.match(markup, /href="\/candidates\/"/);
+  assert.match(markup, /href="\/candidates"/);
   assert.doesNotMatch(markup, /target="_blank"/);
   assert.match(markup, /data-inquiry="Candidate Interview Series"/);
   assert.match(markup, /Limited Availability/);

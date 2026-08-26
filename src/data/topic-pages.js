@@ -70,7 +70,7 @@ export function topicPageById(id) {
 }
 
 export function topicHref(name) {
-  if (name === "2026 Candidates Special") return "/specials/";
+  if (name === "2026 Candidates Special") return "/specials";
   const page = topicPages.find(topic => topic.name === name);
-  return page ? `/topics/${page.id}/` : `/episodes/?topic=${encodeURIComponent(name)}`;
+  return page ? `/topics/${page.id}` : `/episodes?topic=${encodeURIComponent(name)}`;
 }

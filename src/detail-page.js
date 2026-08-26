@@ -15,78 +15,6 @@ const WEBSITE_ID = `${SITE_ORIGIN}/#website`;
 const SHOW_ID = `${SITE_ORIGIN}/#show`;
 const DEFAULT_SOCIAL_IMAGE = `${SITE_ORIGIN}/assets/alana-show-social-card-2026-imessage-v2.png`;
 
-const compactDetailStyles = document.createElement("style");
-compactDetailStyles.textContent = `
-  .detail-hero { padding: 84px 0 42px; }
-  .detail-hero .breadcrumbs { margin-bottom: 20px; }
-  .detail-hero h1 {
-    max-width: 860px;
-    margin-bottom: 12px;
-    font-size: clamp(2rem, 3.2vw, 3.15rem);
-    line-height: 1.03;
-    letter-spacing: -.028em;
-    text-wrap: balance;
-  }
-  .detail-byline { margin-bottom: 20px; font-size: .98rem; }
-  .guest-detail-intro { padding: 18px 0; gap: 18px; }
-  .guest-monogram-large { width: 82px; height: 82px; flex: 0 0 82px; font-size: 1.6rem; }
-  .related-section { padding-top: 18px; margin-top: 14px; }
-  body[data-detail-id="scott-diament-gillian-lieberman"] #episode-summary .related-section > p:not(.related-eyebrow) {
-    max-width: 78ch;
-    margin: 0 0 18px;
-    line-height: 1.72;
-  }
-  body[data-detail-id="scott-diament-gillian-lieberman"] #episode-summary .related-section > p:nth-of-type(4),
-  body[data-detail-id="scott-diament-gillian-lieberman"] #episode-summary .related-section > p:nth-of-type(5) {
-    display: inline-block;
-    width: calc(50% - 10px);
-    max-width: none;
-    vertical-align: top;
-    padding: 18px 20px;
-    margin-top: 4px;
-    margin-bottom: 22px;
-    border: 1px solid rgba(213, 174, 83, .26);
-    border-radius: 10px;
-    background: linear-gradient(145deg, rgba(8, 25, 46, .78), rgba(3, 12, 25, .58));
-    box-shadow: inset 0 1px 0 rgba(255,255,255,.025);
-  }
-  body[data-detail-id="scott-diament-gillian-lieberman"] #episode-summary .related-section > p:nth-of-type(4) {
-    margin-right: 16px;
-  }
-  body[data-detail-id="scott-diament-gillian-lieberman"] #episode-summary .related-section > p:nth-of-type(4)::first-line,
-  body[data-detail-id="scott-diament-gillian-lieberman"] #episode-summary .related-section > p:nth-of-type(5)::first-line {
-    color: #e2bd62;
-    font-family: Georgia, "Times New Roman", serif;
-    font-size: 1.16rem;
-    font-weight: 700;
-    line-height: 1.7;
-  }
-  body[data-detail-id="scott-diament-gillian-lieberman"] #episode-summary .related-section > p:nth-of-type(6) {
-    clear: both;
-    margin-top: 2px;
-    color: rgba(245, 247, 250, .88);
-  }
-  body[data-detail-id="scott-diament-gillian-lieberman"] #episode-summary .related-section > p:nth-of-type(7) {
-    color: #e2bd62;
-    font-size: .96rem;
-    letter-spacing: .025em;
-  }
-  @media (max-width: 640px) {
-    .detail-hero { padding: 90px 0 36px; }
-    .detail-hero .breadcrumbs { margin-bottom: 18px; }
-    .detail-hero h1 { font-size: clamp(1.9rem, 9vw, 2.55rem); line-height: 1.04; }
-    .guest-detail-intro { padding: 16px 0; }
-    body[data-detail-id="scott-diament-gillian-lieberman"] #episode-summary .related-section > p:nth-of-type(4),
-    body[data-detail-id="scott-diament-gillian-lieberman"] #episode-summary .related-section > p:nth-of-type(5) {
-      display: block;
-      width: 100%;
-      margin-right: 0;
-      padding: 16px;
-    }
-  }
-`;
-document.head.append(compactDetailStyles);
-
 const root = document.querySelector("#app");
 if (root && !document.querySelector(".skip-link")) {
   const skipLink = document.createElement("a");
@@ -537,7 +465,7 @@ function episodeGuestCredentialsMarkup(episode) {
 function episodeChaptersMarkup(episode) {
   const chapters = verifiedChapters(episode);
   if (!chapters.length) return "";
-  const canonicalPath = `/episodes/${episode.id}/`;
+  const canonicalPath = `/episodes/${episode.id}`;
   return `<section class="related-section episode-chapters" aria-labelledby="chapters-heading" data-episode-chapters><p class="related-eyebrow"><span></span>KEY MOMENTS</p><h2 id="chapters-heading">Chapters</h2><ol class="episode-chapter-list">${chapters.map(chapter => {
     const href = chapter.startSeconds ? `${canonicalPath}?t=${chapter.startSeconds}` : canonicalPath;
     return `<li><a href="${href}"><time datetime="PT${chapter.startSeconds}S">${formatTimecode(chapter.startSeconds)}</time><span>${escapeHtml(chapter.label)}</span></a></li>`;

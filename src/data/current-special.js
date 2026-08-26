@@ -7,7 +7,7 @@ export const currentSpecial = Object.freeze({
   reachText: "Candidate broadcast placement and airtime are confirmed separately.",
   urgencyText: "Candidate recording appointments are available through the 2026 election season, subject to studio and broadcast availability.",
   ctaLabel: "View Candidate Interview Details",
-  ctaHref: "/candidates/",
+  ctaHref: "/candidates",
   ctaExternal: false,
   disclaimer: "Paid candidate interview package offered to legally qualified candidates on the same published terms. Participation does not constitute an endorsement. No payment is collected through Calendly. After a time is requested, the campaign receives Alana K. Vandeveer's W-9 and written payment instructions. Payment is due at booking!",
   startDate: null,

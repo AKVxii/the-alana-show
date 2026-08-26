@@ -16,30 +16,30 @@ export function Footer({ fromSubpage = false } = {}) {
 
         <div class="footer-links">
           <strong>Explore</strong>
-          <a href="/episodes/">Episodes</a>
-          <a href="/guests/">Guests</a>
-          <a href="/topics/">Topics</a>
-          <a href="/specials/">Specials</a>
-          <a href="/candidates/">2026 Candidate Series</a>
-          <a href="/south-florida/">South Florida</a>
-          <a href="/merchandise/">Merchandise</a>
-          <a href="/beyond-the-show/">Beyond the Show</a>
+          <a href="/episodes">Episodes</a>
+          <a href="/guests">Guests</a>
+          <a href="/topics">Topics</a>
+          <a href="/specials">Specials</a>
+          <a href="/candidates">2026 Candidate Series</a>
+          <a href="/south-florida">South Florida</a>
+          <a href="/merchandise">Merchandise</a>
+          <a href="/beyond-the-show">Beyond the Show</a>
           <a href="${home}#listen">Listen</a>
           <a href="${home}#on-air">On Air</a>
         </div>
 
         <div class="footer-links">
           <strong>Connect</strong>
-          <a href="/about/">About Alana</a>
-          <a href="/book/">Be a Guest</a>
-          <a href="/on-location/">Bring the Show to You</a>
-          <a href="/advertise/">Advertise &amp; Partner</a>
+          <a href="/about">About Alana</a>
+          <a href="/book">Be a Guest</a>
+          <a href="/on-location">Bring the Show to You</a>
+          <a href="/advertise">Advertise &amp; Partner</a>
           <a href="${home}#sponsor">Commercial Real Estate Sponsor — The Fitzgerald Group</a>
           <a href="${home}#contact">Contact</a>
-          <a href="/press/">Press &amp; Media</a>
-          <a href="/standards/">Editorial Standards</a>
-          <a href="/privacy/">Privacy</a>
-          <a href="/accessibility/">Accessibility</a>
+          <a href="/press">Press &amp; Media</a>
+          <a href="/standards">Editorial Standards</a>
+          <a href="/privacy">Privacy</a>
+          <a href="/accessibility">Accessibility</a>
           <a href="${site.social.instagram}" target="_blank" rel="noopener">Instagram</a>
           <a href="${site.social.x}" target="_blank" rel="noopener">X / Twitter</a>
           <a href="${site.social.linkedin}" target="_blank" rel="noopener">LinkedIn</a>

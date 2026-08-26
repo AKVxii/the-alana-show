@@ -15,7 +15,7 @@ export function Partner() {
             <div class="partner-actions">
               <a class="button button-gold" href="#contact" data-inquiry="Advertising or partnership">Request partnership information ${icon("arrow")}</a>
               <a class="button button-ghost" href="#contact" data-inquiry="Media inquiry">Request a media kit</a>
-              <a class="button button-ghost" href="/on-location/">Bring the show to you</a>
+              <a class="button button-ghost" href="/on-location">Bring the show to you</a>
             </div>
           </div>
 
