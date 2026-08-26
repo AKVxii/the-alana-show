@@ -1,0 +1,23 @@
+name: Check Vercel deploy readiness
+
+on:
+  push:
+    branches:
+      - optimize/george-lemieux-discovery-2026-08-26
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check protected deployment variables without exposing values
+        env:
+          VERCEL_TOKEN_VALUE: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_VALUE: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_VALUE: ${{ secrets.VERCEL_PROJECT_ID }}
+        run: |
+          if [ -n "$VERCEL_TOKEN_VALUE" ]; then echo "VERCEL_TOKEN=present"; else echo "VERCEL_TOKEN=absent"; fi
+          if [ -n "$VERCEL_ORG_VALUE" ]; then echo "VERCEL_ORG_ID=present"; else echo "VERCEL_ORG_ID=absent"; fi
+          if [ -n "$VERCEL_PROJECT_VALUE" ]; then echo "VERCEL_PROJECT_ID=present"; else echo "VERCEL_PROJECT_ID=absent"; fi
