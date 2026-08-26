@@ -1,0 +1,117 @@
+.episode-promotion {
+  margin: 18px 0 4px;
+  padding: 20px;
+  display: grid;
+  gap: 17px;
+  color: var(--white);
+  border: 1px solid rgba(216, 184, 102, .28);
+  border-radius: 14px;
+  background: linear-gradient(135deg, rgba(10, 31, 55, .92), rgba(3, 12, 25, .78));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .025);
+}
+
+.episode-promotion-copy h2 {
+  margin: 5px 0 7px;
+  font-size: clamp(1.55rem, 2.7vw, 2.25rem);
+  line-height: 1.08;
+}
+
+.episode-promotion-copy > p:last-child {
+  max-width: 720px;
+  margin: 0;
+  color: rgba(226, 233, 241, .78);
+  line-height: 1.62;
+}
+
+.episode-promotion-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.episode-promotion-grid a {
+  min-height: 116px;
+  padding: 15px;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  gap: 8px;
+  color: var(--white);
+  border: 1px solid rgba(216, 184, 102, .2);
+  border-radius: 11px;
+  background: rgba(255, 255, 255, .025);
+  text-decoration: none;
+  transition: transform .18s ease, border-color .18s ease, background .18s ease;
+}
+
+.episode-promotion-grid a:hover,
+.episode-promotion-grid a:focus-visible {
+  transform: translateY(-2px);
+  border-color: rgba(216, 184, 102, .62);
+  background: rgba(216, 184, 102, .07);
+}
+
+.episode-promotion-grid time {
+  color: var(--gold-300);
+  font-size: .7rem;
+  font-weight: 900;
+  letter-spacing: .055em;
+}
+
+.episode-promotion-grid span {
+  align-self: center;
+  font-family: var(--serif);
+  font-size: 1.08rem;
+  line-height: 1.24;
+}
+
+.episode-promotion-grid small {
+  color: rgba(226, 233, 241, .68);
+  font-size: .68rem;
+  font-weight: 800;
+  letter-spacing: .035em;
+  text-transform: uppercase;
+}
+
+@media (max-width: 820px) {
+  .episode-promotion-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .episode-promotion-grid a {
+    min-height: 88px;
+    grid-template-columns: 58px minmax(0, 1fr) auto;
+    grid-template-rows: auto;
+    align-items: center;
+  }
+
+  .episode-promotion-grid small {
+    text-align: right;
+  }
+}
+
+@media (max-width: 560px) {
+  .episode-promotion {
+    padding: 17px;
+  }
+
+  .episode-promotion-grid a {
+    min-height: 92px;
+    grid-template-columns: 52px minmax(0, 1fr);
+  }
+
+  .episode-promotion-grid small {
+    grid-column: 2;
+    text-align: left;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .episode-promotion-grid a {
+    transition: none;
+  }
+
+  .episode-promotion-grid a:hover,
+  .episode-promotion-grid a:focus-visible {
+    transform: none;
+  }
+}
