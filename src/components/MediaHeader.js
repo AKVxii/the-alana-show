@@ -1,6 +1,7 @@
 import { icon } from "../lib/icons.js";
 import { site } from "../data/site.js";
 import { setupMeasurement } from "../lib/measurement.js";
+import { setupCampaignMeasurement } from "../lib/campaign-measurement.js";
 import { setupNavigationWarmup } from "../lib/navigation-prefetch.js";
 
 function setupEpisodeEnhancements() {
@@ -8,14 +9,21 @@ function setupEpisodeEnhancements() {
 
   const load = async () => {
     try {
-      const [{ setupConversationShare }, { setupEpisodeEngagement }, { setupEpisodeEditorial }] = await Promise.all([
+      const [
+        { setupConversationShare },
+        { setupEpisodeEngagement },
+        { setupEpisodeEditorial },
+        { setupEpisodePromotion }
+      ] = await Promise.all([
         import("../lib/share.js"),
         import("../lib/episode-engagement.js"),
-        import("../lib/episode-editorial.js")
+        import("../lib/episode-editorial.js"),
+        import("../lib/episode-promotion.js")
       ]);
       setupConversationShare();
       setupEpisodeEngagement();
       setupEpisodeEditorial();
+      setupEpisodePromotion();
     } catch {
       // The complete server-delivered episode remains usable if an enhancement fails to load.
     }
@@ -67,6 +75,7 @@ export function MediaHeader() {
 export function setupMediaNavigation() {
   ensureMediaPolishStyles();
   setupMeasurement();
+  setupCampaignMeasurement();
   setupNavigationWarmup();
   const button = document.querySelector("[data-menu-button]");
   const nav = document.querySelector("[data-nav]");

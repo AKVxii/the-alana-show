@@ -1,6 +1,33 @@
 {
   "cleanUrls": true,
   "trailingSlash": false,
+  "redirects": [
+    {
+      "source": "/george",
+      "destination": "/episodes/george-lemieux",
+      "permanent": true
+    },
+    {
+      "source": "/george-radio",
+      "destination": "/episodes/george-lemieux?utm_source=radio&utm_medium=broadcast&utm_campaign=george_lemieux_episode",
+      "permanent": false
+    },
+    {
+      "source": "/george-social",
+      "destination": "/episodes/george-lemieux?utm_source=social&utm_medium=organic&utm_campaign=george_lemieux_episode",
+      "permanent": false
+    },
+    {
+      "source": "/george-guest",
+      "destination": "/episodes/george-lemieux?utm_source=guest&utm_medium=referral&utm_campaign=george_lemieux_episode",
+      "permanent": false
+    },
+    {
+      "source": "/george-email",
+      "destination": "/episodes/george-lemieux?utm_source=email&utm_medium=outreach&utm_campaign=george_lemieux_episode",
+      "permanent": false
+    }
+  ],
   "headers": [
     {
       "source": "/assets/alana-portrait-cutout-v2.png",
