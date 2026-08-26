@@ -1,6 +1,8 @@
 import { BeyondShow } from "./components/BeyondShow.js";
 import { setupEditorialMotion } from "./lib/motion.js";
 
+const VENTURE_HUB_PUBLIC = false;
+
 if (!document.querySelector('link[data-beyond-show-styles]')) {
   const stylesheet = document.createElement("link");
   stylesheet.rel = "stylesheet";
@@ -9,7 +11,7 @@ if (!document.querySelector('link[data-beyond-show-styles]')) {
   document.head.append(stylesheet);
 }
 
-if (!document.querySelector("[data-beyond-home]")) {
+if (VENTURE_HUB_PUBLIC && !document.querySelector("[data-beyond-home]")) {
   const contact = document.querySelector("#contact");
   if (contact) {
     contact.insertAdjacentHTML("beforebegin", BeyondShow());
