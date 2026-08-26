@@ -23,9 +23,7 @@ if (partnerCard) {
         <button class="button button-gold alp-partner-link" type="button" data-affiliate-consent-open>Explore ALP</button>
         <span class="alp-offer-code">Use code <strong>${alp.offer.code}</strong> for ${alp.offer.label}</span>
       </div>`
-    : `<div class="alp-actions alp-actions-pending">
-        <span class="alp-status">Partner access being finalized through AvantLink.</span>
-      </div>`;
+    : "";
 
   partnerCard.innerHTML = `
     <div class="alp-warning" role="note" aria-label="Nicotine warning">
@@ -40,7 +38,6 @@ if (partnerCard) {
         <div class="alp-offer" aria-label="Current merchant-approved affiliate offer">
           <span>MERCHANT-APPROVED AVANTLINK OFFER</span>
           <strong>${alp.offer.label}</strong>
-          <small>The offer code is displayed when the website-specific partner link is activated.</small>
         </div>
         <p class="alp-disclosure"><strong>Affiliate disclosure:</strong> ${alp.disclosure}</p>
         ${action}
