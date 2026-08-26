@@ -79,6 +79,87 @@
     linear-gradient(180deg, transparent 74%, rgba(2, 8, 24, .18));
 }
 
+/* A restrained broadcast-light composition moves behind the approved portrait.
+   The geometry is deliberately slow and tonal so Alana remains the focal point. */
+.portrait-motion {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.portrait-motion::before {
+  content: "";
+  position: absolute;
+  width: 84%;
+  aspect-ratio: 1;
+  left: 8%;
+  top: 5%;
+  border-radius: 50%;
+  background: conic-gradient(from 205deg, transparent 0 22%, rgba(216, 184, 102, .13) 31%, transparent 39% 67%, rgba(68, 126, 176, .18) 78%, transparent 88%);
+  filter: blur(1px);
+  animation: portrait-cinema-turn 34s linear infinite;
+}
+
+.portrait-motion::after {
+  content: "";
+  position: absolute;
+  inset: 9% -22% 2% 16%;
+  background: linear-gradient(112deg, transparent 30%, rgba(255, 253, 248, .065) 43%, rgba(216, 184, 102, .10) 48%, transparent 58%);
+  transform: translateX(-32%);
+  animation: portrait-cinema-sweep 16s ease-in-out infinite;
+}
+
+.portrait-motion-ring {
+  position: absolute;
+  border: 1px solid rgba(234, 215, 158, .16);
+  border-radius: 50%;
+  box-shadow: 0 0 42px rgba(46, 111, 156, .08);
+}
+
+.portrait-motion-ring-one {
+  width: 76%;
+  aspect-ratio: 1;
+  right: -27%;
+  top: 4%;
+  animation: portrait-ring-drift 18s ease-in-out infinite alternate;
+}
+
+.portrait-motion-ring-two {
+  width: 48%;
+  aspect-ratio: 1;
+  left: -19%;
+  bottom: 7%;
+  border-color: rgba(77, 137, 188, .18);
+  animation: portrait-ring-drift 22s ease-in-out -7s infinite alternate-reverse;
+}
+
+.portrait-motion-beam {
+  position: absolute;
+  width: 132%;
+  height: 1px;
+  left: -18%;
+  top: 43%;
+  background: linear-gradient(90deg, transparent 2%, rgba(216, 184, 102, .08) 25%, rgba(234, 215, 158, .65) 51%, rgba(216, 184, 102, .08) 74%, transparent 98%);
+  box-shadow: 0 0 14px rgba(216, 184, 102, .16);
+  transform: rotate(-8deg) translateX(-30%);
+  animation: portrait-beam-pass 13s cubic-bezier(.45, 0, .55, 1) infinite;
+}
+
+.portrait-motion-glint {
+  position: absolute;
+  width: 7px;
+  height: 7px;
+  right: 12%;
+  top: 18%;
+  border: 1px solid rgba(255, 243, 205, .7);
+  border-radius: 50%;
+  background: rgba(234, 215, 158, .22);
+  box-shadow: 0 0 18px rgba(234, 215, 158, .42), 0 0 42px rgba(60, 123, 177, .2);
+  animation: portrait-glint-breathe 7s ease-in-out infinite;
+}
+
 .portrait-inner img {
   width: 100%;
   height: auto;
@@ -98,6 +179,32 @@
 @keyframes portrait-editorial-line {
   from { opacity: 0; transform: scale(.82); }
   to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes portrait-cinema-turn {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes portrait-cinema-sweep {
+  0%, 18% { opacity: 0; transform: translateX(-42%); }
+  43%, 58% { opacity: .9; }
+  82%, 100% { opacity: 0; transform: translateX(32%); }
+}
+
+@keyframes portrait-ring-drift {
+  from { opacity: .38; transform: translate3d(-3%, 2%, 0) scale(.96); }
+  to { opacity: .8; transform: translate3d(4%, -3%, 0) scale(1.04); }
+}
+
+@keyframes portrait-beam-pass {
+  0%, 20% { opacity: 0; transform: rotate(-8deg) translateX(-38%); }
+  42%, 58% { opacity: .75; }
+  80%, 100% { opacity: 0; transform: rotate(-8deg) translateX(34%); }
+}
+
+@keyframes portrait-glint-breathe {
+  0%, 100% { opacity: .28; transform: scale(.72); }
+  50% { opacity: .9; transform: scale(1.12); }
 }
 
 /* About photography should feel like a magazine portrait rather than a framed
@@ -151,7 +258,12 @@
 
 @media (prefers-reduced-motion: reduce) {
   .portrait-stage::before,
-  .portrait-stage::after {
+  .portrait-stage::after,
+  .portrait-motion::before,
+  .portrait-motion::after,
+  .portrait-motion-ring,
+  .portrait-motion-beam,
+  .portrait-motion-glint {
     animation: none;
     transform: none;
   }

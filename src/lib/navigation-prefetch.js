@@ -10,8 +10,7 @@ const routeModules = new Map([
   ["/candidates", "/src/candidates-page.js?v=20260820-payment-booking"],
   ["/south-florida", "/src/growth-page.js"],
   ["/about", "/src/about-page.js"],
-  ["/merchandise", "/src/merchandise-page.js"],
-  ["/beyond-the-show", "/src/beyond-show-page.js"]
+  ["/merchandise", "/src/merchandise-page.js"]
 ]);
 
 function normalizedPath(pathname) {

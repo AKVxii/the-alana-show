@@ -16,8 +16,7 @@ const pages = [
   "privacy/index.html",
   "standards/index.html",
   "press/index.html",
-  "merchandise/index.html",
-  "beyond-the-show/index.html"
+  "merchandise/index.html"
 ];
 
 function collectHtml(directory) {

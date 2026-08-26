@@ -8,7 +8,6 @@ const index = read("index.html");
 const episodes = read("src/components/Episodes.js");
 const featured = read("src/featured-video.js");
 const entry = read("src/home-entry.js");
-const beyondHome = read("src/beyond-home.js");
 const publisher = read("scripts/publish-conversation.mjs");
 
 const orderedEntryMount = /src="\/src\/home-entry\.js(?:\?[^"\s]*)?"/.test(index);
@@ -21,11 +20,8 @@ const featuredImport = entry.indexOf('import "./featured-video.js"');
 const mainImport = entry.indexOf('import "./main.js"');
 assert(featuredImport >= 0 && mainImport > featuredImport, "Featured video custom element must be registered before main.js executes.");
 assert(entry.includes('import "./merchandise-home.js"'), "Homepage entry must preserve merchandise behavior.");
-assert(entry.includes('import "./beyond-home.js"'), "Homepage entry must preserve Beyond the Show behavior.");
 assert(entry.includes('import "./home-nav-accessibility.js"'), "Homepage entry must preserve navigation accessibility behavior.");
 
-assert(beyondHome.includes('import { setupEditorialMotion } from "./lib/motion.js"'), "Dynamically injected Beyond the Show module must initialize editorial motion.");
-assert(beyondHome.includes('setupEditorialMotion(beyondHome)'), "Beyond the Show reveal elements must be observed after the module is inserted.");
 
 assert(episodes.includes("<featured-video"), "Homepage Featured Conversation must use the lightweight custom video element.");
 assert(episodes.includes("data-featured-video"), "Lightweight featured player must preserve the selector used by live YouTube updates.");
@@ -54,5 +50,4 @@ console.log("Homepage performance gate passed.");
 console.log("  Heavy YouTube player deferred until explicit play: OK");
 console.log("  Lightweight poster + fallback: OK");
 console.log("  Ordered homepage module entry: OK");
-console.log("  Dynamically injected Beyond the Show motion: OK");
 console.log("  Permanent video watch-page indexing architecture preserved: OK");

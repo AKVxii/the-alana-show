@@ -36,6 +36,12 @@ export function Hero() {
         <div class="portrait-stage reveal reveal-delay">
           <div class="portrait-frame">
             <div class="portrait-inner">
+              <div class="portrait-motion" aria-hidden="true">
+                <span class="portrait-motion-ring portrait-motion-ring-one"></span>
+                <span class="portrait-motion-ring portrait-motion-ring-two"></span>
+                <span class="portrait-motion-beam"></span>
+                <span class="portrait-motion-glint"></span>
+              </div>
               <picture style="display:contents">
                 <source srcset="${ALANA_PORTRAIT_WEBP}" type="image/webp">
                 <img src="${ALANA_PORTRAIT_PNG}" alt="Alana K. Vandeveer, host of The Alana Show" width="${ALANA_PORTRAIT_WIDTH}" height="${ALANA_PORTRAIT_HEIGHT}" fetchpriority="high" decoding="async">
