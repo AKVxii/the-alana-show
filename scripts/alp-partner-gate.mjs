@@ -44,8 +44,15 @@ if (!module.includes("Partner standard:")) fail("commercial/editorial relationsh
 if (!module.includes("alp.offer.code") || !module.includes("const live = Boolean(alp.tracking.url)")) fail("offer code must only surface through the live-link branch");
 if (!module.includes("data-affiliate-consent-open") || !module.includes("data-affiliate-consent-continue")) fail("affiliate tracking consent flow is missing");
 if (!module.includes("No affiliate tracking click is sent unless you choose to continue")) fail("consent explanation must state that no tracking click is sent before consent");
-if (!pageScript.includes('import "./alp-partner.js"')) fail("ALP partner module is not mounted on Beyond the Show");
+if (!pageScript.includes('import "./alp-partner.js?v=20260826-alp-placeholder-removal"')) fail("ALP partner module is not mounted on Beyond the Show with the current cache version");
 if (!page.includes('id="partners"')) fail("Beyond the Show partner section is missing");
+for (const placeholder of [
+  "Partner access being finalized through AvantLink.",
+  "The offer code is displayed when the website-specific partner link is activated.",
+  "Affiliate link being connected."
+]) {
+  if (`${module}\n${page}`.includes(placeholder)) fail(`unfinished ALP placeholder remains public: ${placeholder}`);
+}
 
 if (!css.includes("border:3mm solid #000")) fail("warning border must preserve the prominent FDA-style treatment");
 if (!css.includes("min-height:150px") || !css.includes("min-height:560px")) fail("warning/ad proportions lost their prominent layout guardrail");
