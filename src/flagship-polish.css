@@ -111,5 +111,38 @@ body:has(.hero#home) .portrait-caption strong{font-size:1.12rem}
 @media(max-width:1120px){body:has(.hero#home) .hero-grid{grid-template-columns:minmax(0,1fr) minmax(390px,.82fr);gap:36px}body:has(.hero#home) .title-main{font-size:clamp(5.7rem,10vw,7.8rem)}body:has(.hero#home) .portrait-stage{width:min(100%,520px)}}
 @media(max-width:900px){body:has(.hero#home) .hero{min-height:auto}body:has(.hero#home) .hero-grid{min-height:auto;grid-template-columns:1fr;padding-top:104px;padding-bottom:40px}body:has(.hero#home) .portrait-stage{width:min(92%,520px);justify-self:center}}
 @media(max-width:760px){body:has(.hero#home) .hero-grid{padding:90px 0 30px;gap:32px}body:has(.hero#home) .hero-copy{padding:0}body:has(.hero#home) .title-main{font-size:clamp(4.6rem,22vw,6.25rem)}body:has(.hero#home) .portrait-stage{width:min(100%,430px)}body:has(.hero#home) .portrait-caption{left:8px;bottom:12px}}
+
+/* Host portrait composition: exact approved photograph, softly integrated
+   with the hero and carrying its own editorial name/title treatment. */
+body:has(.hero#home) .hero{min-height:min(760px,calc(100svh - 72px));background:radial-gradient(ellipse at 77% 40%,rgba(41,105,158,.3),transparent 35%),radial-gradient(ellipse at 58% 100%,rgba(203,164,69,.055),transparent 31%),linear-gradient(108deg,#01060e 0%,#040d19 43%,#071a2e 70%,#0a2947 100%)}
+body:has(.hero#home) .hero-grid{min-height:min(760px,calc(100svh - 72px));grid-template-columns:minmax(0,1.02fr) minmax(500px,.98fr);gap:clamp(38px,4.6vw,72px);padding-top:78px;padding-bottom:28px}
+body:has(.hero#home) .eyebrow{margin-bottom:18px}
+body:has(.hero#home) .title-main{font-size:clamp(6.1rem,8.4vw,8.55rem)}
+body:has(.hero#home) .title-show{margin-top:16px}
+body:has(.hero#home) .hero-line{margin-top:25px;font-size:clamp(1.55rem,2.2vw,2.1rem)}
+body:has(.hero#home) .hero-intro{margin-top:13px;line-height:1.64}
+body:has(.hero#home) .hero-actions{margin-top:23px}
+body:has(.hero#home) .hero-credentials{margin-top:20px;padding-top:15px}
+body:has(.hero#home) .portrait-stage{width:min(100%,620px);height:100%;min-height:610px;align-self:end;display:flex;align-items:flex-end}
+body:has(.hero#home) .portrait-stage::before{inset:1% -7% -1% 2%;opacity:.78;filter:blur(9px);background:radial-gradient(ellipse at 54% 45%,rgba(46,117,173,.36),transparent 52%),radial-gradient(ellipse at 58% 78%,rgba(216,184,102,.065),transparent 40%);animation:portrait-ambient-light 18s ease-in-out infinite alternate}
+body:has(.hero#home) .portrait-frame{width:100%;aspect-ratio:958/968;overflow:visible}
+body:has(.hero#home) .portrait-frame::before,body:has(.hero#home) .portrait-frame::after{display:none}
+body:has(.hero#home) .portrait-inner{overflow:visible;border-radius:0}
+body:has(.hero#home) .portrait-inner::before{inset:2% 0 0;opacity:.42;background:radial-gradient(ellipse at 55% 36%,rgba(86,156,207,.22),transparent 48%)}
+body:has(.hero#home) .portrait-inner::after{inset:auto -2% 0;height:28%;z-index:2;background:linear-gradient(180deg,transparent,rgba(3,12,25,.32) 58%,rgba(3,12,25,.78));pointer-events:none}
+body:has(.hero#home) .portrait-motion{inset:-5% -6% 0;mask-image:linear-gradient(180deg,#000 0 90%,transparent 100%)}
+body:has(.hero#home) .portrait-motion::before{opacity:.75;animation-duration:42s}
+body:has(.hero#home) .portrait-motion::after{opacity:.55;animation-duration:20s}
+body:has(.hero#home) .portrait-motion-ring{border-color:rgba(234,215,158,.11);box-shadow:none}
+body:has(.hero#home) .portrait-motion-beam{opacity:.5;animation-duration:17s}
+body:has(.hero#home) .portrait-motion-glint{width:4px;height:4px;opacity:.55;box-shadow:0 0 15px rgba(234,215,158,.32)}
+body:has(.hero#home) .portrait-inner img{width:100%;height:auto;max-width:100%;max-height:100%;margin:0;object-fit:contain;object-position:center bottom;filter:drop-shadow(0 28px 36px rgba(0,0,0,.3)) drop-shadow(0 0 1px rgba(232,216,181,.22))}
+body:has(.hero#home) .portrait-caption{left:5%;right:4%;bottom:4%;z-index:5;min-width:0;padding:22px 20px 18px;border:0;border-bottom:1px solid rgba(225,194,112,.62);color:#fff;background:linear-gradient(90deg,rgba(3,12,25,.92),rgba(3,12,25,.64) 62%,transparent);box-shadow:none;backdrop-filter:blur(3px)}
+body:has(.hero#home) .portrait-caption::before{top:auto;right:0;bottom:-1px;width:36%;background:linear-gradient(90deg,transparent,#e1c270)}
+body:has(.hero#home) .portrait-caption span{color:#e1c270;font-size:.55rem;letter-spacing:.2em}
+body:has(.hero#home) .portrait-caption strong{margin-top:7px;color:#fff;font-size:clamp(1.38rem,1.7vw,1.72rem);font-weight:500;letter-spacing:-.02em;text-shadow:0 2px 14px rgba(0,0,0,.55)}
+@media(max-width:1120px){body:has(.hero#home) .hero-grid{grid-template-columns:minmax(0,1fr) minmax(420px,.86fr);gap:30px}body:has(.hero#home) .portrait-stage{min-height:540px}}
+@media(max-width:900px){body:has(.hero#home) .hero{min-height:auto}body:has(.hero#home) .hero-grid{min-height:auto;grid-template-columns:1fr;padding-top:96px;padding-bottom:0}body:has(.hero#home) .portrait-stage{height:auto;min-height:0;width:min(94%,540px);margin-top:2px}}
+@media(max-width:760px){body:has(.hero#home) .hero-grid{padding-top:86px;gap:22px}body:has(.hero#home) .eyebrow{margin-bottom:16px}body:has(.hero#home) .hero-line{margin-top:22px}body:has(.hero#home) .portrait-caption{left:3%;right:2%;bottom:3%;padding:17px 15px 14px}body:has(.hero#home) .portrait-caption strong{font-size:1.25rem}}
 @media(max-width:480px){.archive-credentials{display:grid;grid-template-columns:1fr}.archive-control-actions{display:grid;grid-template-columns:1fr 1fr}.flagship-library-grid .media-card-body{padding:21px 19px 18px}.media-card-actions{align-items:flex-start;flex-direction:column}}
 @media(prefers-reduced-motion:reduce){.flagship-library-grid .media-card{transition:none}.flagship-library-grid .media-card:hover,.flagship-library-grid .media-card:focus-within{transform:none}}

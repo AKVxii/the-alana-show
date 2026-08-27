@@ -6,17 +6,18 @@ const errors = [];
 const fail = message => errors.push(message);
 const ROOT = process.cwd();
 const SOURCE = "assets/alana-portrait-cutout.png";
-const PNG = "assets/alana-portrait-cutout-v2.png";
-const WEBP = "assets/alana-portrait-cutout-v3.webp";
-const PNG_URL = "/assets/alana-portrait-cutout-v2.png";
-const WEBP_URL = "/assets/alana-portrait-cutout-v3.webp";
+const PNG = "assets/alana-portrait-host-v4.png";
+const WEBP = "assets/alana-portrait-host-v4.webp";
+const PNG_URL = "/assets/alana-portrait-host-v4.png";
+const WEBP_URL = "/assets/alana-portrait-host-v4.webp";
+const SCHEMA_PNG_URL = "/assets/alana-portrait-cutout-v2.png";
 const EXPECTED_SOURCE_BYTES = 1_003_924;
-const EXPECTED_PNG_BYTES = 551_207;
-const EXPECTED_WEBP_BYTES = 320_326;
+const EXPECTED_PNG_BYTES = 563_742;
+const EXPECTED_WEBP_BYTES = 327_234;
 const EXPECTED_WIDTH = 958;
 const EXPECTED_HEIGHT = 968;
-const EXPECTED_PNG_BLOB_SHA = "2984563bfe50166efc4c32ce230e192725ef9f04";
-const EXPECTED_WEBP_BLOB_SHA = "0942715896ad6e8cbad4b67834678d67d6ca000e";
+const EXPECTED_PNG_BLOB_SHA = "425bb9ce1c828a86ed1f49805d22102e6178299a";
+const EXPECTED_WEBP_BLOB_SHA = "cadd115a26a190b22b145facea205ab19f9106a8";
 
 function read(relative) {
   return fs.readFileSync(path.join(ROOT, relative), "utf8");
@@ -86,7 +87,7 @@ if (!hero.includes(`const ALANA_PORTRAIT_WEBP = "${WEBP_URL}"`)) fail("Hero comp
 if (!hero.includes(`const ALANA_PORTRAIT_PNG = "${PNG_URL}"`)) fail("Hero component is missing the verified PNG fallback.");
 if (!hero.includes(`<source srcset="${'${ALANA_PORTRAIT_WEBP}'}" type="image/webp">`)) fail("Hero picture source must prefer lossless WebP.");
 if (!index.includes(`rel="preload" as="image" href="${WEBP_URL}" type="image/webp"`)) fail("Homepage is not preloading the preferred hero WebP.");
-if (!index.includes(`"image": "https://thealanashow.com${PNG_URL}"`)) fail("Homepage Person schema must keep the broadly compatible verified PNG portrait.");
+if (!index.includes(`"image": "https://thealanashow.com${SCHEMA_PNG_URL}"`)) fail("Homepage Person schema must keep the broadly compatible verified identity portrait.");
 for (const url of [PNG_URL, WEBP_URL]) {
   if (!vercel.includes(`"source": "${url}"`)) fail(`Versioned hero asset is missing its dedicated cache rule: ${url}.`);
 }
@@ -122,8 +123,7 @@ if (errors.length) {
 }
 
 console.log("Hero asset gate passed.");
-console.log("  Exact-pixel production derivatives: 958x968 PNG + lossless WebP");
-console.log(`  Original -> PNG: ${EXPECTED_SOURCE_BYTES.toLocaleString()} -> ${EXPECTED_PNG_BYTES.toLocaleString()} bytes (45.1% smaller)`);
-console.log(`  PNG -> preferred WebP: ${EXPECTED_PNG_BYTES.toLocaleString()} -> ${EXPECTED_WEBP_BYTES.toLocaleString()} bytes (41.9% smaller)`);
-console.log("  Original -> modern preferred delivery: 68.1% smaller");
+console.log("  Approved host portrait: 958x968 PNG + lossless WebP");
+console.log(`  Host PNG: ${EXPECTED_PNG_BYTES.toLocaleString()} bytes`);
+console.log(`  Preferred lossless WebP: ${EXPECTED_WEBP_BYTES.toLocaleString()} bytes`);
 console.log("  Verified binary pins + PNG fallback + WebP preload + immutable caching: OK");

@@ -1,7 +1,7 @@
 import { icon } from "../lib/icons.js";
 
-const ALANA_PORTRAIT_WEBP = "/assets/alana-portrait-cutout-v3.webp";
-const ALANA_PORTRAIT_PNG = "/assets/alana-portrait-cutout-v2.png";
+const ALANA_PORTRAIT_WEBP = "/assets/alana-portrait-host-v4.webp";
+const ALANA_PORTRAIT_PNG = "/assets/alana-portrait-host-v4.png";
 const ALANA_PORTRAIT_WIDTH = 958;
 const ALANA_PORTRAIT_HEIGHT = 968;
 
@@ -49,7 +49,8 @@ export function Hero() {
             </div>
           </div>
           <div class="portrait-caption">
-            <span>HOSTED BY</span>
+            <span class="sr-only">Hosted by</span>
+            <span>HOST, THE ALANA SHOW</span>
             <strong>Alana K. Vandeveer</strong>
           </div>
         </div>
