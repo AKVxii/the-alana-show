@@ -77,5 +77,39 @@ body:has(.hero#home) .portrait-caption strong{font-size:1.18rem}
 @media(max-width:900px){body:has(.hero#home) .hero-grid{grid-template-columns:1fr;padding-top:110px}body:has(.hero#home) .hero-copy{max-width:760px}body:has(.hero#home) .portrait-stage{justify-self:center;width:min(86%,500px)}}
 @media(max-width:760px){body:has(.hero#home) .hero-grid{padding:96px 0 58px;gap:42px}body:has(.hero#home) .hero-copy{padding-left:16px}body:has(.hero#home) .hero-copy::before{height:76px}body:has(.hero#home) .eyebrow{margin-bottom:22px;font-size:.57rem;letter-spacing:.14em}body:has(.hero#home) .title-small{font-size:1rem}body:has(.hero#home) .title-main{font-size:clamp(4.5rem,22vw,6.4rem)}body:has(.hero#home) .title-show{margin-top:16px;gap:12px;font-size:clamp(1.3rem,7vw,1.85rem);letter-spacing:.3em}body:has(.hero#home) .title-show::before{width:42px}body:has(.hero#home) .hero-line{margin-top:27px;font-size:clamp(1.45rem,7vw,1.9rem)}body:has(.hero#home) .hero-intro{font-size:.92rem;line-height:1.65}body:has(.hero#home) .hero-actions{margin-top:25px}body:has(.hero#home) .portrait-stage{width:min(94%,420px);transform:none}body:has(.hero#home) .portrait-caption{left:-5px;bottom:18px;min-width:190px}}
 @media(prefers-reduced-motion:reduce){body:has(.hero#home) .hero::before{animation:none}}
+
+/* Final hero refinement: confidence through restraint. The approved portrait
+   is allowed to break free of the card while the first viewport becomes
+   tighter, calmer and more editorial. */
+body:has(.hero#home) .hero{min-height:min(830px,calc(100svh - 72px));background:radial-gradient(ellipse at 78% 36%,rgba(42,101,151,.32),transparent 34%),linear-gradient(108deg,#01060f 0%,#040d1a 43%,#071a2e 69%,#0a2947 100%)}
+body:has(.hero#home) .hero::before{width:min(700px,48vw);right:-7%;top:-28%;opacity:.7;box-shadow:0 0 0 110px rgba(216,184,102,.014);animation:hero-halo-breathe 20s ease-in-out infinite alternate}
+body:has(.hero#home) .hero::after{background:linear-gradient(90deg,transparent 0 67%,rgba(234,215,158,.075) 67% calc(67% + 1px),transparent calc(67% + 1px)),radial-gradient(ellipse at 80% 42%,rgba(78,143,194,.1),transparent 38%)}
+body:has(.hero#home) .hero-grid{min-height:min(830px,calc(100svh - 72px));grid-template-columns:minmax(0,1.04fr) minmax(470px,.96fr);gap:clamp(48px,6vw,96px);padding-top:94px;padding-bottom:48px}
+body:has(.hero#home) .hero-copy{max-width:740px;padding:0}
+body:has(.hero#home) .hero-copy::before{display:none}
+body:has(.hero#home) .eyebrow{margin-bottom:25px}
+body:has(.hero#home) .title-small{margin-left:2px}
+body:has(.hero#home) .title-main{font-size:clamp(6.6rem,9.2vw,9.25rem);line-height:.76}
+body:has(.hero#home) .title-show{margin-top:20px;margin-left:3px}
+body:has(.hero#home) .hero-line{margin-top:31px}
+body:has(.hero#home) .hero-intro{margin-top:16px}
+body:has(.hero#home) .hero-actions{margin-top:28px}
+body:has(.hero#home) .hero-credentials{margin-top:25px}
+.hero-edition,.hero-signature-rule,.portrait-index{display:none!important}
+body:has(.hero#home) .portrait-stage{width:min(100%,600px);align-self:end;transform:none}
+body:has(.hero#home) .portrait-stage::before{inset:5% -9% -2% 1%;opacity:.9;filter:blur(6px);background:radial-gradient(ellipse at 52% 47%,rgba(39,104,157,.42),transparent 56%),radial-gradient(ellipse at 58% 76%,rgba(216,184,102,.075),transparent 42%)}
+body:has(.hero#home) .portrait-stage::after{display:none}
+body:has(.hero#home) .portrait-frame{aspect-ratio:1/1.06;padding:0;border:0;border-radius:0;background:transparent;box-shadow:none}
+body:has(.hero#home) .portrait-inner{overflow:visible;background:transparent;box-shadow:none}
+body:has(.hero#home) .portrait-inner::before{opacity:.24;background:radial-gradient(ellipse at 56% 42%,rgba(76,147,199,.32),transparent 53%)}
+body:has(.hero#home) .portrait-inner::after{background:linear-gradient(90deg,rgba(2,8,20,.16),transparent 18%,transparent 84%,rgba(2,8,20,.1)),linear-gradient(180deg,transparent 75%,rgba(2,8,20,.22))}
+body:has(.hero#home) .portrait-motion{inset:-3% -4% 0;overflow:hidden;mask-image:linear-gradient(180deg,#000 0 86%,transparent 100%)}
+body:has(.hero#home) .portrait-inner img{width:108%;max-width:none;max-height:104%;margin-left:-2%;filter:drop-shadow(0 30px 38px rgba(0,0,0,.34))}
+body:has(.hero#home) .portrait-caption{left:0;bottom:18px;min-width:224px;padding:11px 16px 12px;border-left:2px solid #d6b45d;background:rgba(4,14,28,.88);color:#fff;border-radius:0;box-shadow:0 18px 44px rgba(0,0,0,.27);backdrop-filter:blur(12px)}
+body:has(.hero#home) .portrait-caption span{color:#e2c775}
+body:has(.hero#home) .portrait-caption strong{font-size:1.12rem}
+@media(max-width:1120px){body:has(.hero#home) .hero-grid{grid-template-columns:minmax(0,1fr) minmax(390px,.82fr);gap:36px}body:has(.hero#home) .title-main{font-size:clamp(5.7rem,10vw,7.8rem)}body:has(.hero#home) .portrait-stage{width:min(100%,520px)}}
+@media(max-width:900px){body:has(.hero#home) .hero{min-height:auto}body:has(.hero#home) .hero-grid{min-height:auto;grid-template-columns:1fr;padding-top:104px;padding-bottom:40px}body:has(.hero#home) .portrait-stage{width:min(92%,520px);justify-self:center}}
+@media(max-width:760px){body:has(.hero#home) .hero-grid{padding:90px 0 30px;gap:32px}body:has(.hero#home) .hero-copy{padding:0}body:has(.hero#home) .title-main{font-size:clamp(4.6rem,22vw,6.25rem)}body:has(.hero#home) .portrait-stage{width:min(100%,430px)}body:has(.hero#home) .portrait-caption{left:8px;bottom:12px}}
 @media(max-width:480px){.archive-credentials{display:grid;grid-template-columns:1fr}.archive-control-actions{display:grid;grid-template-columns:1fr 1fr}.flagship-library-grid .media-card-body{padding:21px 19px 18px}.media-card-actions{align-items:flex-start;flex-direction:column}}
 @media(prefers-reduced-motion:reduce){.flagship-library-grid .media-card{transition:none}.flagship-library-grid .media-card:hover,.flagship-library-grid .media-card:focus-within{transform:none}}

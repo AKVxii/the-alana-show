@@ -8,7 +8,6 @@ const ALANA_PORTRAIT_HEIGHT = 968;
 export function Hero() {
   return `
     <section class="hero" id="home">
-      <div class="hero-edition" aria-hidden="true"><span>THE ALANA SHOW</span><i></i><span>REAL CONVERSATIONS · DISTINCT VOICES</span></div>
       <div class="shell hero-grid">
         <div class="hero-copy reveal">
           <p class="eyebrow"><span></span> Voice of the Gold Coast</p>
@@ -32,13 +31,11 @@ export function Hero() {
             <span>Worldwide streaming</span>
             <span>Independent editorial voice</span>
           </div>
-          <div class="hero-signature-rule" aria-hidden="true"><span>AKV</span></div>
         </div>
 
         <div class="portrait-stage reveal reveal-delay">
           <div class="portrait-frame">
             <div class="portrait-inner">
-              <span class="portrait-index" aria-hidden="true">01</span>
               <div class="portrait-motion" aria-hidden="true">
                 <span class="portrait-motion-ring portrait-motion-ring-one"></span>
                 <span class="portrait-motion-ring portrait-motion-ring-two"></span>
