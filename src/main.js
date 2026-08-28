@@ -1,12 +1,7 @@
 import { Header } from "./components/Header.js";
 import { Hero } from "./components/Hero.js";
-import { Conversions } from "./components/Conversions.js";
-import { Platforms } from "./components/Platforms.js";
 import { EpisodeThumbnail, Episodes, isUsableThumbnailUrl, revealThumbnailFallback } from "./components/Episodes.js";
-import { Impact } from "./components/Impact.js";
 import { About } from "./components/About.js";
-import { Partner } from "./components/Partner.js";
-import { Merchandise } from "./components/Merchandise.js";
 import { Contact } from "./components/Contact.js";
 import { Footer } from "./components/Footer.js";
 import { SearchDialog } from "./components/SearchDialog.js";
@@ -29,13 +24,8 @@ app.innerHTML = `
   ${Header()}
   <main id="main-content">
     ${Hero()}
-    ${Conversions()}
     ${Episodes()}
-    ${Platforms()}
-    ${Impact()}
     ${About()}
-    ${Partner()}
-    ${Merchandise()}
     ${Contact()}
   </main>
   ${Footer()}
