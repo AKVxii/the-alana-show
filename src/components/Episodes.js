@@ -5,7 +5,7 @@ import { Sponsor } from "./Sponsor.js";
 
 export function BrandedEpisodeArtwork({ compact = false } = {}) {
   return `
-    <span class="branded-artwork${compact ? " branded-artwork-compact" : ""}" data-thumbnail-fallback role="img" aria-label="The Alana Show branded episode artwork">
+    <span class="branded-artwork${compact ? " branded-artwork-compact" : ""}" data-thumbnail-fallback role="img" aria-label="Alana — All Over the Place branded episode artwork">
       <span class="branded-artwork-frame" aria-hidden="true"></span>
       <span class="branded-artwork-signal" aria-hidden="true">${icon("radio")}</span>
       <span class="branded-artwork-name"><small>The</small><strong>Alana Show</strong></span>
@@ -41,11 +41,11 @@ export function EpisodeThumbnail(episode = {}, { latest = false } = {}) {
   const thumbnail = normalizeThumbnailUrl(episode.thumbnail) || derivedThumbnail;
   const validThumbnail = isUsableThumbnailUrl(thumbnail);
   const retryThumbnail = derivedThumbnail && derivedThumbnail !== thumbnail ? derivedThumbnail : "";
-  const title = episode.title || "The Alana Show conversation";
+  const title = episode.title || "Alana — All Over the Place conversation";
   return `
     <span class="thumbnail-media${validThumbnail ? "" : " fallback-visible"}" data-thumbnail-frame>
       ${validThumbnail ? `<img${latest ? " data-latest-image" : ""} src="${escapeHtml(thumbnail)}"${retryThumbnail ? ` data-thumbnail-retry-src="${escapeHtml(retryThumbnail)}"` : ""} alt="Thumbnail for ${escapeHtml(title)}" loading="lazy" decoding="async" referrerpolicy="no-referrer">` : ""}
-      ${validThumbnail ? '<span class="thumbnail-brand" aria-hidden="true"><span>The Alana Show</span></span>' : ""}
+      ${validThumbnail ? '<span class="thumbnail-brand" aria-hidden="true"><span>Alana — All Over the Place</span></span>' : ""}
       ${BrandedEpisodeArtwork({ compact: !latest })}
     </span>
   `;
@@ -84,7 +84,7 @@ export function Episodes() {
                 data-featured-video
                 data-initial-src="https://www.youtube-nocookie.com/embed/Kx7rcDzaqDk?rel=0"
                 data-title="Former U.S. Senator George LeMieux | Leadership, Public Service &amp; Florida’s Future">
-                <a href="/episodes/george-lemieux">Watch the George LeMieux conversation on The Alana Show</a>
+                <a href="/episodes/george-lemieux">Watch the George LeMieux conversation on Alana — All Over the Place</a>
               </featured-video>
             </div>
             <div class="featured-meta">

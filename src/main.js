@@ -109,7 +109,7 @@ function episodeCard(episode) {
   const external = !enriched.detailPath;
   const linkAttrs = external ? ' target="_blank" rel="noopener"' : "";
   const dateLabel = formatDate(enriched.publishedAt) || "Verified conversation";
-  const summary = excerpt(enriched.deck || enriched.description, 120) || "A verified conversation from The Alana Show archive.";
+  const summary = excerpt(enriched.deck || enriched.description, 120) || "A verified conversation from Alana — All Over the Place archive.";
   return `
     <article class="episode-card">
       <a class="episode-thumb" href="${cardUrl}"${linkAttrs} aria-label="Watch ${escapeHtml(enriched.title)}">
@@ -158,7 +158,7 @@ function updateFeatured(episode) {
     video.src = `https://www.youtube-nocookie.com/embed/${episode.videoId}?rel=0`;
   }
   if (title) title.textContent = episode.title;
-  if (description) description.textContent = excerpt(episode.deck || episode.description, 250) || "A featured conversation from The Alana Show.";
+  if (description) description.textContent = excerpt(episode.deck || episode.description, 250) || "A featured conversation from Alana — All Over the Place.";
   if (link) {
     link.href = detailPath;
     link.dataset.trackLabel = episode.title || "George LeMieux";
@@ -182,7 +182,7 @@ function updateLatest(episode) {
   const description = document.querySelector("[data-latest-description]");
   const link = document.querySelector("[data-latest-link]");
   if (title) title.textContent = enriched.title;
-  if (description) description.textContent = excerpt(enriched.deck || enriched.description, 145) || "A verified conversation from The Alana Show archive.";
+  if (description) description.textContent = excerpt(enriched.deck || enriched.description, 145) || "A verified conversation from Alana — All Over the Place archive.";
   if (link) {
     const internal = Boolean(enriched.detailPath);
     link.href = enriched.detailPath || `https://www.youtube.com/watch?v=${enriched.videoId}`;
@@ -229,7 +229,7 @@ function searchResult(episode) {
   const external = !episode.detailPath;
   const categories = (episode.categories || []).slice(0, 3);
   const dateLabel = formatDate(episode.publishedAt) || "Verified conversation";
-  const summary = excerpt(episode.deck || episode.description, 110) || "A verified conversation from The Alana Show archive.";
+  const summary = excerpt(episode.deck || episode.description, 110) || "A verified conversation from Alana — All Over the Place archive.";
   return `<a class="search-result" href="${resultUrl}"${external ? ' target="_blank" rel="noopener"' : ""}>
     <span class="search-result-media">${EpisodeThumbnail(episode, { latest: false })}</span>
     <span><small>${escapeHtml(dateLabel)}</small><strong>${escapeHtml(episode.title)}</strong><p>${escapeHtml(summary)}</p>${categories.length ? `<span class="search-categories">${categories.map(category => `<span>${escapeHtml(category)}</span>`).join("")}</span>` : ""}</span>
@@ -243,7 +243,7 @@ function renderSearchResults(query, category = state.selectedCategory) {
   if (!container) return 0;
   if (!state.episodes.length) {
     if (status) status.textContent = "The conversation archive is temporarily unavailable.";
-    container.innerHTML = `<div class="search-empty"><p>The conversation archive is temporarily unavailable.</p><a href="${site.youtube}" target="_blank" rel="noopener">Visit The Alana Show on YouTube ${icon("arrow")}</a></div>`;
+    container.innerHTML = `<div class="search-empty"><p>The conversation archive is temporarily unavailable.</p><a href="${site.youtube}" target="_blank" rel="noopener">Visit Alana — All Over the Place on YouTube ${icon("arrow")}</a></div>`;
     return 0;
   }
   const matches = searchEpisodes(state.episodes, query, category);
@@ -357,7 +357,7 @@ function setupContactForm() {
       const result = await response.json();
       if (!response.ok) throw new Error(result.error || "Unable to send");
       form.reset();
-      status.textContent = "Thank you. Your inquiry has been sent to The Alana Show.";
+      status.textContent = "Thank you. Your inquiry has been sent to Alana — All Over the Place.";
       status.classList.add("success");
       trackEvent("Contact Form Success", { page: location.pathname });
     } catch (error) {

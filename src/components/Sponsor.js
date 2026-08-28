@@ -18,7 +18,7 @@ export function Sponsor() {
 
         <aside class="sponsor-invitation" aria-labelledby="sponsor-invitation-heading" data-reveal style="--reveal-delay: 180ms;">
           <span class="sponsor-rule" aria-hidden="true"></span>
-          <h3 id="sponsor-invitation-heading">Partner with The Alana Show</h3>
+          <h3 id="sponsor-invitation-heading">Partner with Alana — All Over the Place</h3>
           <p>Exclusive category sponsorships are available to select businesses seeking a thoughtful, trusted media presence.</p>
           <a class="button button-gold" href="/#contact">Sponsorship Inquiries</a>
         </aside>

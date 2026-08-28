@@ -37,7 +37,7 @@ export function CurrentSpecial(config = currentSpecial, now = new Date()) {
     <section class="current-special current-special--${theme}" aria-labelledby="current-special-heading" data-current-special>
       <div class="shell">
         <div class="current-special-panel">
-          <div class="current-special-accent" aria-hidden="true">The Alana Show</div>
+          <div class="current-special-accent" aria-hidden="true">Alana — All Over the Place</div>
           <div class="current-special-copy">
             <p class="eyebrow"><span></span> ${escapeHtml(config.eyebrow)}</p>
             <p class="current-special-availability">Limited Availability</p>

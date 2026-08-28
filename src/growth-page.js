@@ -51,7 +51,7 @@ const specialsPage = candidateSpecialActive
       intro: "Editorial collections bring related conversations together so important subjects remain easy to find after the moment has passed.",
       featureEyebrow: "Editorial collections",
       featureTitle: "Focused conversations, organized with purpose.",
-      featureCopy: "The Alana Show groups selected interviews around meaningful themes, communities, and recurring series without turning the archive into a maze.",
+      featureCopy: "Alana — All Over the Place groups selected interviews around meaningful themes, communities, and recurring series without turning the archive into a maze.",
       panel: `<span class="growth-panel-kicker">Explore the archive</span><strong>Stories worth returning to.</strong><p>Special collections connect individual conversations to the larger subjects and communities around them.</p>${internal("/episodes/", "Browse Conversations", "button button-light")}`,
       exploreEyebrow: "Collections",
       exploreTitle: "Explore a collection.",
@@ -73,7 +73,7 @@ const pages = {
     intro: "Conversations rooted in South Florida, connecting local leadership, business, service, community, and ideas with listeners across the region.",
     featureEyebrow: "From the community outward",
     featureTitle: "Local voices. Wider conversation.",
-    featureCopy: "The Alana Show brings together people shaping South Florida—from public service and entrepreneurship to community work, wellness, technology, and stories of people stepping up.",
+    featureCopy: "Alana — All Over the Place brings together people shaping South Florida—from public service and entrepreneurship to community work, wellness, technology, and stories of people stepping up.",
     panel: `<span class="growth-panel-kicker">Heard on True Oldies</span><strong>South Florida</strong><p class="growth-panel-schedule">${site.broadcastSchedule}</p><p>${currentSpecial.broadcastText}</p><p class="growth-panel-note">${currentSpecial.reachText}</p>${external(site.trueOldies, "True Oldies Show Page", "button button-light")}`,
     exploreEyebrow: "Regional index",
     exploreTitle: "Explore conversations shaping the region.",
@@ -91,7 +91,7 @@ const pages = {
   advertise: {
     eyebrow: "Partnerships · sponsorships · visibility",
     title: "Advertise & Partner",
-    intro: "Explore clearly identified advertising and sponsorship opportunities across The Alana Show's radio, video, podcast, web, and conversation archive.",
+    intro: "Explore clearly identified advertising and sponsorship opportunities across Alana — All Over the Place's radio, video, podcast, web, and conversation archive.",
     featureEyebrow: "Partnership opportunities",
     featureTitle: "Build around audience fit—not clutter.",
     featureCopy: "The strongest partnerships make sense beside the audience and subject matter. Sponsorship remains clearly identified, editorial independence stays intact, and opportunities can be shaped around recurring programming, individual conversations, regional visibility, or a relevant collection.",
@@ -110,12 +110,12 @@ const pages = {
   },
   "on-location": {
     eyebrow: "Businesses · events · community · public affairs",
-    title: "The Alana Show — On Location",
+    title: "Alana — All Over the Place — On Location",
     intro: "Bring the conversation out of the studio and into the places where the story is actually happening.",
     featureEyebrow: "The show can come to you",
     featureTitle: "Your place. Your people. A real conversation on site.",
-    featureCopy: "Selected interviews can be recorded at businesses, organizations, events, civic gatherings, and public-affairs settings, then produced for The Alana Show's radio, podcast, video, and web channels with the same editorial care as an in-studio conversation.",
-    panel: `<span class="growth-panel-kicker">How it works</span><strong>Record on site. Produce for broadcast. Publish for replay.</strong><p>Tell us where the story is, who should be part of it, what viewers should understand, and the timing or event details.</p><p class="growth-panel-note">Editorial selection and scheduling apply. Political and public-affairs appearances do not imply endorsement.</p>${internal(onLocationContact, "Invite The Alana Show", "button button-light")}`,
+    featureCopy: "Selected interviews can be recorded at businesses, organizations, events, civic gatherings, and public-affairs settings, then produced for Alana — All Over the Place's radio, podcast, video, and web channels with the same editorial care as an in-studio conversation.",
+    panel: `<span class="growth-panel-kicker">How it works</span><strong>Record on site. Produce for broadcast. Publish for replay.</strong><p>Tell us where the story is, who should be part of it, what viewers should understand, and the timing or event details.</p><p class="growth-panel-note">Editorial selection and scheduling apply. Political and public-affairs appearances do not imply endorsement.</p>${internal(onLocationContact, "Invite Alana — All Over the Place", "button button-light")}`,
     exploreEyebrow: "Go where the story is",
     exploreTitle: "A field format built for real places and real people.",
     cardAction: "Invite the show",
@@ -145,7 +145,7 @@ const pages = {
       ["What Happens Next", "Submissions are reviewed for editorial fit and availability. An inquiry does not guarantee an appearance.", guestContact]
     ],
     ctaEyebrow: "Ready to reach out?",
-    ctaTitle: "Tell us the story you think The Alana Show should hear.",
+    ctaTitle: "Tell us the story you think Alana — All Over the Place should hear.",
     ctas: `${internal(guestContact, "Submit a Guest Inquiry")}${internal("/guests/", "Browse Past Guests", "button button-ghost")}`
   }
 };

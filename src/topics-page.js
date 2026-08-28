@@ -24,7 +24,7 @@ function topicCard(topic) {
   return `<a class="topic-card" href="${topicHref(topic)}" data-topic-card="${escapeHtml(topic)}" data-reveal data-reveal-stagger="true">
     <span class="topic-card-kicker">Explore topic</span>
     <h2>${escapeHtml(topic)}</h2>
-    <p>${escapeHtml(topicDescriptions[topic] || "Browse conversations from The Alana Show connected to this verified topic.")}</p>
+    <p>${escapeHtml(topicDescriptions[topic] || "Browse conversations from Alana — All Over the Place connected to this verified topic.")}</p>
     <span class="topic-card-footer"><span data-topic-count="${escapeHtml(topic)}">Browse conversations</span><span aria-hidden="true">→</span></span>
   </a>`;
 }
@@ -33,13 +33,13 @@ app.innerHTML = `${MediaHeader()}<main id="main-content">
   <section class="media-hero topics-hero"><div class="shell media-hero-inner">
     <nav class="breadcrumbs" aria-label="Breadcrumb"><ol><li><a href="/">Home</a></li><li aria-current="page">Topics</li></ol></nav>
     <p class="eyebrow"><span></span> Discover the archive</p><h1>Topics</h1>
-    <p>Follow the ideas, issues, and areas of expertise that connect conversations across The Alana Show.</p>
+    <p>Follow the ideas, issues, and areas of expertise that connect conversations across Alana — All Over the Place.</p>
   </div></section>
 
   <aside class="archive-signature" aria-label="A note from Alana">
     <div class="shell archive-signature-inner">
       <p class="archive-signature-kicker">A note from Alana</p>
-      <p class="archive-signature-quote"><span>The Alana Show…</span> <em>all over the map so you don’t have to be.</em></p>
+      <p class="archive-signature-quote"><span>Alana — All Over the Place…</span> <em>all over the map so you don’t have to be.</em></p>
     </div>
   </aside>
 

@@ -48,9 +48,9 @@ function ensureMediaPolishStyles() {
 export function MediaHeader() {
   return `<header class="site-header media-site-header" data-header>
     <div class="shell header-inner">
-      <a class="brand" href="/" aria-label="The Alana Show home">
-        <span class="brand-seal" aria-hidden="true">TAS</span>
-        <span class="brand-copy"><strong>The Alana Show</strong><span>Real conversations. Distinct voices.</span></span>
+      <a class="brand" href="/" aria-label="Alana — All Over the Place home">
+        <span class="brand-seal" aria-hidden="true">AOP</span>
+        <span class="brand-copy"><strong>Alana — All Over the Place</strong><span>Real conversations. Distinct voices.</span></span>
       </a>
       <button class="menu-button" type="button" aria-expanded="false" aria-controls="primary-nav" data-menu-button>
         <span class="sr-only">Open navigation</span>${icon("menu")}

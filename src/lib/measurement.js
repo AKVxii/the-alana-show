@@ -80,7 +80,7 @@ function showConsentPrompt(onGrant) {
   aside.setAttribute("aria-label", "Analytics preference");
   aside.innerHTML = `
     <div>
-      <strong>Help improve The Alana Show?</strong>
+      <strong>Help improve Alana — All Over the Place?</strong>
       <p>Allow optional Google Analytics measurement. We do not send names, email addresses, phone numbers, messages, or raw search text. <a href="/privacy/">Privacy</a></p>
     </div>
     <div class="analytics-consent-actions">

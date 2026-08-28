@@ -1,6 +1,6 @@
 import { trackEvent } from "./lib/measurement.js";
 
-const DEFAULT_TITLE = "Featured conversation from The Alana Show";
+const DEFAULT_TITLE = "Featured conversation from Alana — All Over the Place";
 
 function escapeShadowText(value = "") {
   return String(value).replace(/[&<>"']/g, character => ({
@@ -81,7 +81,7 @@ class FeaturedVideo extends HTMLElement {
         @media (prefers-reduced-motion: reduce) { .play { transition: none; } }
       </style>
       <button class="poster${poster ? "" : " fallback-only"}" type="button" aria-label="Play ${escapeShadowText(title)}">
-        <span class="fallback-brand" aria-hidden="true"><span class="brand-mark">TAS</span><span class="show-name">The Alana Show</span><strong>${escapeShadowText(title)}</strong></span>
+        <span class="fallback-brand" aria-hidden="true"><span class="brand-mark">AOP</span><span class="show-name">Alana — All Over the Place</span><strong>${escapeShadowText(title)}</strong></span>
         ${poster ? `<img src="${poster}" alt="" loading="lazy" decoding="async">` : ""}
         <span class="play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"></path></svg></span>
         <span class="label">${playLabel}</span>

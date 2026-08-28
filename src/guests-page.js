@@ -12,7 +12,7 @@ app.innerHTML = `${MediaHeader()}<main id="main-content">
   <section class="media-hero"><div class="shell media-hero-inner">
     <nav class="breadcrumbs" aria-label="Breadcrumb"><ol><li><a href="/">Home</a></li><li aria-current="page">Guests</li></ol></nav>
     <p class="eyebrow"><span></span> People in conversation</p><h1>Guests</h1>
-    <p>Browse the verified guests who have joined The Alana Show—from civic leaders and entrepreneurs to artists, entertainers, experts, community builders, and public figures.</p>
+    <p>Browse the verified guests who have joined Alana — All Over the Place—from civic leaders and entrepreneurs to artists, entertainers, experts, community builders, and public figures.</p>
   </div></section>
   <section class="media-section archive-section" aria-labelledby="directory-heading" data-reveal><div class="shell">
     <div class="media-section-heading"><div><p class="eyebrow dark"><span></span> Guest directory</p><h2 id="directory-heading">Browse alphabetically</h2></div><p class="guest-directory-discovery">Looking for the idea instead of the name? <a href="/topics/">Browse conversations by topic →</a></p></div>

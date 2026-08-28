@@ -105,12 +105,12 @@ function decisionLabel(videoId) {
 
 function queryMessage() {
   const params = new URLSearchParams(location.search);
-  if (params.get("connected") === "1") return "The Alana Show channel is connected in read-only mode.";
+  if (params.get("connected") === "1") return "Alana — All Over the Place channel is connected in read-only mode.";
   const error = params.get("error");
   const messages = {
     cancelled: "Google authorization was cancelled. Nothing changed.",
     state: "The connection request expired or could not be verified. Please try again.",
-    "wrong-channel": "The selected Google identity did not resolve to The Alana Show channel. Choose the account or Brand Account that controls @alanakvandeveer.",
+    "wrong-channel": "The selected Google identity did not resolve to Alana — All Over the Place channel. Choose the account or Brand Account that controls @alanakvandeveer.",
     connection: "Google could not complete the connection. Confirm the OAuth settings, then try again.",
     oauth: "Google returned an authorization error. Nothing changed."
   };
@@ -150,7 +150,7 @@ function renderSetup() {
       ${message ? `<div class="audit-notice">${escapeHtml(message)}</div>` : ""}
       <p>The private console is built, but Google has not been given the application credentials required to open the owner consent screen.</p>
       <div class="setup-grid">
-        <div class="setup-step"><strong>1 · Google Cloud project</strong><p>Create or select <em>The Alana Show Studio</em>, then enable YouTube Data API v3 and YouTube Analytics API.</p></div>
+        <div class="setup-step"><strong>1 · Google Cloud project</strong><p>Create or select <em>Alana — All Over the Place Studio</em>, then enable YouTube Data API v3 and YouTube Analytics API.</p></div>
         <div class="setup-step"><strong>2 · OAuth web client</strong><p>Create a Web application OAuth client and use this exact authorized redirect URI:<code class="setup-code">${escapeHtml(session.redirectUri)}</code></p></div>
         <div class="setup-step"><strong>3 · Private Vercel values</strong><p>Add the Client ID and Client Secret directly in Vercel. Never paste the Client Secret into chat or GitHub.</p></div>
         <div class="setup-step"><strong>4 · Read-only first</strong><p>The first consent requests only channel viewing and non-monetary analytics. It cannot edit photos or videos.</p></div>
@@ -164,7 +164,7 @@ function renderSetup() {
     elements.setupContent.innerHTML = `
       ${message ? `<div class="audit-notice">${escapeHtml(message)}</div>` : ""}
       <p>Google setup is ready. Connect only the account or Brand Account that controls <strong>@alanakvandeveer</strong>. The channel ID must match <code>${escapeHtml(session.expectedChannelId)}</code>.</p>
-      <div class="setup-actions"><a class="console-button console-button-gold" href="/api/youtube-studio-auth">Connect The Alana Show read-only</a></div>`;
+      <div class="setup-actions"><a class="console-button console-button-gold" href="/api/youtube-studio-auth">Connect Alana — All Over the Place read-only</a></div>`;
     return;
   }
 
@@ -183,12 +183,12 @@ function renderChannel() {
   elements.disconnect.hidden = !connected;
   if (!connected) return;
 
-  elements.channelTitle.textContent = channel.title || "The Alana Show";
+  elements.channelTitle.textContent = channel.title || "Alana — All Over the Place";
   elements.channelHandle.textContent = channel.customUrl || "@alanakvandeveer";
   elements.channelId.textContent = channel.id;
   elements.channelStats.textContent = `${number(channel.subscriberCount)} subscribers · ${number(channel.videoCount)} public videos · ${number(channel.viewCount)} channel views`;
   elements.channelImage.src = channel.thumbnail || "/assets/favicon.svg";
-  elements.channelImage.alt = `${channel.title || "The Alana Show"} channel image`;
+  elements.channelImage.alt = `${channel.title || "Alana — All Over the Place"} channel image`;
 }
 
 function summaryMarkup(summary = {}) {
@@ -298,7 +298,7 @@ function thumbnailOption({ video, imageUrl, label, id, source, faceAltered, text
     <h3>${escapeHtml(label)}</h3>
     <div class="thumbnail-option-grid">
       <div class="thumbnail-full"><img src="${escapeHtml(imageUrl)}" alt="${escapeHtml(label)} thumbnail for ${escapeHtml(video.title)}"></div>
-      <div class="thumbnail-mobile-preview"><img src="${escapeHtml(imageUrl)}" alt="" aria-hidden="true"><strong>${escapeHtml(video.title)}</strong><span>The Alana Show</span></div>
+      <div class="thumbnail-mobile-preview"><img src="${escapeHtml(imageUrl)}" alt="" aria-hidden="true"><strong>${escapeHtml(video.title)}</strong><span>Alana — All Over the Place</span></div>
     </div>
     <p class="thumbnail-option-meta"><strong>Source:</strong> ${escapeHtml(source || (current ? "Current YouTube thumbnail" : "Editorial proposal"))}<br><strong>AI face alteration:</strong> ${current ? "Not assessed by this console" : (faceAltered === false ? "None" : "Not verified — approval disabled")}${text ? `<br><strong>Headline:</strong> ${escapeHtml(text)}` : ""}${note ? `<br>${escapeHtml(note)}` : ""}</p>
     <div class="thumbnail-option-actions"><button class="console-button ${canApprove ? "console-button-gold" : "console-button-quiet"}" type="button" data-thumbnail-decision="${escapeHtml(decision)}" data-thumbnail-label="${escapeHtml(label)}" ${canApprove ? "" : "disabled"}>${escapeHtml(buttonLabel)}</button></div>

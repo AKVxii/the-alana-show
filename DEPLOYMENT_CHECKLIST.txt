@@ -1,4 +1,4 @@
-THE ALANA SHOW — GITHUB / VERCEL DEPLOYMENT
+ALANA — ALL OVER THE PLACE — GITHUB / VERCEL DEPLOYMENT
 
 1. Keep the live production website on the main branch.
 2. Build and review redesign work on luxury-redesign or on a dedicated feature branch created from luxury-redesign.

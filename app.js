@@ -25,7 +25,7 @@ function setFeatured(episode){
   if(!episode?.videoId) return;
   document.getElementById("featured-video").src=`https://www.youtube-nocookie.com/embed/${episode.videoId}?rel=0`;
   document.getElementById("featured-title").textContent=episode.title||"Featured Conversation";
-  document.getElementById("featured-description").textContent=episode.description||"A featured conversation from The Alana Show.";
+  document.getElementById("featured-description").textContent=episode.description||"A featured conversation from Alana — All Over the Place.";
   document.getElementById("featured-stats").textContent=[formatDate(episode.publishedAt),formatViews(episode.viewCount)].filter(Boolean).join(" · ");
   document.getElementById("featured-link").href=`https://www.youtube.com/watch?v=${episode.videoId}`;
 }
@@ -38,7 +38,7 @@ function renderRecent(episodes=[]){
     const url=`https://www.youtube.com/watch?v=${encodeURIComponent(e.videoId)}`;
     const card=document.createElement("article");
     card.className="episode-card";
-    card.innerHTML=`<a href="${url}" target="_blank" rel="noopener"><img src="${escapeHtml(e.thumbnail||"")}" alt="" loading="lazy"></a><div class="episode-card-body"><div class="episode-meta">${escapeHtml(formatDate(e.publishedAt))}</div><h3>${escapeHtml(e.title||"The Alana Show")}</h3><p>${escapeHtml((e.description||"").slice(0,125))}${(e.description||"").length>125?"…":""}</p><a class="text-link" href="${url}" target="_blank" rel="noopener">Watch conversation →</a></div>`;
+    card.innerHTML=`<a href="${url}" target="_blank" rel="noopener"><img src="${escapeHtml(e.thumbnail||"")}" alt="" loading="lazy"></a><div class="episode-card-body"><div class="episode-meta">${escapeHtml(formatDate(e.publishedAt))}</div><h3>${escapeHtml(e.title||"Alana — All Over the Place")}</h3><p>${escapeHtml((e.description||"").slice(0,125))}${(e.description||"").length>125?"…":""}</p><a class="text-link" href="${url}" target="_blank" rel="noopener">Watch conversation →</a></div>`;
     rail.appendChild(card);
   });
 }
@@ -53,7 +53,7 @@ form?.addEventListener("submit",async e=>{
   const data=Object.fromEntries(new FormData(form).entries());
   if(!data.name||!data.email||!data.inquiry||!data.message){status.textContent="Please complete the required fields.";return}
   const button=form.querySelector('button[type="submit"]');button.disabled=true;button.textContent="Sending…";
-  try{const r=await fetch(SITE.contactApiEndpoint,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(data)});const result=await r.json();if(!r.ok)throw new Error(result.error);form.reset();status.textContent="Thank you. Your inquiry has been sent to The Alana Show."}catch(err){status.textContent="We couldn’t send the form. Please email alana@alanakvandeveer.com."}finally{button.disabled=false;button.textContent="Send Inquiry"}
+  try{const r=await fetch(SITE.contactApiEndpoint,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(data)});const result=await r.json();if(!r.ok)throw new Error(result.error);form.reset();status.textContent="Thank you. Your inquiry has been sent to Alana — All Over the Place."}catch(err){status.textContent="We couldn’t send the form. Please email alana@alanakvandeveer.com."}finally{button.disabled=false;button.textContent="Send Inquiry"}
 });
 
 const observer="IntersectionObserver" in window?new IntersectionObserver(entries=>entries.forEach(entry=>{if(entry.isIntersecting){entry.target.classList.add("visible");observer.unobserve(entry.target)}}),{threshold:.12}):null;

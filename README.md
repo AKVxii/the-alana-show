@@ -1,4 +1,4 @@
-# The Alana Show
+# Alana — All Over the Place
 
 ## Architecture
 
@@ -14,9 +14,9 @@ No bundler or dependency installation is required.
 
 ## Verified True Oldies wording
 The gold broadcast band uses the station's current published claims:
-- The Alana Show airs Tuesdays, 8:00–8:30 PM ET.
-- The Alana Show airs on True Oldies in South Florida.
-- The Alana Show page states that the program has worldwide streaming and video components.
+- Alana — All Over the Place airs Tuesdays, 8:00–8:30 PM ET.
+- Alana — All Over the Place airs on True Oldies in South Florida.
+- Alana — All Over the Place page states that the program has worldwide streaming and video components.
 
 ## Deployment workflow
 
@@ -48,7 +48,7 @@ The page retains curated fallback content without the API variables. The email v
 
 - Create YouTube thumbnails at **1280 × 720 pixels** using a **16:9** aspect ratio.
 - Keep faces, logos, and essential text inside a generous safe area away from the outer edges.
-- Use a consistent visual system: midnight navy background, ivory and restrained-gold typography, The Alana Show logo or wordmark, a guest image where appropriate, and a short episode topic.
+- Use a consistent visual system: midnight navy background, ivory and restrained-gold typography, Alana — All Over the Place logo or wordmark, a guest image where appropriate, and a short episode topic.
 - Keep logo, guest, and topic placement consistent across episodes.
 - Avoid excessive wording, tiny text, faces at the extreme edge, mismatched ratios, heavy gradients, and unrelated episode-by-episode styling.
 - YouTube remains the source of each episode thumbnail. Updating a thumbnail in YouTube should update the website automatically after the YouTube API cache refreshes; the website does not upload thumbnails to YouTube.

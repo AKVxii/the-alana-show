@@ -14,7 +14,7 @@ export function Broadcast() {
           <div class="broadcast-status" data-broadcast-status><span></span> ${site.broadcastSchedule}</div>
           <h2 id="broadcast-heading">Airing on True Oldies across South Florida.</h2>
           <p>
-            The Alana Show airs on True Oldies in South Florida, with worldwide online streaming and video access.
+            Alana — All Over the Place airs on True Oldies in South Florida, with worldwide online streaming and video access.
           </p>
           <div class="broadcast-facts" aria-label="Broadcast availability">
             <span>South Florida broadcast</span>

@@ -8,8 +8,8 @@ export function Footer({ fromSubpage = false } = {}) {
       <div class="shell footer-grid">
         <div class="footer-brand">
           <a class="brand" href="${home}#home">
-            <span class="brand-seal" aria-hidden="true">TAS</span>
-            <span class="brand-copy"><strong>The Alana Show</strong><span>Real conversations · Meaningful impact</span></span>
+            <span class="brand-seal" aria-hidden="true">AOP</span>
+            <span class="brand-copy"><strong>Alana — All Over the Place</strong><span>Real conversations · Meaningful impact</span></span>
           </a>
           <p>A South Florida media platform built around preparation, curiosity, service, and conversations worth remembering.</p>
         </div>
@@ -54,7 +54,7 @@ export function Footer({ fromSubpage = false } = {}) {
       </div>
 
       <div class="shell footer-bottom">
-        <span>© <span data-year></span> The Alana Show / Alana K. Vandeveer. All rights reserved.</span>
+        <span>© <span data-year></span> Alana — All Over the Place / Alana K. Vandeveer. All rights reserved.</span>
         <span>Editorial independence · Purposeful storytelling · Community impact</span>
       </div>
     </footer>

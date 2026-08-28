@@ -6,7 +6,7 @@ export function Newsletter({ compact = false } = {}) {
       <div class="newsletter-copy reveal">
         <p class="eyebrow"><span></span> Stay in the conversation</p>
         <h2 id="newsletter-title">New conversations, directly to your inbox.</h2>
-        <p>Occasional updates from The Alana Show with new episodes, notable guests, specials, and South Florida broadcasts.</p>
+        <p>Occasional updates from Alana — All Over the Place with new episodes, notable guests, specials, and South Florida broadcasts.</p>
       </div>
 
       <form class="newsletter-form reveal reveal-delay" data-newsletter-form novalidate>
@@ -26,7 +26,7 @@ export function Newsletter({ compact = false } = {}) {
         </label>
 
         <button class="button button-gold newsletter-submit" type="submit">Join the list →</button>
-        <p class="newsletter-note">By subscribing, you agree to receive email updates from The Alana Show. Check your inbox to confirm your subscription. Unsubscribe anytime. Your information is never sold.</p>
+        <p class="newsletter-note">By subscribing, you agree to receive email updates from Alana — All Over the Place. Check your inbox to confirm your subscription. Unsubscribe anytime. Your information is never sold.</p>
         <div class="newsletter-status" data-newsletter-status role="status" aria-live="polite"></div>
       </form>
     </div>

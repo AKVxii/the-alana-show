@@ -57,14 +57,14 @@ export function setupConversationShare() {
   actions.append(button);
 
   button.addEventListener("click", async () => {
-    const title = heading.textContent?.trim() || "The Alana Show conversation";
+    const title = heading.textContent?.trim() || "Alana — All Over the Place conversation";
     const url = episodeShareUrl();
 
     if (navigator.share) {
       try {
         await navigator.share({
-          title: `${title} | The Alana Show`,
-          text: `Watch ${title} on The Alana Show.`,
+          title: `${title} | Alana — All Over the Place`,
+          text: `Watch ${title} on Alana — All Over the Place.`,
           url
         });
         trackEvent("Conversation Share", { method: "native", page: location.pathname });

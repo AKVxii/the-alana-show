@@ -1,7 +1,7 @@
 export const broadcastSchedule = "Tuesdays · 8:00 PM – 8:30 PM ET";
 
 export const site = {
-  name: "The Alana Show",
+  name: "Alana — All Over the Place",
   host: "Alana K. Vandeveer",
   tagline: "Real conversations. Distinct voices. Thoughtful perspective.",
   description:
