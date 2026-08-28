@@ -57,8 +57,12 @@ export function Hero() {
       </div>
       <div class="editorial-ticker" aria-hidden="true">
         <div class="editorial-ticker-track">
-          <span>REAL CONVERSATIONS</span><i></i><span>DISTINCT VOICES</span><i></i><span>ALL OVER THE PLACE</span><i></i>
-          <span>REAL CONVERSATIONS</span><i></i><span>DISTINCT VOICES</span><i></i><span>ALL OVER THE PLACE</span><i></i>
+          <div class="editorial-ticker-set">
+            <span>REAL CONVERSATIONS</span><i></i><span>DISTINCT VOICES</span><i></i><span>ALL OVER THE PLACE</span><i></i>
+          </div>
+          <div class="editorial-ticker-set">
+            <span>REAL CONVERSATIONS</span><i></i><span>DISTINCT VOICES</span><i></i><span>ALL OVER THE PLACE</span><i></i>
+          </div>
         </div>
       </div>
     </section>
