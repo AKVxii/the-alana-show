@@ -353,3 +353,36 @@ body:has(.hero#home) .portrait-stage:hover .portrait-inner img{transform:transla
   body:has(.hero#home) .portrait-stage::before,body:has(.hero#home) .portrait-stage::after,.editorial-ticker-track{animation:none!important}
   body:has(.hero#home) .portrait-stage:hover .portrait-inner img,.featured-player:hover,.latest-card:hover{transform:none}
 }
+
+/* The premiere: an immediate, cinematic handoff from the masthead. */
+.watch-section{
+  padding:clamp(48px,5.4vw,72px) 0 clamp(72px,8vw,112px);
+  background:
+    linear-gradient(90deg,rgba(185,227,248,.18),transparent 34%),
+    #fff
+}
+.watch-section::after{
+  content:"";position:absolute;top:0;left:max(22px,calc((100vw - 1180px)/2));right:max(22px,calc((100vw - 1180px)/2));height:1px;
+  background:linear-gradient(90deg,var(--baby-pink),rgba(185,227,248,.8),transparent)
+}
+.watch-section .watch-heading{
+  display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:end;min-height:0;margin:0 0 26px;padding:0 180px 0 0
+}
+.watch-section .watch-heading .eyebrow{margin-bottom:10px}
+.watch-section .watch-heading h2{
+  max-width:900px;font-size:clamp(3rem,6.25vw,5.85rem);line-height:.86;letter-spacing:-.065em
+}
+.watch-section .featured-player{position:relative;opacity:1;transform:none}
+.watch-section .featured-player::before{
+  content:"PREMIERE";position:absolute;z-index:4;top:18px;left:18px;padding:9px 12px;color:var(--ink);background:var(--baby-pink);
+  border:1px solid var(--ink);font-size:.58rem;font-weight:900;letter-spacing:.2em
+}
+.watch-section .player-frame{aspect-ratio:16/8.25}
+.watch-section .featured-meta{background:linear-gradient(110deg,#fff 0 70%,rgba(185,227,248,.22))}
+@media(max-width:760px){
+  .watch-section{padding-top:42px}
+  .watch-section::before{top:24px}
+  .watch-section .watch-heading{display:block;padding-right:0;margin-bottom:22px}
+  .watch-section .watch-heading h2{font-size:clamp(2.9rem,15vw,4.6rem)}
+  .watch-section .player-frame{aspect-ratio:16/9}
+}

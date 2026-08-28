@@ -68,7 +68,7 @@ export function Episodes() {
   return `
     <section class="section watch-section" id="watch">
       <div class="shell">
-        <div class="section-heading reveal">
+        <div class="section-heading watch-heading">
           <div>
             <p class="eyebrow"><span></span> Watch now</p>
             <h2>Featured Conversation</h2>
@@ -76,7 +76,7 @@ export function Episodes() {
         </div>
 
         <div class="editorial-pair editorial-pair-minimal">
-          <article class="featured-player reveal" data-featured>
+          <article class="featured-player" data-featured>
             <div class="player-frame">
               <featured-video
                 data-featured-video
