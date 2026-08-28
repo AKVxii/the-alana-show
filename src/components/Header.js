@@ -8,8 +8,8 @@ export function Header() {
         <a class="brand" href="#home" aria-label="Alana — All Over the Place home">
           <span class="brand-seal" aria-hidden="true">AOP</span>
           <span class="brand-copy">
-            <strong>Alana — All Over the Place</strong>
-            <span>Real conversations. Distinct voices.</span>
+            <strong>ALANA</strong>
+            <span>All Over the Place</span>
           </span>
         </a>
 
@@ -26,11 +26,6 @@ export function Header() {
         </nav>
 
         <div class="header-actions">
-          <button class="search-trigger" type="button" data-search-open aria-label="Search conversations">
-            ${icon("search")}
-            <span>Search</span>
-            <kbd>/</kbd>
-          </button>
           <a class="button button-gold button-small" href="${site.trueOldiesLive}" target="_blank" rel="noopener">Listen Live</a>
         </div>
       </div>

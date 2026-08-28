@@ -50,7 +50,7 @@ export function MediaHeader() {
     <div class="shell header-inner">
       <a class="brand" href="/" aria-label="Alana — All Over the Place home">
         <span class="brand-seal" aria-hidden="true">AOP</span>
-        <span class="brand-copy"><strong>Alana — All Over the Place</strong><span>Real conversations. Distinct voices.</span></span>
+        <span class="brand-copy"><strong>ALANA</strong><span>All Over the Place</span></span>
       </a>
       <button class="menu-button" type="button" aria-expanded="false" aria-controls="primary-nav" data-menu-button>
         <span class="sr-only">Open navigation</span>${icon("menu")}

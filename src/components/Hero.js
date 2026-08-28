@@ -10,20 +10,20 @@ export function Hero() {
     <section class="hero" id="home">
       <div class="shell hero-grid">
         <div class="hero-copy reveal">
-          <p class="eyebrow"><span></span> Voice of the Gold Coast</p>
+          <p class="eyebrow"><span></span> Alana K. Vandeveer</p>
           <h1>
             <span class="title-small">Alana</span>
             <span class="title-main">All Over</span>
             <span class="title-show">the Place</span>
           </h1>
-          <p class="hero-line">Real conversations. <em>Distinct voices.</em> Thoughtful perspective.</p>
+          <p class="hero-line">Real conversations. <em>Real life.</em> All over the place.</p>
           <p class="hero-intro">
-            In-depth interviews with people shaping business, public service, culture, and community—grounded in South Florida and available wherever you watch or listen.
+            Conversations with people worth knowing—on air, online, and everywhere you listen.
           </p>
 
           <div class="hero-actions">
             <a class="button button-gold" href="#watch">${icon("play")} Watch featured conversation</a>
-            <a class="button button-ghost" href="#listen">Listen everywhere ${icon("arrow")}</a>
+            <a class="button button-ghost" href="/episodes/">Explore all ${icon("arrow")}</a>
           </div>
 
           <div class="hero-credentials" aria-label="Show details">
