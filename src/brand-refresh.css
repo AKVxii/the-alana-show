@@ -291,3 +291,65 @@ body:has(.hero#home) .portrait-caption strong{margin-top:4px;color:var(--ink);fo
   body:has(.hero#home) .hero-actions .button{width:100%}
   body:has(.hero#home) .portrait-caption{left:0;bottom:12px}
 }
+
+/* Luxury motion system: deliberate, slow and editorial. */
+body:has(.hero#home) .hero{isolation:isolate;padding-bottom:48px}
+body:has(.hero#home) .hero-grid{position:relative;z-index:2}
+body:has(.hero#home) .hero-copy>*{animation:luxury-copy-in .85s cubic-bezier(.22,.76,.24,1) both}
+body:has(.hero#home) .hero-copy>.eyebrow{animation-delay:.06s}
+body:has(.hero#home) .hero-copy>h1{animation-delay:.13s}
+body:has(.hero#home) .hero-copy>.hero-line{animation-delay:.2s}
+body:has(.hero#home) .hero-copy>.hero-intro{animation-delay:.27s}
+body:has(.hero#home) .hero-copy>.hero-actions{animation-delay:.34s}
+body:has(.hero#home) .title-show{
+  position:relative;overflow:hidden;
+  background:linear-gradient(105deg,var(--baby-pink) 0 42%,#fce7ee 49%,var(--baby-pink) 56% 100%);
+  background-size:220% 100%;animation:luxury-copy-in .85s cubic-bezier(.22,.76,.24,1) .13s both,luxury-sheen 8s ease-in-out 2s infinite
+}
+body:has(.hero#home) .portrait-stage{position:relative;isolation:isolate;animation:luxury-portrait-in 1.15s cubic-bezier(.18,.8,.24,1) .12s both}
+body:has(.hero#home) .portrait-stage::before{
+  content:"";display:block;position:absolute;z-index:-1;inset:4% -15% 1% -9%;border-radius:48% 52% 58% 42%;
+  background:radial-gradient(ellipse at 48% 48%,rgba(255,255,255,.9),rgba(247,201,217,.2) 42%,rgba(185,227,248,.12) 64%,transparent 72%);
+  filter:blur(3px);animation:luxury-ambient 13s ease-in-out infinite alternate
+}
+body:has(.hero#home) .portrait-stage::after{
+  content:"";display:block;position:absolute;z-index:3;top:8%;bottom:8%;left:-3%;width:1px;
+  background:linear-gradient(180deg,transparent,rgba(21,23,26,.24) 22%,rgba(239,159,188,.72) 54%,transparent);
+  transform-origin:center;animation:luxury-line 7s ease-in-out infinite
+}
+body:has(.hero#home) .portrait-inner img{position:relative;z-index:2;transition:transform .8s cubic-bezier(.22,.76,.24,1),filter .8s ease}
+body:has(.hero#home) .portrait-stage:hover .portrait-inner img{transform:translateY(-5px) scale(1.008);filter:drop-shadow(0 34px 30px rgba(64,103,124,.19))}
+.editorial-ticker{
+  position:absolute;z-index:5;inset:auto 0 0;height:48px;overflow:hidden;color:#fff;background:var(--ink);
+  border-top:1px solid var(--ink);border-bottom:1px solid var(--ink)
+}
+.editorial-ticker-track{
+  width:max-content;height:100%;display:flex;align-items:center;gap:30px;padding-left:30px;
+  animation:editorial-marquee 28s linear infinite;will-change:transform
+}
+.editorial-ticker-track span{font-size:.64rem;font-weight:900;letter-spacing:.18em;white-space:nowrap}
+.editorial-ticker-track i{width:7px;height:7px;border-radius:50%;background:var(--baby-pink)}
+.watch-section{position:relative;overflow:hidden}
+.watch-section::before{
+  content:"01 / FEATURED";position:absolute;top:42px;right:max(22px,calc((100vw - 1180px)/2));
+  color:rgba(21,23,26,.22);font-size:.62rem;font-weight:900;letter-spacing:.18em
+}
+.featured-player{transition:transform .5s cubic-bezier(.22,.76,.24,1),box-shadow .5s ease}
+.featured-player:hover{transform:translateY(-4px);box-shadow:0 28px 70px rgba(21,23,26,.09)}
+.featured-player .player-frame{overflow:hidden}
+.latest-card,.discovery-card{transition:transform .45s cubic-bezier(.22,.76,.24,1),box-shadow .45s ease,background .35s ease,color .35s ease}
+.latest-card:hover{transform:translateY(-4px);box-shadow:0 24px 58px rgba(57,101,126,.11)}
+.button{position:relative;overflow:hidden;transition:color .3s ease,background .3s ease,transform .3s ease,box-shadow .3s ease}
+.button::after{content:"";position:absolute;inset:0;background:rgba(255,255,255,.2);transform:translateX(-105%) skewX(-18deg);transition:transform .55s cubic-bezier(.22,.76,.24,1)}
+.button:hover::after{transform:translateX(105%) skewX(-18deg)}
+@keyframes luxury-copy-in{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+@keyframes luxury-portrait-in{from{opacity:0;transform:translateY(36px) scale(.985)}to{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes luxury-sheen{0%,70%,100%{background-position:100% 0}85%{background-position:0 0}}
+@keyframes luxury-ambient{0%{transform:translate3d(-1%,1%,0) scale(.98);opacity:.72}100%{transform:translate3d(2%,-2%,0) scale(1.04);opacity:1}}
+@keyframes luxury-line{0%,100%{opacity:.15;transform:translateY(-3%)}50%{opacity:.7;transform:translateY(3%)}}
+@keyframes editorial-marquee{to{transform:translateX(-50%)}}
+@media(prefers-reduced-motion:reduce){
+  body:has(.hero#home) .hero-copy>*,body:has(.hero#home) .title-show,body:has(.hero#home) .portrait-stage,
+  body:has(.hero#home) .portrait-stage::before,body:has(.hero#home) .portrait-stage::after,.editorial-ticker-track{animation:none!important}
+  body:has(.hero#home) .portrait-stage:hover .portrait-inner img,.featured-player:hover,.latest-card:hover{transform:none}
+}
