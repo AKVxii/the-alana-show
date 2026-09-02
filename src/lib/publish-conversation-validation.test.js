@@ -17,6 +17,6 @@ test("rejects missing or thin offline publishing copy", () => {
 });
 
 test("rejects generic boilerplate even when it is long enough", () => {
-  const boilerplate = "Watch The Alana Show conversation with Guest Name for a featured conversation and more from The Alana Show.";
+  const boilerplate = "Watch Alana — All Over the Place conversation with Guest Name for a featured conversation and more from Alana — All Over the Place.";
   assert.match(unverifiedEditorialCopyIssue({ description: boilerplate, deck: meaningfulDeck }), /must describe the verified people and substance/);
 });

@@ -4,8 +4,8 @@ export const episodeEnhancements = {
       "Former U.S. Senator George LeMieux joins Alana K. Vandeveer for a conversation about principled leadership, public service, fiscal discipline, civic dialogue, and Florida’s future.",
       "LeMieux traces his interest in public service to Ronald Reagan and the Iranian hostage crisis, then reflects on building consensus, breaking through government bureaucracy, and listening across political divides.",
       "He also discusses the difficult decision not to pursue another Senate run, the work of the LeMieux Center for Public Policy, his warning about federal debt, and why character must come before political convenience.",
-      "Hosted by Alana K. Vandeveer, The Alana Show features real conversations and distinct voices from business, leadership, public service, culture, and community.",
-      "The Alana Show — Real Conversations. Distinct Voices."
+      "Hosted by Alana K. Vandeveer, Alana — All Over the Place features real conversations and distinct voices from business, leadership, public service, culture, and community.",
+      "Alana — All Over the Place — Real Conversations. Distinct Voices."
     ],
     highlights: [
       "How the Iranian hostage crisis and Ronald Reagan shaped LeMieux’s interest in public service.",

@@ -1,14 +1,12 @@
 import { icon } from "../lib/icons.js";
 import { escapeHtml } from "../lib/utils.js";
-import { Broadcast } from "./Broadcast.js";
-import { Sponsor } from "./Sponsor.js";
 
 export function BrandedEpisodeArtwork({ compact = false } = {}) {
   return `
-    <span class="branded-artwork${compact ? " branded-artwork-compact" : ""}" data-thumbnail-fallback role="img" aria-label="The Alana Show branded episode artwork">
+    <span class="branded-artwork${compact ? " branded-artwork-compact" : ""}" data-thumbnail-fallback role="img" aria-label="Alana — All Over the Place branded episode artwork">
       <span class="branded-artwork-frame" aria-hidden="true"></span>
       <span class="branded-artwork-signal" aria-hidden="true">${icon("radio")}</span>
-      <span class="branded-artwork-name"><small>The</small><strong>Alana Show</strong></span>
+      <span class="branded-artwork-name"><small>Alana</small><strong>All Over the Place</strong></span>
       <span class="branded-artwork-line">Real conversations. Distinct voices.</span>
     </span>
   `;
@@ -41,11 +39,11 @@ export function EpisodeThumbnail(episode = {}, { latest = false } = {}) {
   const thumbnail = normalizeThumbnailUrl(episode.thumbnail) || derivedThumbnail;
   const validThumbnail = isUsableThumbnailUrl(thumbnail);
   const retryThumbnail = derivedThumbnail && derivedThumbnail !== thumbnail ? derivedThumbnail : "";
-  const title = episode.title || "The Alana Show conversation";
+  const title = episode.title || "Alana — All Over the Place conversation";
   return `
     <span class="thumbnail-media${validThumbnail ? "" : " fallback-visible"}" data-thumbnail-frame>
       ${validThumbnail ? `<img${latest ? " data-latest-image" : ""} src="${escapeHtml(thumbnail)}"${retryThumbnail ? ` data-thumbnail-retry-src="${escapeHtml(retryThumbnail)}"` : ""} alt="Thumbnail for ${escapeHtml(title)}" loading="lazy" decoding="async" referrerpolicy="no-referrer">` : ""}
-      ${validThumbnail ? '<span class="thumbnail-brand" aria-hidden="true"><span>The Alana Show</span></span>' : ""}
+      ${validThumbnail ? '<span class="thumbnail-brand" aria-hidden="true"><span>Alana — All Over the Place</span></span>' : ""}
       ${BrandedEpisodeArtwork({ compact: !latest })}
     </span>
   `;
@@ -70,21 +68,21 @@ export function Episodes() {
   return `
     <section class="section watch-section" id="watch">
       <div class="shell">
-        <div class="section-heading reveal">
+        <div class="section-heading watch-heading">
           <div>
             <p class="eyebrow"><span></span> Watch now</p>
             <h2>Featured Conversation</h2>
           </div>
         </div>
 
-        <div class="editorial-pair">
-          <article class="featured-player reveal" data-featured>
+        <div class="editorial-pair editorial-pair-minimal">
+          <article class="featured-player" data-featured>
             <div class="player-frame">
               <featured-video
                 data-featured-video
                 data-initial-src="https://www.youtube-nocookie.com/embed/Kx7rcDzaqDk?rel=0"
                 data-title="Former U.S. Senator George LeMieux | Leadership, Public Service &amp; Florida’s Future">
-                <a href="/episodes/george-lemieux">Watch the George LeMieux conversation on The Alana Show</a>
+                <a href="/episodes/george-lemieux">Watch the George LeMieux conversation on Alana — All Over the Place</a>
               </featured-video>
             </div>
             <div class="featured-meta">
@@ -96,17 +94,10 @@ export function Episodes() {
                   <a class="button button-gold" data-featured-link href="/episodes/george-lemieux" data-track-event="Homepage Featured Conversation" data-track-location="homepage" data-track-label="George LeMieux">Explore the full conversation ${icon("arrow")}</a>
                   <a class="button button-ghost" href="/guests/george-lemieux" data-track-event="Homepage Featured Guest" data-track-location="homepage" data-track-label="George LeMieux">Meet the guest</a>
                 </div>
-                <nav class="featured-key-moments" aria-label="Key moments from the George LeMieux conversation">
-                  <a href="/episodes/george-lemieux?t=572" data-track-event="Homepage Key Moment" data-track-location="homepage" data-track-label="Listening Across Political Divides"><time datetime="PT572S">09:32</time><span>Listening Across Political Divides</span></a>
-                  <a href="/episodes/george-lemieux?t=1351" data-track-event="Homepage Key Moment" data-track-location="homepage" data-track-label="America’s Debt and Fiscal Discipline"><time datetime="PT1351S">22:31</time><span>America’s Debt and Fiscal Discipline</span></a>
-                  <a href="/episodes/george-lemieux?t=1669" data-track-event="Homepage Key Moment" data-track-location="homepage" data-track-label="Why Character Is Everything"><time datetime="PT1669S">27:49</time><span>Why Character Is Everything</span></a>
-                </nav>
               </div>
               <div class="featured-stats" data-featured-stats></div>
             </div>
           </article>
-
-          ${Broadcast()}
         </div>
 
         <div class="watch-tools">
@@ -128,29 +119,14 @@ export function Episodes() {
             <button class="discovery-card reveal" type="button" data-search-open>
               <span class="discovery-icon">${icon("search")}</span>
               <span>
-                <small>Find a conversation</small>
-                <strong>Search the conversation archive by guest, topic, or idea.</strong>
+                <small>Want more?</small>
+                <strong>Search the complete conversation archive.</strong>
               </span>
               ${icon("arrow")}
             </button>
           </aside>
         </div>
 
-        <div class="episode-header reveal" id="guests">
-          <div>
-            <p class="eyebrow dark"><span></span> Guests &amp; ideas</p>
-            <h3>Recent conversations</h3>
-          </div>
-          <a href="/episodes">Browse the full archive ${icon("arrow")}</a>
-        </div>
-
-        <div class="episode-rail" data-episode-rail aria-live="polite">
-          <div class="episode-skeleton"></div>
-          <div class="episode-skeleton"></div>
-          <div class="episode-skeleton"></div>
-        </div>
-
-        ${Sponsor()}
       </div>
     </section>
   `;

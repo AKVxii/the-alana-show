@@ -167,7 +167,7 @@ function episodeDisplayData(episode) {
   return {
     ...episode,
     ...canonical,
-    title: canonical.title || episode?.title || "The Alana Show conversation",
+    title: canonical.title || episode?.title || "Alana — All Over the Place conversation",
     description: canonical.description || "",
     deck: canonical.deck || canonical.metaDescription || "",
     categories: Array.isArray(canonical.categories) ? canonical.categories.filter(Boolean) : [],
@@ -244,7 +244,7 @@ function episodeVideoObject(episode, data) {
     "@type": "VideoObject",
     "@id": `${canonical}#video`,
     name: display.title,
-    description: (display.description || display.deck || `Watch ${display.title} on The Alana Show.`).replace(/\s+/g, " ").trim(),
+    description: (display.description || display.deck || `Watch ${display.title} on Alana — All Over the Place.`).replace(/\s+/g, " ").trim(),
     thumbnailUrl: [thumbnailUrl],
     uploadDate,
     embedUrl: `https://www.youtube-nocookie.com/embed/${episode.videoId}`,
@@ -303,7 +303,7 @@ function websiteSchema() {
     "@type": "WebSite",
     "@id": WEBSITE_ID,
     url: `${SITE_ORIGIN}/`,
-    name: "The Alana Show"
+    name: "Alana — All Over the Place"
   };
 }
 
@@ -312,7 +312,7 @@ function showSchema() {
     "@type": "PodcastSeries",
     "@id": SHOW_ID,
     url: `${SITE_ORIGIN}/`,
-    name: "The Alana Show",
+    name: "Alana — All Over the Place",
     isPartOf: { "@id": WEBSITE_ID }
   };
 }
@@ -338,11 +338,11 @@ function applyStaticMetadata(detailType, detailItem) {
   const guestProfile = !isEpisode ? guestProfileById(detailItem.id) : null;
   const guestNames = isEpisode ? episodeGuestNames(detailItem) : [];
   const generatedPageTitle = isEpisode
-    ? `${episodeDisplay.title} | The Alana Show`
-    : `${detailItem.name} | Guest | The Alana Show`;
+    ? `${episodeDisplay.title} | Alana — All Over the Place`
+    : `${detailItem.name} | Guest | Alana — All Over the Place`;
   const generatedDescription = isEpisode
-    ? episodeDisplay.deck || episodeDisplay.metaDescription || `Watch The Alana Show conversation${guestNames.length ? ` with ${guestNames.join(" & ")}` : ""}.`
-    : `Explore verified conversations featuring ${detailItem.name} on The Alana Show.`;
+    ? episodeDisplay.deck || episodeDisplay.metaDescription || `Watch Alana — All Over the Place conversation${guestNames.length ? ` with ${guestNames.join(" & ")}` : ""}.`
+    : `Explore verified conversations featuring ${detailItem.name} on Alana — All Over the Place.`;
   const generatedImage = isEpisode
     ? normalizeThumbnailUrl(episodeDisplay.thumbnail) || `https://img.youtube.com/vi/${detailItem.videoId}/maxresdefault.jpg`
     : DEFAULT_SOCIAL_IMAGE;
@@ -359,18 +359,18 @@ function applyStaticMetadata(detailType, detailItem) {
   upsertCanonical(canonical);
   upsertMeta("name", "description", description);
   upsertMeta("name", "robots", "index,follow,max-image-preview:large");
-  upsertMeta("property", "og:site_name", "The Alana Show");
+  upsertMeta("property", "og:site_name", "Alana — All Over the Place");
   upsertMeta("property", "og:title", pageTitle);
   upsertMeta("property", "og:description", description);
   upsertMeta("property", "og:type", isEpisode ? "video.other" : "profile");
   upsertMeta("property", "og:url", canonical);
   upsertMeta("property", "og:image", image);
-  upsertMeta("property", "og:image:alt", isEpisode ? episodeDisplay.title : `${detailItem.name} on The Alana Show`);
+  upsertMeta("property", "og:image:alt", isEpisode ? episodeDisplay.title : `${detailItem.name} on Alana — All Over the Place`);
   upsertMeta("name", "twitter:card", "summary_large_image");
   upsertMeta("name", "twitter:title", pageTitle);
   upsertMeta("name", "twitter:description", description);
   upsertMeta("name", "twitter:image", image);
-  upsertMeta("name", "twitter:image:alt", isEpisode ? episodeDisplay.title : `${detailItem.name} on The Alana Show`);
+  upsertMeta("name", "twitter:image:alt", isEpisode ? episodeDisplay.title : `${detailItem.name} on Alana — All Over the Place`);
 
   const graph = [
     websiteSchema(),
@@ -433,8 +433,8 @@ function applyLiveEpisodeMetadata(episode, enriched) {
   const display = { ...episodeDisplayData(episode), ...enriched };
   const canonical = detailUrl("episode", episode.id);
   const title = display.title;
-  const pageTitle = `${title} | The Alana Show`;
-  const description = (display.description || display.deck || `Watch ${title} on The Alana Show.`).replace(/\s+/g, " ").trim();
+  const pageTitle = `${title} | Alana — All Over the Place`;
+  const description = (display.description || display.deck || `Watch ${title} on Alana — All Over the Place.`).replace(/\s+/g, " ").trim();
   const conciseDescription = display.deck || display.metaDescription || (description.length > 220 ? `${description.slice(0, 217).trim()}…` : description);
   const thumbnailUrl = normalizeThumbnailUrl(display.thumbnail || display.thumbnailUrl)
     || `https://img.youtube.com/vi/${episode.videoId}/maxresdefault.jpg`;
@@ -580,11 +580,11 @@ function guestDetail(guest) {
   const count = guest.conversationCount || related.length;
   const archiveHref = `/episodes?guest=${encodeURIComponent(guest.name)}`;
   const countLabel = count === 1 ? "1 verified conversation" : `${count} verified conversations`;
-  const intro = profile?.summary || `${countLabel} featuring ${guest.name} on The Alana Show.`;
+  const intro = profile?.summary || `${countLabel} featuring ${guest.name} on Alana — All Over the Place.`;
   const role = profile?.role ? `<p class="detail-byline">${escapeHtml(profile.role)}</p>` : "";
   const officialAction = profile?.officialUrl ? `<a class="button button-outline" href="${escapeHtml(profile.officialUrl)}" target="_blank" rel="noopener">Official profile</a>` : "";
   return `<section class="detail-hero"><div class="shell detail-shell">${breadcrumbs(guest.name)}<p class="eyebrow"><span></span> Guest</p><h1>${escapeHtml(guest.name)}</h1>
-    <div class="guest-detail-intro" data-reveal><div class="guest-monogram guest-monogram-large" aria-hidden="true">${escapeHtml(guest.name.split(/\s+/).map(part => part[0]).slice(0, 2).join(""))}</div><div>${role}<p>${escapeHtml(intro)}</p><p class="detail-byline">${escapeHtml(countLabel)} on The Alana Show.</p><div class="detail-actions"><a class="button button-gold" href="${archiveHref}">View conversations</a>${officialAction}<a class="button button-outline" href="/guests">Guest directory</a></div></div></div>
+    <div class="guest-detail-intro" data-reveal><div class="guest-monogram guest-monogram-large" aria-hidden="true">${escapeHtml(guest.name.split(/\s+/).map(part => part[0]).slice(0, 2).join(""))}</div><div>${role}<p>${escapeHtml(intro)}</p><p class="detail-byline">${escapeHtml(countLabel)} on Alana — All Over the Place.</p><div class="detail-actions"><a class="button button-gold" href="${archiveHref}">View conversations</a>${officialAction}<a class="button button-outline" href="/guests">Guest directory</a></div></div></div>
     ${related.length ? `<section class="related-section" aria-labelledby="related-heading"><div data-reveal><p class="related-eyebrow"><span></span>${escapeHtml(guest.name.toUpperCase())} ARCHIVE</p><h2 id="related-heading">Related conversations</h2></div><div class="related-conversation-list">${related.map(relatedConversationRow).join("")}</div></section>` : ""}
   </div></section>`;
 }

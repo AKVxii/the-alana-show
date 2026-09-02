@@ -5,11 +5,11 @@ export function Header() {
   return `
     <header class="site-header" data-header>
       <div class="shell header-inner">
-        <a class="brand" href="#home" aria-label="The Alana Show home">
-          <span class="brand-seal" aria-hidden="true">TAS</span>
+        <a class="brand" href="#home" aria-label="Alana — All Over the Place home">
+          <span class="brand-seal" aria-hidden="true">AOP</span>
           <span class="brand-copy">
-            <strong>The Alana Show</strong>
-            <span>Real conversations. Distinct voices.</span>
+            <strong>ALANA</strong>
+            <span>All Over the Place</span>
           </span>
         </a>
 
@@ -19,23 +19,13 @@ export function Header() {
         </button>
 
         <nav id="primary-nav" class="primary-nav" aria-label="Primary navigation" data-nav>
-          <a href="/episodes/">Watch</a>
-          <a href="/guests/">Guests</a>
-          <a href="/topics/">Topics</a>
-          <a href="/candidates/">Candidates</a>
-          <a href="/south-florida/">South Florida</a>
-          <a href="#about">About</a>
-          <a href="/merchandise/">Merchandise</a>
+          <a href="#watch">Watch</a>
+          <a href="#about">Alana</a>
           <a href="#contact">Contact</a>
           <a class="mobile-listen-live" href="${site.trueOldiesLive}" target="_blank" rel="noopener">Listen Live</a>
         </nav>
 
         <div class="header-actions">
-          <button class="search-trigger" type="button" data-search-open aria-label="Search conversations">
-            ${icon("search")}
-            <span>Search</span>
-            <kbd>/</kbd>
-          </button>
           <a class="button button-gold button-small" href="${site.trueOldiesLive}" target="_blank" rel="noopener">Listen Live</a>
         </div>
       </div>

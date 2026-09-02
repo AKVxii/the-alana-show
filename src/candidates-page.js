@@ -8,8 +8,8 @@ const bookingUrl = "https://calendly.com/alana-alanakvandeveer/2026-candidate-in
 
 const packageItems = [
   ["Studio Interview", "A professionally recorded 30-minute in-studio video and audio conversation with Alana K. Vandeveer."],
-  ["Radio Broadcast", "Broadcast placement and airtime are confirmed separately. The Alana Show currently airs Tuesdays on True Oldies across South Florida."],
-  ["Digital Distribution", "After production, the conversation is prepared for The Alana Show's video, podcast, and web channels."]
+  ["Radio Broadcast", "Broadcast placement and airtime are confirmed separately. Alana — All Over the Place currently airs Tuesdays on True Oldies across South Florida."],
+  ["Digital Distribution", "After production, the conversation is prepared for Alana — All Over the Place's video, podcast, and web channels."]
 ];
 
 const distributionLabels = ["True Oldies", "South Florida", "Worldwide streaming", "Full video"];
@@ -22,7 +22,7 @@ app.innerHTML = `${MediaHeader()}
         <nav class="breadcrumbs" aria-label="Breadcrumb"><ol><li><a href="/">Home</a></li><li aria-current="page">2026 Candidates</li></ol></nav>
         <p class="eyebrow"><span></span> 2026 Candidate Interview Series</p>
         <h1>Your background. Your priorities. In your own words.</h1>
-        <p class="candidate-lead">The Alana Show warmly welcomes legally qualified candidates to a thoughtful, professionally produced 30-minute conversation about the communities they seek to serve.</p>
+        <p class="candidate-lead">Alana — All Over the Place warmly welcomes legally qualified candidates to a thoughtful, professionally produced 30-minute conversation about the communities they seek to serve.</p>
         <div class="candidate-hero-actions">
           <a class="button button-gold" href="${bookingUrl}" target="_blank" rel="noopener">Request an Interview Time — $1,500</a>
           <a class="button button-ghost" href="#candidate-process">How Confirmation Works</a>
@@ -79,7 +79,7 @@ app.innerHTML = `${MediaHeader()}
         <span class="candidate-card-kicker">Current show schedule</span>
         <strong>Tuesdays</strong>
         <p>${site.broadcastSchedule} on True Oldies. ${site.broadcast.availabilityNote} Candidate interview dates and times are confirmed separately.</p>
-        <a class="candidate-text-link candidate-text-link-light" href="${site.trueOldies}" target="_blank" rel="noopener">The Alana Show on True Oldies <span aria-hidden="true">→</span></a>
+        <a class="candidate-text-link candidate-text-link-light" href="${site.trueOldies}" target="_blank" rel="noopener">Alana — All Over the Place on True Oldies <span aria-hidden="true">→</span></a>
       </aside>
     </div>
   </section>
@@ -93,7 +93,7 @@ app.innerHTML = `${MediaHeader()}
       <ol class="candidate-process">
         <li data-reveal><span>01</span><div><h3>Request a studio time</h3><p>Select an available time through Calendly. The selection is a tentative hold, not a confirmed appointment. No payment is collected through Calendly.</p></div></li>
         <li data-reveal><span>02</span><div><h3>Complete confirmation</h3><p>After requesting a time, the campaign receives Alana K. Vandeveer's W-9 and written payment instructions. Payment is due at booking!</p></div></li>
-        <li data-reveal><span>03</span><div><h3>Prepare, record &amp; publish</h3><p>After confirmation, studio directions and preparation details are provided. Broadcast placement and airtime are confirmed separately, followed by planned publication through The Alana Show's digital channels.</p></div></li>
+        <li data-reveal><span>03</span><div><h3>Prepare, record &amp; publish</h3><p>After confirmation, studio directions and preparation details are provided. Broadcast placement and airtime are confirmed separately, followed by planned publication through Alana — All Over the Place's digital channels.</p></div></li>
       </ol>
     </div>
   </section>
@@ -105,9 +105,9 @@ app.innerHTML = `${MediaHeader()}
         <h2>A professional invitation to candidates across the ballot.</h2>
       </div>
       <div class="candidate-standards-copy" data-reveal>
-        <p>Participation is available to legally qualified candidates on the same published package price and core terms. An appearance does not constitute an endorsement by The Alana Show, Alana K. Vandeveer, or participating broadcast outlets.</p>
+        <p>Participation is available to legally qualified candidates on the same published package price and core terms. An appearance does not constitute an endorsement by Alana — All Over the Place, Alana K. Vandeveer, or participating broadcast outlets.</p>
         <p>Campaigns remain responsible for their own reporting and compliance obligations. After a time is requested, the campaign receives Alana K. Vandeveer's W-9 and written payment instructions. Payment is due at booking! Scheduling and placement remain subject to studio availability, participating-station policies, and applicable legal requirements.</p>
-        <a class="candidate-text-link" href="/standards/">Read The Alana Show editorial standards <span aria-hidden="true">→</span></a>
+        <a class="candidate-text-link" href="/standards/">Read Alana — All Over the Place editorial standards <span aria-hidden="true">→</span></a>
       </div>
     </div>
   </section>
@@ -117,7 +117,7 @@ app.innerHTML = `${MediaHeader()}
       <div>
         <p class="eyebrow"><span></span> Candidate conversations</p>
         <h2>Published interviews will be collected here.</h2>
-        <p>Candidate conversations will appear in The Alana Show archive after the first verified interview is released. Until then, this page provides package terms and scheduling information only.</p>
+        <p>Candidate conversations will appear in Alana — All Over the Place archive after the first verified interview is released. Until then, this page provides package terms and scheduling information only.</p>
       </div>
       <span class="candidate-small-note" data-candidate-archive-status="pending">No verified 2026 candidate interview has been published yet.</span>
     </div>

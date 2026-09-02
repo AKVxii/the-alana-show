@@ -111,7 +111,7 @@ export const guestProfiles = {
       name: "Engajer",
       url: "https://engajer.com/"
     },
-    summary: "Michael Castellano founded Engajer, an interactive-video technology company focused on digital engagement, and has appeared across multiple The Alana Show conversations on technology, AI, healthcare and cybersecurity.",
+    summary: "Michael Castellano founded Engajer, an interactive-video technology company focused on digital engagement, and has appeared across multiple Alana — All Over the Place conversations on technology, AI, healthcare and cybersecurity.",
     officialUrl: "https://old.engajer.com/press-detail/engajer-is-first-technology-to-enable-users-to-embed-interactive-videos-in-facebook/",
     sameAs: [
       "https://engajer.com/",

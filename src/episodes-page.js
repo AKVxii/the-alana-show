@@ -34,7 +34,7 @@ app.innerHTML = `${MediaHeader()}<main id="main-content">
   <section class="media-hero flagship-archive-hero" data-episodes-hero><div class="shell media-hero-inner">
     <nav class="breadcrumbs" aria-label="Breadcrumb"><ol><li><a href="/">Home</a></li><li aria-current="page">Episodes</li></ol></nav>
     <p class="eyebrow"><span></span> The conversation archive</p><h1>Episodes</h1>
-    <p>Explore conversations from The Alana Show by title, topic, or verified guest.</p>
+    <p>Explore conversations from Alana — All Over the Place by title, topic, or verified guest.</p>
     <div class="archive-credentials" aria-label="Conversation archive details">
       <span><strong data-library-total>—</strong> verified conversations</span>
       <span>South Florida radio</span>

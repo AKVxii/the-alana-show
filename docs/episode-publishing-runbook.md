@@ -1,4 +1,4 @@
-# The Alana Show — Episode Publishing Runbook
+# Alana — All Over the Place — Episode Publishing Runbook
 
 This is the default zero-cost publishing workflow for new conversations. The goal is one clean master, broad distribution, strong YouTube discovery, and a permanent owned page on TheAlanaShow.com.
 
@@ -14,7 +14,7 @@ Do not create separate manual uploads at every podcast directory unless a platfo
 
 ### 2. YouTube master
 
-For The Alana Show, direct YouTube upload is preferred over RSS-to-YouTube ingestion because the show uses custom episode-specific 16:9 artwork.
+For Alana — All Over the Place, direct YouTube upload is preferred over RSS-to-YouTube ingestion because the show uses custom episode-specific 16:9 artwork.
 
 Create a 1920x1080 video using:
 - the approved episode thumbnail as the visual,
@@ -22,7 +22,7 @@ Create a 1920x1080 video using:
 - no unnecessary motion unless it materially improves the episode,
 - the same episode title and core description used across distribution.
 
-Upload the MP4 directly in YouTube Studio, set the approved custom thumbnail, and add the full episode to the official The Alana Show podcast playlist.
+Upload the MP4 directly in YouTube Studio, set the approved custom thumbnail, and add the full episode to the official Alana — All Over the Place podcast playlist.
 
 Avoid connecting the same RSS feed to YouTube if the episode will also be uploaded manually; duplicate episodes weaken the archive and analytics.
 

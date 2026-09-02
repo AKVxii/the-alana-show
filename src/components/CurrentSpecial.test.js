@@ -53,14 +53,15 @@ test("null dates are active and date-only bounds use UTC calendar dates", () => 
   assert.equal(isCurrentSpecialActive({ ...currentSpecial, startDate: "2026-08-07", endDate: "2026-08-07" }, today), true);
 });
 
-test("homepage uses one clear three-path gateway before the LeMieux-led watch section", async () => {
+test("homepage keeps one focused media path with featured and latest conversations", async () => {
   const main = await readFile(new URL("../main.js", import.meta.url), "utf8");
   const detail = await readFile(new URL("../detail-page.js", import.meta.url), "utf8");
   const episodes = await readFile(new URL("../episodes-page.js", import.meta.url), "utf8");
   const guests = await readFile(new URL("../guests-page.js", import.meta.url), "utf8");
-  assert.ok(main.indexOf("${Hero()}") < main.indexOf("${Conversions()}"));
-  assert.ok(main.indexOf("${Conversions()}") < main.indexOf("${Episodes()}"));
-  assert.ok(main.indexOf("${Episodes()}") < main.indexOf("${Platforms()}"));
+  assert.ok(main.indexOf("${Hero()}") < main.indexOf("${Episodes()}"));
+  assert.ok(main.indexOf("${Episodes()}") < main.indexOf("${About()}"));
+  assert.ok(main.indexOf("${About()}") < main.indexOf("${Contact()}"));
+  assert.doesNotMatch(main, /\$\{Conversions\(\)\}|\$\{Platforms\(\)\}|\$\{Impact\(\)\}|\$\{Partner\(\)\}|\$\{Merchandise\(\)\}/);
   assert.doesNotMatch(main, /CurrentSpecial\(\)/);
   for (const source of [detail, episodes, guests]) assert.doesNotMatch(source, /CurrentSpecial\(\)/);
 });

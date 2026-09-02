@@ -48,21 +48,16 @@ function ensureMediaPolishStyles() {
 export function MediaHeader() {
   return `<header class="site-header media-site-header" data-header>
     <div class="shell header-inner">
-      <a class="brand" href="/" aria-label="The Alana Show home">
-        <span class="brand-seal" aria-hidden="true">TAS</span>
-        <span class="brand-copy"><strong>The Alana Show</strong><span>Real conversations. Distinct voices.</span></span>
+      <a class="brand" href="/" aria-label="Alana — All Over the Place home">
+        <span class="brand-seal" aria-hidden="true">AOP</span>
+        <span class="brand-copy"><strong>ALANA</strong><span>All Over the Place</span></span>
       </a>
       <button class="menu-button" type="button" aria-expanded="false" aria-controls="primary-nav" data-menu-button>
         <span class="sr-only">Open navigation</span>${icon("menu")}
       </button>
       <nav id="primary-nav" class="primary-nav" aria-label="Primary navigation" data-nav>
         <a href="/episodes/">Watch</a>
-        <a href="/guests/">Guests</a>
-        <a href="/topics/">Topics</a>
-        <a href="/candidates/">Candidates</a>
-        <a href="/south-florida/">South Florida</a>
-        <a href="/about/">About</a>
-        <a href="/merchandise/">Merchandise</a>
+        <a href="/about/">Alana</a>
         <a href="/#contact">Contact</a>
         <a class="mobile-listen-live" href="${site.trueOldiesLive}" target="_blank" rel="noopener">Listen Live</a>
       </nav>

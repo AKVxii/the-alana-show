@@ -23,7 +23,7 @@ export function Partner() {
             <article><span>01</span><strong>Episode Sponsorship</strong><small>Refined opening, closing, or on-screen acknowledgment.</small></article>
             <article><span>02</span><strong>Season Partnership</strong><small>A consistent presence across a curated series.</small></article>
             <article><span>03</span><strong>Community Impact</strong><small>Underwrite service-focused storytelling and reach.</small></article>
-            <article><span>04</span><strong>On Location</strong><small>Invite The Alana Show to a business, event, community setting, or public-affairs conversation.</small></article>
+            <article><span>04</span><strong>On Location</strong><small>Invite Alana — All Over the Place to a business, event, community setting, or public-affairs conversation.</small></article>
           </div>
         </div>
         <p class="editorial-independence">Advertising support never purchases guest appearances, controls questions, or determines editorial positions.</p>
