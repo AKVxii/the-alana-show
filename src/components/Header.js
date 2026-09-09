@@ -5,11 +5,11 @@ export function Header() {
   return `
     <header class="site-header" data-header>
       <div class="shell header-inner">
-        <a class="brand" href="#home" aria-label="Alana — All Over the Place home">
-          <span class="brand-seal" aria-hidden="true">AOP</span>
+        <a class="brand" href="#home" aria-label="The Alana Show home">
+          <span class="brand-seal" aria-hidden="true">TAS</span>
           <span class="brand-copy">
-            <strong>ALANA</strong>
-            <span>All Over the Place</span>
+            <strong>The Alana Show</strong>
+            <span>All over the map so you don’t have to be.</span>
           </span>
         </a>
 
