@@ -749,6 +749,31 @@ body:has(.hero#home) .portrait-caption strong{color:var(--campaign-navy);font-fa
 .form-heading h3{color:#fff;font-family:Georgia,"Times New Roman",serif}.form-footer p,.field-help{color:var(--campaign-sky-soft)}
 .contact-form .button-gold{color:#fff;border-color:var(--campaign-raspberry);background:var(--campaign-raspberry)}
 
+/* Keep the closing invitation as bright and editorial as the rest of the campaign. */
+.contact-section{
+  color:var(--campaign-navy);border-top-color:rgba(211,180,145,.82);
+  background:
+    radial-gradient(circle at 8% 18%,rgba(202,219,234,.74),transparent 28%),
+    radial-gradient(circle at 92% 86%,rgba(244,228,217,.8),transparent 30%),
+    linear-gradient(135deg,#fff,var(--campaign-paper) 58%,var(--campaign-sky-soft))
+}
+.contact-section::before{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(115deg,transparent 0 48%,rgba(211,180,145,.16) 48.1% 48.25%,transparent 48.35%)}
+.contact-section .eyebrow{color:var(--campaign-raspberry)}
+.contact-section .eyebrow>span{background:var(--campaign-gold-deep)}
+.contact-copy h2,.contact-section h2{color:var(--campaign-navy);text-shadow:none}
+.contact-copy>p{color:var(--campaign-muted)}
+.contact-direct a,.contact-direct span{color:var(--campaign-navy)}
+.contact-direct svg{color:var(--campaign-raspberry)}
+.contact-form{
+  color:var(--campaign-navy);border:1px solid rgba(211,180,145,.88);background:rgba(255,255,255,.8);
+  box-shadow:0 26px 64px rgba(5,17,49,.11);backdrop-filter:blur(16px)
+}
+.contact-form input,.contact-form select,.contact-form textarea{color:var(--campaign-navy);border-color:rgba(5,17,49,.16);background:rgba(249,242,239,.76)}
+.contact-form input::placeholder,.contact-form textarea::placeholder{color:rgba(57,70,96,.58)}
+.contact-form label>span,.form-heading span{color:var(--campaign-gold-deep)}
+.form-heading h3{color:var(--campaign-navy)}
+.form-footer p,.field-help{color:var(--campaign-muted)}
+
 .site-footer{color:var(--campaign-muted);background:linear-gradient(135deg,var(--campaign-ivory),#fff 56%,var(--campaign-blush));border-top:1px solid rgba(211,180,145,.82)}
 .site-footer a,.footer-links a,.footer-bottom{color:var(--campaign-navy-soft)}
 .site-footer .brand-copy strong{color:var(--campaign-navy)}.site-footer .brand-copy span{color:var(--campaign-raspberry)}

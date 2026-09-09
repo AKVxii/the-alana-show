@@ -1,37 +1,39 @@
 .analytics-consent {
   position: fixed;
-  right: clamp(16px, 3vw, 36px);
-  bottom: clamp(16px, 3vw, 28px);
+  left: clamp(16px, 3vw, 36px);
+  bottom: clamp(14px, 2vw, 24px);
   z-index: 1200;
-  width: min(440px, calc(100vw - 32px));
+  width: min(670px, calc(100vw - 32px));
   display: grid;
-  gap: 14px;
-  padding: 18px 20px;
-  color: #f7f2e8;
-  background: rgba(3, 9, 20, 0.97);
-  border: 1px solid rgba(203, 157, 73, 0.55);
-  border-radius: 16px;
-  box-shadow: 0 22px 70px rgba(0, 0, 0, 0.38);
-  backdrop-filter: blur(14px);
+  grid-template-columns:minmax(0,1fr) auto;
+  align-items:center;
+  gap: 12px 22px;
+  padding: 13px 15px 13px 18px;
+  color: #051131;
+  background: rgba(252, 246, 244, 0.97);
+  border: 1px solid rgba(211,180,145,.9);
+  border-radius: 12px;
+  box-shadow: 0 16px 44px rgba(5,17,49,.16);
+  backdrop-filter: blur(18px);
 }
 
 .analytics-consent strong {
   display: block;
-  margin-bottom: 5px;
-  color: #fffaf0;
+  margin-bottom: 2px;
+  color: #051131;
   font-family: Georgia, "Times New Roman", serif;
-  font-size: 1.08rem;
+  font-size: .96rem;
 }
 
 .analytics-consent p {
   margin: 0;
-  color: rgba(247, 242, 232, 0.82);
-  font-size: 0.9rem;
-  line-height: 1.55;
+  color: #6f7a95;
+  font-size: 0.76rem;
+  line-height: 1.4;
 }
 
 .analytics-consent a {
-  color: #d5ad60;
+  color: #b8205d;
   text-underline-offset: 3px;
 }
 
@@ -39,14 +41,16 @@
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-  gap: 10px 14px;
+  justify-content:flex-end;
+  gap: 8px 12px;
 }
+.analytics-consent .button{min-height:38px;padding:9px 15px;border-color:#b8205d;background:#b8205d;box-shadow:none}
 
 .analytics-consent-decline {
   appearance: none;
   border: 0;
   padding: 8px 2px;
-  color: rgba(247, 242, 232, 0.76);
+  color: #394660;
   background: transparent;
   font: inherit;
   font-size: 0.88rem;
@@ -57,14 +61,17 @@
 
 .analytics-consent-decline:hover,
 .analytics-consent-decline:focus-visible {
-  color: #fffaf0;
+  color: #b8205d;
 }
 
 @media (max-width: 560px) {
   .analytics-consent {
-    right: 12px;
+    left: 12px;
     bottom: 12px;
     width: calc(100vw - 24px);
-    padding: 16px;
+    grid-template-columns:1fr;
+    gap:10px;
+    padding: 13px 14px;
   }
+  .analytics-consent-actions{justify-content:flex-start}
 }
