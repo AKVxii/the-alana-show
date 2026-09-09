@@ -57,7 +57,7 @@ The website presents the first three immediately below the player. The full chap
 
 Use the radio link in every spoken or written station reference:
 
-> Former U.S. Senator George LeMieux joins The Alana Show for a conversation about leadership, public service, fiscal discipline and why character matters. Watch at TheAlanaShow.com/George-Radio.
+> Former U.S. Senator George LeMieux joins Alana — All Over the Place for a conversation about leadership, public service, fiscal discipline and why character matters. Watch at TheAlanaShow.com/George-Radio.
 
 Publish one owned social post using the social link:
 
@@ -67,9 +67,9 @@ Publish one owned social post using the social link:
 
 Send the guest link individually to George LeMieux, Gunster, the LeMieux Center for Public Policy, Palm Beach Atlantic University and appropriate fellows or alumni contacts.
 
-**Subject:** George LeMieux conversation on The Alana Show
+**Subject:** George LeMieux conversation on Alana — All Over the Place
 
-> George’s full conversation with The Alana Show is now published, including chapters and direct links to the sections on civic dialogue, federal debt and character in leadership. Here is the permanent episode link prepared for your audience: https://thealanashow.com/george-guest
+> George’s full conversation with Alana — All Over the Place is now published, including chapters and direct links to the sections on civic dialogue, federal debt and character in leadership. Here is the permanent episode link prepared for your audience: https://thealanashow.com/george-guest
 >
 > A share through the appropriate official, newsroom, alumni or social channel would be sincerely appreciated.
 
@@ -91,7 +91,7 @@ Each Short should:
 - open immediately on George’s strongest sentence;
 - use clean, accurate captions;
 - avoid an extended logo introduction;
-- identify George and The Alana Show without covering faces;
+- identify George and Alana — All Over the Place without covering faces;
 - end with a restrained full-conversation direction;
 - use the exact real photographs in any supporting thumbnail artwork.
 

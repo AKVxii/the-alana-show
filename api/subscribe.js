@@ -101,7 +101,7 @@ module.exports = async function handler(req, res) {
       return res.status(502).json({ error: "Unable to complete signup right now" });
     }
 
-    // Add the subscriber to The Alana Show — Website Subscribers form.
+    // Add the subscriber to Alana — All Over the Place — Website Subscribers form.
     // When confirmation email is enabled and auto-confirm is disabled in Kit,
     // this form assignment triggers the double-opt-in confirmation flow.
     const formResponse = await fetch(`https://api.kit.com/v4/forms/${KIT_FORM_ID}/subscribers/${subscriberId}`, {

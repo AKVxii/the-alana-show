@@ -110,7 +110,7 @@ module.exports = async function handler(req, res) {
     return res.status(503).json({ error: "Contact email is temporarily unavailable" });
   }
 
-  const subject = `The Alana Show inquiry: ${inquiry}`;
+  const subject = `Alana — All Over the Place inquiry: ${inquiry}`;
   const html = `
     <h2>${escapeHtml(subject)}</h2>
     <p><strong>Name:</strong> ${escapeHtml(name)}</p>

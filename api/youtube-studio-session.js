@@ -41,7 +41,7 @@ module.exports = async function handler(req, res) {
         connected: false,
         readOnly: true,
         canWrite: false,
-        error: "The connected Google account does not control The Alana Show channel."
+        error: "The connected Google account does not control Alana — All Over the Place channel."
       });
     }
 
@@ -54,7 +54,7 @@ module.exports = async function handler(req, res) {
       scopes: String(session.scope || "").split(/\s+/).filter(Boolean),
       channel: {
         id: channel.id,
-        title: channel.snippet?.title || "The Alana Show",
+        title: channel.snippet?.title || "Alana — All Over the Place",
         customUrl: channel.snippet?.customUrl || "@alanakvandeveer",
         description: channel.snippet?.description || "",
         publishedAt: channel.snippet?.publishedAt || "",

@@ -10,7 +10,7 @@ const {
 
 const TEST_SECRET = "test-only-youtube-studio-session-secret-1234567890";
 
-test("the console is pinned to The Alana Show channel", () => {
+test("the console is pinned to Alana — All Over the Place channel", () => {
   assert.equal(EXPECTED_CHANNEL_ID, "UC8sZK_EKbcuCBMquG_C30Sw");
 });
 
@@ -29,7 +29,7 @@ test("encrypted session payloads round-trip and reject tampering", () => {
 
 test("replacement and private duplicate titles normalize consistently", () => {
   assert.equal(
-    normalizeTitle("Former U.S. Senator George LeMieux | Leadership, Public Service & Florida’s Future | The Alana Show"),
+    normalizeTitle("Former U.S. Senator George LeMieux | Leadership, Public Service & Florida’s Future | Alana — All Over the Place"),
     normalizeTitle("Former U.S. Senator George LeMieux — Leadership, Public Service & Florida’s Future")
   );
 });

@@ -60,7 +60,7 @@ module.exports = async function handler(req, res) {
     writeSession(res, {
       version: 1,
       channelId: channel.id,
-      channelTitle: channel.snippet?.title || "The Alana Show",
+      channelTitle: channel.snippet?.title || "Alana — All Over the Place",
       accessToken: tokens.access_token,
       refreshToken: tokens.refresh_token || "",
       expiresAt: Date.now() + expiresIn * 1000,
