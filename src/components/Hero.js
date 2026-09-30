@@ -10,20 +10,20 @@ export function Hero() {
     <section class="hero" id="home">
       <div class="shell hero-grid">
         <div class="hero-copy reveal">
-          <p class="eyebrow"><span></span> Voice of the Gold Coast</p>
+          <p class="eyebrow"><span></span> Alana K. Vandeveer</p>
           <h1>
             <span class="title-small">The</span>
-            <span class="title-main">Alana</span>
+            <span class="title-main">ALANA</span>
             <span class="title-show">Show</span>
           </h1>
-          <p class="hero-line">Real conversations. <em>Distinct voices.</em> Thoughtful perspective.</p>
+          <p class="hero-line">All over the <em>map</em> so you don’t have to be.</p>
           <p class="hero-intro">
-            In-depth interviews with people shaping business, public service, culture, and community—grounded in South Florida and available wherever you watch or listen.
+            Conversations with people worth knowing—on air, online, and everywhere you listen.
           </p>
 
           <div class="hero-actions">
             <a class="button button-gold" href="#watch">${icon("play")} Watch featured conversation</a>
-            <a class="button button-ghost" href="#listen">Listen everywhere ${icon("arrow")}</a>
+            <a class="button button-ghost" href="/episodes/">Explore all ${icon("arrow")}</a>
           </div>
 
           <div class="hero-credentials" aria-label="Show details">
@@ -52,6 +52,16 @@ export function Hero() {
             <span class="sr-only">Hosted by</span>
             <span>HOST, THE ALANA SHOW</span>
             <strong>Alana K. Vandeveer</strong>
+          </div>
+        </div>
+      </div>
+      <div class="editorial-ticker" aria-hidden="true">
+        <div class="editorial-ticker-track">
+          <div class="editorial-ticker-set">
+            <span>REAL CONVERSATIONS</span><i></i><span>DISTINCT VOICES</span><i></i><span>ALL OVER THE MAP</span><i></i>
+          </div>
+          <div class="editorial-ticker-set">
+            <span>REAL CONVERSATIONS</span><i></i><span>DISTINCT VOICES</span><i></i><span>ALL OVER THE MAP</span><i></i>
           </div>
         </div>
       </div>

@@ -245,7 +245,7 @@ async function revokeToken(token) {
 function normalizeTitle(value = "") {
   return String(value)
     .toLowerCase()
-    .replace(/\s*\|\s*the alana show\s*$/i, "")
+    .replace(/\s*\|\s*(?:the alana show|alana\s*[—-]\s*all over the place)\s*$/i, "")
     .replace(/&amp;|&/g, " and ")
     .replace(/[^a-z0-9]+/g, " ")
     .replace(/\s+/g, " ")

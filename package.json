@@ -2,7 +2,7 @@
   "name": "the-alana-show",
   "private": true,
   "version": "1.0.0",
-  "description": "Official landing page for The Alana Show",
+  "description": "Official landing page for Alana — All Over the Place",
   "scripts": {
     "dev": "vercel dev",
     "build:media-polish": "node scripts/build-media-polish.mjs",

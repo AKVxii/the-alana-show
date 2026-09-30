@@ -1,12 +1,12 @@
 # Publishing a New Conversation
 
-The public YouTube feed updates automatically, but a verified internal episode page gives The Alana Show stronger internal linking, guest relationships, social metadata, crawler-visible content, sitemap coverage, and search authority.
+The public YouTube feed updates automatically, but a verified internal episode page gives Alana — All Over the Place stronger internal linking, guest relationships, social metadata, crawler-visible content, sitemap coverage, and search authority.
 
 This repository includes a zero-dependency publishing helper so that enrichment does not require a CMS or routine developer billing.
 
 ## Before you begin
 
-1. Publish the finished conversation on the verified The Alana Show YouTube channel.
+1. Publish the finished conversation on the verified Alana — All Over the Place YouTube channel.
 2. Copy the 11-character YouTube video ID from the published video URL.
 3. Confirm the guest name(s) and permanent episode slug.
 4. Work on a feature branch or other non-production branch. Do not run the publishing helper directly on an unreviewed production working tree.
@@ -110,7 +110,7 @@ The brief treats the permanent website page as the owned canonical destination a
 
 This is intentionally a checklist, not automated outreach. The publisher does not send messages, alter YouTube descriptions, make social posts, or contact guests on its own.
 
-The distribution principle is simple: external platforms distribute the conversation; the permanent The Alana Show page owns the long-term context, guest relationship, topic links, search authority, and reference URL.
+The distribution principle is simple: external platforms distribute the conversation; the permanent Alana — All Over the Place page owns the long-term context, guest relationship, topic links, search authority, and reference URL.
 
 ## Canonical sitemap freshness
 
@@ -136,7 +136,7 @@ The command:
 
 rebuilds that file from the verified episode catalog and the metadata already published in each permanent episode's static HTML. It uses:
 
-- the canonical The Alana Show episode URL as the video landing page;
+- the canonical Alana — All Over the Place episode URL as the video landing page;
 - the page's existing title and description;
 - the page's preferred YouTube thumbnail;
 - the verified privacy-enhanced `youtube-nocookie.com` player URL;
@@ -177,7 +177,7 @@ If a guest already exists in the site catalog, use that guest's existing slug. T
 
 ## New guests
 
-For a new verified guest, the helper creates a profile shell with standard The Alana Show social metadata and ProfilePage/Person structured data. The live detail-page code then connects the guest to the verified conversation.
+For a new verified guest, the helper creates a profile shell with standard Alana — All Over the Place social metadata and ProfilePage/Person structured data. The live detail-page code then connects the guest to the verified conversation.
 
 ## What remains editorial judgment
 
