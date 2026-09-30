@@ -801,3 +801,189 @@ body:has(.hero#home) .portrait-caption strong{color:var(--campaign-navy);font-fa
   .watch-section .watch-heading h2{font-size:clamp(2.7rem,14vw,4.3rem)}
   .featured-meta{background:#fff}
 }
+
+/* Official September 2026 identity — derived from the approved orbital gold logo. */
+:root{
+  --logo-ink:#211806;
+  --logo-espresso:#4d3505;
+  --logo-gold:#986f13;
+  --logo-gold-bright:#d3a65a;
+  --logo-champagne:#e8cea6;
+  --logo-ivory:#fdfcf8;
+  --logo-paper:#f8f4ec;
+  --logo-muted:#756f65;
+  --baby-blue:#f4ecdf;
+  --baby-blue-strong:#e8cea6;
+  --baby-pink:#d3a65a;
+  --baby-pink-strong:#986f13;
+  --plum:#986f13;
+  --broadcast-plum:#986f13;
+  --broadcast-gold:#d3a65a;
+  --broadcast-navy:#211806;
+  --broadcast-navy-soft:#4d3505;
+  --broadcast-ivory:#fdfcf8;
+  --campaign-navy:var(--logo-ink);
+  --campaign-navy-soft:var(--logo-espresso);
+  --campaign-raspberry:var(--logo-gold);
+  --campaign-raspberry-deep:var(--logo-espresso);
+  --campaign-pink:var(--logo-gold-bright);
+  --campaign-sky:var(--logo-paper);
+  --campaign-sky-soft:#fbf8f1;
+  --campaign-ivory:var(--logo-ivory);
+  --campaign-paper:#fffefa;
+  --campaign-blush:#f4ecdf;
+  --campaign-gold:var(--logo-gold-bright);
+  --campaign-gold-deep:var(--logo-gold);
+  --campaign-muted:var(--logo-muted)
+}
+
+html,body{background:var(--logo-ivory);color:var(--logo-ink)}
+body{background-image:radial-gradient(circle at 82% 4%,rgba(232,206,166,.2),transparent 27%)}
+h1,h2,h3,h4{color:var(--logo-ink)}
+
+.site-header,.site-header.scrolled,.media-site-header,.media-site-header.scrolled{
+  color:var(--logo-ink);background:rgba(255,254,250,.96);border-bottom-color:rgba(152,111,19,.28);
+  box-shadow:0 10px 34px rgba(77,53,5,.07);backdrop-filter:blur(20px)
+}
+.header-inner{height:88px}
+.site-header .brand{
+  width:112px;height:84px;flex:0 0 112px;overflow:hidden;
+  background:url('/assets/the-alana-show-logo-official.png') center/112px auto no-repeat
+}
+.site-header .brand>*{position:absolute!important;width:1px!important;height:1px!important;overflow:hidden!important;clip:rect(0 0 0 0)!important;white-space:nowrap!important}
+.primary-nav a{color:var(--logo-ink)}
+.primary-nav a::after{background:linear-gradient(90deg,var(--logo-gold),var(--logo-gold-bright))}
+.primary-nav a:hover,.primary-nav a:focus-visible{color:var(--logo-gold)}
+.header-actions .button-gold{color:#fff;border-color:var(--logo-espresso);background:var(--logo-espresso);box-shadow:0 10px 26px rgba(77,53,5,.14)}
+.header-actions .button-gold:hover{color:#fff;border-color:var(--logo-gold);background:var(--logo-gold)}
+.menu-button{color:var(--logo-espresso);border-color:rgba(152,111,19,.35)}
+
+body:has(.hero#home) .hero{
+  color:var(--logo-ink);min-height:min(790px,calc(100svh - 88px));padding-bottom:58px;
+  background:
+    radial-gradient(circle at 82% 26%,rgba(232,206,166,.34),transparent 25%),
+    radial-gradient(circle at 95% 78%,rgba(211,166,90,.14),transparent 24%),
+    radial-gradient(circle at 14% 78%,rgba(244,236,223,.8),transparent 31%),
+    linear-gradient(108deg,#fff 0 45%,#fffefa 65%,#f7f1e7 100%)
+}
+body:has(.hero#home) .hero::before{
+  opacity:.62;background:
+    repeating-radial-gradient(circle at 55% 38%,transparent 0 58px,rgba(211,166,90,.26) 59px 60px,transparent 61px 96px),
+    linear-gradient(90deg,transparent 49.9%,rgba(152,111,19,.2) 50%,transparent 50.1%)
+}
+body:has(.hero#home) .hero::after{color:rgba(77,53,5,.46)}
+body:has(.hero#home) .hero-grid{min-height:min(790px,calc(100svh - 88px));grid-template-columns:minmax(0,1.06fr) minmax(420px,.94fr)}
+body:has(.hero#home) .hero-copy{max-width:700px;padding-bottom:54px}
+body:has(.hero#home) .hero .eyebrow{color:var(--logo-gold);letter-spacing:.24em}
+body:has(.hero#home) .hero .eyebrow>span{background:var(--logo-gold-bright)}
+body:has(.hero#home) .hero h1{
+  width:min(100%,620px);aspect-ratio:2000/1575;margin:-42px 0 -54px;
+  position:relative;background:url('/assets/the-alana-show-logo-official.png') center/100% 100% no-repeat;
+  filter:drop-shadow(0 18px 30px rgba(77,53,5,.08));text-transform:none
+}
+body:has(.hero#home) .hero h1>span{position:absolute!important;width:1px!important;height:1px!important;overflow:hidden!important;clip:rect(0 0 0 0)!important;white-space:nowrap!important}
+body:has(.hero#home) .hero-line{margin-top:4px;color:var(--logo-espresso);font-size:clamp(1.24rem,1.9vw,1.78rem)}
+body:has(.hero#home) .hero-line em{color:var(--logo-gold);box-shadow:none}
+body:has(.hero#home) .hero-intro{color:var(--logo-muted)}
+body:has(.hero#home) .button-gold,.watch-section .button-gold,.latest-card .button-gold,.contact-form .button-gold{
+  color:#fff;border-color:var(--logo-espresso);background:var(--logo-espresso);box-shadow:0 14px 32px rgba(77,53,5,.15)
+}
+body:has(.hero#home) .button-gold:hover,.watch-section .button-gold:hover,.latest-card .button-gold:hover,.contact-form .button-gold:hover{color:#fff;border-color:var(--logo-gold);background:var(--logo-gold)}
+body:has(.hero#home) .button-ghost{color:var(--logo-espresso);border-color:rgba(77,53,5,.55);background:rgba(255,255,255,.68)}
+body:has(.hero#home) .button-ghost:hover{color:#fff;background:var(--logo-espresso)}
+body:has(.hero#home) .portrait-stage::before{
+  border-color:rgba(211,166,90,.5);background:radial-gradient(ellipse at 52% 45%,rgba(255,255,255,.9),rgba(232,206,166,.32) 48%,rgba(244,236,223,.24) 68%,transparent 73%)
+}
+body:has(.hero#home) .portrait-stage::after{background:linear-gradient(90deg,var(--logo-gold),var(--logo-gold-bright),transparent)}
+body:has(.hero#home) .portrait-caption{color:var(--logo-ink);border-color:rgba(211,166,90,.82);background:rgba(255,254,250,.94);box-shadow:0 14px 34px rgba(77,53,5,.1)}
+body:has(.hero#home) .portrait-caption span{color:var(--logo-gold)}
+body:has(.hero#home) .portrait-caption strong{color:var(--logo-ink)}
+
+.editorial-ticker{
+  color:#fff;background:linear-gradient(90deg,#211806,#4d3505,#211806);border-color:var(--logo-gold-bright);
+  box-shadow:inset 0 3px 0 rgba(211,166,90,.72),inset 0 -3px 0 rgba(211,166,90,.72),0 8px 24px rgba(77,53,5,.13)
+}
+.editorial-ticker::before,.editorial-ticker::after{background:linear-gradient(90deg,transparent,var(--logo-gold-bright),transparent)}
+.editorial-ticker-track i{background:var(--logo-gold-bright)}
+
+.conversion-section{background:#fffefa}
+.conversion-grid{border-color:rgba(77,53,5,.32)}
+.conversion-card,.conversion-card:nth-child(n){color:var(--logo-ink);border-color:rgba(77,53,5,.22);background:rgba(255,255,255,.8)}
+.conversion-card:hover,.conversion-card:focus-visible,.conversion-card:nth-child(2):hover,.conversion-card:nth-child(2):focus-visible{color:var(--logo-ink);background:#f2e5d2}
+.conversion-card>span:first-child,.conversion-card-arrow{color:var(--logo-gold)}
+.conversion-card small{color:var(--logo-muted)}
+
+.watch-section{
+  color:var(--logo-ink);background:radial-gradient(circle at 88% 18%,rgba(232,206,166,.36),transparent 28%),linear-gradient(180deg,#fff,#fbf8f1)
+}
+.watch-section::after{background:linear-gradient(90deg,var(--logo-gold),var(--logo-gold-bright),transparent)}
+.watch-section .watch-heading .eyebrow,.content-label{color:var(--logo-gold)}
+.watch-section .watch-heading .eyebrow>span{background:var(--logo-gold-bright)}
+.watch-section .featured-player{border-color:rgba(211,166,90,.72);box-shadow:0 28px 70px rgba(77,53,5,.1)}
+.watch-section .featured-player::before{color:#fff;border-color:var(--logo-espresso);background:var(--logo-espresso)}
+.watch-section .featured-meta{color:var(--logo-ink);border-top-color:rgba(211,166,90,.65);background:linear-gradient(110deg,#fff 0 68%,#f4ecdf)}
+.featured-meta p,.featured-stats,.latest-card p{color:var(--logo-muted)}
+.latest-card{color:var(--logo-ink);border-color:rgba(211,166,90,.7);background:linear-gradient(135deg,#fff,#f4ecdf);box-shadow:0 22px 54px rgba(77,53,5,.08)}
+.discovery-card{color:#fff;border-color:var(--logo-espresso);background:linear-gradient(145deg,var(--logo-espresso),var(--logo-ink))}
+.discovery-card:hover{color:#fff;background:var(--logo-gold)}
+.discovery-card small{color:var(--logo-champagne)}
+
+.media-hero,.growth-hero,.trust-hero,.about-hero,.press-hero,.candidates-hero,.merchandise-hero{
+  color:var(--logo-ink);background:radial-gradient(circle at 78% 12%,rgba(232,206,166,.4),transparent 34%),linear-gradient(135deg,#fff,#fffefa 54%,#f4ecdf)
+}
+.about-section{
+  color:var(--logo-ink);border-top-color:rgba(211,166,90,.62);background:radial-gradient(circle at 88% 24%,rgba(232,206,166,.38),transparent 30%),linear-gradient(135deg,#fffefa,#fff 58%,#f4ecdf)
+}
+.about-section .eyebrow.dark,.host-principle footer,.host-signature{color:var(--logo-gold)}
+.about-section .eyebrow>span{background:var(--logo-gold-bright)}
+.about-copy h2,.about-lede,.host-principle p{color:var(--logo-ink)!important}
+.about-copy>p{color:var(--logo-muted)}
+.about-photo-frame{border-color:rgba(211,166,90,.72);background:radial-gradient(circle at 50% 25%,#fff,#f4ecdf 72%);box-shadow:0 28px 68px rgba(77,53,5,.1)}
+.about-monogram{color:rgba(152,111,19,.08)}
+.host-principle{border-color:rgba(152,111,19,.26)}
+
+.contact-section{
+  color:var(--logo-ink);border-top-color:rgba(211,166,90,.72);
+  background:radial-gradient(circle at 8% 18%,rgba(232,206,166,.4),transparent 28%),radial-gradient(circle at 92% 86%,rgba(244,236,223,.74),transparent 30%),linear-gradient(135deg,#fff,#fffefa 58%,#f4ecdf)
+}
+.contact-section::before{background:linear-gradient(115deg,transparent 0 48%,rgba(211,166,90,.15) 48.1% 48.25%,transparent 48.35%)}
+.contact-section .eyebrow{color:var(--logo-gold)}
+.contact-section .eyebrow>span{background:var(--logo-gold-bright)}
+.contact-copy h2,.contact-section h2,.contact-direct a,.contact-direct span{color:var(--logo-ink)}
+.contact-copy>p,.form-footer p,.field-help{color:var(--logo-muted)}
+.contact-direct svg{color:var(--logo-gold)}
+.contact-form{color:var(--logo-ink);border-color:rgba(211,166,90,.76);background:rgba(255,255,255,.84);box-shadow:0 26px 64px rgba(77,53,5,.09)}
+.contact-form input,.contact-form select,.contact-form textarea{color:var(--logo-ink);border-color:rgba(77,53,5,.17);background:rgba(248,244,236,.8)}
+.contact-form input:focus,.contact-form select:focus,.contact-form textarea:focus{border-color:var(--logo-gold);box-shadow:0 0 0 3px rgba(211,166,90,.18)}
+.contact-form label>span,.form-heading span{color:var(--logo-gold)}
+.form-heading h3{color:var(--logo-ink)}
+
+.site-footer{color:var(--logo-muted);background:linear-gradient(135deg,#fbf8f1,#fff 56%,#f4ecdf);border-top-color:rgba(211,166,90,.72)}
+.site-footer .footer-brand .brand{
+  width:170px;height:134px;display:block;margin:-24px 0 -14px;
+  background:url('/assets/the-alana-show-logo-official.png') center/100% 100% no-repeat
+}
+.site-footer .footer-brand .brand>*{position:absolute!important;width:1px!important;height:1px!important;overflow:hidden!important;clip:rect(0 0 0 0)!important;white-space:nowrap!important}
+.site-footer a,.footer-links a,.footer-bottom{color:var(--logo-espresso)}
+.footer-heard{border-color:rgba(211,166,90,.62);background:rgba(255,255,255,.68)}
+.footer-heard>span{color:var(--logo-gold)}.footer-heard strong{color:var(--logo-ink)}
+
+@media(max-width:980px){
+  .header-inner{height:82px}
+  .site-header .brand{width:104px;height:78px;flex-basis:104px;background-size:104px auto}
+  .primary-nav{inset-block-start:82px;color:var(--logo-ink);background:rgba(255,254,250,.99);border-top-color:rgba(211,166,90,.55)}
+  .primary-nav a{color:var(--logo-ink);border-bottom-color:rgba(77,53,5,.09)}
+  body:has(.hero#home) .hero{background:linear-gradient(180deg,#fff 0 48%,#f4ecdf 100%)}
+  body:has(.hero#home) .hero-grid{padding-top:112px}
+  body:has(.hero#home) .hero h1{width:min(100%,580px);margin:-38px 0 -48px}
+}
+@media(max-width:600px){
+  .header-inner{height:72px}
+  .site-header .brand{width:92px;height:69px;flex-basis:92px;background-size:92px auto}
+  .primary-nav{inset-block-start:72px}
+  body:has(.hero#home) .hero-grid{padding-top:88px}
+  body:has(.hero#home) .hero-copy{padding-top:16px}
+  body:has(.hero#home) .hero h1{width:min(108%,470px);margin:-26px 0 -32px -4%}
+  body:has(.hero#home) .hero-line{margin-top:0;font-size:1.28rem}
+  .site-footer .footer-brand .brand{width:150px;height:118px}
+}
