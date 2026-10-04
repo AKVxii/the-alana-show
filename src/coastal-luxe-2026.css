@@ -1,0 +1,306 @@
+/* ==========================================================================
+   Coastal Luxe palette — October 2026
+   Visual direction: soft Florida sky, warm ivory, champagne gold, and
+   restrained navy typography. Content, logos, imagery, and functionality
+   remain unchanged.
+   ========================================================================== */
+:root {
+  --navy-1000: #102944;
+  --navy-950: #173550;
+  --navy-900: #214766;
+  --navy-850: #2d5878;
+  --navy-800: #386b8c;
+  --navy-700: #527f9e;
+  --gold-700: #8b6422;
+  --gold-600: #a87c2c;
+  --gold-500: #c69a43;
+  --gold-400: #ddb96c;
+  --gold-300: #efdaa0;
+  --ivory-50: #fffdf8;
+  --ivory-100: #fbf6ec;
+  --ivory-200: #f1e7d5;
+  --ink: #173550;
+  --muted: #64798b;
+  --muted-strong: #526a7d;
+  --muted-light: #b8cbd9;
+  --line-dark: rgba(23, 53, 80, .12);
+  --line-light: rgba(23, 53, 80, .10);
+  --shadow-sm: 0 14px 34px rgba(37, 79, 108, .08);
+  --shadow-md: 0 24px 60px rgba(37, 79, 108, .12);
+  --shadow-lg: 0 42px 110px rgba(37, 79, 108, .18);
+}
+
+html { background: #f8f2e8; }
+
+body {
+  color: var(--ink);
+  background:
+    radial-gradient(circle at 82% 4%, rgba(188, 222, 241, .58), transparent 30rem),
+    radial-gradient(circle at 12% 12%, rgba(255, 232, 187, .50), transparent 27rem),
+    linear-gradient(180deg, #eef8ff 0, #fffaf1 38rem, #fffdf8 100%);
+}
+
+::selection { color: #173550; background: #f1d89c; }
+
+.site-header,
+.site-header.scrolled {
+  color: var(--navy-950);
+  background: rgba(255, 253, 248, .90);
+  border-bottom: 1px solid rgba(177, 133, 47, .26);
+  box-shadow: 0 8px 34px rgba(66, 112, 143, .07);
+  backdrop-filter: blur(18px) saturate(1.08);
+}
+
+.brand,
+.primary-nav a { color: var(--navy-950); }
+
+.brand-seal {
+  color: var(--gold-700);
+  border-color: rgba(168, 124, 44, .56);
+  background: rgba(255,255,255,.42);
+  box-shadow: inset 0 0 0 4px rgba(221,185,108,.08);
+}
+
+.brand-copy span { color: var(--gold-700); }
+.primary-nav a:hover,
+.primary-nav a:focus-visible { color: var(--gold-700); }
+
+.search-trigger {
+  color: var(--navy-900);
+  border-color: rgba(23,53,80,.13);
+  background: rgba(255,255,255,.48);
+}
+.search-trigger kbd {
+  color: var(--gold-700);
+  border-color: rgba(23,53,80,.14);
+}
+.menu-button {
+  color: var(--navy-950);
+  border-color: rgba(168,124,44,.34);
+  background: rgba(255,255,255,.36);
+}
+
+.button-gold {
+  color: #173550;
+  border-color: rgba(139,100,34,.14);
+  background: linear-gradient(135deg, #f4e2ad 0%, #deb968 48%, #c39237 100%);
+  box-shadow: 0 12px 30px rgba(168,124,44,.18);
+}
+.button-gold:hover { box-shadow: 0 16px 38px rgba(168,124,44,.26); }
+.button-ghost {
+  color: var(--navy-950);
+  border-color: rgba(23,53,80,.22);
+  background: rgba(255,255,255,.36);
+}
+.button-light {
+  color: var(--navy-950);
+  background: rgba(255,253,248,.96);
+}
+
+/* Flagship hero: luminous waterfront atmosphere without changing the portrait. */
+body:has(.hero#home) .hero,
+.hero#home {
+  color: var(--navy-950);
+  background:
+    radial-gradient(ellipse at 80% 26%, rgba(255, 225, 169, .62), transparent 23%),
+    radial-gradient(ellipse at 18% 18%, rgba(255, 248, 225, .92), transparent 30%),
+    radial-gradient(ellipse at 76% 52%, rgba(173, 217, 241, .70), transparent 40%),
+    linear-gradient(116deg, #fff8e8 0%, #f8fbfc 34%, #dceff9 70%, #c7e3f3 100%);
+  border-bottom: 1px solid rgba(177,133,47,.28);
+}
+
+body:has(.hero#home) .hero::before,
+.hero#home::before {
+  background:
+    radial-gradient(circle, rgba(255,255,255,.86) 0 2px, transparent 3px) 0 0 / 74px 74px,
+    radial-gradient(ellipse at 50% 50%, rgba(222,185,104,.20), transparent 62%);
+  box-shadow: none;
+  opacity: .42;
+}
+
+body:has(.hero#home) .hero::after,
+.hero#home::after {
+  opacity: .42;
+  background:
+    linear-gradient(90deg, transparent 0 69%, rgba(168,124,44,.14) 69% calc(69% + 1px), transparent calc(69% + 1px)),
+    radial-gradient(ellipse at 82% 44%, rgba(255,255,255,.60), transparent 38%),
+    linear-gradient(180deg, transparent 68%, rgba(255, 244, 216, .35));
+}
+
+.hero .eyebrow { color: var(--gold-700); }
+body:has(.hero#home) .title-small,
+.title-small { color: var(--gold-700); }
+body:has(.hero#home) .title-main,
+.title-main {
+  color: #173550;
+  text-shadow: 0 2px 22px rgba(255,255,255,.58);
+}
+body:has(.hero#home) .title-show,
+.title-show { color: var(--gold-700); }
+.hero-line { color: #173550; }
+.hero-line em { color: #9c7125; }
+.hero-intro { color: #506c80; }
+.hero-credentials {
+  color: #5f788a;
+  border-top-color: rgba(23,53,80,.12);
+}
+.hero-credentials span::before { background: #bc8d36; }
+
+body:has(.hero#home) .portrait-stage::before,
+.portrait-stage::before {
+  opacity: .78;
+  background:
+    radial-gradient(ellipse at 54% 44%, rgba(163, 211, 239, .60), transparent 52%),
+    radial-gradient(ellipse at 58% 78%, rgba(239, 207, 139, .32), transparent 44%);
+}
+
+body:has(.hero#home) .portrait-inner,
+.portrait-inner {
+  background:
+    radial-gradient(circle at 52% 28%, rgba(255,255,255,.78), transparent 34%),
+    linear-gradient(180deg, #eaf6fc 0%, #d5ebf6 55%, #f7ead0 100%);
+}
+
+body:has(.hero#home) .portrait-inner::before {
+  background: radial-gradient(ellipse at 55% 36%, rgba(255,255,255,.48), transparent 48%);
+}
+
+body:has(.hero#home) .portrait-inner::after {
+  background: linear-gradient(180deg, transparent 78%, rgba(43, 86, 116, .16));
+}
+
+body:has(.hero#home) .portrait-motion-ring,
+.portrait-motion-ring {
+  border-color: rgba(168,124,44,.18);
+}
+.portrait-motion::before {
+  background: conic-gradient(from 205deg, transparent 0 22%, rgba(221,185,108,.22) 31%, transparent 39% 67%, rgba(110,174,213,.23) 78%, transparent 88%);
+}
+.portrait-motion::after {
+  background: linear-gradient(112deg, transparent 30%, rgba(255,255,255,.14) 43%, rgba(221,185,108,.18) 48%, transparent 58%);
+}
+.portrait-motion-beam {
+  background: linear-gradient(90deg, transparent 2%, rgba(168,124,44,.08) 25%, rgba(239,218,160,.80) 51%, rgba(168,124,44,.08) 74%, transparent 98%);
+}
+
+body:has(.hero#home) .portrait-caption,
+.portrait-caption {
+  color: var(--navy-950);
+  border-bottom-color: rgba(168,124,44,.54);
+  background: linear-gradient(90deg, rgba(255,253,248,.94), rgba(255,249,236,.80) 66%, rgba(255,255,255,.32));
+  box-shadow: 0 18px 44px rgba(46,91,122,.12);
+}
+body:has(.hero#home) .portrait-caption span,
+.portrait-caption span { color: var(--gold-700); }
+body:has(.hero#home) .portrait-caption strong,
+.portrait-caption strong {
+  color: var(--navy-950);
+  text-shadow: none;
+}
+
+/* Light, editorial surfaces throughout the site. */
+.listen-section,
+.current-special,
+.media-section,
+.about-section,
+.contact-section,
+.footer,
+.site-footer {
+  color: var(--ink);
+}
+
+.listen-section {
+  background: linear-gradient(180deg, #d8edf8, #f9f3e8);
+}
+.listen-section .shell {
+  border-color: rgba(168,124,44,.16);
+  background: rgba(255,253,248,.72);
+  box-shadow: 0 18px 48px rgba(55,101,133,.08);
+}
+.platform-heading h2 { color: var(--gold-700); text-shadow: none; }
+.platform-card {
+  color: var(--navy-950);
+  border-color: rgba(168,124,44,.16);
+  background: linear-gradient(145deg, rgba(255,255,255,.74), rgba(247,241,230,.66));
+  box-shadow: 0 10px 28px rgba(55,101,133,.07);
+}
+.platform-card:hover,
+.platform-card:focus-visible {
+  border-color: rgba(168,124,44,.32);
+  box-shadow: 0 16px 34px rgba(55,101,133,.11);
+}
+.platform-icon {
+  color: var(--gold-700);
+  border-color: rgba(168,124,44,.22);
+  background: rgba(255,255,255,.54);
+}
+.platform-copy small { color: var(--muted); }
+
+.current-special {
+  background: linear-gradient(180deg, #fffdf8, #edf6fb);
+}
+.current-special-panel,
+.broadcast {
+  color: var(--navy-950);
+  border-color: rgba(168,124,44,.25);
+  background:
+    radial-gradient(circle at 88% 10%, rgba(192,224,241,.60), transparent 34%),
+    linear-gradient(145deg, rgba(255,253,248,.96), rgba(245,239,226,.92));
+  box-shadow: 0 24px 58px rgba(55,101,133,.09);
+}
+.current-special-panel::after { border-color: rgba(168,124,44,.12); }
+.broadcast-copy > p,
+.broadcast-facts span,
+.true-oldies-wordmark small { color: var(--muted); }
+.broadcast-facts span { border-color: rgba(23,53,80,.11); }
+
+.conversion-section,
+.media-section,
+.section,
+.about-section {
+  background-color: transparent;
+}
+
+.conversion-card,
+.media-card,
+.card,
+.guest-card,
+.topic-card,
+.archive-card {
+  border-color: rgba(168,124,44,.14);
+  background: rgba(255,253,248,.86);
+  box-shadow: 0 14px 36px rgba(55,101,133,.07);
+}
+.conversion-card:hover,
+.media-card:hover,
+.card:hover {
+  border-color: rgba(168,124,44,.30);
+  box-shadow: 0 18px 42px rgba(55,101,133,.11);
+}
+
+.eyebrow.dark { color: var(--gold-700); }
+
+footer,
+.footer,
+.site-footer {
+  background: linear-gradient(180deg, #f6efe3, #e7f2f8);
+  border-top: 1px solid rgba(168,124,44,.18);
+}
+
+/* Keep mobile navigation bright and legible. */
+@media (max-width: 900px) {
+  .primary-nav {
+    color: var(--navy-950);
+    background: rgba(255,253,248,.98);
+    border-color: rgba(168,124,44,.18);
+    box-shadow: 0 24px 52px rgba(55,101,133,.14);
+  }
+  .primary-nav a { color: var(--navy-950); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .portrait-stage::before,
+  .portrait-motion::before,
+  .portrait-motion::after { animation: none !important; }
+}
+
