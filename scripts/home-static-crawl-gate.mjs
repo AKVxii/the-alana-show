@@ -7,7 +7,7 @@ const assert = (condition, message) => { if (!condition) errors.push(message); }
 assert(html.includes('data-static-home-fallback'), "Homepage must ship a crawler-visible static fallback before JavaScript runs.");
 assert(!html.includes('<div id="app"></div>'), "Homepage must not regress to an empty JavaScript-only app shell.");
 assert(html.includes('All over the <em>map</em> so you don’t have to be.'), "Static homepage must preserve the core show positioning.");
-assert(html.includes('Conversations with people worth knowing—on air, online, and everywhere you listen.'), "Static homepage must include substantive show-description copy.");
+assert(html.includes('Conversations that matter. Voices worth hearing.'), "Static homepage must include substantive show-description copy.");
 for (const href of ["/episodes", "/guests", "/topics", "/south-florida", "/about"]) {
   assert(html.includes(`href="${href}"`), `Static homepage must expose a crawlable ${href} authority link.`);
 }

@@ -18,7 +18,7 @@ export function Hero() {
           </h1>
           <p class="hero-line">All over the <em>map</em> so you don’t have to be.</p>
           <p class="hero-intro">
-            Conversations with people worth knowing—on air, online, and everywhere you listen.
+            Conversations that matter. Voices worth hearing.
           </p>
 
           <div class="hero-actions">
