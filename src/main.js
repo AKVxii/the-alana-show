@@ -62,6 +62,7 @@ function setupNavigation() {
       const target = hash ? document.querySelector(hash) : null;
       if (!target) return;
       event.preventDefault();
+      target.querySelectorAll(".reveal, [data-reveal]").forEach(node => node.classList.add("visible"));
       history.pushState(null, "", hash);
       target.scrollIntoView({ behavior: "auto", block: "start" });
     });
@@ -72,7 +73,10 @@ function setupNavigation() {
   // pre-enhancement scroll position.
   if (location.hash) {
     const target = document.querySelector(location.hash);
-    if (target) requestAnimationFrame(() => target.scrollIntoView({ behavior: "auto", block: "start" }));
+    if (target) {
+      target.querySelectorAll(".reveal, [data-reveal]").forEach(node => node.classList.add("visible"));
+      requestAnimationFrame(() => target.scrollIntoView({ behavior: "auto", block: "start" }));
+    }
   }
 
   document.addEventListener("keydown", event => {
