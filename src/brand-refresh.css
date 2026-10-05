@@ -1122,3 +1122,31 @@ html{scroll-behavior:auto}
   .form-grid{grid-template-columns:1fr}
   .form-grid label.full{grid-column:auto}
 }
+
+/* Remove the clipped vertical rail copy and close the final dead zones. */
+body:has(.hero#home) .hero::after{
+  content:none!important;
+  display:none!important
+}
+
+@media(min-width:901px){
+  body:has(.hero#home) .hero-grid{
+    min-height:min(690px,calc(100svh - 88px));
+    padding-bottom:0
+  }
+  body:has(.hero#home) .portrait-stage{min-height:610px}
+  .about-section{padding-top:58px;padding-bottom:42px}
+}
+
+@media(max-width:900px){
+  body:has(.hero#home) .hero-grid{padding-bottom:0}
+  body:has(.hero#home) .portrait-stage{padding-bottom:0}
+  .about-section{padding-top:42px;padding-bottom:30px}
+}
+
+@media(max-width:600px){
+  body:has(.hero#home) .hero-copy{padding-bottom:2px}
+  body:has(.hero#home) .portrait-stage{margin-bottom:0}
+  .about-grid{gap:22px}
+  .about-copy .hero-actions{margin-bottom:0}
+}
