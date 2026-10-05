@@ -12,6 +12,14 @@
   gap: clamp(32px, 5vw, 76px);
 }
 
+/* Homepage merchandise must never disappear when a visitor lands mid-page. */
+.merchandise-teaser-copy,
+.merchandise-teaser-art {
+  opacity: 1;
+  transform: none;
+  visibility: visible;
+}
+
 .merchandise-teaser-copy { max-width: 520px; }
 .merchandise-teaser-copy h2 { margin-bottom: 18px; }
 .merchandise-teaser-copy > p { max-width: 470px; color: var(--muted); font-size: 1.02rem; }
