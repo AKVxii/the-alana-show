@@ -996,3 +996,33 @@ body:has(.hero#home) .portrait-caption strong{color:var(--logo-ink)}
   body:has(.hero#home) .hero-line{margin-top:0;font-size:1.28rem}
   .site-footer .footer-brand .brand{width:150px;height:118px}
 }
+
+/* Homepage navigation and density refinement — October 2026 review. */
+html{scroll-behavior:auto}
+#watch,#about,#contact{scroll-margin-top:88px}
+
+@media(min-width:981px){
+  .site-header .brand{width:136px;height:86px;flex-basis:136px;background-size:136px auto}
+  .watch-section{padding:52px 0 76px}
+  .watch-section .watch-heading{margin-bottom:24px;padding-right:0}
+  .watch-section .watch-heading h2{max-width:780px;font-size:clamp(3.35rem,5.1vw,5rem);line-height:.9;letter-spacing:-.055em}
+  .about-section,.contact-section{padding-block:68px}
+  .about-grid{gap:clamp(36px,4vw,58px)}
+  .about-copy h2{font-size:clamp(2.8rem,3.8vw,4.15rem);line-height:.96}
+  .contact-grid{grid-template-columns:minmax(320px,.72fr) minmax(0,1.28fr);gap:42px}
+  .contact-copy h2{font-size:clamp(3rem,4.8vw,5rem);line-height:.92}
+}
+
+.contact-copy>p,.about-copy>p{color:#645c51}
+.contact-form{backdrop-filter:blur(10px)}
+
+@media(max-width:980px){
+  #watch,#about,#contact{scroll-margin-top:82px}
+  .watch-section .watch-heading{padding-right:0}
+}
+
+@media(max-width:600px){
+  #watch,#about,#contact{scroll-margin-top:72px}
+  .watch-section{padding-top:38px}
+  .watch-section .watch-heading h2{font-size:clamp(2.65rem,13vw,4rem);line-height:.92}
+}

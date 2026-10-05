@@ -53,6 +53,28 @@ function setupNavigation() {
     setMenuState(false);
   }));
 
+  // Homepage navigation should feel immediate. Native smooth scrolling made
+  // visitors travel through large in-between sections and briefly stare at
+  // empty space before the requested section arrived.
+  nav?.querySelectorAll('a[href^="#"]').forEach(link => {
+    link.addEventListener("click", event => {
+      const hash = link.getAttribute("href");
+      const target = hash ? document.querySelector(hash) : null;
+      if (!target) return;
+      event.preventDefault();
+      history.pushState(null, "", hash);
+      target.scrollIntoView({ behavior: "auto", block: "start" });
+    });
+  });
+
+  // The homepage is enhanced after the first HTML paint, so re-align a deep
+  // link once the final section markup exists instead of preserving a stale
+  // pre-enhancement scroll position.
+  if (location.hash) {
+    const target = document.querySelector(location.hash);
+    if (target) requestAnimationFrame(() => target.scrollIntoView({ behavior: "auto", block: "start" }));
+  }
+
   document.addEventListener("keydown", event => {
     if (event.key === "Escape" && nav?.classList.contains("open")) {
       setMenuState(false);
