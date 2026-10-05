@@ -14,7 +14,7 @@ const main = read("src/main.js");
 const episodeArchive = read("src/episodes-page.js");
 const youtubeApi = read("api/youtube.js");
 const home = read("index.html");
-const styles = read("src/traffic-sprint.css");
+const styles = read("src/brand-refresh.css");
 const guestProfile = read("src/data/guest-profiles.js");
 const guestPage = read("guests/george-lemieux/index.html");
 const packageJson = read("package.json");
@@ -22,10 +22,9 @@ const packageJson = read("package.json");
 for (const needle of [
   'data-initial-src="https://www.youtube-nocookie.com/embed/Kx7rcDzaqDk?rel=0"',
   'href="/episodes/george-lemieux"',
-  'href="/episodes/george-lemieux?t=572"',
-  'href="/episodes/george-lemieux?t=1351"',
-  'href="/episodes/george-lemieux?t=1669"',
-  'data-track-event="Homepage Key Moment"'
+  'data-track-event="Homepage Featured Conversation"',
+  'href="/guests/george-lemieux"',
+  'data-track-event="Homepage Featured Guest"'
 ]) {
   if (!episodes.includes(needle)) errors.push(`Homepage featured-conversation markup is missing: ${needle}`);
 }
@@ -46,7 +45,6 @@ if (!youtubeApi.includes('FEATURED_CONVERSATION_VIDEO_ID = "Kx7rcDzaqDk"')) {
 }
 
 for (const needle of [
-  '/src/traffic-sprint.css?v=1',
   'static-current-conversation',
   'George LeMieux on leadership, fiscal discipline and Florida’s future',
   '/episodes/george-lemieux?t=1351',
@@ -57,10 +55,9 @@ for (const needle of [
 
 for (const needle of [
   '.featured-conversation-actions',
-  '.featured-key-moments',
   '.static-current-conversation',
-  '@media (max-width: 640px)',
-  '@media (prefers-reduced-motion: reduce)'
+  '@media(max-width:600px)',
+  '@media(prefers-reduced-motion:reduce)'
 ]) {
   if (!styles.includes(needle)) errors.push(`Traffic-promotion styling is missing: ${needle}`);
 }
@@ -95,4 +92,4 @@ if (errors.length) {
 }
 
 console.log("Homepage traffic sprint gate passed.");
-console.log("  Latest conversation prominence, internal routing, live feed, key moments and guest authority: OK");
+console.log("  Focused conversation prominence, internal routing, live feed and guest authority: OK");

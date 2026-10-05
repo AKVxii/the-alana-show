@@ -4,8 +4,8 @@
   "description": "Real conversations. Distinct voices. Thoughtful perspective.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#061020",
-  "theme_color": "#061020",
+  "background_color": "#fdfcf8",
+  "theme_color": "#fdfcf8",
   "icons": [
     {"src": "/assets/favicon.svg", "sizes": "any", "type": "image/svg+xml"}
   ]

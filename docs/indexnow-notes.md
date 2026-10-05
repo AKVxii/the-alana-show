@@ -1,6 +1,6 @@
 # IndexNow discovery notes
 
-The Alana Show uses the open IndexNow protocol as a supplemental discovery signal for participating search engines.
+Alana — All Over the Place uses the open IndexNow protocol as a supplemental discovery signal for participating search engines.
 
 - Canonical host: `thealanashow.com`
 - Global endpoint: `https://api.indexnow.org/indexnow`

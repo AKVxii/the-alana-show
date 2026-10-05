@@ -1,6 +1,6 @@
 # Vercel Git integration
 
-The Alana Show website uses the following deployment workflow:
+Alana — All Over the Place website uses the following deployment workflow:
 
 - GitHub repository: `AKVxii/the-alana-show`
 - Source-of-truth branch: `main`

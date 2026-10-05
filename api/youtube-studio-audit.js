@@ -206,12 +206,12 @@ module.exports = async function handler(req, res) {
 
   try {
     const session = await activeSession(req, res);
-    if (!session) return json(res, 401, { error: "Connect The Alana Show channel first." });
+    if (!session) return json(res, 401, { error: "Connect Alana — All Over the Place channel first." });
 
     const channel = await ownedChannel(session.accessToken);
     if (!channel || channel.id !== EXPECTED_CHANNEL_ID) {
       clearSession(res);
-      return json(res, 403, { error: "The connected account does not control The Alana Show channel." });
+      return json(res, 403, { error: "The connected account does not control Alana — All Over the Place channel." });
     }
 
     const ids = await uploadIds(channel, session.accessToken);
@@ -249,7 +249,7 @@ module.exports = async function handler(req, res) {
       photoApprovalRequired: true,
       channel: {
         id: channel.id,
-        title: channel.snippet?.title || "The Alana Show",
+        title: channel.snippet?.title || "Alana — All Over the Place",
         customUrl: channel.snippet?.customUrl || "@alanakvandeveer",
         thumbnail: normalizeThumbnailUrl(channel.snippet?.thumbnails?.high?.url || channel.snippet?.thumbnails?.default?.url)
       },
@@ -271,7 +271,7 @@ module.exports = async function handler(req, res) {
     });
     if (error?.status === 401) clearSession(res);
     return json(res, error?.status === 401 ? 401 : 502, {
-      error: error?.status === 401 ? "Reconnect The Alana Show channel." : "The read-only channel audit could not be completed just now."
+      error: error?.status === 401 ? "Reconnect Alana — All Over the Place channel." : "The read-only channel audit could not be completed just now."
     });
   }
 };
