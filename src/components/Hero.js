@@ -7,25 +7,32 @@ const ALANA_PORTRAIT_HEIGHT = 968;
 
 export function Hero() {
   return `
-    <section class="hero" id="home">
-      <div class="shell hero-grid">
-        <div class="hero-copy reveal">
-          <p class="eyebrow"><span></span> Voice of the Gold Coast</p>
-          <h1>
-            <span class="title-small">The</span>
-            <span class="title-main">Alana</span>
-            <span class="title-show">Show</span>
-          </h1>
-          <p class="hero-line">Real conversations. <em>Distinct voices.</em> Thoughtful perspective.</p>
-          <p class="hero-intro">
-            In-depth interviews with people shaping business, public service, culture, and community—grounded in South Florida and available wherever you watch or listen.
-          </p>
+    <section class="hero coastal-home-hero" id="home">
+      <div class="shell coastal-masthead-wrap">
+        <div class="coastal-masthead" aria-label="The Alana Show — Real Conversations. Distinct Voices.">
+          <span class="coastal-masthead-frame" aria-hidden="true"></span>
+          <span class="coastal-sun" aria-hidden="true"></span>
+          <span class="coastal-skyline" aria-hidden="true"></span>
+          <span class="coastal-globe" aria-hidden="true"></span>
+          <div class="coastal-masthead-copy">
+            <h1>THE ALANA SHOW</h1>
+            <p>REAL CONVERSATIONS. DISTINCT VOICES.</p>
+          </div>
+          <span class="coastal-microphone" aria-hidden="true"><i></i><b></b></span>
+        </div>
+      </div>
 
+      <div class="shell coastal-intro-grid">
+        <div class="coastal-intro-copy reveal">
+          <p class="eyebrow"><span></span> Alana K. Vandeveer</p>
+          <h2>All over the <em>map</em> so you don’t have to be.</h2>
+          <p class="hero-intro">
+            Conversations with people worth knowing — on air, online, and everywhere you listen.
+          </p>
           <div class="hero-actions">
             <a class="button button-gold" href="#watch">${icon("play")} Watch featured conversation</a>
             <a class="button button-ghost" href="#listen">Listen everywhere ${icon("arrow")}</a>
           </div>
-
           <div class="hero-credentials" aria-label="Show details">
             <span>South Florida radio</span>
             <span>Worldwide streaming</span>
