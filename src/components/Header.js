@@ -3,9 +3,9 @@ import { site } from "../data/site.js";
 
 export function Header() {
   return `
-    <header class="site-header" data-header>
+    <header class="site-header coastal-header" data-header>
       <div class="shell header-inner">
-        <a class="brand" href="#home" aria-label="The Alana Show home">
+        <a class="brand coastal-brand" href="#home" aria-label="The Alana Show home">
           <span class="brand-seal" aria-hidden="true">TAS</span>
           <span class="brand-copy">
             <strong>The Alana Show</strong>
