@@ -1024,3 +1024,101 @@ html{scroll-behavior:auto}
   .watch-section{padding-top:38px}
   .watch-section .watch-heading h2{font-size:clamp(2.65rem,13vw,4rem);line-height:.92}
 }
+
+/* Final responsive composition — compact, readable, and intentionally branded. */
+@media(min-width:901px){
+  body:has(.hero#home) .hero-grid{
+    min-height:min(720px,calc(100svh - 88px));
+    padding-bottom:30px
+  }
+}
+
+@media(max-width:900px){
+  body:has(.hero#home) .hero{
+    min-height:0;
+    padding-bottom:0;
+    background:
+      radial-gradient(circle at 82% 20%,rgba(196,225,246,.62),transparent 33%),
+      linear-gradient(180deg,#fff 0 62%,#eef7fd 100%)
+  }
+  body:has(.hero#home) .hero-grid{
+    display:grid;
+    grid-template-columns:minmax(0,1fr);
+    width:min(calc(100% - 36px),1180px);
+    min-height:0;
+    padding:92px 0 0;
+    gap:20px
+  }
+  body:has(.hero#home) .hero-copy{
+    width:100%;
+    max-width:none;
+    padding:24px 0 18px
+  }
+  body:has(.hero#home) .hero h1{
+    width:min(100%,560px);
+    min-height:0;
+    margin:-18px 0 -26px;
+    background-size:contain
+  }
+  body:has(.hero#home) .hero-line,
+  body:has(.hero#home) .hero-intro{
+    width:100%;
+    max-width:32rem
+  }
+  body:has(.hero#home) .portrait-stage{
+    width:min(100%,430px);
+    height:auto;
+    min-height:0;
+    margin:0 auto
+  }
+}
+
+@media(max-width:600px){
+  .header-inner{height:68px}
+  .site-header .brand{width:112px;height:66px;flex-basis:112px;background-size:112px auto}
+  .primary-nav{inset-block-start:68px}
+  html{scroll-padding-top:68px}
+  body:has(.hero#home) .hero-grid{
+    width:min(calc(100% - 28px),1180px);
+    padding:72px 0 0;
+    gap:14px
+  }
+  body:has(.hero#home) .hero-copy{padding:18px 0 8px}
+  body:has(.hero#home) .eyebrow{margin-bottom:8px;font-size:.64rem}
+  body:has(.hero#home) .hero h1{
+    width:min(100%,390px);
+    aspect-ratio:2000/1575;
+    margin:-16px 0 -24px
+  }
+  body:has(.hero#home) .hero-line{
+    margin-top:4px;
+    max-width:100%;
+    font-size:clamp(1.34rem,6.8vw,1.72rem);
+    line-height:1.18;
+    text-wrap:balance
+  }
+  body:has(.hero#home) .hero-intro{
+    margin-top:10px;
+    max-width:31rem;
+    font-size:.96rem;
+    line-height:1.55
+  }
+  body:has(.hero#home) .hero-actions{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:10px;
+    margin-top:20px
+  }
+  body:has(.hero#home) .hero-actions .button{width:100%;justify-content:center}
+  body:has(.hero#home) .portrait-stage{width:min(100%,390px);margin-top:0}
+  body:has(.hero#home) .portrait-caption{left:10px;right:10px;bottom:10px;min-width:0}
+  .editorial-ticker{margin-top:0}
+  .watch-section{padding:34px 0 52px}
+  .watch-section>.shell{width:min(calc(100% - 28px),1180px)}
+  .about-section,.contact-section{padding-block:48px}
+  .about-grid,.contact-grid{gap:30px}
+  .about-copy h2,.contact-copy h2{font-size:clamp(2.4rem,12vw,3.6rem);line-height:.96}
+  .contact-form{padding:22px 18px}
+  .form-grid{grid-template-columns:1fr}
+  .form-grid label.full{grid-column:auto}
+}
