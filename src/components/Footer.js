@@ -21,6 +21,8 @@ export function Footer({ fromSubpage = false } = {}) {
           <a href="/book/">Be a Guest</a>
           <a href="/advertise/">Advertise &amp; Partner</a>
           <a href="/merchandise/">Merchandise</a>
+          <a href="/press/">Press &amp; Media</a>
+          <a href="/on-location/">On Location</a>
           <a href="${home}#contact">Contact</a>
         </div>
 
@@ -34,7 +36,7 @@ export function Footer({ fromSubpage = false } = {}) {
 
       <div class="shell footer-bottom">
         <span>© <span data-year></span> The Alana Show / Alana K. Vandeveer. All rights reserved.</span>
-        <span><a href="/standards/">Standards</a> · <a href="/privacy/">Privacy</a> · <a href="${site.social.instagram}" target="_blank" rel="noopener">Instagram</a></span>
+        <span><a href="/standards/">Standards</a> · <a href="/privacy/">Privacy</a> · <a href="/accessibility/">Accessibility</a> · <a href="${site.social.instagram}" target="_blank" rel="noopener">Instagram</a></span>
       </div>
     </footer>
   `;

@@ -64,10 +64,10 @@ if (!homepageAbout.includes('href="/about/">Full host profile')) {
   fail("Homepage host introduction must link to the permanent full profile.");
 }
 
-if (!mediaHeader.includes('<a href="/about/">About</a>')) {
+if (!mediaHeader.includes('<a href="/about/">Alana</a>')) {
   fail("Subpage primary navigation must route About to the permanent host profile.");
 }
-if (mediaHeader.includes('<a href="/#about">About</a>')) {
+if (mediaHeader.includes('<a href="/#about">Alana</a>')) {
   fail("Subpage primary navigation must not route About back to the homepage anchor.");
 }
 

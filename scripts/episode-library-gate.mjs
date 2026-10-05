@@ -28,9 +28,10 @@ requireText(styles, ".flagship-library-grid", "The flagship library visual layer
 requireText(styles, "prefers-reduced-motion", "The flagship library must respect reduced-motion preferences.");
 
 for (const quote of [
-  "Real conversations. <em>Distinct voices.</em> Thoughtful perspective.",
-  "Voice of the Gold Coast",
-  "Hosted by"
+  "Alana K. Vandeveer",
+  "All over the <em>map</em> so you don’t have to be.",
+  "Conversations with people worth knowing—on air, online, and everywhere you listen.",
+  "HOST, THE ALANA SHOW"
 ]) requireText(hero.toLowerCase(), quote.toLowerCase(), `Approved hero wording changed or disappeared: ${quote}`);
 
 if (errors.length) {

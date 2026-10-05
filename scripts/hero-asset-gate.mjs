@@ -12,11 +12,11 @@ const PNG_URL = "/assets/alana-portrait-host-v4.png";
 const WEBP_URL = "/assets/alana-portrait-host-v4.webp";
 const SCHEMA_PNG_URL = "/assets/alana-portrait-cutout-v2.png";
 const EXPECTED_SOURCE_BYTES = 1_003_924;
-const EXPECTED_PNG_BYTES = 563_742;
+const EXPECTED_PNG_BYTES = 567_143;
 const EXPECTED_WEBP_BYTES = 327_234;
 const EXPECTED_WIDTH = 958;
 const EXPECTED_HEIGHT = 968;
-const EXPECTED_PNG_BLOB_SHA = "425bb9ce1c828a86ed1f49805d22102e6178299a";
+const EXPECTED_PNG_BLOB_SHA = "7854aab4684a3ab381760cfdfbf2cd4735872035";
 const EXPECTED_WEBP_BLOB_SHA = "cadd115a26a190b22b145facea205ab19f9106a8";
 
 function read(relative) {
