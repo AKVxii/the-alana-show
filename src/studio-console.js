@@ -187,7 +187,7 @@ function renderChannel() {
   elements.channelHandle.textContent = channel.customUrl || "@alanakvandeveer";
   elements.channelId.textContent = channel.id;
   elements.channelStats.textContent = `${number(channel.subscriberCount)} subscribers · ${number(channel.videoCount)} public videos · ${number(channel.viewCount)} channel views`;
-  elements.channelImage.src = channel.thumbnail || "/assets/favicon.svg";
+  elements.channelImage.src = channel.thumbnail || "/assets/favicon-orbit.svg";
   elements.channelImage.alt = `${channel.title || "The Alana Show"} channel image`;
 }
 
