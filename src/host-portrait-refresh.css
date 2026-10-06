@@ -8,7 +8,7 @@ body:has(.hero#home) .portrait-stage {
 
 body:has(.hero#home) .portrait-frame {
   width: min(100%, 438px);
-  aspect-ratio: 500 / 595;
+  aspect-ratio: 500 / 581;
   margin-inline: auto;
   overflow: hidden;
   border: 1px solid rgba(225, 194, 112, .38);
