@@ -8,7 +8,7 @@ body:has(.hero#home) .portrait-stage {
 
 body:has(.hero#home) .portrait-frame {
   width: min(100%, 438px);
-  aspect-ratio: 500 / 720;
+  aspect-ratio: 500 / 595;
   margin-inline: auto;
   overflow: hidden;
   border: 1px solid rgba(225, 194, 112, .38);
@@ -41,12 +41,12 @@ body:has(.hero#home) .portrait-inner .portrait-photo img {
   object-fit: cover;
   object-position: left center;
   filter: none;
-  transform: scale(1.035);
+  transform: scale(1.015);
   transform-origin: left center;
 }
 
 body:has(.hero#home) .portrait-stage:hover .portrait-inner .portrait-photo img {
-  transform: scale(1.045);
+  transform: scale(1.025);
   filter: none;
 }
 

@@ -1,8 +1,8 @@
 import { icon } from "../lib/icons.js";
 
-const ALANA_PORTRAIT = "/assets/alana-standing-arms-crossed.png";
-const ALANA_PORTRAIT_WIDTH = 1270;
-const ALANA_PORTRAIT_HEIGHT = 720;
+const ALANA_PORTRAIT = "/assets/alana-standing-arms-crossed-crop.png";
+const ALANA_PORTRAIT_WIDTH = 500;
+const ALANA_PORTRAIT_HEIGHT = 595;
 
 export function Hero() {
   return `
