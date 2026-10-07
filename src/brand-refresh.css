@@ -1455,7 +1455,7 @@ body[data-detail-type="episode"] .episode-related-static a:focus-visible{
     font-size:.62rem
   }
   body[data-detail-type="episode"] .detail-hero h1{
-    max-width:12ch;
+    max-width:100%;
     margin-bottom:14px;
     font-size:clamp(1.95rem,8.4vw,2.45rem);
     line-height:1.02;
