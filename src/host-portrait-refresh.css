@@ -1,18 +1,21 @@
 /* Exact-pixel crop of Alana's approved white-suit portrait. The original image
    is preserved; CSS framing keeps logos and surrounding artwork out of view. */
 body:has(.hero#home) .portrait-stage {
-  width: min(100%, 500px);
-  min-height: 610px;
+  width: min(100%, 460px);
+  min-height: 600px;
+  padding-top: 18px;
+  padding-bottom: 82px;
+  align-items: flex-start;
   justify-self: center;
 }
 
 body:has(.hero#home) .portrait-frame {
-  width: min(100%, 438px);
+  width: min(100%, 420px);
   aspect-ratio: 500 / 581;
   margin-inline: auto;
   overflow: hidden;
   border: 1px solid rgba(225, 194, 112, .38);
-  border-radius: 220px 220px 20px 20px;
+  border-radius: 210px 210px 28px 28px;
   background: #f7f0e5;
   box-shadow: 0 34px 80px rgba(0, 0, 0, .28);
 }
@@ -55,24 +58,103 @@ body:has(.hero#home) .portrait-motion {
 }
 
 body:has(.hero#home) .portrait-caption {
-  left: 5%;
-  right: 5%;
-  bottom: 4%;
+  left: 8%;
+  right: 8%;
+  bottom: 12px;
+  padding: 13px 17px 14px;
+  border: 1px solid rgba(197, 151, 62, .32);
+  border-bottom: 1px solid rgba(197, 151, 62, .48);
+  border-radius: 14px;
+  background: rgba(255, 252, 245, .94);
+  box-shadow: 0 15px 34px rgba(77, 53, 5, .12);
+  backdrop-filter: blur(10px);
+}
+
+body:has(.hero#home) .portrait-caption::before {
+  display: none;
+}
+
+body:has(.hero#home) .portrait-caption span {
+  color: #9b7421;
+}
+
+body:has(.hero#home) .portrait-caption strong {
+  color: #251900;
+  text-shadow: none;
+}
+
+/* Carry the same approved portrait and framing into the host introduction. */
+.about-portrait {
+  width: min(100%, 500px);
+}
+
+.about-photo-frame {
+  aspect-ratio: 500 / 581;
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid rgba(197, 151, 62, .38);
+  border-radius: 34px;
+  background: #f7f0e5;
+  box-shadow: 0 28px 66px rgba(77, 53, 5, .13);
+}
+
+.about-photo-frame::before,
+.about-photo-frame::after {
+  display: none;
+}
+
+.about-photo {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.about-photo-frame .about-photo img {
+  width: 100%;
+  height: 100%;
+  aspect-ratio: 500 / 581;
+  object-fit: cover;
+  object-position: left center;
+  border-radius: 33px;
+  background: #f7f0e5;
+}
+
+.about-monogram {
+  right: 22px;
+  bottom: 18px;
+  color: rgba(155, 116, 33, .14);
 }
 
 @media (max-width: 900px) {
   body:has(.hero#home) .portrait-stage {
-    width: min(92%, 470px);
+    width: min(92%, 430px);
     min-height: 0;
+    padding-bottom: 78px;
   }
 }
 
 @media (max-width: 480px) {
   body:has(.hero#home) .portrait-stage {
-    width: min(90%, 350px);
+    width: min(92%, 350px);
+    padding-top: 8px;
+    padding-bottom: 74px;
   }
 
   body:has(.hero#home) .portrait-frame {
     border-radius: 180px 180px 18px 18px;
+  }
+
+  body:has(.hero#home) .portrait-caption {
+    left: 4%;
+    right: 4%;
+    bottom: 8px;
+  }
+
+  .about-photo-frame {
+    border-radius: 26px;
+  }
+
+  .about-photo-frame .about-photo img {
+    border-radius: 25px;
   }
 }

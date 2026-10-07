@@ -6,18 +6,18 @@ const errors = [];
 const fail = message => errors.push(message);
 const ROOT = process.cwd();
 const SOURCE = "assets/alana-portrait-cutout.png";
-const PNG = "assets/alana-portrait-host-v4.png";
-const WEBP = "assets/alana-portrait-host-v4.webp";
-const PNG_URL = "/assets/alana-portrait-host-v4.png";
-const WEBP_URL = "/assets/alana-portrait-host-v4.webp";
+const PNG = "assets/alana-standing-arms-crossed-crop.png";
+const WEBP = "assets/alana-standing-arms-crossed-crop.webp";
+const PNG_URL = "/assets/alana-standing-arms-crossed-crop.png";
+const WEBP_URL = "/assets/alana-standing-arms-crossed-crop.webp";
 const SCHEMA_PNG_URL = "/assets/alana-portrait-cutout-v2.png";
 const EXPECTED_SOURCE_BYTES = 1_003_924;
-const EXPECTED_PNG_BYTES = 567_143;
-const EXPECTED_WEBP_BYTES = 327_234;
-const EXPECTED_WIDTH = 958;
-const EXPECTED_HEIGHT = 968;
-const EXPECTED_PNG_BLOB_SHA = "7854aab4684a3ab381760cfdfbf2cd4735872035";
-const EXPECTED_WEBP_BLOB_SHA = "cadd115a26a190b22b145facea205ab19f9106a8";
+const EXPECTED_PNG_BYTES = 376_334;
+const EXPECTED_WEBP_BYTES = 222_822;
+const EXPECTED_WIDTH = 500;
+const EXPECTED_HEIGHT = 581;
+const EXPECTED_PNG_BLOB_SHA = "a39deaec289bd11018527595096cb635dfc42f8f";
+const EXPECTED_WEBP_BLOB_SHA = "e3e6f25be46e1ec00129932e76792e9fba327b9c";
 
 function read(relative) {
   return fs.readFileSync(path.join(ROOT, relative), "utf8");
@@ -123,7 +123,7 @@ if (errors.length) {
 }
 
 console.log("Hero asset gate passed.");
-console.log("  Approved host portrait: 958x968 PNG + lossless WebP");
+console.log("  Approved host portrait: 500x581 PNG + lossless WebP");
 console.log(`  Host PNG: ${EXPECTED_PNG_BYTES.toLocaleString()} bytes`);
 console.log(`  Preferred lossless WebP: ${EXPECTED_WEBP_BYTES.toLocaleString()} bytes`);
 console.log("  Verified binary pins + PNG fallback + WebP preload + immutable caching: OK");

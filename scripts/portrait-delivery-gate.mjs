@@ -5,13 +5,15 @@ const read = file => fs.existsSync(file) ? fs.readFileSync(file, "utf8") : "";
 const assert = (condition, message) => { if (!condition) errors.push(message); };
 const WEBP = "/assets/alana-portrait-cutout-v3.webp";
 const PNG = "/assets/alana-portrait-cutout-v2.png";
+const HOME_WEBP = "/assets/alana-standing-arms-crossed-crop.webp";
+const HOME_PNG = "/assets/alana-standing-arms-crossed-crop.png";
 
 const homeAbout = read("src/components/About.js");
 const aboutPage = read("about/index.html");
 const pressPage = read("press/index.html");
 
-assert(homeAbout.includes(`const ALANA_PORTRAIT_WEBP = "${WEBP}"`), "Homepage About section must reference the verified lossless WebP portrait.");
-assert(homeAbout.includes(`const ALANA_PORTRAIT_PNG = "${PNG}"`), "Homepage About section must retain the verified PNG fallback.");
+assert(homeAbout.includes(`const ALANA_PORTRAIT_WEBP = "${HOME_WEBP}"`), "Homepage About section must reference the approved arms-crossed WebP portrait.");
+assert(homeAbout.includes(`const ALANA_PORTRAIT_PNG = "${HOME_PNG}"`), "Homepage About section must retain the approved arms-crossed PNG fallback.");
 assert(homeAbout.includes('<source srcset="${ALANA_PORTRAIT_WEBP}" type="image/webp">'), "Homepage About picture must prefer lossless WebP.");
 assert(homeAbout.includes('<img src="${ALANA_PORTRAIT_PNG}"'), "Homepage About picture must retain the PNG fallback image.");
 assert(homeAbout.includes('loading="lazy"'), "Below-the-fold homepage About portrait must remain lazy-loaded.");

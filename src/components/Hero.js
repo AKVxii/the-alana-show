@@ -1,6 +1,7 @@
 import { icon } from "../lib/icons.js";
 
-const ALANA_PORTRAIT = "/assets/alana-standing-arms-crossed-crop.png";
+const ALANA_PORTRAIT_WEBP = "/assets/alana-standing-arms-crossed-crop.webp";
+const ALANA_PORTRAIT_PNG = "/assets/alana-standing-arms-crossed-crop.png";
 const ALANA_PORTRAIT_WIDTH = 500;
 const ALANA_PORTRAIT_HEIGHT = 581;
 
@@ -42,7 +43,8 @@ export function Hero() {
                 <span class="portrait-motion-glint"></span>
               </div>
               <picture class="portrait-photo">
-                <img src="${ALANA_PORTRAIT}" alt="Alana K. Vandeveer, host of The Alana Show, standing with her arms crossed" width="${ALANA_PORTRAIT_WIDTH}" height="${ALANA_PORTRAIT_HEIGHT}" fetchpriority="high" decoding="async">
+                <source srcset="${ALANA_PORTRAIT_WEBP}" type="image/webp">
+                <img src="${ALANA_PORTRAIT_PNG}" alt="Alana K. Vandeveer, host of The Alana Show, standing with her arms crossed" width="${ALANA_PORTRAIT_WIDTH}" height="${ALANA_PORTRAIT_HEIGHT}" fetchpriority="high" decoding="async">
               </picture>
             </div>
           </div>

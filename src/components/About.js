@@ -1,9 +1,9 @@
 import { icon } from "../lib/icons.js";
 
-const ALANA_PORTRAIT_WEBP = "/assets/alana-portrait-cutout-v3.webp";
-const ALANA_PORTRAIT_PNG = "/assets/alana-portrait-cutout-v2.png";
-const ALANA_PORTRAIT_WIDTH = 958;
-const ALANA_PORTRAIT_HEIGHT = 968;
+const ALANA_PORTRAIT_WEBP = "/assets/alana-standing-arms-crossed-crop.webp";
+const ALANA_PORTRAIT_PNG = "/assets/alana-standing-arms-crossed-crop.png";
+const ALANA_PORTRAIT_WIDTH = 500;
+const ALANA_PORTRAIT_HEIGHT = 581;
 
 export function About() {
   return `
@@ -11,7 +11,7 @@ export function About() {
       <div class="shell about-grid">
         <div class="about-portrait reveal">
           <div class="about-photo-frame">
-            <picture style="display:contents"><source srcset="${ALANA_PORTRAIT_WEBP}" type="image/webp"><img src="${ALANA_PORTRAIT_PNG}" alt="Alana K. Vandeveer in the studio" width="${ALANA_PORTRAIT_WIDTH}" height="${ALANA_PORTRAIT_HEIGHT}" loading="lazy" decoding="async"></picture>
+            <picture class="about-photo"><source srcset="${ALANA_PORTRAIT_WEBP}" type="image/webp"><img src="${ALANA_PORTRAIT_PNG}" alt="Alana K. Vandeveer, host of The Alana Show, standing with her arms crossed" width="${ALANA_PORTRAIT_WIDTH}" height="${ALANA_PORTRAIT_HEIGHT}" loading="lazy" decoding="async"></picture>
           </div>
           <div class="about-monogram" aria-hidden="true">AKV</div>
         </div>
