@@ -16,7 +16,7 @@ import { setupNavigationWarmup } from "./lib/navigation-prefetch.js";
 import { loadYouTubeFeed } from "./lib/youtube-feed.js";
 import { setupNewsletter } from "./newsletter.js";
 
-const FEATURED_CONVERSATION_VIDEO_ID = "Kx7rcDzaqDk";
+const FEATURED_CONVERSATION_VIDEO_ID = "SqRazfeMcTk";
 const FEATURED_CONVERSATION_PATH = "/episodes/george-lemieux";
 const app = document.querySelector("#app");
 
@@ -177,7 +177,7 @@ function updateFeatured(episode) {
   if (description) description.textContent = excerpt(episode.deck || episode.description, 250) || "A featured conversation from The Alana Show.";
   if (link) {
     link.href = detailPath;
-    link.dataset.trackLabel = episode.title || "George LeMieux";
+    link.dataset.trackLabel = episode.title || "Sheriff Ric Bradshaw";
   }
   const stats = [formatDate(episode.publishedAt), episode.viewCount ? `${compactNumber(episode.viewCount)} views` : ""].filter(Boolean);
   if (statsNode) statsNode.textContent = stats.join(" · ");

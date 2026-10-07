@@ -9,6 +9,7 @@
 const guestIdentityByVideoId = Object.freeze({
   "NN9mSARhmIQ": Object.freeze(["Gillian Lieberman", "Scott Diament"]),
   "Kx7rcDzaqDk": Object.freeze(["George LeMieux"]),
+  "SqRazfeMcTk": Object.freeze(["Sheriff Ric Bradshaw"]),
   "VYXrV-WGiHM": Object.freeze(["George LeMieux"]),
   "iR4cdm9Ux3U": Object.freeze(["Stacey Ibarra", "Vaughn Mitchell"]),
   "h_A5sgFQOhs": Object.freeze(["Nick Cannon"]),

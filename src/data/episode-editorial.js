@@ -290,13 +290,13 @@ export const episodeEditorial = Object.freeze({
     "chapters": []
   },
   "ric-bradshaw": {
-    "title": "A Legacy of Service: Sheriff Ric Bradshaw on Community-First Policing",
-    "deck": "Palm Beach County Sheriff Ric Bradshaw reflects on nearly 50 years in law enforcement, community-first policing, multi-agency collaboration and mentoring the next generation.",
-    "metaDescription": "Palm Beach County Sheriff Ric Bradshaw reflects on nearly 50 years in law enforcement, community-first policing, multi-agency collaboration and mentoring the next generation.",
-    "description": "Join Alana for an insightful conversation with Sheriff Ric Bradshaw, the longest-serving sheriff in Palm Beach County history. A U.S. Marine Corps veteran with nearly 50 years in law enforcement, Sheriff Bradshaw discusses his \"community-first\" approach to policing and the leadership principles that have guided his six-term tenure. The episode dives into: Strategic Enforcement: How PBSO balances public safety with compassion by distinguishing between criminal offenders and hardworking undocumented residents. Innovation in Action: A look at the multi-agency task forces—from public corruption to sexual predator units—that have become models for the state of Florida. Mentoring the Future: Wisdom for the next generation of law enforcement leaders on maintaining integrity and adapting to an evolving industry. …. Making Palm Beach County a safe and prosperous community…. Discover the blueprint for leadership rooted in service, empathy, and visionary crime prevention.",
-    "publishedAt": "2026-03-04T14:08:14Z",
-    "durationSeconds": 1969,
-    "thumbnail": "https://img.youtube.com/vi/c3Nly17ax8k/maxresdefault.jpg",
+    "title": "Palm Beach County Sheriff Ric Bradshaw on Flock Cameras, Amendment 3 & Budget",
+    "deck": "Sheriff Ric Bradshaw joins Alana K. Vandeveer for a candid conversation about the Sheriff’s Office budget, Flock cameras, Amendment 3, public safety and privacy safeguards.",
+    "metaDescription": "Palm Beach County Sheriff Ric Bradshaw discusses Flock cameras, Amendment 3, the Sheriff’s Office budget, public safety and privacy on The Alana Show.",
+    "description": "Palm Beach County Sheriff Ric Bradshaw joins host Alana K. Vandeveer for a candid conversation about the Palm Beach County Sheriff’s Office budget and public-safety priorities, the investigative value and privacy safeguards surrounding Flock Safety license-plate reader cameras, and Amendment 3 and what it could mean for law enforcement and the community. Recorded in Palm Beach Gardens, Florida, this episode brings South Florida a timely conversation about technology, accountability, public policy and community safety.",
+    "publishedAt": "2026-10-07T00:30:21Z",
+    "durationSeconds": 1787,
+    "thumbnail": "https://img.youtube.com/vi/SqRazfeMcTk/maxresdefault.jpg",
     "categories": [
       "Leadership",
       "Community",

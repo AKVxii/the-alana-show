@@ -10,11 +10,12 @@ const {
 } = require("./guest-identities");
 
 test("the complete archive mapping covers all verified guest conversations", () => {
-  assert.equal(Object.keys(guestIdentityByVideoId).length, 26);
+  assert.equal(Object.keys(guestIdentityByVideoId).length, 27);
   const distinctGuests = new Set(Object.values(guestIdentityByVideoId).flat());
   assert.equal(distinctGuests.size, 30);
   assert.deepEqual(guestIdentityByVideoId["NN9mSARhmIQ"], ["Gillian Lieberman", "Scott Diament"]);
   assert.deepEqual(guestIdentityByVideoId["Kx7rcDzaqDk"], ["George LeMieux"]);
+  assert.deepEqual(guestIdentityByVideoId["SqRazfeMcTk"], ["Sheriff Ric Bradshaw"]);
   assert.deepEqual(guestIdentityByVideoId["VYXrV-WGiHM"], ["George LeMieux"]);
   assert.deepEqual(guestIdentityByVideoId["7hGs2kuAKMk"], [
     "Noel J. Guillama-Alvarez",

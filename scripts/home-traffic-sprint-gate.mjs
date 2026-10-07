@@ -20,35 +20,35 @@ const guestPage = read("guests/george-lemieux/index.html");
 const packageJson = read("package.json");
 
 for (const needle of [
-  'data-initial-src="https://www.youtube-nocookie.com/embed/Kx7rcDzaqDk?rel=0"',
-  'href="/episodes/george-lemieux"',
+  'data-initial-src="https://www.youtube-nocookie.com/embed/SqRazfeMcTk?rel=0"',
+  'href="/episodes/ric-bradshaw"',
   'data-track-event="Homepage Featured Conversation"',
-  'href="/guests/george-lemieux"',
+  'href="/guests/ric-bradshaw"',
   'data-track-event="Homepage Featured Guest"'
 ]) {
   if (!episodes.includes(needle)) errors.push(`Homepage featured-conversation markup is missing: ${needle}`);
 }
 
 for (const needle of [
-  'FEATURED_CONVERSATION_VIDEO_ID = "Kx7rcDzaqDk"',
+  'FEATURED_CONVERSATION_VIDEO_ID = "SqRazfeMcTk"',
   'state.episodes.find(episode => episode.videoId === FEATURED_CONVERSATION_VIDEO_ID) || data.featured',
   'link.href = enriched.detailPath || `https://www.youtube.com/watch?v=${enriched.videoId}`'
 ]) {
   if (!main.includes(needle)) errors.push(`Homepage routing logic is missing: ${needle}`);
 }
 
-if (!episodeArchive.includes('FEATURED_CONVERSATION_VIDEO_ID = "Kx7rcDzaqDk"')) {
-  errors.push("The episode archive must feature the current George LeMieux master.");
+if (!episodeArchive.includes('FEATURED_CONVERSATION_VIDEO_ID = "SqRazfeMcTk"')) {
+  errors.push("The episode archive must feature the current Sheriff Ric Bradshaw interview.");
 }
-if (!youtubeApi.includes('FEATURED_CONVERSATION_VIDEO_ID = "Kx7rcDzaqDk"')) {
-  errors.push("The live YouTube feed must expose George LeMieux as the selected featured conversation.");
+if (!youtubeApi.includes('FEATURED_CONVERSATION_VIDEO_ID = "SqRazfeMcTk"')) {
+  errors.push("The live YouTube feed must expose Sheriff Ric Bradshaw as the selected featured conversation.");
 }
 
 for (const needle of [
   'static-current-conversation',
-  'George LeMieux on leadership, fiscal discipline and Florida’s future',
-  '/episodes/george-lemieux?t=1351',
-  '20260820-george-featured'
+  'Sheriff Ric Bradshaw on Flock cameras, Amendment 3 and the budget',
+  'https://www.youtube.com/watch?v=SqRazfeMcTk',
+  '/guests/ric-bradshaw'
 ]) {
   if (!home.includes(needle)) errors.push(`Crawler-visible homepage promotion is missing: ${needle}`);
 }

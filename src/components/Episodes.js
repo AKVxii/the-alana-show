@@ -80,19 +80,19 @@ export function Episodes() {
             <div class="player-frame">
               <featured-video
                 data-featured-video
-                data-initial-src="https://www.youtube-nocookie.com/embed/Kx7rcDzaqDk?rel=0"
-                data-title="Former U.S. Senator George LeMieux | Leadership, Public Service &amp; Florida’s Future">
-                <a href="/episodes/george-lemieux">Watch the George LeMieux conversation on The Alana Show</a>
+                data-initial-src="https://www.youtube-nocookie.com/embed/SqRazfeMcTk?rel=0"
+                data-title="Palm Beach County Sheriff Ric Bradshaw on Flock Cameras, Amendment 3 &amp; Budget">
+                <a href="/episodes/ric-bradshaw">Watch the Sheriff Ric Bradshaw conversation on The Alana Show</a>
               </featured-video>
             </div>
             <div class="featured-meta">
               <div>
                 <span class="content-label">New this week</span>
-                <h3 data-featured-title>Former U.S. Senator George LeMieux | Leadership, Public Service &amp; Florida’s Future</h3>
-                <p data-featured-description>George LeMieux joins Alana K. Vandeveer for a conversation about principled leadership, public service, fiscal discipline, civic dialogue, and Florida’s future.</p>
+                <h3 data-featured-title>Palm Beach County Sheriff Ric Bradshaw on Flock Cameras, Amendment 3 &amp; Budget</h3>
+                <p data-featured-description>Sheriff Ric Bradshaw joins Alana K. Vandeveer for a candid conversation about the Sheriff’s Office budget, Flock cameras, Amendment 3, public safety, and privacy concerns.</p>
                 <div class="featured-conversation-actions">
-                  <a class="button button-gold" data-featured-link href="/episodes/george-lemieux" data-track-event="Homepage Featured Conversation" data-track-location="homepage" data-track-label="George LeMieux">Explore the full conversation ${icon("arrow")}</a>
-                  <a class="button button-ghost" href="/guests/george-lemieux" data-track-event="Homepage Featured Guest" data-track-location="homepage" data-track-label="George LeMieux">Meet the guest</a>
+                  <a class="button button-gold" data-featured-link href="/episodes/ric-bradshaw" data-track-event="Homepage Featured Conversation" data-track-location="homepage" data-track-label="Sheriff Ric Bradshaw">Explore the full conversation ${icon("arrow")}</a>
+                  <a class="button button-ghost" href="/guests/ric-bradshaw" data-track-event="Homepage Featured Guest" data-track-location="homepage" data-track-label="Sheriff Ric Bradshaw">Meet the guest</a>
                 </div>
               </div>
               <div class="featured-stats" data-featured-stats></div>

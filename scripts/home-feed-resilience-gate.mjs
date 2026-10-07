@@ -19,7 +19,7 @@ const { episodes: verifiedEpisodes } = await import(`${pathToFileURL(path.resolv
 assert(main.includes('episodes as editorialEpisodes'), "Homepage must import the verified static episode catalog for live-feed failure recovery.");
 assert(main.includes('state.episodes = mergeEpisodeSources(editorialEpisodes).map(enrichEpisode);'), "Homepage live-feed catch path must restore the verified static conversation archive.");
 assert(main.includes('mergeEpisodeSources(liveEpisodes, editorialEpisodes)'), "Homepage partial live-feed success must retain every verified canonical conversation.");
-assert(main.includes('const FEATURED_CONVERSATION_VIDEO_ID = "Kx7rcDzaqDk";'), "Homepage must pin the approved George LeMieux episode as its featured conversation.");
+assert(main.includes('const FEATURED_CONVERSATION_VIDEO_ID = "SqRazfeMcTk";'), "Homepage must pin the current Sheriff Ric Bradshaw episode as its featured conversation.");
 assert(main.includes('updateFeatured(fallbackFeatured);'), "Homepage live-feed failure must keep the approved featured conversation.");
 assert(main.includes('updateLatest(fallbackLatest);'), "Homepage live-feed failure must keep the latest-conversation surface populated.");
 assert(main.includes('renderEpisodes(state.episodes);'), "Homepage live-feed failure must render verified conversation cards.");
@@ -66,10 +66,10 @@ if (typeof collapseReplacementMasters === "function") {
 // metadata improves the experience, but the owned verified catalog keeps it useful.
 assert(archive.includes('state.episodes = editorialEpisodes;'), "Episodes archive must retain its verified static fallback.");
 assert(archive.includes('mergeEpisodeSources(liveEpisodes, editorialEpisodes)'), "Episodes archive partial live-feed success must retain every verified canonical conversation.");
-assert(archive.includes('FEATURED_CONVERSATION_VIDEO_ID = "Kx7rcDzaqDk"'), "Episodes archive must use the approved George LeMieux episode as its featured conversation.");
+assert(archive.includes('FEATURED_CONVERSATION_VIDEO_ID = "SqRazfeMcTk"'), "Episodes archive must use the current Sheriff Ric Bradshaw episode as its featured conversation.");
 assert(archive.includes('episode.detailPath || `https://www.youtube.com/watch?v=${episode.videoId}`'), "Episodes archive featured CTA must prefer the permanent owned episode page.");
-assert(youtubeApiSource.includes('FEATURED_CONVERSATION_VIDEO_ID = "Kx7rcDzaqDk"'), "Live YouTube data must use the approved George LeMieux episode as its featured conversation.");
-assert(episodesComponent.includes('Kx7rcDzaqDk') && episodesComponent.includes('Former U.S. Senator George LeMieux'), "Homepage server-rendered featured content must match the approved George LeMieux episode.");
+assert(youtubeApiSource.includes('FEATURED_CONVERSATION_VIDEO_ID = "SqRazfeMcTk"'), "Live YouTube data must use the current Sheriff Ric Bradshaw episode as its featured conversation.");
+assert(episodesComponent.includes('SqRazfeMcTk') && episodesComponent.includes('Palm Beach County Sheriff Ric Bradshaw'), "Homepage server-rendered featured content must match the current Sheriff Ric Bradshaw episode.");
 assert(episodesComponent.includes('data-thumbnail-retry-src') && episodesComponent.includes('hqdefault'), "Episode thumbnails must remain available when the live feed or maximum-resolution artwork is unavailable.");
 assert(episodesComponent.includes('url.hostname === "i.ytimg.com"') && episodesComponent.includes('url.hostname = "img.youtube.com"'), "Episode cards must normalize legacy YouTube thumbnail hosts.");
 assert(episodesComponent.includes('BrandedEpisodeArtwork'), "Missing thumbnails must retain branded artwork rather than broken image chrome.");

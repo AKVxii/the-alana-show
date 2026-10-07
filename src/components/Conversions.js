@@ -3,11 +3,11 @@ import { icon } from "../lib/icons.js";
 const cards = [
   {
     number: "01",
-    title: "Watch George LeMieux",
-    copy: "The featured conversation on leadership, public service, civic responsibility, and Florida's future.",
+    title: "Watch Sheriff Ric Bradshaw",
+    copy: "The new conversation on Flock cameras, Amendment 3, the Sheriff’s Office budget, and public safety.",
     href: "#watch",
     className: "conversion-card-featured",
-    label: "Watch the featured George LeMieux conversation"
+    label: "Watch the featured Sheriff Ric Bradshaw conversation"
   },
   {
     number: "02",
