@@ -135,9 +135,9 @@ body:has(.hero#home) .portrait-caption strong {
 
 @media (max-width: 480px) {
   body:has(.hero#home) .portrait-stage {
-    width: min(92%, 350px);
-    padding-top: 8px;
-    padding-bottom: 74px;
+    width: min(82%, 310px);
+    padding-top: 2px;
+    padding-bottom: 64px;
   }
 
   body:has(.hero#home) .portrait-frame {
@@ -145,9 +145,14 @@ body:has(.hero#home) .portrait-caption strong {
   }
 
   body:has(.hero#home) .portrait-caption {
-    left: 9%;
-    right: 9%;
-    bottom: 14px;
+    left: 7%;
+    right: 7%;
+    bottom: 9px;
+    padding: 8px 11px 9px;
+  }
+
+  body:has(.hero#home) .portrait-caption strong {
+    font-size: .9rem;
   }
 
   .about-photo-frame {
