@@ -107,9 +107,9 @@ export function Episodes() {
                 ${EpisodeThumbnail({}, { latest: true })}
               </div>
               <div class="latest-copy">
-                <span class="content-label">Latest conversation</span>
-                <h3 data-latest-title>The newest episode</h3>
-                <p data-latest-description>New conversations appear here automatically when they are published.</p>
+                <span class="content-label">More from the archive</span>
+                <h3 data-latest-title>Continue watching</h3>
+                <p data-latest-description>Explore another conversation from The Alana Show.</p>
                 <a class="button button-gold" data-latest-link href="/episodes" data-track-event="Homepage Latest Conversation" data-track-location="homepage" data-track-label="latest">
                   ${icon("play")} Explore latest episode
                 </a>
