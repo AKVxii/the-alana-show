@@ -113,7 +113,9 @@ class FeaturedVideo extends HTMLElement {
     iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
     iframe.referrerPolicy = "strict-origin-when-cross-origin";
     iframe.allowFullscreen = true;
-    // Keep the component sizing rules when replacing the poster with YouTube.\n    this.shadowRoot.querySelector(".poster")?.remove();\n    this.shadowRoot.append(iframe);
+    // Keep the component sizing rules when replacing the poster with YouTube.
+    this.shadowRoot.querySelector(".poster")?.remove();
+    this.shadowRoot.append(iframe);
     trackEvent("Featured Play", { location: this.dataset.context === "episode" ? "episode" : "home", platform: "youtube" });
   }
 }
