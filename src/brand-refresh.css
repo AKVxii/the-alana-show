@@ -1268,3 +1268,13 @@ body:has(.hero#home) .hero::after{
   body:has(.hero#home) .portrait-stage{width:min(82vw,285px)}
   .watch-section .watch-heading h2{font-size:2.25rem}
 }
+
+/* Final mobile handoff: keep the host credit clear of the moving banner. */
+@media(max-width:600px){
+  body:has(.hero#home) .hero{padding-bottom:0}
+  .editorial-ticker{
+    position:relative;
+    inset:auto;
+    margin-top:0
+  }
+}
