@@ -36,7 +36,10 @@ function renderAlphabet() {
 
 function guestCard(guest) {
   const guestPath = guestConversationPath(guest);
-  return `<article class="guest-card" data-reveal data-reveal-stagger="true"><div class="guest-monogram" aria-hidden="true">${escapeHtml(guest.name.split(/\s+/).map(part => part[0]).slice(0, 2).join(""))}</div>
+  const visual = guest.portrait
+    ? `<div class="guest-monogram guest-photo" aria-hidden="true"><img src="${escapeHtml(guest.portrait)}" alt="" loading="lazy" decoding="async" style="object-position:${escapeHtml(guest.portraitPosition || "center 18%")}"></div>`
+    : `<div class="guest-monogram" aria-hidden="true">${escapeHtml(guest.name.split(/\s+/).map(part => part[0]).slice(0, 2).join(""))}</div>`;
+  return `<article class="guest-card" data-reveal data-reveal-stagger="true">${visual}
     <div><p class="content-label">Guest</p><h3><a href="${guestPath}">${escapeHtml(guest.name)}</a></h3>
     ${isVerifiedCandidateGuest(guest, episodeRecords) ? `<p class="candidate-label">${CANDIDATES_LABEL}</p>` : ""}
     ${guest.organization ? `<p>${escapeHtml(guest.organization)}</p>` : ""}

@@ -14,6 +14,8 @@ export const guestProfiles = {
     ]
   },
   "ric-bradshaw": {
+    image: "/assets/sheriff-ric-bradshaw-official.jpg",
+    imagePosition: "center 18%",
     role: "Sheriff of Palm Beach County · U.S. Marine Corps veteran",
     organization: {
       name: "Palm Beach County Sheriff’s Office",

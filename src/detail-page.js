@@ -517,12 +517,23 @@ function episodeTopicsMarkup(episode) {
   return `<section class="related-section episode-topics" aria-labelledby="topics-heading" data-episode-topics><p class="related-eyebrow"><span></span>EXPLORE MORE</p><h2 id="topics-heading">Topics</h2><div class="episode-topic-links">${categories.map(category => `<a href="${topicHref(category)}">${escapeHtml(category)}</a>`).join("")}</div></section>`;
 }
 
+function guestVisualMarkup(guest, profile, sizeClass = "", loading = "lazy") {
+  const image = profile?.image || guest?.portrait || "";
+  const classes = `guest-monogram${sizeClass ? ` ${sizeClass}` : ""}${image ? " guest-photo" : ""}`;
+  if (image) {
+    const position = profile?.imagePosition || guest?.portraitPosition || "center 18%";
+    return `<div class="${classes}" aria-hidden="true"><img src="${escapeHtml(image)}" alt="" loading="${loading}" decoding="async" style="object-position:${escapeHtml(position)}"></div>`;
+  }
+  const initials = guest.name.split(/\s+/).map(part => part[0]).slice(0, 2).join("");
+  return `<div class="${classes}" aria-hidden="true">${escapeHtml(initials)}</div>`;
+}
+
 function episodeGuestCredentialsMarkup(episode) {
   const guestProfiles = episodeGuests(episode).map(guest => ({ guest, profile: guestProfileById(guest.id) }));
   if (!guestProfiles.length) return "";
   const heading = guestProfiles.length === 1 ? "About the guest" : "About the guests";
   return `<section class="related-section episode-guests" aria-labelledby="episode-guests-heading" data-episode-guests><p class="related-eyebrow"><span></span>GUEST${guestProfiles.length === 1 ? "" : "S"} IN THIS CONVERSATION</p><h2 id="episode-guests-heading">${heading}</h2><div class="episode-guest-grid">${guestProfiles.map(({ guest, profile }) => {
-    const initials = guest.name.split(/\s+/).map(part => part[0]).slice(0, 2).join("");
+    const visual = guestVisualMarkup(guest, profile);
     const hasVerifiedProfile = Boolean(profile?.role && profile?.summary);
     const officialLink = hasVerifiedProfile && profile.officialUrl
       ? `<a class="episode-guest-source" href="${escapeHtml(profile.officialUrl)}" target="_blank" rel="noopener">Verified official profile →</a>`
@@ -530,7 +541,7 @@ function episodeGuestCredentialsMarkup(episode) {
     const verifiedDetails = hasVerifiedProfile
       ? `<p class="episode-guest-role">${escapeHtml(profile.role)}</p><p>${escapeHtml(profile.summary)}</p>${officialLink}`
       : "";
-    return `<article class="episode-guest-profile${hasVerifiedProfile ? "" : " episode-guest-profile-name-only"}"><div class="guest-monogram" aria-hidden="true">${escapeHtml(initials)}</div><div><h3><a href="/guests/${guest.id}">${escapeHtml(guest.name)}</a></h3>${verifiedDetails}</div></article>`;
+    return `<article class="episode-guest-profile${hasVerifiedProfile ? "" : " episode-guest-profile-name-only"}">${visual}<div><h3><a href="/guests/${guest.id}">${escapeHtml(guest.name)}</a></h3>${verifiedDetails}</div></article>`;
   }).join("")}</div></section>`;
 }
 
@@ -584,7 +595,7 @@ function guestDetail(guest) {
   const role = profile?.role ? `<p class="detail-byline">${escapeHtml(profile.role)}</p>` : "";
   const officialAction = profile?.officialUrl ? `<a class="button button-outline" href="${escapeHtml(profile.officialUrl)}" target="_blank" rel="noopener">Official profile</a>` : "";
   return `<section class="detail-hero"><div class="shell detail-shell">${breadcrumbs(guest.name)}<p class="eyebrow"><span></span> Guest</p><h1>${escapeHtml(guest.name)}</h1>
-    <div class="guest-detail-intro" data-reveal><div class="guest-monogram guest-monogram-large" aria-hidden="true">${escapeHtml(guest.name.split(/\s+/).map(part => part[0]).slice(0, 2).join(""))}</div><div>${role}<p>${escapeHtml(intro)}</p><p class="detail-byline">${escapeHtml(countLabel)} on The Alana Show.</p><div class="detail-actions"><a class="button button-gold" href="${archiveHref}">View conversations</a>${officialAction}<a class="button button-outline" href="/guests">Guest directory</a></div></div></div>
+    <div class="guest-detail-intro" data-reveal>${guestVisualMarkup(guest, profile, "guest-monogram-large", "eager")}<div>${role}<p>${escapeHtml(intro)}</p><p class="detail-byline">${escapeHtml(countLabel)} on The Alana Show.</p><div class="detail-actions"><a class="button button-gold" href="${archiveHref}">View conversations</a>${officialAction}<a class="button button-outline" href="/guests">Guest directory</a></div></div></div>
     ${related.length ? `<section class="related-section" aria-labelledby="related-heading"><div data-reveal><p class="related-eyebrow"><span></span>${escapeHtml(guest.name.toUpperCase())} ARCHIVE</p><h2 id="related-heading">Related conversations</h2></div><div class="related-conversation-list">${related.map(relatedConversationRow).join("")}</div></section>` : ""}
   </div></section>`;
 }

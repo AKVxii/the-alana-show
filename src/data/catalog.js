@@ -39,7 +39,7 @@ export const guests = [
   { id: "michael-saldana", name: "Michael Saldana", episodeIds: ["michael-saldana-marvens-beauge"], conversationCount: 1 },
   { id: "nick-cannon", name: "Nick Cannon", episodeIds: ["nick-cannon"], conversationCount: 1 },
   { id: "noel-j-guillama-alvarez", name: "Noel J. Guillama-Alvarez", episodeIds: ["noel-guillama-michael-castellano-mark-khachaturian"], conversationCount: 1 },
-  { id: "ric-bradshaw", name: "Sheriff Ric Bradshaw", episodeIds: ["ric-bradshaw"], conversationCount: 1 },
+  { id: "ric-bradshaw", name: "Sheriff Ric Bradshaw", portrait: "/assets/sheriff-ric-bradshaw-official.jpg", portraitPosition: "center 18%", episodeIds: ["ric-bradshaw"], conversationCount: 1 },
   { id: "rick-morris", name: "Rick Morris", episodeIds: ["rick-morris"], conversationCount: 1 },
   { id: "sabrina-maschue", name: "Sabrina Maschue", episodeIds: ["johana-villafuerte-sabrina-maschue"], conversationCount: 1 },
   { id: "scott-diament", name: "Scott Diament", episodeIds: ["scott-diament-gillian-lieberman"], conversationCount: 1 },
