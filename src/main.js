@@ -1,3 +1,4 @@
+import { AronbergTeaser } from "./components/AronbergTeaser.js";
 import { Header } from "./components/Header.js";
 import { Platforms } from "./components/Platforms.js";
 import { Hero } from "./components/Hero.js";
@@ -25,6 +26,7 @@ app.innerHTML = `
   ${Header()}
   <main id="main-content">
     ${Hero()}
+    ${AronbergTeaser()}
     ${Platforms()}
     ${Episodes()}
     ${About()}
