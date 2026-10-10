@@ -61,7 +61,7 @@ test("homepage keeps one focused media path with featured and latest conversatio
   assert.ok(main.indexOf("${Hero()}") < main.indexOf("${Episodes()}"));
   assert.ok(main.indexOf("${Episodes()}") < main.indexOf("${About()}"));
   assert.ok(main.indexOf("${About()}") < main.indexOf("${Contact()}"));
-  assert.doesNotMatch(main, /\$\{Conversions\(\)\}|\$\{Platforms\(\)\}|\$\{Impact\(\)\}|\$\{Partner\(\)\}|\$\{Merchandise\(\)\}/);
+  assert.doesNotMatch(main, /\$\{Conversions\(\)\}|\$\{Impact\(\)\}|\$\{Partner\(\)\}|\$\{Merchandise\(\)\}/);
   assert.doesNotMatch(main, /CurrentSpecial\(\)/);
   for (const source of [detail, episodes, guests]) assert.doesNotMatch(source, /CurrentSpecial\(\)/);
 });

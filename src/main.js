@@ -1,4 +1,5 @@
 import { Header } from "./components/Header.js";
+import { Platforms } from "./components/Platforms.js";
 import { Hero } from "./components/Hero.js";
 import { EpisodeThumbnail, Episodes, isUsableThumbnailUrl, revealThumbnailFallback } from "./components/Episodes.js";
 import { About } from "./components/About.js";
@@ -24,6 +25,7 @@ app.innerHTML = `
   ${Header()}
   <main id="main-content">
     ${Hero()}
+    ${Platforms()}
     ${Episodes()}
     ${About()}
     ${Contact()}

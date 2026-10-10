@@ -20,6 +20,7 @@ export function Header() {
 
         <nav id="primary-nav" class="primary-nav" aria-label="Primary navigation" data-nav>
           <a href="#watch">Watch</a>
+          <a href="#listen">Listen &amp; Follow</a>
           <a href="#about">Alana</a>
           <a href="#contact">Contact</a>
           <a class="mobile-listen-live" href="${site.trueOldiesLive}" target="_blank" rel="noopener">Listen Live</a>

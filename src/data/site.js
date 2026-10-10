@@ -52,8 +52,8 @@ export const site = {
     },
     {
       name: "iHeartRadio",
-      detail: "Search for the show",
-      url: "https://www.iheart.com/search/?q=The%20Alana%20Show",
+      detail: "Listen on iHeart",
+      url: "https://www.iheart.com/podcast/269-the-alana-show-104342007/",
       icon: "iheart"
     },
     {
