@@ -5,7 +5,7 @@ export const site = {
   host: "Alana K. Vandeveer",
   tagline: "Real conversations. Distinct voices. Thoughtful perspective.",
   description:
-    "A South Florida-based interview show featuring wide-ranging conversations with leaders, entrepreneurs, public servants, artists, advocates, experts, and community voices from across America.",
+    "Conversations that matter. Voices worth hearing. A South Florida-based interview show featuring wide-ranging conversations with leaders, entrepreneurs, public servants, artists, advocates, experts, and community voices across America.",
   email: "Alana@AlanaKVandeveer.com",
   phone: "561-444-7700",
   youtube: "https://www.youtube.com/@alanakvandeveer/videos",
