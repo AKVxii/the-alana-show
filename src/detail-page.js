@@ -277,6 +277,29 @@ function episodeVideoObject(episode, data) {
   return videoObject;
 }
 
+function episodePodcastObject(episode, data) {
+  const display = { ...episodeDisplayData(episode), ...data };
+  const canonical = detailUrl("episode", episode.id);
+  if (!display.publishedAt) return null;
+  const image = normalizeThumbnailUrl(display.thumbnail || display.thumbnailUrl)
+    || `https://img.youtube.com/vi/${episode.videoId}/maxresdefault.jpg`;
+  const duration = isoDuration(display.durationSeconds);
+  return {
+    "@type": "PodcastEpisode",
+    "@id": `${canonical}#podcast-episode`,
+    url: canonical,
+    name: display.title,
+    description: (display.description || display.deck || `Listen to ${display.title} on The Alana Show.`).replace(/\s+/g, " ").trim(),
+    datePublished: display.publishedAt,
+    image,
+    partOfSeries: { "@id": SHOW_ID },
+    associatedMedia: { "@id": `${canonical}#video` },
+    mainEntityOfPage: { "@id": `${canonical}#webpage` },
+    about: episodeGuests(episode).map(verifiedGuestReference),
+    ...(duration ? { timeRequired: duration } : {})
+  };
+}
+
 function relatedEpisodesFor(episode) {
   const display = episodeDisplayData(episode);
   const guestIds = new Set(episode.guestIds || []);
@@ -393,6 +416,8 @@ function applyStaticMetadata(detailType, detailItem) {
     const videoObject = episodeVideoObject(detailItem, episodeDisplay);
     if (videoObject) {
       graph.push(videoObject);
+      const podcastEpisode = episodePodcastObject(detailItem, episodeDisplay);
+      if (podcastEpisode) graph.push(podcastEpisode);
       graph[2].mainEntity = { "@id": `${canonical}#video` };
     }
   }
@@ -471,6 +496,8 @@ function applyLiveEpisodeMetadata(episode, enriched) {
   if (videoObject) {
     graph[2].datePublished = uploadDate;
     graph.push(videoObject);
+    const podcastEpisode = episodePodcastObject(episode, display);
+    if (podcastEpisode) graph.push(podcastEpisode);
     graph[2].mainEntity = { "@id": `${canonical}#video` };
   }
 
@@ -506,9 +533,10 @@ function formatTimecode(seconds = 0) {
 
 function episodeOverviewMarkup(episode) {
   const display = episodeDisplayData(episode);
-  const overview = display.deck || display.metaDescription || display.description;
+  const overview = display.overview || display.deck || display.metaDescription || display.description;
   if (!overview) return "";
-  return `<section class="related-section episode-overview" aria-labelledby="summary-heading" data-episode-overview><p class="related-eyebrow"><span></span>ABOUT THIS CONVERSATION</p><h2 id="summary-heading">Episode overview</h2><p>${escapeHtml(overview)}</p></section>`;
+  const paragraphs = String(overview).split(/\n\s*\n/).map(paragraph => `<p>${escapeHtml(paragraph)}</p>`).join("");
+  return `<section class="related-section episode-overview" aria-labelledby="summary-heading" data-episode-overview><p class="related-eyebrow"><span></span>ABOUT THIS CONVERSATION</p><h2 id="summary-heading">Episode overview</h2>${paragraphs}</section>`;
 }
 
 function episodeTopicsMarkup(episode) {

@@ -253,14 +253,15 @@ function breadcrumbs(parent, current) {
 function episodeFallback(episode, html) {
   const display = episodeDisplayData(episode);
   const title = display.title || pageTitle(html) || episode.title;
-  const overview = display.deck || display.metaDescription || pageDescription(html) || "Watch this verified conversation on The Alana Show.";
+  const overview = display.overview || display.deck || display.metaDescription || pageDescription(html) || "Watch this verified conversation on The Alana Show.";
   const relatedGuests = (episode.guestIds || []).map(guestById).filter(Boolean);
   const guestLinks = relatedGuests.map(guest => `<a href="/guests/${escapeHtml(guest.id)}">${escapeHtml(guest.name)}</a>`).join(" and ");
   const date = formatDate(display.publishedAt);
   const duration = formatDuration(display.durationSeconds);
   const meta = [date, duration].filter(Boolean).join(" · ");
   const topicLinks = display.categories.map(category => `<a href="${escapeHtml(topicHref(category))}">${escapeHtml(category)}</a>`).join("");
-  const overviewSection = overview ? `<section class="related-section episode-overview" data-static-episode-overview aria-labelledby="static-overview-heading"><p class="related-eyebrow"><span></span>ABOUT THIS CONVERSATION</p><h2 id="static-overview-heading">Episode overview</h2><p>${escapeHtml(overview)}</p></section>` : "";
+  const overviewParagraphs = String(overview).split(/\n\s*\n/).map(paragraph => `<p>${escapeHtml(paragraph)}</p>`).join("");
+  const overviewSection = overview ? `<section class="related-section episode-overview" data-static-episode-overview aria-labelledby="static-overview-heading"><p class="related-eyebrow"><span></span>ABOUT THIS CONVERSATION</p><h2 id="static-overview-heading">Episode overview</h2>${overviewParagraphs}</section>` : "";
   const topicsSection = topicLinks ? `<section class="related-section episode-topics" data-static-episode-topics aria-labelledby="static-topics-heading"><p class="related-eyebrow"><span></span>EXPLORE MORE</p><h2 id="static-topics-heading">Topics</h2><div class="episode-topic-links">${topicLinks}</div></section>` : "";
   const canonical = `${ORIGIN}/episodes/${episode.id}`;
   const primaryActions = `<div class="detail-actions episode-primary-actions" data-episode-primary-actions><a class="button button-gold" href="https://www.youtube.com/watch?v=${encodeURIComponent(episode.videoId)}" target="_blank" rel="noopener">Watch on YouTube</a><a class="button button-outline" href="mailto:?subject=${encodeURIComponent(title)}&body=${encodeURIComponent(canonical)}">Share by email</a><a class="button button-outline" href="/episodes">All conversations</a></div>`;
@@ -412,6 +413,25 @@ function episodeGraph(episode, html) {
       };
     }
     graph.push(videoObject);
+    graph.push({
+      "@type": "PodcastEpisode",
+      "@id": `${canonical}#podcast-episode`,
+      url: canonical,
+      name: title,
+      description,
+      datePublished: display.publishedAt,
+      image,
+      partOfSeries: { "@id": SHOW_ID },
+      associatedMedia: { "@id": `${canonical}#video` },
+      mainEntityOfPage: { "@id": `${canonical}#webpage` },
+      about: relatedGuests.map(guest => ({
+        "@type": "Person",
+        "@id": `${ORIGIN}/guests/${guest.id}#person`,
+        name: guest.name,
+        url: `${ORIGIN}/guests/${guest.id}`
+      })),
+      ...(display.durationSeconds ? { timeRequired: isoDuration(display.durationSeconds) } : {})
+    });
     graph[2].mainEntity = { "@id": `${canonical}#video` };
   }
   return graph;

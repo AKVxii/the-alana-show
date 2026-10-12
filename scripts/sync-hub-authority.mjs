@@ -143,7 +143,7 @@ const episodeFallback = archiveChrome(`<main id="main-content" class="static-cra
   <section class="media-hero flagship-archive-hero"><div class="shell media-hero-inner">
     <nav class="breadcrumbs" aria-label="Breadcrumb"><ol><li><a href="/">Home</a></li><li aria-current="page">Episodes</li></ol></nav>
     <p class="eyebrow"><span></span> The conversation archive</p><h1>Episodes</h1>
-    <p>Explore conversations from The Alana Show by title, topic, or verified guest.</p>
+    <p>Explore interviews with guests across America, hosted from South Florida. Browse by title, topic, or verified guest.</p>
     <div class="archive-credentials" aria-label="Conversation archive details"><span><strong>${episodeItems.length}</strong> verified conversations</span><span>South Florida radio</span><span>Worldwide streaming</span></div>
   </div></section>
   <section class="media-section" aria-labelledby="static-featured-heading"><div class="shell">
@@ -191,7 +191,7 @@ const topicList = topicItems.map(item => `<li><a href="${escapeHtml(item.href)}"
 const topicFallback = archiveChrome(`<main id="main-content" class="static-crawl-fallback static-directory-fallback static-topics-fallback">
   <section class="media-hero topics-hero"><div class="shell media-hero-inner">
     <nav class="breadcrumbs" aria-label="Breadcrumb"><ol><li><a href="/">Home</a></li><li aria-current="page">Topics</li></ol></nav>
-    <p class="eyebrow"><span></span> Discover the archive</p><h1>Topics</h1><p>Follow the ideas, issues, and areas of expertise that connect conversations across The Alana Show.</p>
+    <p class="eyebrow"><span></span> Discover the archive</p><h1>Topics</h1><p>Explore interviews spanning business, leadership, public service, culture, wellness, technology, faith, and community—with South Florida roots and perspectives from across America.</p>
   </div></section>
   <aside class="archive-signature" aria-label="A note from Alana"><div class="shell archive-signature-inner"><p class="archive-signature-kicker">A note from Alana</p><p class="archive-signature-quote"><span>The Alana Show…</span> <em>all over the map so you don’t have to be.</em></p></div></aside>
   <section class="static-directory-section" aria-labelledby="static-topics-heading"><div class="shell">

@@ -290,17 +290,19 @@ export const episodeEditorial = Object.freeze({
     "chapters": []
   },
   "ric-bradshaw": {
-    "title": "Palm Beach County Sheriff Ric Bradshaw on Flock Cameras, Amendment 3 & Budget",
-    "deck": "Sheriff Ric Bradshaw joins Alana K. Vandeveer for a candid conversation about the Sheriff’s Office budget, Flock cameras, Amendment 3, public safety and privacy safeguards.",
-    "metaDescription": "Palm Beach County Sheriff Ric Bradshaw discusses Flock cameras, Amendment 3, the Sheriff’s Office budget, public safety and privacy on The Alana Show.",
-    "description": "Palm Beach County Sheriff Ric Bradshaw joins host Alana K. Vandeveer for a candid conversation about the Palm Beach County Sheriff’s Office budget and public-safety priorities, the investigative value and privacy safeguards surrounding Flock Safety license-plate reader cameras, and Amendment 3 and what it could mean for law enforcement and the community. Recorded in Palm Beach Gardens, Florida, this episode brings South Florida a timely conversation about technology, accountability, public policy and community safety.",
+    "title": "Sheriff Ric Bradshaw Interview: PBSO Budget, Amendment 3 & Flock Cameras",
+    "deck": "Palm Beach County Sheriff Ric Bradshaw joins Alana K. Vandeveer to discuss the PBSO budget, Florida’s Amendment 3, Flock cameras, public safety and privacy.",
+    "overview": "Palm Beach County Sheriff Ric Bradshaw joins Alana K. Vandeveer for an in-depth interview about the PBSO budget, Florida’s Amendment 3 and the expanding use of Flock license-plate-reader cameras.\n\nSheriff Bradshaw discusses how the Palm Beach County Sheriff’s Office budget supports staffing, training, public-safety operations and technology—including the Real-Time Crime Center and tools used to identify vehicles and locate dangerous suspects.\n\nThe conversation also addresses privacy safeguards, accountability, community trust and the law-enforcement perspective on Amendment 3. Recorded in Palm Beach Gardens, Florida, this episode examines the balance between effective public-safety technology and responsible oversight.",
+    "metaDescription": "Palm Beach County Sheriff Ric Bradshaw joins Alana K. Vandeveer to discuss the PBSO budget, Florida’s Amendment 3, Flock cameras, public safety and privacy.",
+    "description": "Palm Beach County Sheriff Ric Bradshaw joins Alana K. Vandeveer for an in-depth interview about the PBSO budget, Florida’s Amendment 3 and the expanding use of Flock license-plate-reader cameras.\n\nSheriff Bradshaw discusses how the Palm Beach County Sheriff’s Office budget supports staffing, training, public-safety operations and technology—including the Real-Time Crime Center and tools used to identify vehicles and locate dangerous suspects.\n\nThe conversation also addresses privacy safeguards, accountability, community trust and the law-enforcement perspective on Amendment 3. Recorded in Palm Beach Gardens, Florida, this episode examines the balance between effective public-safety technology and responsible oversight.",
     "publishedAt": "2026-10-07T00:30:21Z",
     "durationSeconds": 1787,
     "thumbnail": "https://img.youtube.com/vi/SqRazfeMcTk/maxresdefault.jpg",
     "categories": [
       "Leadership",
       "Community",
-      "Public Service"
+      "Public Service",
+      "Technology"
     ],
     "chapters": []
   },

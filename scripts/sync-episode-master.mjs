@@ -110,13 +110,36 @@ video.about = guests.map(guest => ({
   name: guest.name,
   url: `${ORIGIN}/guests/${guest.id}`
 }));
+const podcastId = `${canonicalUrl}#podcast-episode`;
+let podcastEpisode = graph.find(node => node["@type"] === "PodcastEpisode");
+if (!podcastEpisode) {
+  podcastEpisode = { "@type": "PodcastEpisode", "@id": podcastId };
+  graph.push(podcastEpisode);
+}
+Object.assign(podcastEpisode, {
+  url: canonicalUrl,
+  name: title,
+  description: description.replace(/\s+/g, " ").trim(),
+  datePublished: publishedAt,
+  image: thumbnail,
+  partOfSeries: { "@id": `${ORIGIN}/#show` },
+  associatedMedia: { "@id": `${canonicalUrl}#video` },
+  mainEntityOfPage: { "@id": `${canonicalUrl}#webpage` },
+  about: guests.map(guest => ({
+    "@type": "Person",
+    "@id": `${ORIGIN}/guests/${guest.id}#person`,
+    name: guest.name,
+    url: `${ORIGIN}/guests/${guest.id}`
+  })),
+  timeRequired: isoDuration(durationSeconds)
+});
 replaceOne(scriptPattern, `<script id="detail-structured-data" type="application/ld+json">${JSON.stringify(structured).replace(/</g, "\\u003c")}</script>`, "structured data");
 
 replaceOne(/<li aria-current="page">[^<]*<\/li>/, `<li aria-current="page">${htmlEscape(title)}</li>`, "breadcrumb title");
 replaceOne(/<h1>[^<]*<\/h1>/, `<h1>${htmlEscape(title)}</h1>`, "episode heading");
 if (guestLinks) replaceOne(/<p class="detail-byline">A conversation with [\s\S]*?<\/p>/, `<p class="detail-byline">A conversation with ${guestLinks}</p>`, "guest byline");
-replaceOne(/<p class="detail-byline">[A-Z][a-z]+ \d{1,2}, \d{4} · [^<]+<\/p>/, `<p class="detail-byline">${displayDate(publishedAt)} · ${displayDuration(durationSeconds)}</p>`, "published date and duration");
-replaceOne(/<section class="related-section" data-static-episode-overview[\s\S]*?<\/section>(?=<section class="related-section" data-static-episode-topics)/, `<section class="related-section" data-static-episode-overview aria-labelledby="static-overview-heading"><p class="related-eyebrow"><span></span>ABOUT THIS CONVERSATION</p><h2 id="static-overview-heading">Episode overview</h2>${overviewHtml}</section>`, "episode overview");
+replaceOne(/<p class="detail-byline(?: episode-meta)?">[A-Z][a-z]+ \d{1,2}, \d{4} · [^<]+<\/p>/, `<p class="detail-byline episode-meta">${displayDate(publishedAt)} · ${displayDuration(durationSeconds)}</p>`, "published date and duration");
+replaceOne(/<section class="related-section(?: episode-overview)?" data-static-episode-overview[\s\S]*?<\/section>(?=<\/div><div><section class="related-section episode-topics"|<section class="related-section(?: episode-topics)?" data-static-episode-topics)/, `<section class="related-section episode-overview" data-static-episode-overview aria-labelledby="static-overview-heading"><p class="related-eyebrow"><span></span>ABOUT THIS CONVERSATION</p><h2 id="static-overview-heading">Episode overview</h2>${overviewHtml}</section>`, "episode overview");
 replaceOne(/href="https:\/\/www\.youtube\.com\/watch\?v=[A-Za-z0-9_-]{11}"/, `href="https://www.youtube.com/watch?v=${videoId}"`, "YouTube watch link");
 
 fs.writeFileSync(pagePath, html);
