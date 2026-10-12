@@ -187,9 +187,13 @@ catalog = appendArrayRecord(catalog, "episodeRecords", episodeRecord);
 
 function insertCrawlLink(html, href, label) {
   if (html.includes(`href="${href}"`)) return html;
+  const directoryListIndex = html.indexOf('<ul class="static-directory-list"');
   const fallbackIndex = html.indexOf('class="static-crawl-fallback"');
-  if (fallbackIndex < 0) fail("Could not find static crawl fallback container.");
-  const listStart = html.indexOf("<ul", fallbackIndex);
+  const listStart = directoryListIndex >= 0
+    ? directoryListIndex
+    : fallbackIndex >= 0
+      ? html.indexOf("<ul", fallbackIndex)
+      : -1;
   if (listStart < 0) fail("Could not find crawl fallback list.");
   const listTagEnd = html.indexOf(">", listStart);
   if (listTagEnd < 0) fail("Crawl fallback list markup is incomplete.");
@@ -200,15 +204,15 @@ function insertCrawlLink(html, href, label) {
 episodeHub = insertCrawlLink(episodeHub, `/episodes/${slug}`, title);
 for (const guest of newGuestPages) guestHub = insertCrawlLink(guestHub, `/guests/${guest.slug}`, guest.name);
 
-function insertSitemapUrl(xml, canonical, priority) {
+function insertSitemapUrl(xml, canonical) {
   if (xml.includes(`<loc>${canonical}</loc>`)) return xml;
-  const entry = `  <url><loc>${canonical}</loc><changefreq>monthly</changefreq><priority>${priority}</priority></url>\n`;
+  const entry = `  <url><loc>${canonical}</loc><lastmod>${publishedAt.slice(0, 10)}</lastmod></url>\n`;
   if (!xml.includes("</urlset>")) fail("sitemap.xml is missing </urlset>.");
   return xml.replace("</urlset>", `${entry}</urlset>`);
 }
 
-sitemap = insertSitemapUrl(sitemap, `${ORIGIN}/episodes/${slug}`, "0.8");
-for (const guest of newGuestPages) sitemap = insertSitemapUrl(sitemap, `${ORIGIN}/guests/${guest.slug}`, "0.7");
+sitemap = insertSitemapUrl(sitemap, `${ORIGIN}/episodes/${slug}`);
+for (const guest of newGuestPages) sitemap = insertSitemapUrl(sitemap, `${ORIGIN}/guests/${guest.slug}`);
 
 const episodeCanonical = `${ORIGIN}/episodes/${slug}`;
 const episodeImage = thumbnail;
