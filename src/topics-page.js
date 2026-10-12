@@ -33,7 +33,7 @@ app.innerHTML = `${MediaHeader()}<main id="main-content">
   <section class="media-hero topics-hero"><div class="shell media-hero-inner">
     <nav class="breadcrumbs" aria-label="Breadcrumb"><ol><li><a href="/">Home</a></li><li aria-current="page">Topics</li></ol></nav>
     <p class="eyebrow"><span></span> Discover the archive</p><h1>Topics</h1>
-    <p>Follow the ideas, issues, and areas of expertise that connect conversations across The Alana Show.</p>
+    <p>Explore interviews spanning business, leadership, public service, culture, wellness, technology, faith, and community—with South Florida roots and perspectives from across America.</p>
   </div></section>
 
   <aside class="archive-signature" aria-label="A note from Alana">

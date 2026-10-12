@@ -9,7 +9,7 @@ export function Platforms() {
         <div class="worldwide-heading">
           <p class="eyebrow"><span></span> From South Florida to everywhere</p>
           <h2 id="worldwide-heading">Streaming Worldwide</h2>
-          <p>Watch, listen, and stay connected—wherever you are.</p>
+          <p>Watch and listen worldwide to wide-ranging conversations hosted from South Florida.</p>
         </div>
         <ul class="worldwide-platforms" aria-label="Watch and listen to The Alana Show">
           ${site.platforms.filter(platform => !platform.inquiry).map(platform => `

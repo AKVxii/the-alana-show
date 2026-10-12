@@ -18,7 +18,7 @@ export function Hero() {
           </h1>
           <p class="hero-line">All over the <em>map</em> so you don’t have to be.</p>
           <p class="hero-intro">
-            Conversations that matter. Voices worth hearing.
+            Conversations that matter. Voices worth hearing. Based in South Florida, with guests and perspectives from across America.
           </p>
 
           <div class="hero-actions">

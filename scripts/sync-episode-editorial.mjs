@@ -58,8 +58,10 @@ const EDITORIAL_OVERRIDES = {
     deck: "Noel J. Guillama-Alvarez, Michael Castellano and Mark Khachaturian examine how AI, interactive video, medical devices and remote monitoring could make healthcare more connected and accessible."
   },
   "ric-bradshaw": {
-    title: "A Legacy of Service: Sheriff Ric Bradshaw on Community-First Policing",
-    deck: "Palm Beach County Sheriff Ric Bradshaw reflects on nearly 50 years in law enforcement, community-first policing, multi-agency collaboration and mentoring the next generation."
+    title: "Sheriff Ric Bradshaw Interview: PBSO Budget, Amendment 3 & Flock Cameras",
+    deck: "Palm Beach County Sheriff Ric Bradshaw joins Alana K. Vandeveer to discuss the PBSO budget, Florida’s Amendment 3, Flock cameras, public safety and privacy.",
+    overview: "Palm Beach County Sheriff Ric Bradshaw joins Alana K. Vandeveer for an in-depth interview about the PBSO budget, Florida’s Amendment 3 and the expanding use of Flock license-plate-reader cameras.\n\nSheriff Bradshaw discusses how the Palm Beach County Sheriff’s Office budget supports staffing, training, public-safety operations and technology—including the Real-Time Crime Center and tools used to identify vehicles and locate dangerous suspects.\n\nThe conversation also addresses privacy safeguards, accountability, community trust and the law-enforcement perspective on Amendment 3. Recorded in Palm Beach Gardens, Florida, this episode examines the balance between effective public-safety technology and responsible oversight.",
+    categories: ["Leadership", "Community", "Public Service", "Technology"]
   },
   "caden-veltkamp-steve-cisneros": {
     title: "Caden Veltkamp: Faith, Perseverance & a Conference USA Breakthrough",
@@ -202,6 +204,7 @@ for (const id of directories) {
   editorial[id] = {
     title: override.title || title || video.name,
     deck: override.deck || metaDescription,
+    overview: override.overview || override.deck || metaDescription,
     metaDescription,
     description,
     publishedAt: video.uploadDate,
