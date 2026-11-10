@@ -66,6 +66,22 @@ export const episodeEditorial = Object.freeze({
     ],
     "chapters": []
   },
+  "dave-aronberg-florida-shuffle": {
+    "title": "Dave Aronberg on Fighting the Florida Shuffle, Justice & Public Service",
+    "deck": "Former Palm Beach County State Attorney Dave Aronberg joins Alana K. Vandeveer to discuss the Florida Shuffle, addiction-treatment fraud, public service, justice, and accountability.",
+    "overview": "Former Palm Beach County State Attorney Dave Aronberg joins Alana K. Vandeveer to discuss the Florida Shuffle, addiction-treatment fraud, public service, justice, and accountability.",
+    "metaDescription": "Former Palm Beach County State Attorney Dave Aronberg joins Alana K. Vandeveer to discuss the Florida Shuffle, addiction-treatment fraud, public service, justice, and accountability.",
+    "description": "Former Palm Beach County State Attorney Dave Aronberg joins Alana K. Vandeveer for a wide-ranging conversation about Fighting the Florida Shuffle, the investigation that exposed corruption within parts of Florida's addiction-treatment industry, his public-service career, and his work today. The conversation examines patient brokering, fraudulent sober-home practices, the Sober Homes Task Force, and what the fight for accountability can teach families, policymakers, and communities.",
+    "publishedAt": "2026-10-14T03:40:23Z",
+    "durationSeconds": 1342,
+    "thumbnail": "https://img.youtube.com/vi/XjQHRdFluZc/maxresdefault.jpg",
+    "categories": [
+      "Community",
+      "Public Service",
+      "Wellness"
+    ],
+    "chapters": []
+  },
   "diana-davis": {
     "title": "Art as Activism: Fighting Human Trafficking Through Film",
     "deck": "Movies Making a Difference founder Diana Davis explains how socially conscious filmmaking can expose human trafficking, rally communities and support survivors beyond the screen.",
