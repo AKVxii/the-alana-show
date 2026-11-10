@@ -20,35 +20,35 @@ const guestPage = read("guests/george-lemieux/index.html");
 const packageJson = read("package.json");
 
 for (const needle of [
-  'data-initial-src="https://www.youtube-nocookie.com/embed/SqRazfeMcTk?rel=0"',
-  'href="/episodes/ric-bradshaw"',
+  'data-initial-src="https://www.youtube-nocookie.com/embed/OMIQxss58UE?rel=0"',
+  'href="/episodes/grady-judd"',
   'data-track-event="Homepage Featured Conversation"',
-  'href="/guests/ric-bradshaw"',
+  'href="/guests/grady-judd"',
   'data-track-event="Homepage Featured Guest"'
 ]) {
   if (!episodes.includes(needle)) errors.push(`Homepage featured-conversation markup is missing: ${needle}`);
 }
 
 for (const needle of [
-  'FEATURED_CONVERSATION_VIDEO_ID = "SqRazfeMcTk"',
+  'FEATURED_CONVERSATION_VIDEO_ID = "OMIQxss58UE"',
   'state.episodes.find(episode => episode.videoId === FEATURED_CONVERSATION_VIDEO_ID) || data.featured',
   'link.href = enriched.detailPath || `https://www.youtube.com/watch?v=${enriched.videoId}`'
 ]) {
   if (!main.includes(needle)) errors.push(`Homepage routing logic is missing: ${needle}`);
 }
 
-if (!episodeArchive.includes('FEATURED_CONVERSATION_VIDEO_ID = "SqRazfeMcTk"')) {
-  errors.push("The episode archive must feature the current Sheriff Ric Bradshaw interview.");
+if (!episodeArchive.includes('FEATURED_CONVERSATION_VIDEO_ID = "OMIQxss58UE"')) {
+  errors.push("The episode archive must feature the current Sheriff Grady Judd interview.");
 }
-if (!youtubeApi.includes('FEATURED_CONVERSATION_VIDEO_ID = "SqRazfeMcTk"')) {
-  errors.push("The live YouTube feed must expose Sheriff Ric Bradshaw as the selected featured conversation.");
+if (!youtubeApi.includes('FEATURED_CONVERSATION_VIDEO_ID = "OMIQxss58UE"')) {
+  errors.push("The live YouTube feed must expose Sheriff Grady Judd as the selected featured conversation.");
 }
 
 for (const needle of [
   'static-current-conversation',
-  'Sheriff Ric Bradshaw on Flock cameras, Amendment 3 and the budget',
-  'https://www.youtube.com/watch?v=SqRazfeMcTk',
-  '/guests/ric-bradshaw'
+  'Sheriff Grady Judd on Flock cameras, Amendment 3 and Florida property-tax reform',
+  'https://www.youtube.com/watch?v=OMIQxss58UE',
+  '/guests/grady-judd'
 ]) {
   if (!home.includes(needle)) errors.push(`Crawler-visible homepage promotion is missing: ${needle}`);
 }

@@ -10,7 +10,7 @@ import { CANDIDATES_DISCLAIMER, resolveCollection } from "./data/collections.js"
 import { lengthBucket, trackEvent } from "./lib/measurement.js";
 import { loadYouTubeFeed } from "./lib/youtube-feed.js";
 
-const FEATURED_CONVERSATION_VIDEO_ID = "SqRazfeMcTk";
+const FEATURED_CONVERSATION_VIDEO_ID = "OMIQxss58UE";
 const PAGE_SIZE = 9;
 const SAVED_EPISODES_KEY = "the-alana-show:saved-conversations:v1";
 const initialParams = new URLSearchParams(location.search);

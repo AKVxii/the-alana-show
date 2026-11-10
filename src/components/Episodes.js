@@ -80,19 +80,19 @@ export function Episodes() {
             <div class="player-frame">
               <featured-video
                 data-featured-video
-                data-initial-src="https://www.youtube-nocookie.com/embed/SqRazfeMcTk?rel=0"
-                data-title="Palm Beach County Sheriff Ric Bradshaw on Flock Cameras, Amendment 3 &amp; Budget">
-                <a href="/episodes/ric-bradshaw">Watch the Sheriff Ric Bradshaw conversation on The Alana Show</a>
+                data-initial-src="https://www.youtube-nocookie.com/embed/OMIQxss58UE?rel=0"
+                data-title="Sheriff Grady Judd on Flock Cameras, Amendment 3 &amp; Florida Property-Tax Reform">
+                <a href="/episodes/grady-judd">Watch the Sheriff Grady Judd conversation on The Alana Show</a>
               </featured-video>
             </div>
             <div class="featured-meta">
               <div>
                 <span class="content-label">New this week</span>
-                <h3 data-featured-title>Palm Beach County Sheriff Ric Bradshaw on Flock Cameras, Amendment 3 &amp; Budget</h3>
-                <p data-featured-description>Sheriff Ric Bradshaw joins Alana K. Vandeveer for a candid conversation about the Sheriff’s Office budget, Flock cameras, Amendment 3, public safety, and privacy concerns.</p>
+                <h3 data-featured-title>Sheriff Grady Judd on Flock Cameras, Amendment 3 &amp; Florida Property-Tax Reform</h3>
+                <p data-featured-description>Polk County Sheriff Grady Judd joins Alana K. Vandeveer to discuss property-tax reform, Amendment 3, Flock license-plate readers, public safety, privacy, crime reduction, and growth.</p>
                 <div class="featured-conversation-actions">
-                  <a class="button button-gold" data-featured-link href="/episodes/ric-bradshaw" data-track-event="Homepage Featured Conversation" data-track-location="homepage" data-track-label="Sheriff Ric Bradshaw">Explore the full conversation ${icon("arrow")}</a>
-                  <a class="button button-ghost" href="/guests/ric-bradshaw" data-track-event="Homepage Featured Guest" data-track-location="homepage" data-track-label="Sheriff Ric Bradshaw">Meet the guest</a>
+                  <a class="button button-gold" data-featured-link href="/episodes/grady-judd" data-track-event="Homepage Featured Conversation" data-track-location="homepage" data-track-label="Sheriff Grady Judd">Explore the full conversation ${icon("arrow")}</a>
+                  <a class="button button-ghost" href="/guests/grady-judd" data-track-event="Homepage Featured Guest" data-track-location="homepage" data-track-label="Sheriff Grady Judd">Meet the guest</a>
                 </div>
               </div>
               <div class="featured-stats" data-featured-stats></div>

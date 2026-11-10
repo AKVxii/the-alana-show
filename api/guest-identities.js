@@ -7,6 +7,7 @@
  * biographical claim to make an identity appear more complete.
  */
 const guestIdentityByVideoId = Object.freeze({
+  "OMIQxss58UE": Object.freeze(["Sheriff Grady Judd"]),
   "NN9mSARhmIQ": Object.freeze(["Gillian Lieberman", "Scott Diament"]),
   "Kx7rcDzaqDk": Object.freeze(["George LeMieux"]),
   "SqRazfeMcTk": Object.freeze(["Sheriff Ric Bradshaw"]),
