@@ -110,7 +110,7 @@ export function Episodes() {
           </div>
           <div class="archive-spotlight-grid">
             <article class="archive-spotlight-card">
-              <a class="archive-spotlight-media" href="/episodes/dave-aronberg-florida-shuffle" aria-label="Watch Dave Aronberg on Fighting the Florida Shuffle">
+              <a class="archive-spotlight-media" href="/episodes/dave-aronberg-florida-shuffle" aria-label="Watch Dave Aronberg on Fighting the Florida Shuffle" style="--archive-image:url('https://img.youtube.com/vi/XjQHRdFluZc/maxresdefault.jpg')">
                 ${EpisodeThumbnail({
                   videoId: "XjQHRdFluZc",
                   title: "Dave Aronberg on Fighting the Florida Shuffle, Justice & Public Service",
@@ -126,7 +126,7 @@ export function Episodes() {
             </article>
 
             <article class="archive-spotlight-card">
-              <a class="archive-spotlight-media" href="/episodes/ric-bradshaw" aria-label="Watch Sheriff Ric Bradshaw on PBSO, Amendment 3 and Flock cameras">
+              <a class="archive-spotlight-media" href="/episodes/ric-bradshaw" aria-label="Watch Sheriff Ric Bradshaw on PBSO, Amendment 3 and Flock cameras" style="--archive-image:url('https://img.youtube.com/vi/SqRazfeMcTk/maxresdefault.jpg')">
                 ${EpisodeThumbnail({
                   videoId: "SqRazfeMcTk",
                   title: "Sheriff Ric Bradshaw Interview: PBSO Budget, Amendment 3 & Flock Cameras",
