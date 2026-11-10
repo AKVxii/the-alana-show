@@ -100,6 +100,49 @@ export function Episodes() {
           </article>
         </div>
 
+        <section class="archive-spotlight" aria-labelledby="archive-spotlight-heading">
+          <div class="archive-spotlight-heading">
+            <div>
+              <p class="eyebrow"><span></span> From the archives</p>
+              <h3 id="archive-spotlight-heading">More conversations worth revisiting</h3>
+            </div>
+            <a href="/episodes" class="archive-spotlight-all">Explore every episode ${icon("arrow")}</a>
+          </div>
+          <div class="archive-spotlight-grid">
+            <article class="archive-spotlight-card">
+              <a class="archive-spotlight-media" href="/episodes/dave-aronberg-florida-shuffle" aria-label="Watch Dave Aronberg on Fighting the Florida Shuffle">
+                ${EpisodeThumbnail({
+                  videoId: "XjQHRdFluZc",
+                  title: "Dave Aronberg on Fighting the Florida Shuffle, Justice & Public Service",
+                  thumbnail: "https://img.youtube.com/vi/XjQHRdFluZc/maxresdefault.jpg"
+                })}
+              </a>
+              <div class="archive-spotlight-copy">
+                <span class="content-label">Justice &amp; public service</span>
+                <h4><a href="/episodes/dave-aronberg-florida-shuffle">Dave Aronberg on Fighting the Florida Shuffle</a></h4>
+                <p>The former Palm Beach County State Attorney discusses addiction-treatment fraud, patient brokering, justice, and accountability.</p>
+                <a class="archive-spotlight-link" href="/episodes/dave-aronberg-florida-shuffle">Watch the conversation ${icon("arrow")}</a>
+              </div>
+            </article>
+
+            <article class="archive-spotlight-card">
+              <a class="archive-spotlight-media" href="/episodes/ric-bradshaw" aria-label="Watch Sheriff Ric Bradshaw on PBSO, Amendment 3 and Flock cameras">
+                ${EpisodeThumbnail({
+                  videoId: "SqRazfeMcTk",
+                  title: "Sheriff Ric Bradshaw Interview: PBSO Budget, Amendment 3 & Flock Cameras",
+                  thumbnail: "https://img.youtube.com/vi/SqRazfeMcTk/maxresdefault.jpg"
+                })}
+              </a>
+              <div class="archive-spotlight-copy">
+                <span class="content-label">Public safety &amp; accountability</span>
+                <h4><a href="/episodes/ric-bradshaw">Sheriff Ric Bradshaw on PBSO, Amendment 3 &amp; Flock Cameras</a></h4>
+                <p>The Palm Beach County sheriff discusses the PBSO budget, public-safety technology, privacy, and community trust.</p>
+                <a class="archive-spotlight-link" href="/episodes/ric-bradshaw">Watch the conversation ${icon("arrow")}</a>
+              </div>
+            </article>
+          </div>
+        </section>
+
         <div class="watch-tools">
           <aside class="watch-aside">
             <article class="latest-card reveal reveal-delay" data-latest>
