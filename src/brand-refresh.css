@@ -302,9 +302,13 @@ body:has(.hero#home) .portrait-caption strong{margin-top:4px;color:var(--ink);fo
 .archive-spotlight-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px}
 .archive-spotlight-card{min-width:0;min-height:330px;overflow:hidden;display:grid;grid-template-columns:minmax(190px,.72fr) minmax(0,1.28fr);border:1px solid rgba(152,111,19,.42);border-radius:10px;background:#fff;box-shadow:0 12px 30px rgba(77,53,5,.065);transition:transform .18s ease,border-color .18s ease,box-shadow .18s ease}
 .archive-spotlight-card:hover,.archive-spotlight-card:focus-within{transform:translateY(-2px);border-color:rgba(152,111,19,.72);box-shadow:0 17px 38px rgba(77,53,5,.095)}
-.archive-spotlight-media{min-height:100%;display:block;overflow:hidden;background:#030914}
-.archive-spotlight-media .thumbnail-media{width:100%;height:100%;min-height:330px;display:block}
-.archive-spotlight-media img,.archive-spotlight-media .branded-artwork{width:100%;height:100%;object-fit:cover;filter:contrast(1.045) saturate(1.035)}
+.archive-spotlight-media{min-height:100%;position:relative;isolation:isolate;display:block;overflow:hidden;background:#030914}
+.archive-spotlight-media::before{content:"";position:absolute;z-index:0;inset:-20px;background-image:var(--archive-image);background-size:cover;background-position:center;filter:blur(16px) saturate(.72);opacity:.42;transform:scale(1.08)}
+.archive-spotlight-media::after{content:"";position:absolute;z-index:0;inset:0;background:linear-gradient(180deg,rgba(3,9,20,.2),rgba(3,9,20,.48))}
+.archive-spotlight-media .thumbnail-media{width:100%;height:100%;min-height:330px;position:relative;z-index:1;display:block;border:0;border-radius:0;background:transparent}
+.archive-spotlight-media .thumbnail-media::after{box-shadow:inset 0 0 0 1px rgba(234,215,158,.2)}
+.archive-spotlight-media img{width:100%;height:100%;padding:10px;box-sizing:border-box;object-fit:contain;background:transparent;filter:contrast(1.045) saturate(1.035)}
+.archive-spotlight-media .branded-artwork{width:100%;height:100%;object-fit:contain}
 .archive-spotlight-copy{padding:26px 25px 24px;display:flex;flex-direction:column;align-items:start}
 .archive-spotlight-copy h4{margin:11px 0 10px;color:var(--logo-ink,#211806);font:600 clamp(1.3rem,1.65vw,1.6rem)/1.07 var(--serif);letter-spacing:-.02em}
 .archive-spotlight-copy h4 a{color:inherit;text-decoration:none}
