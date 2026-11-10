@@ -46,7 +46,8 @@ export const guests = [
   { id: "stacey-ibarra", name: "Stacey Ibarra", episodeIds: ["stacey-ibarra-vaughn-mitchell"], conversationCount: 1 },
   { id: "steve-cisneros", name: "Steve Cisneros", episodeIds: ["caden-veltkamp-steve-cisneros"], conversationCount: 1 },
   { id: "thais-glysson", name: "Thais Glysson", episodeIds: ["thais-glysson"], conversationCount: 1 },
-  { id: "vaughn-mitchell", name: "Vaughn Mitchell", episodeIds: ["stacey-ibarra-vaughn-mitchell"], conversationCount: 1 }
+  { id: "vaughn-mitchell", name: "Vaughn Mitchell", episodeIds: ["stacey-ibarra-vaughn-mitchell"], conversationCount: 1 },
+  { id: "grady-judd", name: "Sheriff Grady Judd", episodeIds: ["grady-judd"], conversationCount: 1 },
 ];
 
 const episodeRecords = [
@@ -74,7 +75,8 @@ const episodeRecords = [
   { id: "matthew-yeandle-2", videoId: "UINLMza4HPQ", title: "Conversation with Matthew Yeandle", guestIds: ["matthew-yeandle"], detailPath: "/episodes/matthew-yeandle-2/" },
   { id: "michael-barnett-2022-midterms", videoId: "kJWFTnWOgYM", title: "Chairman Michael Barnett Recaps the 2022 Midterms", guestIds: ["michael-barnett"], detailPath: "/episodes/michael-barnett-2022-midterms/" },
   { id: "john-rourke-2", videoId: "KCIFHIGvEWM", title: "Conversation with John Rourke", guestIds: ["john-rourke"], detailPath: "/episodes/john-rourke-2/" },
-  { id: "elijah-knight", videoId: "HCAlWzWTig4", title: "Conversation with Elijah Knight", guestIds: ["elijah-knight"], detailPath: "/episodes/elijah-knight/" }
+  { id: "elijah-knight", videoId: "HCAlWzWTig4", title: "Conversation with Elijah Knight", guestIds: ["elijah-knight"], detailPath: "/episodes/elijah-knight/" },
+  { id: "grady-judd", videoId: "OMIQxss58UE", title: "Sheriff Grady Judd on Flock Cameras, Amendment 3 & Florida Property-Tax Reform", guestIds: ["grady-judd"], detailPath: "/episodes/grady-judd/", canonical: {"title":"Sheriff Grady Judd on Flock Cameras, Amendment 3 & Florida Property-Tax Reform","deck":"Polk County Sheriff Grady Judd joins Alana K. Vandeveer to discuss Florida property-tax reform, Amendment 3, Flock license-plate readers, public safety, privacy, and law enforcement in a rapidly growing county.","description":"Polk County Sheriff Grady Judd joins Alana K. Vandeveer for a wide-ranging conversation about Florida property-tax reform, Amendment 3, Flock license-plate-reader cameras, public safety, privacy, crime reduction, growth, and law-enforcement priorities in Polk County. The interview examines whether property-tax cuts are the right reform for Florida, how communities should balance investigative technology with accountability, and what effective public safety requires as the county continues to grow.","publishedAt":"2026-11-04T23:59:41Z","durationSeconds":2348,"thumbnail":"https://img.youtube.com/vi/OMIQxss58UE/maxresdefault.jpg"} },
 ];
 
 export const episodes = episodeRecords

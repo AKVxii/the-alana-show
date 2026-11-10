@@ -25,6 +25,16 @@ export const guestProfiles = {
     officialUrl: "https://www.pbso.org/inside-pbso/general/executive-staff",
     sameAs: ["https://www.pbso.org/inside-pbso/general/executive-staff"]
   },
+  "grady-judd": {
+    role: "Sheriff of Polk County",
+    organization: {
+      name: "Polk County Sheriff’s Office",
+      url: "https://www.polksheriff.org/about/sheriff-grady-judd"
+    },
+    summary: "Sheriff Grady Judd began his career with the Polk County Sheriff’s Office as a dispatcher in 1972, advanced through every rank from sergeant to colonel, and was first elected sheriff in 2004.",
+    officialUrl: "https://www.polksheriff.org/about/sheriff-grady-judd",
+    sameAs: ["https://www.polksheriff.org/about/sheriff-grady-judd"]
+  },
   "ashley-vertuno": {
     role: "Chief Executive Officer · HCA Florida JFK North Hospital",
     organization: {
